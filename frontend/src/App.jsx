@@ -11,10 +11,10 @@ const Unitpage = lazy(() => import('./Pages/Unitpage'));
 const Designationpage = lazy(() => import('./Pages/Designationpage'));
 const Bankmasterpage = lazy(() => import('./Pages/Bankmasterpage'));
 const Bankaccountpage = lazy(() => import('./Pages/Bankaccountpage'));
+const Salarycreationpage = lazy(() => import('./Pages/Salarycreationpage'));
+const Purposepage = lazy(() => import('./Pages/Purposepage'));
+const Typepage = lazy(() => import('./Pages/Typepage'));
 import { BrowserRouter as Router, Routes, Route} from 'react-router-dom'
-import Salarycreationpage from './Pages/Salarycreationpage';
-import Purposepage from './Pages/Purposepage';
-import Typepage from './Pages/Typepage';
 const App = () => {
   return (
         <Router>

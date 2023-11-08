@@ -21,6 +21,15 @@ module.exports={
     AddDesignation:async(req,res)=>{
         try{
             const data = req.body;
+
+            const existingDesignation = await Designation.findOne({ name: data.name});
+
+            if (existingDesignation) {
+              return res.status(409).json({
+                success: false,
+                message: "Designation already exists.",
+              });
+            }
             const newDesignation = new Designation(data)
 
             await newDesignation.save()
@@ -29,6 +38,7 @@ module.exports={
           res.status(200).json({
             success: true,
             message: "Designation added successfully.",
+            data:newDesignation
           });
 
         }catch(err){
@@ -39,4 +49,63 @@ module.exports={
             });
         }
     },
+    EditDesignation: async (req, res) => {
+        try {
+          const data = req.body;
+          const {id } = req.params;
+    
+          // Check if an Employeetype with the specified employeeid exists
+          const existingDesignation = await Designation.findOne({_id:id});
+    
+          if (!existingDesignation) {
+            return res.status(404).json({
+              success: false,
+              message: "Designation not found.",
+            });
+          }
+    
+          // Update the existing Employeetype with new data
+          await Designation.updateOne({ _id: id }, data);
+          console.log("Designation Edited Successfully");
+          res.status(200).json({
+            success: true,
+            message: "Designation edited successfully.",
+          });
+        } catch (err) {
+          res.status(500).json({
+            success: false,
+            message: "Failed to edit Designation.",
+            error: err.message,
+          });
+        }
+      },
+    
+      DeleteDesignation: async (req, res) => {
+        try {
+          const {id } = req.params;
+    
+          // Check if an Employeetype with the specified employeeid exists
+          const existingDesignation= await Designation.findOne({_id:id });
+    
+          if (!existingDesignation) {
+            return res.status(404).json({
+              success: false,
+              message: "Designation not found.",
+            });
+          }
+    
+          // Delete the existing Employeetype
+          await Designation.deleteOne({_id:id });
+          res.status(200).json({
+            success: true,
+            message: "Designation deleted successfully.",
+          });
+        } catch (err) {
+          res.status(500).json({
+            success: false,
+            message: "Failed to delete Designation.",
+            error: err.message,
+          });
+        }
+      },
 }

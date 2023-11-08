@@ -22,6 +22,15 @@ module.exports={
     AddDepartment:async(req,res)=>{
         try{
             const data = req.body;
+
+            const existingDepartment = await Department.findOne({ name: data.name });
+
+            if (existingDepartment) {
+              return res.status(409).json({
+                success: false,
+                message: "Department already exists.",
+              });
+            }
             const newDepartment = new Department(data)
 
             await newDepartment.save()
@@ -30,6 +39,7 @@ module.exports={
           res.status(200).json({
             success: true,
             message: "Department added successfully.",
+            data:newDepartment
           });
 
         }catch(err){
@@ -43,13 +53,9 @@ module.exports={
     UpdateDepartment:async(req,res)=>{
         try{
             const {id}=req.params;
-            const {name}=req.body;
+            const data=req.body;
 
-            await Department.findByIdAndUpdate(
-               { _id : id},
-                {name},
-                {new:true}
-            )
+            await Department.updateOne({ _id: id }, data);
             res.json({
                 success: true,
                 message: "Department edited successfully."
@@ -63,4 +69,32 @@ module.exports={
             });
         }
     },
+    DeleteDepartment: async (req, res) => {
+        try {
+          const {id } = req.params;
+    
+          // Check if an Employeetype with the specified employeeid exists
+          const existingDepartment = await Department.findOne({_id:id });
+    
+          if (!existingDepartment) {
+            return res.status(404).json({
+              success: false,
+              message: "Department not found.",
+            });
+          }
+    
+          // Delete the existing Employeetype
+          await Department.deleteOne({_id:id });
+          res.status(200).json({
+            success: true,
+            message: "Department deleted successfully.",
+          });
+        } catch (err) {
+          res.status(500).json({
+            success: false,
+            message: "Failed to delete Department.",
+            error: err.message,
+          });
+        }
+      },
 }

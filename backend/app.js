@@ -6,7 +6,10 @@ const morgan = require('morgan')
 const mongoose = require('mongoose');
 
 const  UserRouters = require('./routes/userRouter');
-
+const  employeeRouters = require('./routes/EmployeeRouter');
+const  DepartmentRouter = require('./routes/DepartmentRouter');
+const  UnitRouter = require('./routes/UnitRouter');
+const  DesignationRouter = require('./routes/DesignationRouter');
 dotenv.config()
 
 
@@ -27,6 +30,19 @@ app.use(express.urlencoded({ extended: true }))
 
 
 app.use('/api/users', UserRouters)
+app.use('/api/employee',employeeRouters)
+app.use('/api/Department',DepartmentRouter)
+app.use('/api/Unit',UnitRouter)
+app.use('/api/Designation',DesignationRouter)
+
+
+
+
+
+
+
+
+
 
 mongoose.connect(process.env.MONGO_URL).then(()=>{
     console.log("Database connected");

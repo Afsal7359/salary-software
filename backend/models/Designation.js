@@ -1,7 +1,11 @@
 const mongoose = require('mongoose');
 
 const designationSchema = new mongoose.Schema({
- 
+     designationid:{
+       type: String,
+       require:true,
+       trim:true
+      },
       name: {
         type: String,
         require: true,
