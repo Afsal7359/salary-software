@@ -10,6 +10,8 @@ const  employeeRouters = require('./routes/EmployeeRouter');
 const  DepartmentRouter = require('./routes/DepartmentRouter');
 const  UnitRouter = require('./routes/UnitRouter');
 const  DesignationRouter = require('./routes/DesignationRouter');
+const  PurposeRouter = require('./routes/PurposeRouter');
+const  TypeRouter = require('./routes/TypeRoter');
 dotenv.config()
 
 
@@ -34,6 +36,8 @@ app.use('/api/employee',employeeRouters)
 app.use('/api/Department',DepartmentRouter)
 app.use('/api/Unit',UnitRouter)
 app.use('/api/Designation',DesignationRouter)
+app.use('/api/purpose',PurposeRouter)
+app.use('/api/Type',TypeRouter)
 
 
 
