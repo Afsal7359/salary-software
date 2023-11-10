@@ -21,11 +21,16 @@ const bankSchema= new mongoose.Schema({
         require:true,
         trim:true,
     },
-    number:{
+    phone:{
         type:Number,
         require:true,
         trim:true,
     },
+    isdeleted:{
+        type:Boolean,
+        require:true,
+        default:false
+    }
 });
 const Bankmaster = mongoose.model('Bankmaster',bankSchema);
 module.exports=Bankmaster;

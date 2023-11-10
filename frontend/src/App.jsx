@@ -11,10 +11,12 @@ const Unitpage = lazy(() => import('./Pages/Unitpage'));
 const Designationpage = lazy(() => import('./Pages/Designationpage'));
 const Bankmasterpage = lazy(() => import('./Pages/Bankmasterpage'));
 const Bankaccountpage = lazy(() => import('./Pages/Bankaccountpage'));
+const Salarycreationpage = lazy(() => import('./Pages/Salarycreationpage'));
+const Purposepage = lazy(() => import('./Pages/Purposepage'));
+const Typepage = lazy(() => import('./Pages/Typepage'));
+const Operationalpage = lazy(() => import('./Pages/Operationalpage'));
+const Accounttypepage = lazy(() => import('./Pages/Accounttypepage'));
 import { BrowserRouter as Router, Routes, Route} from 'react-router-dom'
-import Salarycreationpage from './Pages/Salarycreationpage';
-import Purposepage from './Pages/Purposepage';
-import Typepage from './Pages/Typepage';
 const App = () => {
   return (
         <Router>
@@ -38,6 +40,8 @@ const App = () => {
        <Route path="/add-salary-master" element={<Salarycreationpage/>} />
        <Route path="/add-purpose" element={<Purposepage/>} />
        <Route path="/add-Type" element={<Typepage/>} />
+       <Route path="/add-operationalType" element={<Operationalpage/>} />
+       <Route path="/add-accounttype" element={<Accounttypepage/>} />
        </Routes>
        </Suspense>
        </div>
