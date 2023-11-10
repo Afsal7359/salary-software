@@ -78,12 +78,10 @@ module.exports = {
 
       // Delete the existing Employeetype
    await Type.deleteOne({_id:id });
-const response =await Employeetype.find()
       console.log(" Deleted Successfully");
       res.status(200).json({
         success: true,
         message: "Deleted successfully.",
-        data:response
       });
     } catch (err) {
       res.status(500).json({
