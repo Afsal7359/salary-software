@@ -14,7 +14,6 @@ module.exports = {
       }
 
       const newEmployeetype = new Employeetype(data);
-
       await newEmployeetype.save();
 
       console.log("Employeetype Added Successfully");
@@ -75,15 +74,14 @@ module.exports = {
           
         });
       }
-
-      // Delete the existing Employeetype
-   await Employeetype.deleteOne({_id:id });
-const response =await Employeetype.find()
+     
+     
+     // Soft delete by updating isdeleted field
+  await Employeetype.updateOne({ _id: id }, { $set: { isdeleted: true } });
       console.log(" Deleted Successfully");
       res.status(200).json({
         success: true,
         message: "Deleted successfully.",
-        data:response
       });
     } catch (err) {
       res.status(500).json({
@@ -119,7 +117,7 @@ const response =await Employeetype.find()
   GetallEmployeetype: async (req, res) => {
     try {
       // Retrieve a single Employeetype record based on the specified employeeid
-      const employeetype = await Employeetype.find();
+      const employeetype = await Employeetype.find({ isdeleted: { $ne: true } });
 
       if (!employeetype) {
         return res.status(404).json({

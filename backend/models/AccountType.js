@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
-const PurposeSchema= new mongoose.Schema({
-    Purposeid:{
+const AccountTypeSchema= new mongoose.Schema({
+    accounttypeid:{
         type: String,
         require:true,
         trim:true
@@ -19,5 +19,5 @@ const PurposeSchema= new mongoose.Schema({
    
 
 })
-const Purposedata = mongoose.model('Purpose',PurposeSchema);
-module.exports=Purposedata;
+const newaccounttype = mongoose.model('accounttype',AccountTypeSchema);
+module.exports=newaccounttype;

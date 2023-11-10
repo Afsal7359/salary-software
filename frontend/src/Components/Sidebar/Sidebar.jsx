@@ -171,6 +171,8 @@ const Sidebar = () => {
                             <li><Link to="/add-Bank-master"> Add Bank</Link></li>
                             <li><Link to="/add-purpose"> Add purpose</Link></li>
                             <li><Link to="/add-Type"> Add Type</Link></li>
+                            <li><Link to="/add-operationalType"> Add OperationalType</Link></li>
+                            <li><Link to="/add-accounttype"> Add AccountType</Link></li>
 							
 							</ul>
 						</li>

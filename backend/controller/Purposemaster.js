@@ -77,13 +77,11 @@ module.exports = {
       }
 
       // Delete the existing Employeetype
-   await Purpose.deleteOne({_id:id });
-const response =await Purpose.find()
+      await Purpose.updateOne({ _id: id }, { $set: { isdeleted: true } });
       console.log(" Deleted Successfully");
       res.status(200).json({
         success: true,
         message: "Deleted successfully.",
-        data:response
       });
     } catch (err) {
       res.status(500).json({
@@ -96,7 +94,7 @@ const response =await Purpose.find()
   GetallPurpose: async (req, res) => {
     try {
       // Retrieve a single Employeetype record based on the specified employeeid
-      const Purposedata = await Purpose.find();
+      const Purposedata = await Purpose.find({ isdeleted: { $ne: true } });
 
       if (!Purposedata) {
         return res.status(404).json({

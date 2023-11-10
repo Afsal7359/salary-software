@@ -3,7 +3,7 @@ const Designation = require("../models/Designation");
 module.exports={
     GetDesignation:async(req,res)=>{
         try{
-            const response= await Designation.find()
+            const response= await Designation.find({ isdeleted: { $ne: true } })
             console.log("Designation data get Successfully");
             res.status(200).json({
               success: true,
@@ -95,7 +95,7 @@ module.exports={
           }
     
           // Delete the existing Employeetype
-          await Designation.deleteOne({_id:id });
+          await Designation.updateOne({ _id: id }, { $set: { isdeleted: true } });
           res.status(200).json({
             success: true,
             message: "Designation deleted successfully.",

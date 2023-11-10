@@ -10,6 +10,11 @@ const UnitSchema=new mongoose.Schema({
         type:String,
         require:true,
         trim:true
+    },
+    isdeleted:{
+        type:Boolean,
+        require:true,
+        default:false
     }
 
 })

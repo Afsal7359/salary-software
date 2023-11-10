@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
-const PurposeSchema= new mongoose.Schema({
-    Purposeid:{
+const operationalSchema= new mongoose.Schema({
+    operationalid:{
         type: String,
         require:true,
         trim:true
@@ -19,5 +19,5 @@ const PurposeSchema= new mongoose.Schema({
    
 
 })
-const Purposedata = mongoose.model('Purpose',PurposeSchema);
-module.exports=Purposedata;
+const newoperational = mongoose.model('operational',operationalSchema);
+module.exports=newoperational;

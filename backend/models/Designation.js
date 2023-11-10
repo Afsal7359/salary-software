@@ -11,7 +11,11 @@ const designationSchema = new mongoose.Schema({
         require: true,
         trim: true,
       },
-     
+      isdeleted:{
+        type:Boolean,
+        require:true,
+        default:false
+    }
   
  
 });

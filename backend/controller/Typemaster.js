@@ -77,7 +77,7 @@ module.exports = {
       }
 
       // Delete the existing Employeetype
-   await Type.deleteOne({_id:id });
+      await Type.updateOne({ _id: id }, { $set: { isdeleted: true } });
       console.log(" Deleted Successfully");
       res.status(200).json({
         success: true,
@@ -94,7 +94,7 @@ module.exports = {
   GetallType: async (req, res) => {
     try {
       // Retrieve a single Employeetype record based on the specified employeeid
-      const Typedata = await Type.find();
+      const Typedata = await Type.find({ isdeleted: { $ne: true } });
 
       if (!Typedata) {
         return res.status(404).json({

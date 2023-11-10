@@ -3,7 +3,7 @@ const Unit = require("../models/Unit");
 module.exports={
     GetUnit:async(req,res)=>{
         try{
-            const response= await Unit.find()
+            const response= await Unit.find({ isdeleted: { $ne: true } })
             console.log("Unit data get Successfully");
             res.status(200).json({
               success: true,
@@ -94,7 +94,7 @@ module.exports={
           }
     
           // Delete the existing Employeetype
-          await Unit.deleteOne({_id:id });
+          await Unit.updateOne({ _id: id }, { $set: { isdeleted: true } });
           res.status(200).json({
             success: true,
             message: "Unit deleted successfully.",

@@ -4,7 +4,7 @@ module.exports={
 
     GetDepartment:async(req,res)=>{
         try{
-            const response= await Department.find()
+            const response= await Department.find({ isdeleted: { $ne: true } })
             console.log("Department data get Successfully");
             res.status(200).json({
               success: true,
@@ -84,7 +84,7 @@ module.exports={
           }
     
           // Delete the existing Employeetype
-          await Department.deleteOne({_id:id });
+          await Department.updateOne({ _id: id }, { $set: { isdeleted: true } });
           res.status(200).json({
             success: true,
             message: "Department deleted successfully.",

@@ -12,6 +12,11 @@ const  UnitRouter = require('./routes/UnitRouter');
 const  DesignationRouter = require('./routes/DesignationRouter');
 const  PurposeRouter = require('./routes/PurposeRouter');
 const  TypeRouter = require('./routes/TypeRoter');
+const  OperationalTypeRouter = require('./routes/OperationaltypeRouter');
+const  AccountTypeRouter = require('./routes/AccountTypeRouter');
+
+
+
 dotenv.config()
 
 
@@ -38,9 +43,8 @@ app.use('/api/Unit',UnitRouter)
 app.use('/api/Designation',DesignationRouter)
 app.use('/api/purpose',PurposeRouter)
 app.use('/api/Type',TypeRouter)
-
-
-
+app.use('/api/operatonaltype',OperationalTypeRouter)
+app.use('/api/accounttype',AccountTypeRouter)
 
 
 
