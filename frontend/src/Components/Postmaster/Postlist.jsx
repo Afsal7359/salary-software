@@ -1,262 +1,189 @@
-import React from 'react'
-import searchicon from '../../assets/img/icons/search-normal.svg'
-import addicon from '../../assets/img/icons/plus.svg'
-import refreshicon  from '../../assets/img/icons/re-fresh.svg'
-import pdficon  from '../../assets/img/icons/pdf-icon-01.svg'
-import TXticon  from '../../assets/img/icons/pdf-icon-02.svg'
-import csvicon  from '../../assets/img/icons/pdf-icon-03.svg'
-import Excelicon  from '../../assets/img/icons/pdf-icon-04.svg'
-function Postlist() {
+import React, { useEffect, useState,useMemo,useCallback  } from 'react';
+import searchicon from '../../assets/img/icons/search-normal.svg';
+import addicon from '../../assets/img/icons/plus.svg';
+import refreshicon from '../../assets/img/icons/re-fresh.svg';
+import pdficon from '../../assets/img/icons/pdf-icon-01.svg';
+import TXticon from '../../assets/img/icons/pdf-icon-02.svg';
+import csvicon from '../../assets/img/icons/pdf-icon-03.svg';
+import Excelicon from '../../assets/img/icons/pdf-icon-04.svg';
+import { getallpost } from '../../Apicalls/Post';
+import Postdelete from '../Modal/Postdelete';
+
+function Postlist({ formdata, setformdata }) {
+  console.log(formdata, 'yyyyyyyyyyyyyyyy');
+  const [Data, setData] = useState([]);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [showDeleteModal, setshowDeleteModal] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  
+useEffect(() => {
+	if (formdata.length !== 0) {
+	  setData((prevData) => [...prevData, formdata]);
+	  setformdata([]);
+	}
+  }, [formdata]);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const result = await getallpost();
+        console.log(result.data, 'response');
+        setData(result.data);
+        setIsLoading(false);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    }
+
+    fetchData();
+  }, []);
+
+  const memoizedData = useMemo(() => Data, [Data]);
+
+
+  const handleEditClick = useCallback((item) => {
+	setShowEditModal(true);
+	setSelectedItem(item);
+  }, []);
+
+  // Function to close the modal
+const closeEditModal = () => {
+	// Set showEditModal to false when the modal is closed
+	setShowEditModal(false);
+  };
+
+   // Function to handle the click event
+ const handleDeleteClick = (item) => {
+	console.log(item);
+	setshowDeleteModal(true)
+	setSelectedItem(item)
+   };
+   
+   const closeDeleteModal = () => {
+	 // Set showEditModal to false when the modal is closed
+	 setshowDeleteModal(false);
+   };
+  if (isLoading) {
+    return <div>Loading...</div>; // You can render a loading indicator here
+  }
+
   return (
-  <>
-  <div class="row">
-					<div class="col-sm-12">
-		<div className="card  card-table show-entire">
-			<div className="card-body">
-				<div className="page-table-header mb-2">
-					<div className="row align-items-center">
-						<div className="col">
-								<div className="doctor-table-blk">
-									<h3>Post List</h3>
-										<div className="doctor-search-blk">
-											<div className="top-nav-search table-search-blk">
-												<form>
-													<input type="text" className="form-control" placeholder="Search here"/>
-													<a className="btn"><img src={searchicon} alt=""/></a>
-												</form>
-											</div>
-											<div className="add-group">
-											<a href="add-doctor.html" className="btn btn-primary add-pluss ms-2"><img src={addicon} alt=""/></a>
-											<a href="javascript:;" className="btn btn-primary doctor-refresh ms-2"><img src={refreshicon} alt=""/></a>
-											</div>
-										</div>
-								</div>
-						</div>
-										<div className="col-auto text-end float-end ms-auto download-grp">
-											<a href="javascript:;" className=" me-2"><img src={pdficon} alt=""/></a>
-											<a href="javascript:;" className=" me-2"><img src={TXticon} alt=""/></a>
-											<a href="javascript:;" className=" me-2"><img src={csvicon} alt=""/></a>
-											<a href="javascript:;" ><img src={Excelicon} alt=""/></a>
-											
-										</div>
-									</div>
-								</div>
-					
-								
-								<div class="table-responsive">
-									<table class="table border-0 custom-table comman-table datatable mb-0">
-										<thead>
-											<tr>
-												<th>
-													<div class="form-check check-tables">
-														<input class="form-check-input" type="checkbox" value="something"/>
-													</div>
-												</th>
-												<th>Name</th>
-												<th>Department</th>
-												<th>Specialization</th>
-												<th>Degree</th>
-												<th>Mobile</th>
-												<th>Email</th>
-												<th >Joining Date</th>
-												<th ></th>
-											</tr>
-										</thead>
-										<tbody>
-											<tr>
-												<td>
-													<div class="form-check check-tables">
-														<input class="form-check-input" type="checkbox" value="something"/>
-													</div>
-												</td>
-												<td class="profile-image"><a href="profile.html"><img width="28" height="28" src="assets/img/profiles/avatar-01.jpg" class="rounded-circle m-r-5" alt=""/> Andrea Lalema</a></td>
-												<td>Otolaryngology</td>
-												<td>Infertility</td>
-												<td>MBBS, MS</td>
-												<td><a href="javascript:;">+1 23 456890</a></td>
-												<td><a href="https://preclinic.dreamstechnologies.com/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="a6c3dec7cbd6cac3e6c3cbc7cfca88c5c9cb">[email&#160;protected]</a></td>
-												<td>01.10.2022</td>
-												<td class="text-end">
-													<div class="dropdown dropdown-action">
-														<a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
-														<div class="dropdown-menu dropdown-menu-end">
-															<a class="dropdown-item" href="edit-doctor.html"><i class="fa-solid fa-pen-to-square m-r-5"></i> Edit</a>
-															<a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#delete_patient"><i class="fa fa-trash-alt m-r-5"></i> Delete</a>
-														</div>
-													</div>
-												</td>
-											</tr>
-											<tr>
-												<td>
-													<div class="form-check check-tables">
-														<input class="form-check-input" type="checkbox" value="something"/>
-													</div>
-												</td>
-												<td class="profile-image"><a href="profile.html"><img width="28" height="28" src="assets/img/profiles/avatar-02.jpg" class="rounded-circle m-r-5" alt=""/> Dr.Smith Bruklin</a></td>
-												<td>Urology</td>
-												<td>Prostate</td>
-												<td>MBBS, MS</td>
-												<td><a href="javascript:;">+1 23 456890</a></td>
-												<td><a href="https://preclinic.dreamstechnologies.com/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="0a6f726b677a666f4a6f676b636624696567">[email&#160;protected]</a></td>
-												<td>01.10.2022</td>
-												<td class="text-end">
-													<div class="dropdown dropdown-action">
-														<a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
-														<div class="dropdown-menu dropdown-menu-end">
-															<a class="dropdown-item" href="edit-doctor.html"><i class="fa-solid fa-pen-to-square m-r-5"></i> Edit</a>
-															<a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#delete_patient"><i class="fa fa-trash-alt m-r-5"></i> Delete</a>
-														</div>
-													</div>
-												</td>
-											</tr>
-											<tr>
-												<td>
-													<div class="form-check check-tables">
-														<input class="form-check-input" type="checkbox" value="something"/>
-													</div>
-												</td>
-												<td class="profile-image"><a href="profile.html"><img width="28" height="28" src="assets/img/profiles/avatar-03.jpg" class="rounded-circle m-r-5" alt=""/> Dr.William Stephin</a></td>
-												<td>Radiology</td>
-												<td>Cancer</td>
-												<td>MBBS, MS</td>
-												<td><a href="javascript:;">+1 23 456890</a></td>
-												<td><a href="https://preclinic.dreamstechnologies.com/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="086d70696578646d486d65696164266b6765">[email&#160;protected]</a></td>
-												<td>01.10.2022</td>
-												<td class="text-end">
-													<div class="dropdown dropdown-action">
-														<a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
-														<div class="dropdown-menu dropdown-menu-end">
-															<a class="dropdown-item" href="edit-doctor.html"><i class="fa-solid fa-pen-to-square m-r-5"></i> Edit</a>
-															<a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#delete_patient"><i class="fa fa-trash-alt m-r-5"></i> Delete</a>
-														</div>
-													</div>
-												</td>
-											</tr>
-											<tr>
-												<td>
-													<div class="form-check check-tables">
-														<input class="form-check-input" type="checkbox" value="something"/>
-													</div>
-												</td>
-												<td class="profile-image"><a href="profile.html"><img width="28" height="28" src="assets/img/profiles/avatar-04.jpg" class="rounded-circle m-r-5" alt=""/> Bernardo James</a></td>
-												<td>Dentist</td>
-												<td>Prostate</td>
-												<td>MBBS, MS</td>
-												<td><a href="javascript:;">+1 23 456890</a></td>
-												<td><a href="https://preclinic.dreamstechnologies.com/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="47223f262a372b2207222a262e2b6924282a">[email&#160;protected]</a></td>
-												<td>01.10.2022</td>
-												<td class="text-end">
-													<div class="dropdown dropdown-action">
-														<a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
-														<div class="dropdown-menu dropdown-menu-end">
-															<a class="dropdown-item" href="edit-doctor.html"><i class="fa-solid fa-pen-to-square m-r-5"></i> Edit</a>
-															<a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#delete_patient"><i class="fa fa-trash-alt m-r-5"></i> Delete</a>
-														</div>
-													</div>
-												</td>
-											</tr>
-											<tr>
-												<td>
-													<div class="form-check check-tables">
-														<input class="form-check-input" type="checkbox" value="something"/>
-													</div>
-												</td>
-												<td class="profile-image"><a href="profile.html"><img width="28" height="28" src="assets/img/profiles/avatar-06.jpg" class="rounded-circle m-r-5" alt=""/>Cristina Groves</a></td>
-												<td>Gynocolgy</td>
-												<td>Prostate</td>
-												<td>MBBS, MS</td>
-												<td><a href="javascript:;">+1 23 456890</a></td>
-												<td><a href="https://preclinic.dreamstechnologies.com/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="0f6a776e627f636a4f6a626e6663216c6062">[email&#160;protected]</a></td>
-												<td>01.10.2022</td>
-												<td class="text-end">
-													<div class="dropdown dropdown-action">
-														<a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
-														<div class="dropdown-menu dropdown-menu-end">
-															<a class="dropdown-item" href="edit-doctor.html"><i class="fa-solid fa-pen-to-square m-r-5"></i> Edit</a>
-															<a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#delete_patient"><i class="fa fa-trash-alt m-r-5"></i> Delete</a>
-														</div>
-													</div>
-												</td>
-											</tr>
-											<tr>
-												<td>
-													<div class="form-check check-tables">
-														<input class="form-check-input" type="checkbox" value="something"/>
-													</div>
-												</td>
-												<td class="profile-image"><a href="profile.html"><img width="28" height="28" src="assets/img/profiles/avatar-05.jpg" class="rounded-circle m-r-5" alt=""/> Mark Hay Smith</a></td>
-												<td>Gynocolgy</td>
-												<td>Prostate</td>
-												<td>MBBS, MS</td>
-												<td><a href="javascript:;">+1 23 456890</a></td>
-												<td><a href="https://preclinic.dreamstechnologies.com/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="a8cdd0c9c5d8c4cde8cdc5c9c1c486cbc7c5">[email&#160;protected]</a></td>
-												<td>01.10.2022</td>
-												<td class="text-end">
-													<div class="dropdown dropdown-action">
-														<a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
-														<div class="dropdown-menu dropdown-menu-end">
-															<a class="dropdown-item" href="edit-doctor.html"><i class="fa-solid fa-pen-to-square m-r-5"></i> Edit</a>
-															<a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#delete_patient"><i class="fa fa-trash-alt m-r-5"></i> Delete</a>
-														</div>
-													</div>
-												</td>
-											</tr>
-											<tr>
-												<td>
-													<div class="form-check check-tables">
-														<input class="form-check-input" type="checkbox" value="something"/>
-													</div>
-												</td>
-												<td class="profile-image"><a href="profile.html"><img width="28" height="28" src="assets/img/profiles/avatar-01.jpg" class="rounded-circle m-r-5" alt=""/> Andrea Lalema</a></td>
-												<td>Otolaryngology</td>
-												<td>Infertility</td>
-												<td>MBBS, MS</td>
-												<td><a href="javascript:;">+1 23 456890</a></td>
-												<td><a href="https://preclinic.dreamstechnologies.com/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="204558414d504c4560454d41494c0e434f4d">[email&#160;protected]</a></td>
-												<td>01.10.2022</td>
-												<td class="text-end">
-													<div class="dropdown dropdown-action">
-														<a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
-														<div class="dropdown-menu dropdown-menu-end">
-															<a class="dropdown-item" href="edit-doctor.html"><i class="fa-solid fa-pen-to-square m-r-5"></i> Edit</a>
-															<a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#delete_patient"><i class="fa fa-trash-alt m-r-5"></i> Delete</a>
-														</div>
-													</div>
-												</td>
-											</tr>
-											<tr>
-												<td>
-													<div class="form-check check-tables">
-														<input class="form-check-input" type="checkbox" value="something"/>
-													</div>
-												</td>
-												<td class="profile-image"><a href="profile.html"><img width="28" height="28" src="assets/img/profiles/avatar-02.jpg" class="rounded-circle m-r-5" alt=""/> Dr.Smith Bruklin</a></td>
-												<td>Urology</td>
-												<td>Prostate</td>
-												<td>MBBS, MS</td>
-												<td><a href="javascript:;">+1 23 456890</a></td>
-												<td><a href="https://preclinic.dreamstechnologies.com/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="0a6f726b677a666f4a6f676b636624696567">[email&#160;protected]</a></td>
-												<td>01.10.2022</td>
-												<td class="text-end">
-													<div class="dropdown dropdown-action">
-														<a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
-														<div class="dropdown-menu dropdown-menu-end">
-															<a class="dropdown-item" href="edit-doctor.html"><i class="fa-solid fa-pen-to-square m-r-5"></i> Edit</a>
-															<a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#delete_patient"><i class="fa fa-trash-alt m-r-5"></i> Delete</a>
-														</div>
-													</div>
-												</td>
-											</tr>
-										</tbody>
-									</table>
-								</div>
-							</div>
-						</div>	
+    <>
+      <div className="row">
+        <div className="col-sm-12">
+          {memoizedData.length === 0 ? (
+            <p>No Data available</p>
+          ) : (
+            <div className="card card-table show-entire">
+              <div className="card-body">
+                <div className="page-table-header mb-2">
+                  <div className="row align-items-center">
+                    <div className="col">
+                      <div className="doctor-table-blk">
+                        <h3>Post List</h3>
+                        <div className="doctor-search-blk">
+                          <div className="top-nav-search table-search-blk">
+                            <form>
+                              <input type="text" className="form-control" placeholder="Search here" />
+                              <a className="btn">
+                                <img src={searchicon} alt="" />
+                              </a>
+                            </form>
+                          </div>
+                          <div className="add-group">
+                            <a href="add-doctor.html" className="btn btn-primary add-pluss ms-2">
+                              <img src={addicon} alt="" />
+                            </a>
+                            <a href="javascript:;" className="btn btn-primary doctor-refresh ms-2">
+                              <img src={refreshicon} alt="" />
+                            </a>
+                          </div>
                         </div>
-                        </div>						
-			
-  </>
-  )
+                      </div>
+                    </div>
+                    <div className="col-auto text-end float-end ms-auto download-grp">
+                      <a href="javascript:;" className=" me-2">
+                        <img src={pdficon} alt="" />
+                      </a>
+                      <a href="javascript:;" className=" me-2">
+                        <img src={TXticon} alt="" />
+                      </a>
+                      <a href="javascript:;" className=" me-2">
+                        <img src={csvicon} alt="" />
+                      </a>
+                      <a href="javascript:;">
+                        <img src={Excelicon} alt="" />
+                      </a>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="table-responsive">
+                  <table className="table border-0 custom-table comman-table datatable mb-0">
+                    <thead>
+                      <tr>
+                        <th>No</th>
+                        <th>Department</th>
+                        <th>Unit</th>
+                        <th>Designation</th>
+                        <th></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {memoizedData.map((item, index) => (
+                        <tr key={item._id}>
+                          <td>{index + 1}</td>
+                          <td>{item.department.name}</td>
+                          <td>{item.designation.name}</td>
+                          <td>{item.unit.name}</td>
+                          <td className="text-end">
+                            <div className="dropdown dropdown-action">
+                              <a href="#" className="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i className="fa fa-ellipsis-v"></i>
+                              </a>
+                              <div className="dropdown-menu dropdown-menu-end">
+                                <a className="dropdown-item"  onMouseEnter={() => {
+                                setSelectedItem(item);
+                                setShowEditModal(true);
+                              }}
+                               onClick={() => handleEditClick(item)}>
+                                  <i className="fa-solid fa-pen-to-square m-r-5"></i> Edit
+                                </a>
+                                <a className="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#delete_patient"   onMouseEnter={() => {
+                                setshowDeleteModal(true);
+                                setSelectedItem(item);
+                              }}
+                              onClick={() => handleDeleteClick(item)}>
+                                  <i className="fa fa-trash-alt m-r-5"></i> Delete
+                                </a>
+                              </div>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+
+	  {/* {showEditModal && selectedItem && (
+ <p>ihjihuuijhuhgtft6fdfrdfr5df5rdfr</p>
+)} */}
+
+
+{showDeleteModal && selectedItem &&(<Postdelete
+ setData={setData}
+ Data={Data}
+ item={selectedItem}
+ closeDeleteModal={closeDeleteModal}
+/>)}
+    </>
+  );
 }
 
-export default Postlist
+export default React.memo(Postlist);

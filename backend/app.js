@@ -14,6 +14,8 @@ const  PurposeRouter = require('./routes/PurposeRouter');
 const  TypeRouter = require('./routes/TypeRoter');
 const  OperationalTypeRouter = require('./routes/OperationaltypeRouter');
 const  AccountTypeRouter = require('./routes/AccountTypeRouter');
+const  PostRouter = require('./routes/PostRouter');
+const  BankRouter = require('./routes/BankRouter');
 
 
 
@@ -45,6 +47,9 @@ app.use('/api/purpose',PurposeRouter)
 app.use('/api/Type',TypeRouter)
 app.use('/api/operatonaltype',OperationalTypeRouter)
 app.use('/api/accounttype',AccountTypeRouter)
+app.use('/api/post',PostRouter)
+app.use('/api/bank',BankRouter)
+
 
 
 

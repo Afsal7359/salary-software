@@ -17,45 +17,47 @@ const Sidebar = () => {
 						<li className="submenu">
 							<a href="#"><span className="menu-side"><img src={Dashboard} alt=""/></span> <span> Dashboard </span> <span className="menu-arrow"></span></a>
 							<ul style={{ display:'none'}}>
-								<li><a className="active" href="index.html">Admin Dashboard</a></li>
+								{/* <li><a className="active" href="index.html">Admin Dashboard</a></li>
 								<li><a href="doctor-dashboard.html">Doctor Dashboard</a></li>
-								<li><a href="patient-dashboard.html">Patient Dashboard</a></li>
+								<li><a href="patient-dashboard.html">Patient Dashboard</a></li> */}
 							</ul>
 						</li>
 						<li className="submenu">
 							<a href="#"><span className="menu-side"><img src={Doctors} alt=""/></span> <span> Employee Master</span> <span className="menu-arrow"></span></a>
 							<ul style={{ display:'none'}}>
                             <li><Link to="/add-employee-master">Add Employee Master</Link></li>
-                            <li><Link to="/add-doctor">Add Doctor</Link></li>
+                            
+                            {/* <li><Link to="/add-doctor">Add Doctor</Link></li>
                             <li><Link to="/edit-doctor">Edit Doctor</Link></li>
-                            <li><Link to="/doctor-profile">Doctor Profile</Link></li>
+                            <li><Link to="/doctor-profile">Doctor Profile</Link></li> */}
 							</ul>
 						</li>
                         <li className="submenu">
 							<a href="#"><span className="menu-side"><img src={Bankicon} alt=""/></span> <span> Bank Master</span> <span className="menu-arrow"></span></a>
 							<ul style={{ display:'none'}}>
-                            <li><Link to="/add-Bankaccount-master">Add Bank</Link></li>
-                            <li><Link to="/add-doctor">Add Doctor</Link></li>
+                            <li><Link to="/add-Bankaccount-master">Add BankAccount</Link></li>
+                            <li><Link to="/add-Bank-master"> Add Bank</Link></li>
+                            {/* <li><Link to="/add-doctor">Add Doctor</Link></li>
                             <li><Link to="/edit-doctor">Edit Doctor</Link></li>
-                            <li><Link to="/doctor-profile">Doctor Profile</Link></li>
+                            <li><Link to="/doctor-profile">Doctor Profile</Link></li> */}
 							</ul>
 						</li>
                         <li className="submenu">
 							<a href="#"><span className="menu-side"><img src={Posts} alt=""/></span> <span> Post Master</span> <span className="menu-arrow"></span></a>
 							<ul style={{ display:'none'}}>
                             <li><Link to="/add-post-master">Add Post Master</Link></li>
-                            <li><Link to="/add-doctor">Add Doctor</Link></li>
+                            {/* <li><Link to="/add-doctor">Add Doctor</Link></li>
                             <li><Link to="/edit-doctor">Edit Doctor</Link></li>
-                            <li><Link to="/doctor-profile">Doctor Profile</Link></li>
+                            <li><Link to="/doctor-profile">Doctor Profile</Link></li> */}
 							</ul>
 						</li>
                         <li className="submenu">
 							<a href="#"><span className="menu-side"><img src={Posts} alt=""/></span> <span> Salary Master</span> <span className="menu-arrow"></span></a>
 							<ul style={{ display:'none'}}>
                             <li><Link to="/add-salary-master">Add salary Master</Link></li>
-                            <li><Link to="/add-doctor">Add Doctor</Link></li>
+                            {/* <li><Link to="/add-doctor">Add Doctor</Link></li>
                             <li><Link to="/edit-doctor">Edit Doctor</Link></li>
-                            <li><Link to="/doctor-profile">Doctor Profile</Link></li>
+                            <li><Link to="/doctor-profile">Doctor Profile</Link></li> */}
 							</ul>
 						</li>
 						{/* <li className="submenu">
