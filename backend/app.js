@@ -16,7 +16,7 @@ const  OperationalTypeRouter = require('./routes/OperationaltypeRouter');
 const  AccountTypeRouter = require('./routes/AccountTypeRouter');
 const  PostRouter = require('./routes/PostRouter');
 const  BankRouter = require('./routes/BankRouter');
-
+const salary = require('./routes/SalarymasterRouter');
 
 
 dotenv.config()
@@ -49,6 +49,7 @@ app.use('/api/operatonaltype',OperationalTypeRouter)
 app.use('/api/accounttype',AccountTypeRouter)
 app.use('/api/post',PostRouter)
 app.use('/api/bank',BankRouter)
+app.use('/api/salary',salary)
 
 
 
