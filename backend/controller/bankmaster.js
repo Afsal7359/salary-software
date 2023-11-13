@@ -1,4 +1,4 @@
-const Bankmaster = require("../models/bankmaster");
+const Bankmaster = require("../models/Bankmaster");
 
 
 module.exports={
