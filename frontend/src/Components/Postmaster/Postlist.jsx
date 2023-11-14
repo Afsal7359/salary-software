@@ -8,6 +8,7 @@ import csvicon from '../../assets/img/icons/pdf-icon-03.svg';
 import Excelicon from '../../assets/img/icons/pdf-icon-04.svg';
 import { getallpost } from '../../Apicalls/Post';
 import Postdelete from '../Modal/Postdelete';
+import Postedit from '../Modal/Postedit';
 
 function Postlist({ formdata, setformdata }) {
   console.log(formdata, 'yyyyyyyyyyyyyyyy');
@@ -143,11 +144,12 @@ const closeEditModal = () => {
                                 <i className="fa fa-ellipsis-v"></i>
                               </a>
                               <div className="dropdown-menu dropdown-menu-end">
-                                <a className="dropdown-item"  onMouseEnter={() => {
+                                <a  onMouseEnter={() => {
                                 setSelectedItem(item);
                                 setShowEditModal(true);
                               }}
-                               onClick={() => handleEditClick(item)}>
+                               onClick={() => handleEditClick(item)} className="dropdown-item" data-bs-toggle="modal"
+                               data-bs-target="#delete_patients">
                                   <i className="fa-solid fa-pen-to-square m-r-5"></i> Edit
                                 </a>
                                 <a className="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#delete_patient"   onMouseEnter={() => {
@@ -171,10 +173,18 @@ const closeEditModal = () => {
         </div>
       </div>
 
-	  {/* {showEditModal && selectedItem && (
+	  {showEditModal && selectedItem && (
  <p>ihjihuuijhuhgtft6fdfrdfr5df5rdfr</p>
+)}
+ {/* {showEditModal&& (
+  <Postedit
+  setData={setData}
+  Data={Data}
+    item={selectedItem}
+    closeEditModal={closeEditModal}
+   
+  />
 )} */}
-
 
 {showDeleteModal && selectedItem &&(<Postdelete
  setData={setData}
