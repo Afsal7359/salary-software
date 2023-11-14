@@ -149,11 +149,22 @@ const closeEditModal = () => {
                             </a>
                             <div className="dropdown-menu dropdown-menu-end">
                               <a
-                              onMouseEnter={() => {
-                                setSelectedItem(item);
-                                setShowEditModal(true);
-                              }}
-                               onClick={() => handleEditClick(item)} className="dropdown-item" data-bs-toggle="modal"
+                             onMouseEnter={() => {
+                              setSelectedItem(item);
+                              setShowEditModal(true);
+                            }}
+                            onClick={(event) => {
+                              // Prevent the default click behavior to avoid double triggering on mobile devices
+                              event.preventDefault();
+                              
+                              // Your edit click logic
+                              handleEditClick(item);
+                            }}
+                            onTouchStart={() => {
+                              // Touch devices do not have onMouseEnter, so use onTouchStart
+                              setSelectedItem(item);
+                              setShowEditModal(true);
+                            }} className="dropdown-item" data-bs-toggle="modal"
                                 data-bs-target="#delete_patients"
                                 >
                                 <i className="fa-solid fa-pen-to-square m-r-5"></i> Edit

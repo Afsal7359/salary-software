@@ -1,5 +1,6 @@
 import React from 'react'
 import PageHeader from '../PageHeader'
+import SalaryComponent from './SalaryComponent'
 
 const AddEmployeemaster = () => {
   return (
@@ -205,6 +206,8 @@ const AddEmployeemaster = () => {
 						</div>							
 					</div>					
 				</div>
+
+				<SalaryComponent/>
    </>
   )
 }

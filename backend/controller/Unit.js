@@ -63,7 +63,8 @@ module.exports={
           }
     
           // Update the existing Employeetype with new data
-          await Unit.updateOne(data);
+          await Unit.updateOne({ _id: id }, data);
+          // await Unit.updateOne(data);
     
           console.log("Unit Edited Successfully");
           res.status(200).json({

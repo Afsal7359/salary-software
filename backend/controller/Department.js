@@ -55,6 +55,15 @@ module.exports={
             const {id}=req.params;
             const data=req.body;
 
+            const existingDepartment = await Department.findOne({_id:id});
+    
+            if (!existingDepartment) {
+              return res.status(404).json({
+                success: false,
+                message: "Designation not found.",
+              });
+            }
+
             await Department.updateOne({ _id: id }, data);
             res.json({
                 success: true,

@@ -1,12 +1,12 @@
 import React from 'react'
 import Logo from '../Logo'
-import search from '../../assets/img/icons/search-normal.svg'
-import menu1 from '../../assets/img/icons/bar-icon.svg'
-import menu2 from '../../assets/img/icons/bar-icon.svg'
-import book from '../../assets/img/icons/note-icon-02.svg'
-import user from '../../assets/img/profiles/avatar-03.jpg'
-import notification from '../../assets/img/icons/note-icon-01.svg'
-import settings from '../../assets/img/icons/setting-icon-01.svg'
+import search from '/assets/img/icons/search-normal.svg'
+import menu1 from '/assets/img/icons/bar-icon.svg'
+import menu2 from '/assets/img/icons/bar-icon.svg'
+import book from '/assets/img/icons/note-icon-02.svg'
+import user from '/assets/img/profiles/avatar-03.jpg'
+import notification from '/assets/img/icons/note-icon-01.svg'
+import settings from '/assets/img/icons/setting-icon-01.svg'
 const Header = () => {
   return (
     <>
