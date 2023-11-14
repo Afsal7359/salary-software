@@ -50,11 +50,51 @@ module.exports={
                 } catch (err) {
                     res.status(500).json({
                         success: false,
-                        message: "Failed to add Post.",
+                        message: "Failed to add Salary Master.",
                         error: err.message,
                     });
                 }
             },
+
+            EditSalaryMaster: async (req, res) => {
+              console.log(req.body, 'gggggggggggggggggggggggggggggggg');
+              try {
+                  const { name, purposeId, typeId, salarymasterId } = req.body;
+                  const { id } = req.params;
+          
+                  // Use updateOne directly on the model to update the document
+                  await Salarymaster.updateOne({ _id: id }, {
+                      name,
+                      purpose: purposeId,
+                      type: typeId,
+                      salarymasterId
+                  });
+          
+                  const populatedSalary = await Salarymaster.findById(id)
+                  .populate([
+                    { path: 'purpose' },
+                    { path: 'type' },
+                  ]);
+                
+
+                  console.log(populatedSalary,"rrrrrrrrrrrrrrrrrrrrrrr");
+          
+                  console.log("Salarymaster Edited Successfully");
+                  res.status(200).json({
+                      success: true,
+                      message: "Salary master Edited successfully.",
+                      data: populatedSalary,
+                  });
+              } catch (err) {
+                  res.status(500).json({
+                      success: false,
+                      message: "Failed to Edit Salary Master.",
+                      error: err.message,
+                  });
+              }
+          },
+          
+
     DeleteSalarymaster: async (req, res) => {
         try {
           const {id } = req.params;

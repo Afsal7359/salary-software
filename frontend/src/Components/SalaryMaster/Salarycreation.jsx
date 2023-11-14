@@ -5,6 +5,9 @@ import { toast } from 'react-toastify';
 import { getallType } from '../../Apicalls/Type';
 import { useForm } from 'react-hook-form';
 import { Addsalarymaster } from '../../Apicalls/salarymaster';
+import Salarylist from './Salarylist';
+
+const MemoizedSalarylist = React.memo(Salarylist);
 
 function Salarycreation() {
 
@@ -201,7 +204,7 @@ function Salarycreation() {
 						</div>							
 					</div>					
 				</div>
-			
+				<MemoizedSalarylist  formdata={formdata} setformdata={setformdata} />
    </>
   )
 }

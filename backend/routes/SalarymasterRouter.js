@@ -5,7 +5,8 @@ const router = express.Router();
 
 router.post('/addsalarymaster',salarymaster.AddSalarymaster);
 // router.delete('/deletepost/:id',postcontroller.DeletePost)
-// router.get('/getallpost',postcontroller.GetPost)
+router.get('/getallsalary',salarymaster.GetSalarymaster)
+router.post('/editsalarymaster/:id',salarymaster.EditSalaryMaster);
 
 
 module.exports = router;
