@@ -8,6 +8,7 @@ import csvicon from '../../assets/img/icons/pdf-icon-03.svg';
 import Excelicon from '../../assets/img/icons/pdf-icon-04.svg';
 import SalaryMasteredit from '../Modal/SalaryMasteredit';
 import { getallSalary } from '../../Apicalls/salarymaster';
+import Salarymasterdelete from '../Modal/salarymasterdelete';
 
 function Salarylist({ formdata, setformdata }) {
   console.log(formdata, 'yyyyyyyyyyyyyyyy');
@@ -186,12 +187,12 @@ const closeEditModal = () => {
   />
 )}
 
-{/* {showDeleteModal && selectedItem &&(<PurposeDelete
+{showDeleteModal && selectedItem &&(<Salarymasterdelete
  setData={setData}
  Data={Data}
  item={selectedItem}
  closeDeleteModal={closeDeleteModal}
-/>)} */}
+/>)}
     </>
   );
 }

@@ -29,12 +29,12 @@ export const editsalarymaster= async (payload) => {
     }
   };
 
-//   export const deleteType = async (payload) => {
-//     try {
-//       // Make a PUT request to edit the employeetype
-//       const response = await instance.delete(`Type/deletetype/${payload}`);
-//       return response.data;
-//     } catch (err) {
-//       return err.response.data;
-//     }
-//   };
+  export const deletesalarymaster = async (payload) => {
+    try {
+      // Make a PUT request to edit the employeetype
+      const response = await instance.delete(`salary/deletesalarymaster/${payload}`);
+      return response.data;
+    } catch (err) {
+      return err.response.data;
+    }
+  };

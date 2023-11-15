@@ -4,7 +4,7 @@ const router = express.Router();
 
 
 router.post('/addsalarymaster',salarymaster.AddSalarymaster);
-// router.delete('/deletepost/:id',postcontroller.DeletePost)
+router.delete('/deletesalarymaster/:id',salarymaster.DeleteSalarymaster)
 router.get('/getallsalary',salarymaster.GetSalarymaster)
 router.post('/editsalarymaster/:id',salarymaster.EditSalaryMaster);
 

@@ -19,16 +19,14 @@ function SalaryMasteredit({ closeEditModal, item,setData,Data}) {
 
   const [PurposeData, setPurposeData] = useState([]);
 	const [TypeData, setTypeData]=useState([]);
-	const [name, setName] = useState([]);
 	const [PurposeId, setPurposeId]=useState('');
 	const [TypeId, setTypeId]=useState('');
-	const [formdata, setformdata] = useState([]);
 
 	const [isPurposeDataFetched, setIsPurposeDataFetched] = useState(false);
 	const [isTypeDataFetched, setIsTypeDataFetched] = useState(false);
 
   const handlePurposeClick = async () => {
-    console.log(PurposeData,"iiiiii");
+   
     try {
       if (!isPurposeDataFetched) {
         const response = await getallPurposee();
@@ -79,27 +77,7 @@ function SalaryMasteredit({ closeEditModal, item,setData,Data}) {
       });
       return;
     }
-  console.log(Data,"shahid");
-    // // Update Data array if itemid matches
-    // const updatedData = Data.map((dataItem) => {
-    //     if (dataItem._id === item._id) {
-    //         console.log("itemid is here");
-    //       // Update the name with the new value from formData
-    //       return {
-    //         ...dataItem,
-    //         name: formData.name,
-    //         purpose: { name: formData.purpose }, // Update purpose with the value from formData
-    //         type: { name: formData.type }, // Update type with the value from formData
-    //       };
-    //     } 
-    //     return dataItem;
-    //   });
-      
-      // Use the updatedData array as needed (e.g., set state or dispatch action)
-     
-      
-    
-    
+
     // setData(updatedData);
   
     formData._id =itemid;
@@ -175,35 +153,7 @@ function SalaryMasteredit({ closeEditModal, item,setData,Data}) {
                             {errors.name && <span className="text-danger">{errors.name.message}</span>}
                           </div>
                         </div>
-                        <div className="col-12 col-md-6 col-xl-6">
-                          <div className="form-group local-forms">
-                            <label>Type</label>
-                            <Controller
-                                name="typeId"
-                                control={control}
-                                defaultValue={item.type._id}  
-                                render={({ field }) => (
-                                    <select
-                                        className="form-control select"
-                                        onMouseEnter={handleTypeClick}
-                                        onChange={handleTypeChange}
-                                        {...field}
-                                    >
-                                        {/* Render the current type as the default option */}
-                                        <option value={item.type._id}>{item.type.name}</option>
-                                        {TypeData.map((option) => (
-                                            <option key={option._id} value={option._id}>
-                                                {option.name}
-                                            </option>
-                                        ))}
-                                    </select>
-                                )}
-                            />
 
-                          
-                            {errors.name && <span className="text-danger">{errors.name.message}</span>}
-                          </div>
-                        </div>
                         <div className="col-12 col-md-6 col-xl-6">
                           <div className="form-group local-forms">
                             <label>Purpose</label>
@@ -233,6 +183,37 @@ function SalaryMasteredit({ closeEditModal, item,setData,Data}) {
                             {errors.name && <span className="text-danger">{errors.name.message}</span>}
                           </div>
                         </div>
+
+                        <div className="col-12 col-md-6 col-xl-6">
+                          <div className="form-group local-forms">
+                            <label>Type</label>
+                            <Controller
+                                name="typeId"
+                                control={control}
+                                defaultValue={item.type._id}  
+                                render={({ field }) => (
+                                    <select
+                                        className="form-control select"
+                                        onMouseEnter={handleTypeClick}
+                                        onChange={handleTypeChange}
+                                        {...field}
+                                    >
+                                        {/* Render the current type as the default option */}
+                                        <option value={item.type._id}>{item.type.name}</option>
+                                        {TypeData.map((option) => (
+                                            <option key={option._id} value={option._id}>
+                                                {option.name}
+                                            </option>
+                                        ))}
+                                    </select>
+                                )}
+                            />
+
+                          
+                            {errors.name && <span className="text-danger">{errors.name.message}</span>}
+                          </div>
+                        </div>
+                       
                         <div className="col-12 col-md-6 col-xl-3">
                           <div className="doctor-submit text-end">
                             <button type="submit" data-bs-dismiss="modal"  className=" btn btn-primary submit-form me-2">

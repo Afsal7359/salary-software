@@ -18,15 +18,16 @@ export const getallpost = async () => {
         return err.response.data;
     }
 }
-// export const editType= async (payload) => {
-//     try {
-//       // Make a PUT request to edit the employeetype
-//       const response = await instance.put(`Type/edittype/${payload._id}`, payload);
-//       return response.data;
-//     } catch (err) {
-//       return err.response.data;
-//     }
-//   };
+export const editpost= async (payload) => {
+  console.log(payload,"iiiiiiiiiiiiiiiiiiiiiiiaaaaiiiiiiiiiii");
+    try {
+      // Make a PUT request to edit the employeetype
+      const response = await instance.put(`post/editpost/${payload._id}`, payload);
+      return response.data;
+    } catch (err) {
+      return err.response.data;
+    }
+  };
 
   export const deletepost = async (payload) => {
     try {

@@ -86,4 +86,43 @@ module.exports={
           });
         }
       },
+      EditPost: async (req, res) => {
+        console.log(req.body, 'gggggggggggggggggggggggggggggggg');
+        try {
+            const {  departmentId, unitId, designationId } = req.body;
+            const { id } = req.params;
+    
+            // Use updateOne directly on the model to update the document
+            await Post.updateOne({ _id: id }, {
+                
+                department: departmentId,
+                unit: unitId,
+                designation:designationId
+            });
+    
+            const populatedpost = await Post.findById(id)
+            .populate([
+              { path: 'department' },
+              { path: 'unit' },
+              { path: 'designation' },
+            ]);
+          
+
+            console.log(populatedpost,"rrrrrrrrrrrrrrrrrrrrrrr");
+    
+            console.log("post Edited Successfully");
+            res.status(200).json({
+                success: true,
+                message: "post master Edited successfully.",
+                data: populatedpost,
+            });
+        } catch (err) {
+            res.status(500).json({
+                success: false,
+                message: "Failed to Edit post .",
+                error: err.message,
+            });
+        }
+    },
+    
 }

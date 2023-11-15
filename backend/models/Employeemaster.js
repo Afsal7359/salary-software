@@ -11,15 +11,15 @@ const EmployeeSchema= new mongoose.Schema({
         require:true,
         trim:true
     },
-    type:{
-        type: String,
-        require:true,
-        trim:true
+    EmployeeTypeId:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'type', // This should be the model name that you want to reference
+        required: true,
     },
-    post:{
-        type: String,
-        require:true,
-        trim:true
+    PostId:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Post', // This should be the model name that you want to reference
+        required: true,
     },
     employeeno:{
         type: String,
@@ -59,7 +59,7 @@ const EmployeeSchema= new mongoose.Schema({
         require:true,
         trim:true
     },
-    accountno:{
+    accountNo:{
         type: String,
         require:true,
         trim:true
@@ -69,48 +69,78 @@ const EmployeeSchema= new mongoose.Schema({
         require:true,
         trim:true
     },
-    pancard:{
+    panNo:{
         type: String,
         require:true,
         trim:true
     },
-    panname:{
+    panName:{
         type: String,
         require:true,
         trim:true
     },
-    dof:{
+    dateOfBirth:{
         type: String,
         require:true,
         trim:true
     },
-    dob:{
+    dateOfJoining:{
         type: String,
         require:true,
         trim:true
     },
-    guardianname :{
+    guardianName :{
         type: String,
         require:true,
         trim:true
     },
-    basicsalary:{
+    basicSalary:{
         type: String,
         require:true,
         trim:true
     },
-    universalacno:{
+   
+    gender:{
         type: String,
         require:true,
         trim:true
     },
-    maritalstatus:{
+    universalAcNo:{
         type: String,
         require:true,
         trim:true
     },
+    city:{
+        type: String,
+        require:true,
+        trim:true
+    },
+    country:{
+        type: String,
+        require:true,
+        trim:true
+    },
+    salarymasterId:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Salarymaster', // This should be the model name that you want to reference
+        required: true,
+    },
+    SalaryCompPercantage:{
+        type: Number, 
+    },
+    SalaryCompAmount:{
+        type:Number
+    },
+    SalaryCompTotal:{
+        type:Number
+    },
+    TotalSalary:{
+        type:Number
+    }
+    
     
 
 })
 const Employee = mongoose.model('Employee',EmployeeSchema);
 module.exports=Employee;
+

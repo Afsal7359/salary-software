@@ -126,8 +126,8 @@ const closeEditModal = () => {
                       <tr>
                         <th>No</th>
                         <th>Department</th>
-                        <th>Unit</th>
                         <th>Designation</th>
+                        <th>unit</th>
                         <th></th>
                       </tr>
                     </thead>
@@ -173,10 +173,8 @@ const closeEditModal = () => {
         </div>
       </div>
 
-	  {showEditModal && selectedItem && (
- <p>ihjihuuijhuhgtft6fdfrdfr5df5rdfr</p>
-)}
- {/* {showEditModal&& (
+	  
+ {showEditModal&& (
   <Postedit
   setData={setData}
   Data={Data}
@@ -184,7 +182,7 @@ const closeEditModal = () => {
     closeEditModal={closeEditModal}
    
   />
-)} */}
+)}
 
 {showDeleteModal && selectedItem &&(<Postdelete
  setData={setData}
