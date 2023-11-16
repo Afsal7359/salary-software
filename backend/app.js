@@ -6,7 +6,7 @@ const morgan = require('morgan')
 const mongoose = require('mongoose');
 
 const  UserRouters = require('./routes/userRouter');
-const  employeeRouters = require('./routes/EmployeeRouter');
+const  EmployeeTypeRouter = require('./routes/EmployeetypeRouter');
 const  DepartmentRouter = require('./routes/DepartmentRouter');
 const  UnitRouter = require('./routes/UnitRouter');
 const  DesignationRouter = require('./routes/DesignationRouter');
@@ -17,7 +17,7 @@ const  AccountTypeRouter = require('./routes/AccountTypeRouter');
 const  PostRouter = require('./routes/PostRouter');
 const  BankRouter = require('./routes/BankRouter');
 const salary = require('./routes/SalarymasterRouter');
-
+const employeeRouters = require('./routes/EmployeeRouter')
 
 dotenv.config()
 
@@ -39,7 +39,7 @@ app.use(express.urlencoded({ extended: true }))
 
 
 app.use('/api/users', UserRouters)
-app.use('/api/employee',employeeRouters)
+app.use('/api/employeetype',EmployeeTypeRouter)
 app.use('/api/Department',DepartmentRouter)
 app.use('/api/Unit',UnitRouter)
 app.use('/api/Designation',DesignationRouter)
@@ -50,6 +50,7 @@ app.use('/api/accounttype',AccountTypeRouter)
 app.use('/api/post',PostRouter)
 app.use('/api/bank',BankRouter)
 app.use('/api/salary',salary)
+app.use('/api/employee',employeeRouters)
 
 
 

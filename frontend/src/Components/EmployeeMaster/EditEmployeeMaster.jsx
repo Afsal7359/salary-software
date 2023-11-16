@@ -7,8 +7,7 @@ import { getallemployeetype } from '../../Apicalls/Employeetype';
 import { getallpost } from '../../Apicalls/Post';
 import { getallSalary } from '../../Apicalls/salarymaster';
 import { Addemployee } from '../../Apicalls/EmployeeMater';
-import Employeemasterlist from './Employeemasterlist';
-const AddEmployeemaster = () => {
+function EditEmployeeMaster() {
 
 	const [employeeTypeData, setEmployeeTypeData]=useState([]);
 	const [employeeTypeId, setEmployeeTypeId]=useState('');
@@ -125,7 +124,7 @@ console.log('salary data : ',salarymasterData);
 		criteriaMode: 'all',
 		
 	  });
-	const [formdata , setFormdata]=useState([])
+	
 	  const onSubmit = async (data) => {
 		
 		
@@ -154,7 +153,7 @@ console.log('salary data : ',salarymasterData);
 			console.log('Afsal :' , data);
 		  const response = await Addemployee(data);
 		  if (response.success) {
-			setFormdata(response.data);
+			
 			toast.success(response.message);
 			setName('');
 			setEmployeeTypeId('');
@@ -267,12 +266,11 @@ console.log('salary data : ',salarymasterData);
         settableRows(updatedTableRows);
 	};
 
-	
 
 
   return (
-   <>
-   <PageHeader/>
+    <div>
+        <PageHeader/>
      <div className="row">
 					<div className="col-sm-12">
 					
@@ -875,10 +873,9 @@ console.log('salary data : ',salarymasterData);
 						</div>							
 					</div>					
 				</div>
-
-				<Employeemasterlist   formdata={formdata} setformdata={setFormdata}/>
-   </>
+    </div>
+    
   )
 }
 
-export default AddEmployeemaster
+export default EditEmployeeMaster

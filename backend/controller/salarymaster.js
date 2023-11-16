@@ -6,7 +6,6 @@ module.exports={
         try{
             const response = await Salarymaster.find({ isdeleted: { $ne: true } })
             .populate('purpose')
-            .populate('type');
             console.log("Salarymaster data get Successfully");
             res.status(200).json({
               success: true,
@@ -24,13 +23,13 @@ module.exports={
     AddSalarymaster:async(req,res)=>{
         try {
           console.log(req.body);
-            const { name, PurposeId, TypeId,salarymasterId } = req.body;
+            const { name, PurposeId, type,salarymasterId } = req.body;
     
             // Create a new Post document with the provided departmentId, unitId, and designationId
             const newPost = new Salarymaster({
                 name,
                 purpose: PurposeId,
-                type: TypeId,
+                type: type,
                 salarymasterId
             });
     
@@ -38,7 +37,6 @@ module.exports={
              // Populate the fields and return the populated post
             const Salary = await Salarymaster.populate(newPost, [
                 { path: 'purpose' },
-                { path: 'type' },
               ]);
             
                     console.log("Salarymaster Added Successfully");
@@ -59,21 +57,20 @@ module.exports={
             EditSalaryMaster: async (req, res) => {
               console.log(req.body, 'gggggggggggggggggggggggggggggggg');
               try {
-                  const { name, purposeId, typeId, salarymasterId } = req.body;
+                  const { name, purposeId, type, salarymasterId } = req.body;
                   const { id } = req.params;
           
                   // Use updateOne directly on the model to update the document
                   await Salarymaster.updateOne({ _id: id }, {
                       name,
                       purpose: purposeId,
-                      type: typeId,
+                      type: type,
                       salarymasterId
                   });
           
                   const populatedSalary = await Salarymaster.findById(id)
                   .populate([
                     { path: 'purpose' },
-                    { path: 'type' },
                   ]);
                 
 

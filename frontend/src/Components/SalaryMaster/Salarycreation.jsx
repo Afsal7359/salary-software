@@ -12,7 +12,7 @@ const MemoizedSalarylist = React.memo(Salarylist);
 function Salarycreation() {
 
 	const [PurposeData, setPurposeData] = useState([]);
-	const [TypeData, setTypeData]=useState([]);
+	const [type, setType]=useState([]);
 	const [name, setName] = useState([]);
 	const [PurposeId, setPurposeId]=useState('');
 	const [TypeId, setTypeId]=useState('');
@@ -44,46 +44,49 @@ function Salarycreation() {
 		}
 	  };
 
-	  const handleTypeClick = async () =>{
-		try {
-			if(!isTypeDataFetched){
-				const response = await getallType();
-				if(response.success){
-					setTypeData(response.data);
-				}else{
-					setTypeData([]);
-				}
-				setIsTypeDataFetched(true);
-			}
-		}catch(error){
-			toast.error(error.message);
-		}
-	  }
+	//   const handleTypeClick = async () =>{
+	// 	try {
+	// 		if(!isTypeDataFetched){
+	// 			const response = await getallType();
+	// 			if(response.success){
+	// 				setTypeData(response.data);
+	// 			}else{
+	// 				setTypeData([]);
+	// 			}
+	// 			setIsTypeDataFetched(true);
+	// 		}
+	// 	}catch(error){
+	// 		toast.error(error.message);
+	// 	}
+	//   }
 
 
 
 	  const handlePurposeChange = (event) => {
 		setPurposeId(event.target.value);
 	  };
-	  const handleTypeChange = (event)=>{
-		setTypeId(event.target.value);
-	  }
+	//   const handleTypeChange = (event)=>{
+	// 	setType(event.target.value);
+	//   }
 
-	
+	// Function to handle change in the dropdown
+	const handleSelectChange = (event) => {
+	  setType(event.target.value); // Update the selected value in the state
+	};
+	console.log('ifffffffif : ',type);
 	  const handleSubmit = async (event) => {
 		event.preventDefault();
 		// Use unitId, departmentId, designationId as needed
 		console.log('Purpose ID:', PurposeId);
-		console.log('Type ID:', TypeId);
 	
 		const formdatas = {
 			name,
 			PurposeId,
-			TypeId,
+			type,
 			
 			
 		  };
-	  
+		  console.log(formdatas);
 		  try {
 			function generateUniqueSixLetterID() {
 			  const currentDate = new Date();
@@ -109,7 +112,7 @@ function Salarycreation() {
 			if (response.success) {
 			  setformdata(response.data);
 			  setName('');
-			  setTypeId('');
+			  setType('');
 			  setPurposeId('');
 			  toast.success(response.message);
 			} else {
@@ -179,16 +182,15 @@ function Salarycreation() {
 										<div className="col-12 col-md-6 col-xl-6">
 											<div className="form-group local-forms">
 												<label >Type<span className="login-danger">*</span></label>
-												<select className="form-control select"
-												onMouseEnter={handleTypeClick}
-												onChange={handleTypeChange}>
+												<select
+													className="form-control select"
+													value={type} // Set the value of the select to the state
+													onChange={handleSelectChange} // Handle change in the select
+												>
 													<option value="">Select Type</option>
-													{TypeData.map((option) => (
-														<option key={option._id} value={option._id}>
-															{option.name}
-														</option>
-														))}
-												  </select>
+													<option value="Increment">Increment</option>
+													<option value="Decrement">Decrement</option>
+												</select>
 											</div>
 										</div>
 									

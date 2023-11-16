@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import PageHeader from '../PageHeader';
 import { useForm } from 'react-hook-form';
-import { Addemployeetype } from '../../Apicalls/Employee';
+import { Addemployeetype } from '../../Apicalls/Employeetype';
 import { toast } from 'react-toastify';
 import Employeetypelist from './Employeetypelist';
 

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
-import { editemployeetype } from '../../Apicalls/Employee';
+import { editemployeetype } from '../../Apicalls/Employeetype';
 import { toast } from 'react-toastify';
 
 function Employeeedit({ closeEditModal, item,setData,Data}) {

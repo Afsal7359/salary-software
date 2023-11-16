@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import searchicon from '../../assets/img/icons/search-normal.svg';
 import addicon from '../../assets/img/icons/plus.svg';
@@ -6,84 +7,80 @@ import pdficon from '../../assets/img/icons/pdf-icon-01.svg';
 import TXticon from '../../assets/img/icons/pdf-icon-02.svg';
 import csvicon from '../../assets/img/icons/pdf-icon-03.svg';
 import Excelicon from '../../assets/img/icons/pdf-icon-04.svg';
+import { getallemployeemaster } from '../../Apicalls/EmployeeMater';
 
-import { getallemployeetype } from '../../Apicalls/Employeetype';
-import Employeeedit from '../Modal/Employeeedit';
-import EmployeeTypeDelete from '../Modal/EmployeeTypeDelete';
-
-function Employeetypelist({formdata,setformdata}) {
-  const [Data, setData] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [showEditModal, setShowEditModal] = useState(false);
-  const [showDeleteModal, setshowDeleteModal] = useState(false);
-  const [selectedItem, setSelectedItem] = useState(null);
-    if (formdata.length!=0) {
-       const isNameInData = Data.some((item) => item.name === formdata.name);
-       if (!isNameInData) {
-         setData((prevData) => [...prevData, formdata]);
-         setformdata([])
-       }
-    }
-
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const result = await getallemployeetype();
-        setData(result.data);
-        setIsLoading(false);
-        // setrender(!render)
-      } catch (error) {
-        console.error('Error fetching data:', error);
+const Employeemasterlist = React.memo(({ formdata, setformdata }) =>{
+    const [Data, setData] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [showEditModal, setShowEditModal] = useState(false);
+    const [showDeleteModal, setshowDeleteModal] = useState(false);
+    const [selectedItem, setSelectedItem] = useState(null);
+      if (formdata.length!=0) {
+         const isNameInData = Data.some((item) => item.name === formdata.name);
+         if (!isNameInData) {
+           setData((prevData) => [...prevData, formdata]);
+           setformdata([])
+         }
       }
+  
+    useEffect(() => {
+      async function fetchData() {
+        try {
+          const result = await getallemployeemaster();
+          setData(result.data);
+          console.log(Data);
+          setIsLoading(false);
+          // setrender(!render)
+        } catch (error) {
+          console.error('Error fetching data:', error);
+        }
+      }
+  
+      fetchData();
+    }, []);
+  
+   // Function to handle the click event
+  const handleEditClick = (item) => {
+    // Set showEditModal to true when the "Edit" button is clicked
+    setShowEditModal(true);
+    setSelectedItem(item);
+  };
+  
+   // Function to handle the click event
+   const handleDeleteClick = (item) => {
+   console.log(item);
+   setshowDeleteModal(true)
+   setSelectedItem(item)
+  };
+  
+  const closeDeleteModal = () => {
+    // Set showEditModal to false when the modal is closed
+    setshowDeleteModal(false);
+  };
+  
+  // Function to close the modal
+  const closeEditModal = () => {
+    // Set showEditModal to false when the modal is closed
+    setShowEditModal(false);
+  };
+  
+  
+    if (isLoading) {
+      return <div>Loading...</div>; // You can render a loading indicator here
     }
-
-    fetchData();
-  }, []);
-
- // Function to handle the click event
-const handleEditClick = (item) => {
-  // Set showEditModal to true when the "Edit" button is clicked
-  setShowEditModal(true);
-  setSelectedItem(item);
-};
-
- // Function to handle the click event
- const handleDeleteClick = (item) => {
- console.log(item);
- setshowDeleteModal(true)
- setSelectedItem(item)
-};
-
-const closeDeleteModal = () => {
-  // Set showEditModal to false when the modal is closed
-  setshowDeleteModal(false);
-};
-
-// Function to close the modal
-const closeEditModal = () => {
-  // Set showEditModal to false when the modal is closed
-  setShowEditModal(false);
-};
-
-
-  if (isLoading) {
-    return <div>Loading...</div>; // You can render a loading indicator here
-  }
 
   return (
-    <>
-      <div className="row">
+    <div>
+        <div className="row">
         <div className="col-sm-12">
-          {Data.length ===0 ? (
-            <p>No Data available</p> // You can customize this message
-          ) : (
+          
             <div className="card  card-table show-entire">
               <div className="card-body">
                 <div className="page-table-header mb-2">
                   <div className="row align-items-center">
                     <div className="col">
                       <div className="doctor-table-blk">
-                        <h3>Employeelist List</h3>
+                        <h3>Bank List</h3>
                         <div className="doctor-search-blk">
                           <div className="top-nav-search table-search-blk">
                             <form>
@@ -128,6 +125,9 @@ const closeEditModal = () => {
                       <th>No</th>
                       <th>Employee Id</th>
                       <th>Name</th>
+                      <th>Phone</th>
+                      <th>Email</th>
+                      <th>Total Salary</th>
                       <th></th>
                     </tr>
                   </thead>
@@ -137,6 +137,9 @@ const closeEditModal = () => {
                         <td>{index + 1}</td>
                         <td>{item.employeeid}</td>
                         <td>{item.name}</td>
+                        <td>{item.phone}</td>
+                        <td>{item.email}</td>
+                        <td>{item.TotalSalary}</td>
                         <td className="text-end">
                           <div className="dropdown dropdown-action">
                             <a
@@ -149,22 +152,11 @@ const closeEditModal = () => {
                             </a>
                             <div className="dropdown-menu dropdown-menu-end">
                               <a
-                             onMouseEnter={() => {
-                              setSelectedItem(item);
-                              setShowEditModal(true);
-                            }}
-                            onClick={(event) => {
-                              // Prevent the default click behavior to avoid double triggering on mobile devices
-                              event.preventDefault();
-                              
-                              // Your edit click logic
-                              handleEditClick(item);
-                            }}
-                            onTouchStart={() => {
-                              // Touch devices do not have onMouseEnter, so use onTouchStart
-                              setSelectedItem(item);
-                              setShowEditModal(true);
-                            }} className="dropdown-item" data-bs-toggle="modal"
+                              onMouseEnter={() => {
+                                setSelectedItem(item);
+                                setShowEditModal(true);
+                              }}
+                               onClick={() => handleEditClick(item)} className="dropdown-item" data-bs-toggle="modal"
                                 data-bs-target="#delete_patients"
                                 >
                                 <i className="fa-solid fa-pen-to-square m-r-5"></i> Edit
@@ -181,6 +173,18 @@ const closeEditModal = () => {
                               >
                                 <i className="fa fa-trash-alt m-r-5"></i> Delete
                               </a>
+                              <a
+                               onMouseEnter={() => {
+                                setshowDeleteModal(true);
+                                setSelectedItem(item);
+                              }}
+                              onClick={() => handleDeleteClick(item)}
+                                className="dropdown-item"
+                                data-bs-toggle="modal"
+                                data-bs-target="#delete_patient"
+                              >
+                                <i className="fa fa-trash-alt m-r-5"></i> View
+                              </a>
                             </div>
                           </div>
                         </td>
@@ -190,29 +194,11 @@ const closeEditModal = () => {
                 </table>
               </div>
             </div>
-          )}
+          
         </div>
       </div>
-      {showEditModal && selectedItem && (
-  <Employeeedit
-  setData={setData}
-  Data={Data}
-    item={selectedItem}
-    closeEditModal={closeEditModal}
-   
-  />
-)}
-
-{showDeleteModal && selectedItem &&(<EmployeeTypeDelete
- setData={setData}
- Data={Data}
- item={selectedItem}
- closeDeleteModal={closeDeleteModal}
-/>)}
-
-
-    </>
-  );
+    </div>
+  )
 }
-
-export default Employeetypelist;
+)
+export default Employeemasterlist

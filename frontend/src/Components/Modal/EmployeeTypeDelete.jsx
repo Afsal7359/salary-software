@@ -2,7 +2,7 @@ import React, { useState }  from 'react'
 import alerticon from '../../assets/img/sent.png'
 
 import { toast } from 'react-toastify';
-import { deleteemployeetype } from '../../Apicalls/Employee';
+import { deleteemployeetype } from '../../Apicalls/Employeetype';
 function EmployeeTypeDelete({ closeDeleteModal, item,setData,Data}) {
 
 

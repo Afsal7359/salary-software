@@ -139,7 +139,7 @@ const closeEditModal = () => {
                           <td>{index + 1}</td>
                           <td>{item.name}</td>
                           <td>{item.purpose.name}</td>
-                          <td>{item.type.name}</td>
+                          <td>{item.type}</td>
                           <td className="text-end">
                             <div className="dropdown dropdown-action">
                               <a href="#" className="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">

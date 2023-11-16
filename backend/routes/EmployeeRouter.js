@@ -1,12 +1,11 @@
 const express = require('express');
-const employeemaster =require('../controller/Employeemaster')
+const Employeemaster = require('../controller/Employeemaster');
 const router = express.Router();
 
 
-router.post('/addemployeetype',employeemaster.AddEmployeetype);
-router.put('/editemployeetype/:id',employeemaster.EditEmployeetype);
-router.delete('/deleteemployeetype/:id',employeemaster.DeleteEmployeetype)
-router.get('/getallemployeetype',employeemaster.GetallEmployeetype)
-router.get('/getemployeetype/:id',employeemaster.GetEmployeetype)
+router.post('/addemployee',Employeemaster.AddEmployee);
+router.put('/editemployee/:id',Employeemaster.EditEmployee);
+router.delete('/deleteemployee/:id',Employeemaster.DeleteEmployee)
+router.get('/getallemployee',Employeemaster.GetallEmployee)
 
 module.exports = router;

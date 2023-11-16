@@ -19,8 +19,7 @@ const SalarySchema = new mongoose.Schema({
         require: true,
     },
     type: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'type', // This should be the model name that you want to reference
+        type: String,
         require: true,
     },
  

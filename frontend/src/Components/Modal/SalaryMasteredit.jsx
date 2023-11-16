@@ -20,7 +20,7 @@ function SalaryMasteredit({ closeEditModal, item,setData,Data}) {
   const [PurposeData, setPurposeData] = useState([]);
 	const [TypeData, setTypeData]=useState([]);
 	const [PurposeId, setPurposeId]=useState('');
-	const [TypeId, setTypeId]=useState('');
+	const [Type, setType]=useState('');
 
 	const [isPurposeDataFetched, setIsPurposeDataFetched] = useState(false);
 	const [isTypeDataFetched, setIsTypeDataFetched] = useState(false);
@@ -42,21 +42,21 @@ function SalaryMasteredit({ closeEditModal, item,setData,Data}) {
     }
   };
 
-  const handleTypeClick = async () =>{
-    try {
-        if(!isTypeDataFetched){
-            const response = await getallType();
-            if(response.success){
-                setTypeData(response.data);
-            }else{
-                setTypeData([]);
-            }
-            setIsTypeDataFetched(true);
-        }
-    }catch(error){
-        toast.error(error.message);
-    }
-  }
+  // const handleTypeClick = async () =>{
+  //   try {
+  //       if(!isTypeDataFetched){
+  //           const response = await getallType();
+  //           if(response.success){
+  //               setTypeData(response.data);
+  //           }else{
+  //               setTypeData([]);
+  //           }
+  //           setIsTypeDataFetched(true);
+  //       }
+  //   }catch(error){
+  //       toast.error(error.message);
+  //   }
+  // }
 
 
 
@@ -64,7 +64,7 @@ function SalaryMasteredit({ closeEditModal, item,setData,Data}) {
     setPurposeId(event.target.value);
   };
   const handleTypeChange = (event)=>{
-    setTypeId(event.target.value);
+    setType(event.target.value);
   }
 
 
@@ -93,7 +93,7 @@ function SalaryMasteredit({ closeEditModal, item,setData,Data}) {
               ...dataItem,
               name: response.data.name,
               purpose: { name:response.data.purpose.name }, // Update purpose with the value from formData
-              type: { name:response.data.type.name }, // Update type with the value from formData
+              type: { name:response.data.type }, // Update type with the value from formData
             };
           } 
           return dataItem;
@@ -188,23 +188,25 @@ function SalaryMasteredit({ closeEditModal, item,setData,Data}) {
                           <div className="form-group local-forms">
                             <label>Type</label>
                             <Controller
-                                name="typeId"
+                                name="type"
                                 control={control}
-                                defaultValue={item.type._id}  
+                                defaultValue={item.type}  
                                 render={({ field }) => (
                                     <select
                                         className="form-control select"
-                                        onMouseEnter={handleTypeClick}
                                         onChange={handleTypeChange}
                                         {...field}
                                     >
                                         {/* Render the current type as the default option */}
-                                        <option value={item.type._id}>{item.type.name}</option>
-                                        {TypeData.map((option) => (
+                                        <option>{item.type}</option>
+                                     
+                                        <option value="Increment">Increment</option>
+                                        <option value="Decrement">Decrement</option>
+                                        {/* {TypeData.map((option) => (
                                             <option key={option._id} value={option._id}>
                                                 {option.name}
                                             </option>
-                                        ))}
+                                        ))} */}
                                     </select>
                                 )}
                             />
