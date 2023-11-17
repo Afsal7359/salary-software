@@ -64,7 +64,7 @@ const AddEmployeemaster = () => {
 			if(!issalarymasterDataFetched){
 				const response = await getallSalary();
 				if(response.success){
-					
+					console.log('ffffffffrrrrrrrrrrrrrrrrrrrr',response.data);
 					setSalarymasterData(response.data);
 				}else{
 					setSalarymasterData([]);
@@ -79,6 +79,7 @@ const AddEmployeemaster = () => {
 		updatedTableRows[index] = {
 		  ...updatedTableRows[index],
 		  salaryComponent: event.target.value // Update salaryComponent based on the event value
+		  
 		};
 	  console.log(updatedTableRows,"ii");
 		settableRows(updatedTableRows); // Update the state with the modified rows
@@ -211,35 +212,30 @@ console.log('salary data : ',salarymasterData);
 	  };
 
 	  const [totalAmount, setTotalAmount] = useState(0);
+	 
+	  
 	
 
 	  useEffect(() => {
 		
 		
 		const totalAmount = tableRows.reduce((acc, row) => {
-			if (row.salaryComponent === 'Increment') {
+			// const Salarytype = row.salaryComponent.type
+			const salarytype = salarymasterData.filter((item) => {
+				return item._id === row.salaryComponent;
+			});
+			
+			console.log('Filtered salary type:', salarytype);
+	
+			if (salarytype[0]?.type === 'Increment') {
 			  return acc + parseFloat(row.price);
-			} else if (row.salaryComponent === 'Decrement') {
+			} else if (salarytype[0]?.type === 'Decrement') {
 			  return acc - parseFloat(row.price);
 			}
 			return acc;
 		  }, basicsalary); // Initialize accumulator with basicsalary
-		  
-		  // Use the calculated totalAmount
 		  setTotalAmount(totalAmount);
-
-	// 	if(totalIncrement && totalDecrement){
-	// 		let total= parseInt(totalIncrement)-parseInt(totalDecrement);
-	// 		totalPrice =total+parseFloat(basicsalary)
-	// 	}
-	//   else if(totalIncrement){
-		
-	// 	totalPrice =totalIncrement+parseFloat(basicsalary)
 	
-	//   }else if(totalDecrement){
-	// 	totalPrice =parseFloat(basicsalary)-totalDecrement
-	//   }
-	// 	setTotalAmount(totalPrice);
 	  }, [tableRows, basicsalary]);
 	  
 
@@ -266,14 +262,19 @@ console.log('salary data : ',salarymasterData);
 		updatedTableRows[index].price = newPrice;
         settableRows(updatedTableRows);
 	};
+const [state,setstate]=useState(false)
 
+	const handleclick=()=>{
+		setstate(!state)
+	}
 	
 
 
   return (
    <>
    <PageHeader/>
-     <div className="row">
+   <button onClick={handleclick} >click</button>
+   {state&&  <div className="row">
 					<div className="col-sm-12">
 					
 						<div className="card">
@@ -781,7 +782,7 @@ console.log('salary data : ',salarymasterData);
 																>
 																	<option>Select</option>
 																	{salarymasterData.map((option)=>(
-																		<option value={option.type} key={option._id}>
+																		<option value={option._id} key={option._id}>
 																			{option.name}
 																		</option>
 																	
@@ -874,9 +875,9 @@ console.log('salary data : ',salarymasterData);
 							</div>
 						</div>							
 					</div>					
-				</div>
+				</div>}
 
-				<Employeemasterlist   formdata={formdata} setformdata={setFormdata}/>
+				<Employeemasterlist   formdata={formdata} setformdata={setFormdata} />
    </>
   )
 }

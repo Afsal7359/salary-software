@@ -32,7 +32,7 @@ const App = () => {
        <Suspense fallback={<div>Loading...</div>}>
        <Routes>
        <Route path="/" element={<Dashboardpage/>} />
-       <Route path="/add-employee-master" element={<AddEmployeemaster/>} />
+       <Route path="/employee-master" element={<AddEmployeemaster/>} />
        <Route path="/add-post-master" element={<AddPostmaster/>} />
        <Route path="/add-employeetype" element={<Employeetypepage/>} />
        <Route path="/add-Department" element={<Departmentpage/>} />

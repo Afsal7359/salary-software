@@ -98,8 +98,16 @@ console.log('haaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',data);
   GetallEmployee: async (req, res) => {
     try {
       // Retrieve a single Employee record based on the specified employeeid
-      const Employeess = await Employee.find({ isdeleted: { $ne: true } });
-
+      const Employees = await Employee
+      .find({ isdeleted: { $ne: true } })
+      .populate({
+        path: 'PostId',
+        // Include 'designation' and 'DesignationId' fields from the referenced document
+        populate: {
+          path: 'designation' // Populate the 'DesignationId' field within the 'PostId'
+        }
+      })
+      .populate('EmployeeTypeId');
       if (!Employee) {
         return res.status(404).json({
           success: false,
@@ -109,7 +117,7 @@ console.log('haaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',data);
 
       res.status(200).json({
         success: true,
-       data: Employeess,
+       data: Employees,
       });
     } catch (err) {
       res.status(500).json({

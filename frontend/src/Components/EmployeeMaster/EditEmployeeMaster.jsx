@@ -2,13 +2,14 @@ import React,{useEffect, useState} from 'react'
 import PageHeader from '../PageHeader'
 import SalaryComponent from './SalaryComponent'
 import { toast } from 'react-toastify';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { getallemployeetype } from '../../Apicalls/Employeetype';
 import { getallpost } from '../../Apicalls/Post';
 import { getallSalary } from '../../Apicalls/salarymaster';
 import { Addemployee } from '../../Apicalls/EmployeeMater';
-function EditEmployeeMaster() {
-
+function EditEmployeeMaster({  item, setData, Data,show,setshow }) {
+console.log(item);
+const [tableRow, settableRow] = useState(item?.tablerow)
 	const [employeeTypeData, setEmployeeTypeData]=useState([]);
 	const [employeeTypeId, setEmployeeTypeId]=useState('');
 	const [isemployeeTypeDataFetch, setisEmployeeTypeDataFetch]=useState(false);
@@ -65,6 +66,7 @@ function EditEmployeeMaster() {
 				if(response.success){
 					
 					setSalarymasterData(response.data);
+					
 				}else{
 					setSalarymasterData([]);
 				}
@@ -73,12 +75,16 @@ function EditEmployeeMaster() {
 			toast.error(error.message)
 		}
 	}
+	const [salarycomponent,setSalaryComponent]=useState([]);
+
 	const handlesalarymasterchange = (event, index) => {
 		const updatedTableRows = [...tableRows];
 		updatedTableRows[index] = {
 		  ...updatedTableRows[index],
-		  salaryComponent: event.target.value // Update salaryComponent based on the event value
+		  salarycomponent: event.target.value // Update salaryComponent based on the event value
+		  
 		};
+		
 	  console.log(updatedTableRows,"ii");
 		settableRows(updatedTableRows); // Update the state with the modified rows
 	  }
@@ -103,7 +109,7 @@ console.log('salary data : ',salarymasterData);
 	const [dateOfJoining, setDateOfJoining]=useState('');
 	const [dateOfBirth,setDateOfBirth]=useState('');
 	const [guardianname, setGuardianName]=useState('');
-	const [basicsalary, setBasicSalary]=useState('');
+	const [basicsalary, setBasicSalary]=useState(item?.basicSalary);
 	const [universalAcNo, setUniversalAcNo]=useState('');
 	const [city, setCity]=useState('');
 	const [country, setCountry]=useState('');
@@ -116,39 +122,47 @@ console.log('salary data : ',salarymasterData);
 
 
 	const {
-		
-		register,
+		control,
 		handleSubmit,
+		register,
+		setError,
 		formState: { errors },
 	  } = useForm({
-		criteriaMode: 'all',
+		defaultValues: {
+		  name: item.name,
+		  employeeno:item.employeeno,
+		  email: item.email,
+		  phone:item.phone,
+		  address1 :item.address1,
+		  address2 :item.address2,
+		  address3 :item.address3,
+		  bank :item.bank,
+		  accountNo:item.accountNo,
+		  branch:item.branch,
+		  ifsc :item.ifsc,
+		  panNo:item.panNo,
+		  panName :item.panName,
+		  dateOfJoining: item.dateOfJoining,
+		  dateOfBirth: item.dateOfBirth,
+		  guardianName: item.guardianName,
 		
+		  universalAcNo : item.universalAcNo,
+		  city : item.city,
+		  country : item.country,
+		
+		  id : item.tablerow.id,
+		  salaryComponent: item.tablerow.salaryComponent,
+		  percentage: item.tablerow.percentage,
+		  value: item.tablerow.value,
+		  price: item.tablerow.price,
+		  TotalSalary: item.TotalSalary
+
+		},
 	  });
 	
 	  const onSubmit = async (data) => {
 		
-		
-		// console.log(data);
-		function generateUniqueSixLetterID() {
-		  const currentDate = new Date();
-		  const year = String(currentDate.getFullYear()).slice(-2);
-		  const month = String(currentDate.getMonth() + 1).padStart(2, '0');
-		  const day = String(currentDate.getDate()).padStart(2, '0');
-		  const hours = String(currentDate.getHours()).padStart(2, '0');
-		  const minutes = String(currentDate.getMinutes()).padStart(2, '0');
-		  const seconds = String(currentDate.getSeconds()).padStart(2, '0');
 	
-		  const id = `${year}${month}${day}${hours}${minutes}${seconds}`;
-	
-		  return id;
-		}
-	
-		const uniqueSixLetterID = generateUniqueSixLetterID();
-		data.employeeid = uniqueSixLetterID;
-	     data.EmployeeTypeId=employeeTypeId
-		 data.PostId=postId
-		 data.tablerow=tableRows
-		 data.TotalSalary=totalAmount?totalAmount:basicsalary
 		try {
 			console.log('Afsal :' , data);
 		  const response = await Addemployee(data);
@@ -227,18 +241,7 @@ console.log('salary data : ',salarymasterData);
 		  // Use the calculated totalAmount
 		  setTotalAmount(totalAmount);
 
-	// 	if(totalIncrement && totalDecrement){
-	// 		let total= parseInt(totalIncrement)-parseInt(totalDecrement);
-	// 		totalPrice =total+parseFloat(basicsalary)
-	// 	}
-	//   else if(totalIncrement){
-		
-	// 	totalPrice =totalIncrement+parseFloat(basicsalary)
-	
-	//   }else if(totalDecrement){
-	// 	totalPrice =parseFloat(basicsalary)-totalDecrement
-	//   }
-	// 	setTotalAmount(totalPrice);
+
 	  }, [tableRows, basicsalary]);
 	  
 
@@ -267,6 +270,10 @@ console.log('salary data : ',salarymasterData);
 	};
 
 
+	const handlebasicsalarychange=(e)=>{
+		setBasicSalary(e.target.value)
+	}
+
 
   return (
     <div>
@@ -294,65 +301,88 @@ console.log('salary data : ',salarymasterData);
 										<div className="col-12 col-md-6 col-xl-6">
 											<div className="form-group local-forms">
 												<label >Name <span className="login-danger">*</span></label>
-												<input
-													{...register('name', { required: true, minLength: 4 })}
-													type="text"
-													className={`form-control ${errors.name ? 'is-invalid' : ''}`}
-													placeholder=""
-													value={name}
-													onChange={(e) => setName(e.target.value)}
-												/>
-												{errors.name && errors.name.type === 'required' && (
-													<span className="text-danger">Name is required</span>
-												)}
-												{errors.name && errors.name.type === 'minLength' && (
-													<span className="text-danger">Name must be at least 4 characters</span>
-												)}
+												<Controller
+
+													name="name"
+													control={control}
+													render={({ field }) => (
+													<input
+														{...field}
+														className={`form-control ${errors.name ? 'is-invalid' : ''}`}
+														type="text"
+														placeholder=""
+													/>
+													)}
+													/>
+												
+											
+												
 											</div>
 										</div>
 										<div className="col-12 col-md-6 col-xl-6">
 											<div className="form-group local-forms">
 												<label >Employee Type<span className="login-danger">*</span></label>
+												<Controller
+													name="EmployeeTypeId"
+													control={control}
+													defaultValue={item.EmployeeTypeId._id}
+													render={({ field }) => (
 												<select className="form-control select"
 													
 												onMouseEnter={handlemployeetypeclick}
 												onChange={handleemployeetypechange}
 												>
-													<option>Select Type</option>
+													
+													<option value={item.EmployeeTypeId._id}>{item.EmployeeTypeId.name}</option>
 													{employeeTypeData.map((option)=>(
 														<option value={option._id} key={option._id}>
 															{option.name}
 														</option>
 													))}
 												  </select>
+												  )}
+												  />
 											</div>
 										</div>
 										<div className="col-12 col-md-6 col-xl-6">
 											<div className="form-group local-forms">
 												<label >Post<span className="login-danger">*</span></label>
+												<Controller
+													name="EmployeeTypeId"
+													control={control}
+													defaultValue={item.PostId._id}
+													render={({ field }) => (
 												<select className="form-control select"
 													onMouseEnter={handlePostClick}
 													onChange={handlePostChange}
 												>
-													<option>Select Post</option>
+												
+													<option value={item.PostId._id}>{item.PostId.designation.name}</option>
 													{postData.map((option)=>(
 														<option value={option._id} key={option._id}>
 															{option.designation.name}
 														</option>
 													))}
 												  </select>
+												  )}
+												  />
 											</div>
 										</div>
 										<div className="col-12 col-md-6 col-xl-6">
 											<div className="form-group local-forms">
 													<label>Employee No <span className="login-danger">*</span></label>
+													<Controller
+
+														name="employeeno"
+														control={control}
+														render={({ field }) => (
 														<input
-														{...register('employeeno', { required: true, minLength: 1 })}
-														type="text"
-														className={`form-control ${errors.employeeno ? 'is-invalid' : ''}`}
-														placeholder=""
-														value={employeeno}
-														onChange={(e) => setEmployeeno(e.target.value)}
+															{...field}
+															className={`form-control ${errors.employeeno ? 'is-invalid' : ''}`}
+															type="text"
+															placeholder=""
+														/>
+														)}
 														/>
 													{errors.employeeno && errors.employeeno.type === 'required' && (
 													<span className="text-danger">Employee No is required</span>
@@ -365,34 +395,40 @@ console.log('salary data : ',salarymasterData);
 										<div className="col-12 col-md-6 col-xl-6">
 											<div className="form-group local-forms">
 												<label >Address-2 <span className="login-danger">*</span></label>
-												<input
-													{...register('address2')}
-													type="text"
-													className={`form-control ${errors.address2 ? 'is-invalid' : ''}`}
-													placeholder=""
-													value={address2}
-													onChange={(e) => setAddress2(e.target.value)}
-												/>
+												<Controller
+
+														name="address2"
+														control={control}
+														render={({ field }) => (
+														<input
+															{...field}
+															className={`form-control ${errors.address2 ? 'is-invalid' : ''}`}
+															type="text"
+															placeholder=""
+														/>
+														)}
+														/>
 											</div>
 										</div>
 
 										<div className="col-12 col-md-6 col-xl-6">
 												<div className="form-group local-forms">
 													<label>Address-1 <span className="login-danger">*</span></label>
-													<input
-													{...register('address1', { required: true, minLength: 2 })}
-													type="text"
-													className={`form-control ${errors.address1 ? 'is-invalid' : ''}`}
-													placeholder=""
-													value={address1}
-													onChange={(e) => setAddress1(e.target.value)}
-													/>
-													{errors.address1 && errors.address1.type === 'required' && (
-													<span className="text-danger">Address-1 is required</span>
-													)}
-													{errors.address1 && errors.address1.type === 'minLength' && (
-													<span className="text-danger">Address-1 must be at least 2 characters</span>
-													)}
+													<Controller
+
+														name="address1"
+														control={control}
+														render={({ field }) => (
+														<input
+															{...field}
+															className={`form-control ${errors.address1 ? 'is-invalid' : ''}`}
+															type="text"
+															placeholder=""
+														/>
+														)}
+														/>
+													
+													
 												</div>
 										</div>
 
@@ -440,226 +476,236 @@ console.log('salary data : ',salarymasterData);
                                         <div className="col-12 col-md-6 col-xl-6">
 											<div className="form-group local-forms">
 												<label >Address-3 <span className="login-danger">*</span></label>
-												<input
-													{...register('address3')}
-													type='text'
-													className={`form-control ${errors.address3 ? 'is-nvalid' : ''}`}
-													placeholder=''
-													value={address3}
-													onChange={(e)=> setAddress3(e.target.value)}
-												/>
+												<Controller
+
+														name="address3"
+														control={control}
+														render={({ field }) => (
+														<input
+															{...field}
+															className={`form-control ${errors.address3 ? 'is-invalid' : ''}`}
+															type="text"
+															placeholder=""
+														/>
+														)}
+														/>
 											</div>
 										</div>
                                         <div className="col-12 col-md-6 col-xl-6">
 											<div className="form-group local-forms">
 												<label >Email <span className="login-danger">*</span></label>
-												<input
-												{...register('email', {
-													required: 'Email is required',
-													pattern: {
-													  value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-													  message: 'Invalid email address',
-													},
-												  })}
-													type="text"
-													className={`form-control ${errors.employeeno ? 'is-invalid' : ''}`}
-													placeholder=""
-													value={email}
-													onChange={(e) => setEmail(e.target.value)}
-												/>
-												 {errors.email && (
-														<span className="text-danger">{errors.email.message}</span>
-													)}
+												<Controller
+
+														name="email"
+														control={control}
+														render={({ field }) => (
+														<input
+															{...field}
+															className={`form-control ${errors.email ? 'is-invalid' : ''}`}
+															type="text"
+															placeholder=""
+															
+														/>
+														)}
+														/>
 											</div>
 										</div>
                                         <div className="col-12 col-md-6 col-xl-6">
 											<div className="form-group local-forms">
 												<label >Phone <span className="login-danger">*</span></label>
-												<input  {...register('phone', {
+												<Controller
+													name="phone"
+													control={control}
+													rules={{
 													required: 'Phone number is required',
 													pattern: {
 														value: /^[0-9]{10}$/,
 														message: 'Please enter a valid phone number',
 													},
-													})}
-													className={`form-control ${errors.phone ? 'is-invalid' : ''}`}
-													type="number"
-													placeholder=""
-													value={phone}
-													onChange={(e)=> setPhone(e.target.value)}
+													}}
+													render={({ field }) => (
+													<>
+														<input
+														{...field}
+														className={`form-control ${errors.phone ? 'is-invalid' : ''}`}
+														type="number"
+														placeholder=""
+													
+														/>
+														{errors.phone && (
+														<span className="text-danger">{errors.phone.message}</span>
+														)}
+													</>
+													)}
 												/>
-												{errors.phone && (
-													<span className="text-danger">{errors.phone.message}</span>
-												)}
 											</div>
 										</div>
 										<div className="col-12 col-md-6 col-xl-6">
 												<div className="form-group local-forms">
 													<label>Bank <span className="login-danger">*</span></label>
+													<Controller
+
+													name="bank"
+													control={control}
+													render={({ field }) => (
 													<input
-													{...register('bank', { required: true, minLength: 2 })}
-													type="text"
-													className={`form-control ${errors.bank ? 'is-invalid' : ''}`}
-													placeholder=""
-													value={bank}
-													onChange={(e) => setBank(e.target.value)}
+														{...field}
+														className={`form-control ${errors.bank ? 'is-invalid' : ''}`}
+														type="text"
+														placeholder=""
 													/>
-													{errors.bank && errors.bank.type === 'required' && (
-													<span className="text-danger">Bank name is required</span>
 													)}
-													{errors.bank && errors.bank.type === 'minLength' && (
-													<span className="text-danger">Bank name must be at least 2 characters</span>
-													)}
+													/>
 												</div>
 										</div>
 
                                        <div className="col-12 col-md-6 col-xl-6">
 												<div className="form-group local-forms">
 													<label>Account No<span className="login-danger">*</span></label>
+													<Controller
+
+													name="accountNo"
+													control={control}
+													render={({ field }) => (
 													<input
-													{...register('accountNo', { required: true, minLength: 5 })}
-													type="number"
-													className={`form-control ${errors.accountNo ? 'is-invalid' : ''}`}
-													placeholder=""
-													value={accountno}
-													onChange={(e) => setAccountno(e.target.value)}
+														{...field}
+														className={`form-control ${errors.bank ? 'is-invalid' : ''}`}
+														type="text"
+														placeholder=""
 													/>
-													{errors.accountNo && errors.accountNo.type === 'required' && (
-													<span className="text-danger">Account number is required</span>
 													)}
-													{errors.accountNo && errors.accountNo.type === 'minLength' && (
-													<span className="text-danger">Account number must be at least 5 characters</span>
-													)}
+													/>
 												</div>
 										</div>
 										<div className="col-12 col-md-6 col-xl-6">
 												<div className="form-group local-forms">
 													<label>Branch<span className="login-danger">*</span></label>
+													<Controller
+
+													name="branch"
+													control={control}
+													render={({ field }) => (
 													<input
-													{...register('branch', { required: true, minLength: 2 })}
-													type="text"
-													className={`form-control ${errors.branch ? 'is-invalid' : ''}`}
-													placeholder=""
-													value={branch}
-													onChange={(e) => setBranch(e.target.value)}
+														{...field}
+														className={`form-control ${errors.branch ? 'is-invalid' : ''}`}
+														type="text"
+														placeholder=""
 													/>
-													{errors.branch && errors.branch.type === 'required' && (
-													<span className="text-danger">Branch name is required</span>
 													)}
-													{errors.branch && errors.branch.type === 'minLength' && (
-													<span className="text-danger">Branch name must be at least 2 characters</span>
-													)}
+													/>
 												</div>
 										</div>
 
 										<div className="col-12 col-md-6 col-xl-6">
 												<div className="form-group local-forms">
 													<label>IFSC<span className="login-danger">*</span></label>
-													<input
-													{...register('ifsc', { required: true, minLength: 5 })}
-													type="text"
-													className={`form-control ${errors.ifsc ? 'is-invalid' : ''}`}
-													placeholder=""
-													value={ifsc}
-													onChange={(e) => setIfsc(e.target.value)}
-													/>
-													{errors.ifsc && errors.ifsc.type === 'required' && (
-													<span className="text-danger">IFSC code is required</span>
-													)}
-													{errors.ifsc && errors.ifsc.type === 'minLength' && (
-													<span className="text-danger">IFSC code must be at least 5 characters</span>
-													)}
+													<Controller
+
+														name="ifsc"
+														control={control}
+														render={({ field }) => (
+														<input
+															{...field}
+															className={`form-control ${errors.ifsc ? 'is-invalid' : ''}`}
+															type="text"
+															placeholder=""
+														/>
+														)}
+														/>
 												</div>
 										</div>
 
                                         <div className="col-12 col-md-6 col-xl-6">
 												<div className="form-group local-forms">
 													<label>PAN No<span className="login-danger">*</span></label>
-													<input
-													{...register('panNo', { required: true })}
-													type="text"
-													className={`form-control ${errors.panNo ? 'is-invalid' : ''}`}
-													placeholder=""
-													value={panNo}
-													onChange={(e) => setPanNo(e.target.value)}
-													/>
-													{errors.panNo && errors.panNo.type === 'required' && (
-													<span className="text-danger">PAN No is required</span>
-													)}
-													
+													<Controller
+
+														name="panNo"
+														control={control}
+														render={({ field }) => (
+														<input
+															{...field}
+															className={`form-control ${errors.panNo ? 'is-invalid' : ''}`}
+															type="text"
+															placeholder=""
+														/>
+														)}
+														/>
 												</div>
 										</div>
 
                                         <div className="col-12 col-md-6 col-xl-6">
 											<div className="form-group local-forms">
 												<label>Pan Name<span className="login-danger">*</span></label>
-												<input
-												{...register('panName', { required: true, minLength: 2 })}
-												type="text"
-												className={`form-control ${errors.panName ? 'is-invalid' : ''}`}
-												placeholder=""
-												value={panName}
-												onChange={(e) => setPanName(e.target.value)}
-												/>
-												{errors.panName && errors.panName.type === 'required' && (
-												<span className="text-danger">Pan Name is required</span>
-												)}
-												{errors.panName && errors.panName.type === 'minLength' && (
-												<span className="text-danger">Pan Name must be at least 2 characters</span>
-												)}
+												<Controller
+
+														name="panName"
+														control={control}
+														render={({ field }) => (
+														<input
+															{...field}
+															className={`form-control ${errors.panName ? 'is-invalid' : ''}`}
+															type="text"
+															placeholder=""
+														/>
+														)}
+														/>
 											</div>
 										</div>
 
 										<div className="col-12 col-md-6 col-xl-6">
 												<div className="form-group local-forms">
 													<label>Date Of Joining<span className="login-danger">*</span></label>
-													<input
-													{...register('dateOfJoining', { required: true })}
-													type='date'
-													className={`form-control ${errors.dateOfJoining ? 'is-invalid' : ''}`}
-													placeholder=""
-													value={dateOfJoining}
-													onChange={(e) => setDateOfJoining(e.target.value)}
-													/>
-													{errors.dateOfJoining && errors.dateOfJoining.type === 'required' && (
-													<span className="text-danger">Date Of Joining is required</span>
-													)}
+													<Controller
+
+														name="dateOfJoining"
+														control={control}
+														render={({ field }) => (
+														<input
+															{...field}
+															className={`form-control ${errors.dateOfJoining ? 'is-invalid' : ''}`}
+															type="text"
+															placeholder=""
+														/>
+														)}
+														/>
 												</div>
 										</div>
 
                                         <div className="col-12 col-md-6 col-xl-6">
 											<div className="form-group local-forms">
 												<label>Date Of Birth<span className="login-danger">*</span></label>
-												<input
-												{...register('dateOfBirth', { required: true })}
-												type="date"
-												className={`form-control ${errors.dateOfBirth ? 'is-invalid' : ''}`}
-												placeholder=""
-												value={dateOfBirth}
-												onChange={(e) => setDateOfBirth(e.target.value)}
-												/>
-												{errors.dateOfBirth && errors.dateOfBirth.type === 'required' && (
-												<span className="text-danger">Date Of Birth is required</span>
-												)}
+											<Controller
+
+														name="ifsc"
+														control={control}
+														render={({ field }) => (
+														<input
+															{...field}
+															className={`form-control ${errors.ifsc ? 'is-invalid' : ''}`}
+															type="text"
+															placeholder=""
+														/>
+														)}
+														/>
 											</div>
 										</div>
 										<div className="col-12 col-md-6 col-xl-6">
 												<div className="form-group local-forms">
 													<label>Guardian Name<span className="login-danger">*</span></label>
-													<input
-													{...register('guardianName', { required: true, minLength: 2 })}
-													type="text"
-													className={`form-control ${errors.guardianName ? 'is-invalid' : ''}`}
-													placeholder=""
-													value={guardianname}
-													onChange={(e) => setGuardianName(e.target.value)}
-													/>
-													{errors.guardianName && errors.guardianName.type === 'required' && (
-													<span className="text-danger">Guardian Name is required</span>
-													)}
-													{errors.guardianName && errors.guardianName.type === 'minLength' && (
-													<span className="text-danger">Guardian Name must be at least 2 characters</span>
-													)}
+												<Controller
+
+														name="guardianName"
+														control={control}
+														render={({ field }) => (
+														<input
+															{...field}
+															className={`form-control ${errors.guardianName ? 'is-invalid' : ''}`}
+															type="text"
+															placeholder=""
+														/>
+														)}
+														/>
 												</div>
 										</div>
 
@@ -669,40 +715,28 @@ console.log('salary data : ',salarymasterData);
 										<div className="col-12 col-md-6 col-xl-6">
 												<div className="form-group local-forms">
 													<label>Basic Salary<span className="login-danger">*</span></label>
-													<input
-													{...register('basicSalary', { required: true, min: 0 })}
-													type="number"
-													className={`form-control ${errors.basicSalary ? 'is-invalid' : ''}`}
-													placeholder=""
-													value={basicsalary}
-													onChange={(e) => setBasicSalary(e.target.value)}
-													/>
-													{errors.basicSalary && errors.basicSalary.type === 'required' && (
-													<span className="text-danger">Basic Salary is required</span>
-													)}
-													{errors.basicSalary && errors.basicSalary.type === 'min' && (
-													<span className="text-danger">Basic Salary must be a positive number</span>
-													)}
+													<input className='form-control' 	type="number"
+															placeholder="" value={basicsalary} onChange={handlebasicsalarychange}/>
+													
 												</div>
 										</div>
 
 										<div className="col-12 col-md-6 col-xl-6">
 												<div className="form-group local-forms">
 													<label>Universal Account Number<span className="login-danger">*</span></label>
-													<input
-													{...register('universalAcNo', { required: true, minLength: 6 })}
-													type="text"
-													className={`form-control ${errors.accountNumber ? 'is-invalid' : ''}`}
-													placeholder=""
-													value={universalAcNo}
-													onChange={(e) => setUniversalAcNo(e.target.value)}
-													/>
-													{errors.accountNumber && errors.accountNumber.type === 'required' && (
-													<span className="text-danger">Account Number is required</span>
-													)}
-													{errors.accountNumber && errors.accountNumber.type === 'minLength' && (
-													<span className="text-danger">Account Number should be at least 6 characters</span>
-													)}
+													<Controller
+
+														name="universalAcNo"
+														control={control}
+														render={({ field }) => (
+														<input
+															{...field}
+															className={`form-control ${errors.universalAcNo ? 'is-invalid' : ''}`}
+															type="text"
+															placeholder=""
+														/>
+														)}
+														/>
 												</div>
 										</div>
 
@@ -710,40 +744,38 @@ console.log('salary data : ',salarymasterData);
 										<div className="col-12 col-md-6 col-xl-6">
 												<div className="form-group local-forms">
 													<label>City <span className="login-danger">*</span></label>
-													<input
-													{...register('city', { required: true, minLength: 2 })}
-													type="text"
-													className={`form-control ${errors.city ? 'is-invalid' : ''}`}
-													placeholder=""
-													value={city}
-													onChange={(e) => setCity(e.target.value)}
-													/>
-													{errors.city && errors.city.type === 'required' && (
-													<span className="text-danger">City is required</span>
-													)}
-													{errors.city && errors.city.type === 'minLength' && (
-													<span className="text-danger">City should be at least 2 characters</span>
-													)}
+													<Controller
+
+														name="city"
+														control={control}
+														render={({ field }) => (
+														<input
+															{...field}
+															className={`form-control ${errors.city ? 'is-invalid' : ''}`}
+															type="text"
+															placeholder=""
+														/>
+														)}
+														/>
 												</div>
 										</div>
 
 										<div className="col-12 col-md-6 col-xl-6">
 												<div className="form-group local-forms">
 													<label>Country <span className="login-danger">*</span></label>
-													<input
-													{...register('country', { required: true, minLength: 2 })}
-													type="text"
-													className={`form-control ${errors.country ? 'is-invalid' : ''}`}
-													placeholder=""
-													value={country}
-													onChange={(e) => setCountry(e.target.value)}
-													/>
-													{errors.country && errors.country.type === 'required' && (
-													<span className="text-danger">Country is required</span>
-													)}
-													{errors.country && errors.country.type === 'minLength' && (
-													<span className="text-danger">Country should be at least 2 characters</span>
-													)}
+													<Controller
+
+														name="country"
+														control={control}
+														render={({ field }) => (
+														<input
+															{...field}
+															className={`form-control ${errors.country ? 'is-invalid' : ''}`}
+															type="text"
+															placeholder=""
+														/>
+														)}
+														/>
 												</div>
 										</div>
 
@@ -766,25 +798,49 @@ console.log('salary data : ',salarymasterData);
 															<th></th>
 															</tr>
 														</thead>
+
 														<tbody>
-															{tableRows.map((row, index) => (
+															{tableRow.map((row, index) => (
 															<tr key={row.id}>
 																<td>
-																<input type="text" className="form-control" value={index + 1} readOnly />
+																	
+
+												
+													
+													
+													<input
+														value={row.id}
+														className="form-control"
+														type="text"
+														placeholder=""
+														readOnly
+													/>
+													
+													
+																
 																</td>
 																<td>
-																<select className="form-control"
-																onMouseEnter={handlesalarymasterclick}
-																onChange={(event) => handlesalarymasterchange(event, index)}
-																>
-																	<option>Select</option>
-																	{salarymasterData.map((option)=>(
-																		<option value={option.type} key={option._id}>
-																			{option.name}
-																		</option>
 																	
-																	))}
-																</select>
+														
+															<select className="form-control"
+															
+															onMouseEnter={handlesalarymasterclick}
+															onChange={(event) => handlesalarymasterchange(event, index)}
+															
+															>
+																 <option value={row._id}>{row.salaryComponent || 'salaryComponent'}</option>
+
+																{salarymasterData.map((option)=>(
+																	
+																	<option value={option._id} key={option._id}>
+																		{option.name}
+																	</option>
+																
+																))}
+															</select>
+													
+													
+																
 																</td>
 																
 																<td>
@@ -795,7 +851,7 @@ console.log('salary data : ',salarymasterData);
 																		placeholder="%"
 																		// onChange={handleChange}
 																		// value={percentage}
-																		value={row.percentage ? row.percentage : ''}
+																		// value={row.percentage ? row.percentage : ''}
                                                                         onChange={(e) => handleChange(index, e.target.value)}
 																		/>
 																	
@@ -807,7 +863,7 @@ console.log('salary data : ',salarymasterData);
 																<input
 																	type="text"
 																	className="form-control"
-																	value={row.value ? row.value : ''}
+																	// value={row.value ? row.value : ''}
 																	onChange={(e) => handleSecondInputChange(index, e.target.value)}
 																	
 																/>
@@ -846,7 +902,21 @@ console.log('salary data : ',salarymasterData);
 															
 															<tr>
 															<td colSpan="5" className="text-end"><strong>Total Amount:</strong></td>
-															<td><input className="form-control" type="number" value={totalAmount?totalAmount:basicsalary} readOnly/>
+															<td>
+																<Controller
+
+														name="TotalSalary"
+														control={control}
+														render={({ field }) => (
+														<input
+															{...field}
+															className={`form-control ${errors.TotalSalary ? 'is-invalid' : ''}`}
+															type="text"
+															placeholder=""
+															readOnly/>
+														)}
+														/>
+																{/* <input className="form-control" type="number" value={totalAmount?totalAmount:basicsalary} readOnly/> */}
 																{/* Display the total amount here */}
 																{/* You can use the 'calculateTotalAmount' function to get the total */}
 															</td>

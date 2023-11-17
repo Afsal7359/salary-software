@@ -7,7 +7,8 @@ import pdficon from '../../assets/img/icons/pdf-icon-01.svg';
 import TXticon from '../../assets/img/icons/pdf-icon-02.svg';
 import csvicon from '../../assets/img/icons/pdf-icon-03.svg';
 import Excelicon from '../../assets/img/icons/pdf-icon-04.svg';
-import { getallemployeemaster } from '../../Apicalls/EmployeeMater';
+import { editemployeemaster, getallemployeemaster } from '../../Apicalls/EmployeeMater';
+import EditEmployeeMaster from './EditEmployeeMaster';
 
 const Employeemasterlist = React.memo(({ formdata, setformdata }) =>{
     const [Data, setData] = useState([]);
@@ -15,6 +16,7 @@ const Employeemasterlist = React.memo(({ formdata, setformdata }) =>{
     const [showEditModal, setShowEditModal] = useState(false);
     const [showDeleteModal, setshowDeleteModal] = useState(false);
     const [selectedItem, setSelectedItem] = useState(null);
+    const [selected, setSelected] = useState(false);
       if (formdata.length!=0) {
          const isNameInData = Data.some((item) => item.name === formdata.name);
          if (!isNameInData) {
@@ -42,8 +44,9 @@ const Employeemasterlist = React.memo(({ formdata, setformdata }) =>{
    // Function to handle the click event
   const handleEditClick = (item) => {
     // Set showEditModal to true when the "Edit" button is clicked
-    setShowEditModal(true);
     setSelectedItem(item);
+    setShowEditModal(true);
+    setSelected(!selected)
   };
   
    // Function to handle the click event
@@ -70,7 +73,7 @@ const Employeemasterlist = React.memo(({ formdata, setformdata }) =>{
     }
 
   return (
-    <div>
+    <>
         <div className="row">
         <div className="col-sm-12">
           
@@ -152,12 +155,9 @@ const Employeemasterlist = React.memo(({ formdata, setformdata }) =>{
                             </a>
                             <div className="dropdown-menu dropdown-menu-end">
                               <a
-                              onMouseEnter={() => {
-                                setSelectedItem(item);
-                                setShowEditModal(true);
-                              }}
-                               onClick={() => handleEditClick(item)} className="dropdown-item" data-bs-toggle="modal"
-                                data-bs-target="#delete_patients"
+                            
+                            
+                               onClick={() => handleEditClick(item)} className="dropdown-item" 
                                 >
                                 <i className="fa-solid fa-pen-to-square m-r-5"></i> Edit
                               </a>
@@ -197,7 +197,14 @@ const Employeemasterlist = React.memo(({ formdata, setformdata }) =>{
           
         </div>
       </div>
-    </div>
+
+      {showEditModal && selectedItem && (
+  <EditEmployeeMaster item={selectedItem} setData={setData} Data={Data} />
+)}
+
+    </>
+
+
   )
 }
 )

@@ -13,7 +13,7 @@ const EmployeeSchema= new mongoose.Schema({
     },
     EmployeeTypeId:{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'type', // This should be the model name that you want to reference
+        ref: 'Employeetype', // This should be the model name that you want to reference
        
     },
     PostId:{
@@ -127,8 +127,9 @@ const EmployeeSchema= new mongoose.Schema({
             required: true
         },
         salaryComponent: {
-            type: String,
-            required: true
+            type: mongoose.Schema.Types.ObjectId,
+        ref: 'Salarymaster', // This should be the model name that you want to reference
+       
         },
         percentage: {
             type: Number,

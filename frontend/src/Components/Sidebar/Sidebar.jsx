@@ -25,7 +25,7 @@ const Sidebar = () => {
 						<li className="submenu">
 							<a href="#"><span className="menu-side"><img src={Doctors} alt=""/></span> <span> Employee Master</span> <span className="menu-arrow"></span></a>
 							<ul style={{ display:'none'}}>
-                            <li><Link to="/add-employee-master">Add Employee Master</Link></li>
+                            <li><Link to="/employee-master">Employee Master</Link></li>
                             
                             {/* <li><Link to="/add-doctor">Add Doctor</Link></li>
                             <li><Link to="/edit-doctor">Edit Doctor</Link></li>
