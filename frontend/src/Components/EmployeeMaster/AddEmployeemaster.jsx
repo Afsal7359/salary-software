@@ -115,7 +115,7 @@ console.log('salary data : ',salarymasterData);
 	const [percentage, setPercentage]=useState('');
 	const [calculatePercentage, setCalculatePercentage]=useState('')
 	const [secondInputValue, setSecondInputValue] = useState('');
-
+	  const [employeelist,setemployeelist]=useState(true)
 
 	const {
 		
@@ -157,6 +157,8 @@ console.log('salary data : ',salarymasterData);
 		  if (response.success) {
 			setFormdata(response.data);
 			toast.success(response.message);
+			setstate(false)
+			setemployeelist(true)
 			setName('');
 			setEmployeeTypeId('');
 			setPostId('');
@@ -266,6 +268,12 @@ const [state,setstate]=useState(false)
 
 	const handleclick=()=>{
 		setstate(!state)
+		setemployeelist(false)
+		
+	}
+	const handletableclick=()=>{
+		setstate(false)
+		setemployeelist(true)
 	}
 	
 
@@ -273,8 +281,9 @@ const [state,setstate]=useState(false)
   return (
    <>
    <PageHeader/>
-   <button onClick={handleclick} >click</button>
-   {state&&  <div className="row">
+   <button className='btn btn-success submit-form' onClick={handleclick} >Add Employee</button>
+   {state&& <>   <button className='btn btn-success submit-form' onClick={handletableclick} >View Table</button>
+ <div className="row">
 					<div className="col-sm-12">
 					
 						<div className="card">
@@ -875,9 +884,9 @@ const [state,setstate]=useState(false)
 							</div>
 						</div>							
 					</div>					
-				</div>}
+				</div></>}
 
-				<Employeemasterlist   formdata={formdata} setformdata={setFormdata} />
+				{employeelist&&<Employeemasterlist   formdata={formdata} setformdata={setFormdata} />}
    </>
   )
 }

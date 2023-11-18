@@ -150,7 +150,11 @@ const EmployeeSchema= new mongoose.Schema({
         type:Number
     },
 
-    
+    isdeleted:{
+        type:Boolean,
+        require:true,
+        default:false
+    }
     
 
 })

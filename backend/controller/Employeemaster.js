@@ -35,8 +35,11 @@ console.log('haaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',data);
   },
 
   EditEmployee: async (req, res) => {
+    console.log('okokokokokokokokokookoookoookokk');
     try {
+      console.log('reqqqqbody',req.body);
       const data = req.body;
+      
       const {id } = req.params;
       // Check if an Employee with the specified employeeid exists
       const existingEmployee = await Employee.findOne({_id:id});
@@ -65,6 +68,7 @@ console.log('haaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',data);
 
   DeleteEmployee: async (req, res) => {
     try {
+      console.log('haaaaaaaaaaaaaaaaai',req.params);
       const {id } = req.params;
 
       // Check if an Employee with the specified employeeid exists

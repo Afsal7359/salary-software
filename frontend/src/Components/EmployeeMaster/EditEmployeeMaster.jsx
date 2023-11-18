@@ -1,4 +1,5 @@
 import React,{useEffect, useState} from 'react'
+import { useNavigate } from 'react-router-dom';
 import PageHeader from '../PageHeader'
 import SalaryComponent from './SalaryComponent'
 import { toast } from 'react-toastify';
@@ -6,10 +7,12 @@ import { Controller, useForm } from 'react-hook-form';
 import { getallemployeetype } from '../../Apicalls/Employeetype';
 import { getallpost } from '../../Apicalls/Post';
 import { getallSalary } from '../../Apicalls/salarymaster';
-import { Addemployee } from '../../Apicalls/EmployeeMater';
-function EditEmployeeMaster({  item, setData, Data,show,setshow }) {
+import { editemployeemaster } from '../../Apicalls/EmployeeMater';
+import Employeemasterlist from './Employeemasterlist';
+function EditEmployeeMaster({closeEdit,  item, setData, Data,show,setshow }) {
 console.log(item);
-const [tableRow, settableRow] = useState(item?.tablerow)
+    const [tableRow, settableRow] = useState(item?.tablerow)
+	console.log('kakakakakakakaka',tableRow);
 	const [employeeTypeData, setEmployeeTypeData]=useState([]);
 	const [employeeTypeId, setEmployeeTypeId]=useState('');
 	const [isemployeeTypeDataFetch, setisEmployeeTypeDataFetch]=useState(false);
@@ -78,122 +81,119 @@ const [tableRow, settableRow] = useState(item?.tablerow)
 	const [salarycomponent,setSalaryComponent]=useState([]);
 
 	const handlesalarymasterchange = (event, index) => {
-		const updatedTableRows = [...tableRows];
+		const updatedTableRows = [...tablerow];
 		updatedTableRows[index] = {
 		  ...updatedTableRows[index],
-		  salarycomponent: event.target.value // Update salaryComponent based on the event value
+		  salaryComponent: event.target.value // Update salaryComponent based on the event value
 		  
 		};
 		
 	  console.log(updatedTableRows,"ii");
-		settableRows(updatedTableRows); // Update the state with the modified rows
+	
+	  setTablerow(updatedTableRows); // Update the state with the modified rows
 	  }
 	// console.log('ghfdgfygfghfghf',salarymasterId);
 
 console.log('salary data : ',salarymasterData);
 	
 	
-	const [name, setName] = useState('');
-	const [email, setEmail]=useState('');
-	const [phone,setPhone]=useState('');
-	const [employeeno, setEmployeeno]=useState('');
-	const [address1, setAddress1]=useState('');
-	const [address2, setAddress2]=useState('');
-	const [address3, setAddress3]=useState('');
-	const [bank, setBank]=useState('');
-	const [accountno, setAccountno]=useState('');
-	const [branch, setBranch]=useState('');
-	const [ifsc, setIfsc]=useState('');
-	const [panNo,setPanNo]=useState('');
-	const [panName, setPanName]=useState('');
-	const [dateOfJoining, setDateOfJoining]=useState('');
-	const [dateOfBirth,setDateOfBirth]=useState('');
-	const [guardianname, setGuardianName]=useState('');
-	const [basicsalary, setBasicSalary]=useState(item?.basicSalary);
-	const [universalAcNo, setUniversalAcNo]=useState('');
-	const [city, setCity]=useState('');
-	const [country, setCountry]=useState('');
+	const [name, setName] = useState(item?.name);
+	const [email, setEmail]=useState(item?.email);
+	const [phone,setPhone]=useState(item?.phone);
+	const [employeeno, setEmployeeno]=useState(item?.employeeno);
+	const [address1, setAddress1]=useState(item?.address1);
+	const [address2, setAddress2]=useState(item?.address2);
+	const [address3, setAddress3]=useState(item?.address3);
+	const [bank, setBank]=useState(item?.bank);
+	const [accountNo, setAccountno]=useState(item?.accountNo);
+	const [branch, setBranch]=useState(item?.branch);
+	const [ifsc, setIfsc]=useState(item?.ifsc);
+	const [panNo,setPanNo]=useState(item?.panNo);
+	const [panName, setPanName]=useState(item?.panName);
+	const [dateOfJoining, setDateOfJoining]=useState(item?.dateOfJoining);
+	const [dateOfBirth,setDateOfBirth]=useState(item?.dateOfBirth);
+	const [guardianname, setGuardianName]=useState(item?.guardianName);
+	const [basicSalary, setBasicSalary]=useState(item?.basicSalary);
+	const [universalAcNo, setUniversalAcNo]=useState(item?.universalAcNo);
+	const [city, setCity]=useState(item?.city);
+	const [country, setCountry]=useState(item?.country);
+	const [tabledata,setTabledata]=useState(item?.tableRow);
+	const [TotalSalary,setTotalSalary]=useState(item?.TotalSalary);
+	const [gender, setGender]=useState(item?.gender)
 
+	const[employelist,setEmployelist]=useState(false);
+	const [editemployee,setEditemployee]=useState(true);
 
-	const [tableRows, settableRows] = useState([])
+	const [tablerow, setTablerow] = useState(item?.tablerow ? item.tablerow : [{
+		id: 1,
+		salaryComponent: '',
+		percentage: '',
+		value: '',
+		price: '',
+	  }]);
 	const [percentage, setPercentage]=useState('');
 	const [calculatePercentage, setCalculatePercentage]=useState('')
 	const [secondInputValue, setSecondInputValue] = useState('');
+	const navigate = useNavigate();
+const [formdata,setFormdata]=useState('')
+	// const {
+	// 	control,
+	// 	handleSubmit,
+	// 	register,
+	// 	field
+	//   } = useForm
+	  const [itemid, setitemid] = useState(item._id);
+	  const handleclick = async (event) => {
+		event.preventDefault(); // Prevent default form submission
 
+		// Prepare formData with all necessary fields
+		const formData = {
+		  name,
+		  email,
+		  phone,
+		  gender,
+		  employeeno,
+		  address1,
+		  address2,
+		  address3,
+		  bank,
+		  accountNo,
+		  ifsc,
+		  branch,
+		  panNo,
+		  panName,
+		  dateOfJoining,
+		  dateOfBirth,
+		  guardianname,
+		  basicSalary,
+		  universalAcNo,
+		  city,
+		  country,
+		  tablerow,
+		  TotalSalary,
 
-	const {
-		control,
-		handleSubmit,
-		register,
-		setError,
-		formState: { errors },
-	  } = useForm({
-		defaultValues: {
-		  name: item.name,
-		  employeeno:item.employeeno,
-		  email: item.email,
-		  phone:item.phone,
-		  address1 :item.address1,
-		  address2 :item.address2,
-		  address3 :item.address3,
-		  bank :item.bank,
-		  accountNo:item.accountNo,
-		  branch:item.branch,
-		  ifsc :item.ifsc,
-		  panNo:item.panNo,
-		  panName :item.panName,
-		  dateOfJoining: item.dateOfJoining,
-		  dateOfBirth: item.dateOfBirth,
-		  guardianName: item.guardianName,
-		
-		  universalAcNo : item.universalAcNo,
-		  city : item.city,
-		  country : item.country,
-		
-		  id : item.tablerow.id,
-		  salaryComponent: item.tablerow.salaryComponent,
-		  percentage: item.tablerow.percentage,
-		  value: item.tablerow.value,
-		  price: item.tablerow.price,
-		  TotalSalary: item.TotalSalary
-
-		},
-	  });
-	
-	  const onSubmit = async (data) => {
-		
-	
+		};
+		setFormdata(formData)
+		console.log('ffffooooorrrrrmmmmdddaaatttaaa',formData);
+		// Update Data array if itemid matches
+		const updatedData = Data.map((dataItem) => {
+		  if (dataItem._id === item._id) {
+			return { ...dataItem, name: formData.name }; // Update the relevant field here
+		  }
+		  return dataItem;
+		});
+		setData(updatedData);
+	  
+		formData._id = itemid;
 		try {
-			console.log('Afsal :' , data);
-		  const response = await Addemployee(data);
+		  const response = await editemployeemaster(formData);
 		  if (response.success) {
-			
 			toast.success(response.message);
-			setName('');
-			setEmployeeTypeId('');
-			setPostId('');
-			setEmail('');
-			setPhone('');
-			setEmployeeno('');
-			setAddress1('');
-			setAddress2('');
-			setAddress3('');
-			setBank('');
-			setAccountno('');
-			setBranch('');
-			setIfsc('');
-			setPanNo('');
-			setPanName('');
-			setDateOfJoining('');
-			setDateOfBirth('');
-			setGuardianName('');
-			setBasicSalary('');
-			setUniversalAcNo('')
-			setCity('');
-			setCountry('');
-			setPercentage('');
-			setSecondInputValue('');
-
+			setEditemployee(false)
+			setEmployelist(true)
+			
+			// Update any state or flags to manage component visibility
+			// For example, setVisibility(false);
 		  } else {
 			toast.error(response.message);
 		  }
@@ -201,13 +201,14 @@ console.log('salary data : ',salarymasterData);
 		  toast.error(err.message);
 		}
 	  };
+	
 	  
 
-
+	  
 	 
 	
 	  const handleAddRow = () => {
-		settableRows((prevRows) => [
+		setTablerow((prevRows) => [
 		  ...prevRows,
 		  {
 			id: Date.now(),
@@ -220,70 +221,90 @@ console.log('salary data : ',salarymasterData);
 	  };
 	
 	  const handleRemoveRow = (id) => {
-		settableRows((prevRows) => prevRows.filter((row) => row.id !== id));
+		setTablerow((prevRows) => prevRows.filter((row) => row.id !== id));
 	  };
 
-	  const [totalAmount, setTotalAmount] = useState(0);
 	
 
+	
+	 
+	  
+
 	  useEffect(() => {
+	
+		console.log('haaaaaaiaaaaaaaaaaia');
+		const TotalSalary = tablerow.reduce((acc, row) => {
+			console.log('frrrrrrrrrrrrrrrrrrrrrrrrrrr',row.salaryComponent);
+			console.log('kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk',salarymasterData);
+			// const Salarytype = row.salaryComponent.type
+			const salarytype = salarymasterData.filter((item) => {
+				return item._id=== row.salaryComponent;
+			});
+			
+			console.log('Filtered salary type:', salarytype);
+			
+			
 		
-		
-		const totalAmount = tableRows.reduce((acc, row) => {
-			if (row.salaryComponent === 'Increment') {
+			if (salarytype[0]?.type === 'Increment') {
 			  return acc + parseFloat(row.price);
-			} else if (row.salaryComponent === 'Decrement') {
+			} else if (salarytype[0]?.type === 'Decrement') {
 			  return acc - parseFloat(row.price);
 			}
+			
+			
 			return acc;
-		  }, basicsalary); // Initialize accumulator with basicsalary
-		  
-		  // Use the calculated totalAmount
-		  setTotalAmount(totalAmount);
-
-
-	  }, [tableRows, basicsalary]);
+		  }, basicSalary); // Initialize accumulator with basicsalary
+		  setTotalSalary(TotalSalary);
+	console.log('ooooolaaaa',TotalSalary,tabledata);
+	  }, [tablerow, basicSalary]);
 	  
 
 
-	  const handleChange = (index,percentage) => {
-		
-		const updatedTableRows = [...tableRows];
-		
-		
-        updatedTableRows[index].percentage = Number(percentage);
-       // Recalculate the price based on the updated percentage and basic salary
-    const newPrice = (basicsalary * Number(percentage)) / 100;
-    updatedTableRows[index].price = newPrice;
-    settableRows(updatedTableRows);
-	};
-
-	
-
-	const handleSecondInputChange = (index,value) => {
-		const updatedTableRows = [...tableRows];
-		updatedTableRows[index].percentage ='';
-		updatedTableRows[index].value = Number(value);
-		const newPrice = (value)
+	  const handleSecondInputChange = (index, value) => {
+		const updatedTableRows = [...tablerow];
+		updatedTableRows[index].percentage = '';
+		updatedTableRows[index].value = value.trim() !== '' ? Number(value) : '';
+		const newPrice = value.trim() !== '' ? value : '';
 		updatedTableRows[index].price = newPrice;
-        settableRows(updatedTableRows);
+		setTablerow(updatedTableRows);
 	};
-
-
-	const handlebasicsalarychange=(e)=>{
-		setBasicSalary(e.target.value)
+	
+	const handleChange = (index, percentage) => {
+		const updatedTableRows = [...tablerow];
+		updatedTableRows[index].percentage = Number(percentage);
+	
+		// Reset second field's value when first field is updated
+		updatedTableRows[index].value = '';
+	
+		// Recalculate the price based on the updated percentage and basic salary
+		const newPrice = basicSalary ? (basicSalary * Number(percentage)) / 100 : '';
+		updatedTableRows[index].price = newPrice || '';
+	
+		setTablerow(updatedTableRows);
+	};
+	
+	//   const [editpage,setEditpage]=useState('')
+	//   const [tablelist,setTablelist]=useState(false)
+	  
+	//   if(setEditpage(false)){
+	// 	setTablelist(true)
+	//   }
+	const handleclicktable =()=>{
+		setEditemployee(false);
+		setEmployelist(true);
 	}
-
+	  
 
   return (
     <div>
-        <PageHeader/>
-     <div className="row">
+    
+
+     {editemployee&& <div>   <button className='btn btn-primary submit-form  ' style={{marginRight:0}} onClick={handleclicktable}>View Table</button><div className="row">
 					<div className="col-sm-12">
 					
 						<div className="card">
 							<div className="card-body">
-								<form onSubmit={handleSubmit(onSubmit)}>
+								<form onSubmit={handleclick}>
 									<div className="row">
 										<div className="col-12">
 											<div className="form-heading">
@@ -301,19 +322,15 @@ console.log('salary data : ',salarymasterData);
 										<div className="col-12 col-md-6 col-xl-6">
 											<div className="form-group local-forms">
 												<label >Name <span className="login-danger">*</span></label>
-												<Controller
-
-													name="name"
-													control={control}
-													render={({ field }) => (
+												
 													<input
-														{...field}
-														className={`form-control ${errors.name ? 'is-invalid' : ''}`}
+														className={`form-control`}
 														type="text"
 														placeholder=""
+														value={name}
+														onChange={(e) => setName(e.target.value)}
 													/>
-													)}
-													/>
+													
 												
 											
 												
@@ -322,11 +339,7 @@ console.log('salary data : ',salarymasterData);
 										<div className="col-12 col-md-6 col-xl-6">
 											<div className="form-group local-forms">
 												<label >Employee Type<span className="login-danger">*</span></label>
-												<Controller
-													name="EmployeeTypeId"
-													control={control}
-													defaultValue={item.EmployeeTypeId._id}
-													render={({ field }) => (
+												
 												<select className="form-control select"
 													
 												onMouseEnter={handlemployeetypeclick}
@@ -340,18 +353,13 @@ console.log('salary data : ',salarymasterData);
 														</option>
 													))}
 												  </select>
-												  )}
-												  />
+												
 											</div>
 										</div>
 										<div className="col-12 col-md-6 col-xl-6">
 											<div className="form-group local-forms">
 												<label >Post<span className="login-danger">*</span></label>
-												<Controller
-													name="EmployeeTypeId"
-													control={control}
-													defaultValue={item.PostId._id}
-													render={({ field }) => (
+												
 												<select className="form-control select"
 													onMouseEnter={handlePostClick}
 													onChange={handlePostChange}
@@ -364,69 +372,52 @@ console.log('salary data : ',salarymasterData);
 														</option>
 													))}
 												  </select>
-												  )}
-												  />
+												
 											</div>
 										</div>
 										<div className="col-12 col-md-6 col-xl-6">
 											<div className="form-group local-forms">
 													<label>Employee No <span className="login-danger">*</span></label>
-													<Controller
-
-														name="employeeno"
-														control={control}
-														render={({ field }) => (
+													
 														<input
-															{...field}
-															className={`form-control ${errors.employeeno ? 'is-invalid' : ''}`}
+														
+															className={`form-control`}
 															type="text"
 															placeholder=""
+															value={employeeno}
+															onChange={(e) => setEmployeeno(e.target.value)}
 														/>
-														)}
-														/>
-													{errors.employeeno && errors.employeeno.type === 'required' && (
-													<span className="text-danger">Employee No is required</span>
-													)}
-													{errors.employeeno && errors.employeeno.type === 'minLength' && (
-													<span className="text-danger">Employee No must be at least 1 character</span>
-													)}
+													
+												
 											</div>
 										</div>
 										<div className="col-12 col-md-6 col-xl-6">
 											<div className="form-group local-forms">
 												<label >Address-2 <span className="login-danger">*</span></label>
-												<Controller
-
-														name="address2"
-														control={control}
-														render={({ field }) => (
+											
 														<input
-															{...field}
-															className={`form-control ${errors.address2 ? 'is-invalid' : ''}`}
+														onChange={(e) => setAddress2(e.target.value)}
+															className={`form-control `}
 															type="text"
 															placeholder=""
+															value={address2}
 														/>
-														)}
-														/>
+													
 											</div>
 										</div>
 
 										<div className="col-12 col-md-6 col-xl-6">
 												<div className="form-group local-forms">
 													<label>Address-1 <span className="login-danger">*</span></label>
-													<Controller
-
-														name="address1"
-														control={control}
-														render={({ field }) => (
+											
 														<input
-															{...field}
-															className={`form-control ${errors.address1 ? 'is-invalid' : ''}`}
+															onChange={(e) => setAddress1(e.target.value)}
+															className={`form-control `}
 															type="text"
 															placeholder=""
+															value={address1}
 														/>
-														)}
-														/>
+													
 													
 													
 												</div>
@@ -439,10 +430,10 @@ console.log('salary data : ',salarymasterData);
 												<label className="form-check-label">
 												<input
 													type="radio"
-													name="gender"
+													name={gender}
 													className="form-check-input mt-0"
 													value="Male"
-													{...register('gender')}
+													onChange={(e) => setGender(e.target.value)}
 												/>
 												Male
 												</label>
@@ -451,10 +442,10 @@ console.log('salary data : ',salarymasterData);
 												<label className="form-check-label">
 												<input
 													type="radio"
-													name="gender"
+													name={gender}
 													className="form-check-input mt-0"
 													value="Female"
-													{...register('gender')}
+													onChange={(e) => setGender(e.target.value)}
 												/>
 												Female
 												</label>
@@ -463,10 +454,10 @@ console.log('salary data : ',salarymasterData);
 												<label className="form-check-label">
 												<input
 													type="radio"
-													name="gender"
+													name={gender}
 													className="form-check-input mt-0"
 													value="Others"
-													{...register('gender')}
+													onChange={(e) => setGender(e.target.value)}
 												/>
 												Others
 												</label>
@@ -476,236 +467,177 @@ console.log('salary data : ',salarymasterData);
                                         <div className="col-12 col-md-6 col-xl-6">
 											<div className="form-group local-forms">
 												<label >Address-3 <span className="login-danger">*</span></label>
-												<Controller
-
-														name="address3"
-														control={control}
-														render={({ field }) => (
+												
+													
 														<input
-															{...field}
-															className={`form-control ${errors.address3 ? 'is-invalid' : ''}`}
+															value={address3}
+															className={`form-control`}
 															type="text"
 															placeholder=""
+															onChange={(e) => setAddress3(e.target.value)}
 														/>
-														)}
-														/>
+														
 											</div>
 										</div>
                                         <div className="col-12 col-md-6 col-xl-6">
 											<div className="form-group local-forms">
 												<label >Email <span className="login-danger">*</span></label>
-												<Controller
-
-														name="email"
-														control={control}
-														render={({ field }) => (
+											
 														<input
-															{...field}
-															className={`form-control ${errors.email ? 'is-invalid' : ''}`}
+															value={email}
+															className={`form-control`}
 															type="text"
 															placeholder=""
-															
+															onChange={(e) => setEmail(e.target.value)}
 														/>
-														)}
-														/>
+														
 											</div>
 										</div>
                                         <div className="col-12 col-md-6 col-xl-6">
 											<div className="form-group local-forms">
 												<label >Phone <span className="login-danger">*</span></label>
-												<Controller
-													name="phone"
-													control={control}
-													rules={{
-													required: 'Phone number is required',
-													pattern: {
-														value: /^[0-9]{10}$/,
-														message: 'Please enter a valid phone number',
-													},
-													}}
-													render={({ field }) => (
-													<>
+											
 														<input
-														{...field}
-														className={`form-control ${errors.phone ? 'is-invalid' : ''}`}
+													value={phone}
+														className={`form-control`}
 														type="number"
 														placeholder=""
-													
+														onChange={(e) => setPhone(e.target.value)}
 														/>
-														{errors.phone && (
-														<span className="text-danger">{errors.phone.message}</span>
-														)}
-													</>
-													)}
-												/>
+														
+													
 											</div>
 										</div>
 										<div className="col-12 col-md-6 col-xl-6">
 												<div className="form-group local-forms">
 													<label>Bank <span className="login-danger">*</span></label>
-													<Controller
-
-													name="bank"
-													control={control}
-													render={({ field }) => (
+													
 													<input
-														{...field}
-														className={`form-control ${errors.bank ? 'is-invalid' : ''}`}
+													onChange={(e) => setBank(e.target.value)}
+														className={`form-control`}
 														type="text"
 														placeholder=""
+														value={bank}
 													/>
-													)}
-													/>
+													
 												</div>
 										</div>
 
                                        <div className="col-12 col-md-6 col-xl-6">
 												<div className="form-group local-forms">
 													<label>Account No<span className="login-danger">*</span></label>
-													<Controller
-
-													name="accountNo"
-													control={control}
-													render={({ field }) => (
+													
 													<input
-														{...field}
-														className={`form-control ${errors.bank ? 'is-invalid' : ''}`}
+												onChange={(e) => setAccountno(e.target.value)}
+														className={`form-control`}
 														type="text"
 														placeholder=""
+														value={accountNo}
 													/>
-													)}
-													/>
+												
 												</div>
 										</div>
 										<div className="col-12 col-md-6 col-xl-6">
 												<div className="form-group local-forms">
 													<label>Branch<span className="login-danger">*</span></label>
-													<Controller
-
-													name="branch"
-													control={control}
-													render={({ field }) => (
+													
 													<input
-														{...field}
-														className={`form-control ${errors.branch ? 'is-invalid' : ''}`}
+														onChange={(e) => setBranch(e.target.value)}
+														className={`form-control`}
 														type="text"
 														placeholder=""
+														value={branch}
 													/>
-													)}
-													/>
+													
 												</div>
 										</div>
 
 										<div className="col-12 col-md-6 col-xl-6">
 												<div className="form-group local-forms">
 													<label>IFSC<span className="login-danger">*</span></label>
-													<Controller
-
-														name="ifsc"
-														control={control}
-														render={({ field }) => (
+													
 														<input
-															{...field}
-															className={`form-control ${errors.ifsc ? 'is-invalid' : ''}`}
+															onChange={(e) => setIfsc(e.target.value)}
+															className={`form-control `}
 															type="text"
 															placeholder=""
+															value={ifsc}
 														/>
-														)}
-														/>
+														
 												</div>
 										</div>
 
                                         <div className="col-12 col-md-6 col-xl-6">
 												<div className="form-group local-forms">
 													<label>PAN No<span className="login-danger">*</span></label>
-													<Controller
-
-														name="panNo"
-														control={control}
-														render={({ field }) => (
+													
 														<input
-															{...field}
-															className={`form-control ${errors.panNo ? 'is-invalid' : ''}`}
+															onChange={(e) => setPanNo(e.target.value)}
+															className={`form-control `}
 															type="text"
 															placeholder=""
+															value={panNo}
 														/>
-														)}
-														/>
+														
 												</div>
 										</div>
 
                                         <div className="col-12 col-md-6 col-xl-6">
 											<div className="form-group local-forms">
 												<label>Pan Name<span className="login-danger">*</span></label>
-												<Controller
-
-														name="panName"
-														control={control}
-														render={({ field }) => (
+												
 														<input
-															{...field}
-															className={`form-control ${errors.panName ? 'is-invalid' : ''}`}
+															onChange={(e) => setPanName(e.target.value)}
+															className={`form-control `}
 															type="text"
 															placeholder=""
+															value={panName}
 														/>
-														)}
-														/>
+														
 											</div>
 										</div>
 
 										<div className="col-12 col-md-6 col-xl-6">
 												<div className="form-group local-forms">
 													<label>Date Of Joining<span className="login-danger">*</span></label>
-													<Controller
-
-														name="dateOfJoining"
-														control={control}
-														render={({ field }) => (
+													
 														<input
-															{...field}
-															className={`form-control ${errors.dateOfJoining ? 'is-invalid' : ''}`}
-															type="text"
+														onChange={(e) => setDateOfJoining(e.target.value)}
+															className={`form-control `}
+															type="date"
 															placeholder=""
+															value={dateOfJoining}
 														/>
-														)}
-														/>
+														
 												</div>
 										</div>
 
                                         <div className="col-12 col-md-6 col-xl-6">
 											<div className="form-group local-forms">
 												<label>Date Of Birth<span className="login-danger">*</span></label>
-											<Controller
-
-														name="ifsc"
-														control={control}
-														render={({ field }) => (
+										
 														<input
-															{...field}
-															className={`form-control ${errors.ifsc ? 'is-invalid' : ''}`}
-															type="text"
+															className={`form-control`}
+															type="date"
 															placeholder=""
+															value={dateOfBirth}
+															onChange={(e) => setDateOfBirth(e.target.value)}
 														/>
-														)}
-														/>
+												
 											</div>
 										</div>
 										<div className="col-12 col-md-6 col-xl-6">
 												<div className="form-group local-forms">
 													<label>Guardian Name<span className="login-danger">*</span></label>
-												<Controller
-
-														name="guardianName"
-														control={control}
-														render={({ field }) => (
+											
 														<input
-															{...field}
-															className={`form-control ${errors.guardianName ? 'is-invalid' : ''}`}
+															onChange={(e) => setGuardianName(e.target.value)}
+															className={`form-control`}
 															type="text"
 															placeholder=""
+															value={guardianname}
 														/>
-														)}
-														/>
+														
 												</div>
 										</div>
 
@@ -716,7 +648,7 @@ console.log('salary data : ',salarymasterData);
 												<div className="form-group local-forms">
 													<label>Basic Salary<span className="login-danger">*</span></label>
 													<input className='form-control' 	type="number"
-															placeholder="" value={basicsalary} onChange={handlebasicsalarychange}/>
+															placeholder="" value={basicSalary} onChange={(e) => setBasicSalary(e.target.value)}/>
 													
 												</div>
 										</div>
@@ -724,18 +656,12 @@ console.log('salary data : ',salarymasterData);
 										<div className="col-12 col-md-6 col-xl-6">
 												<div className="form-group local-forms">
 													<label>Universal Account Number<span className="login-danger">*</span></label>
-													<Controller
-
-														name="universalAcNo"
-														control={control}
-														render={({ field }) => (
-														<input
-															{...field}
-															className={`form-control ${errors.universalAcNo ? 'is-invalid' : ''}`}
+													<input
+													onChange={(e) => setUniversalAcNo(e.target.value)}
+															className={`form-control`}
 															type="text"
 															placeholder=""
-														/>
-														)}
+															value={universalAcNo}
 														/>
 												</div>
 										</div>
@@ -744,18 +670,12 @@ console.log('salary data : ',salarymasterData);
 										<div className="col-12 col-md-6 col-xl-6">
 												<div className="form-group local-forms">
 													<label>City <span className="login-danger">*</span></label>
-													<Controller
-
-														name="city"
-														control={control}
-														render={({ field }) => (
-														<input
-															{...field}
-															className={`form-control ${errors.city ? 'is-invalid' : ''}`}
+													<input
+															onChange={(e) => setCity(e.target.value)}
+															className={`form-control`}
 															type="text"
 															placeholder=""
-														/>
-														)}
+															value={city}
 														/>
 												</div>
 										</div>
@@ -763,18 +683,12 @@ console.log('salary data : ',salarymasterData);
 										<div className="col-12 col-md-6 col-xl-6">
 												<div className="form-group local-forms">
 													<label>Country <span className="login-danger">*</span></label>
-													<Controller
-
-														name="country"
-														control={control}
-														render={({ field }) => (
-														<input
-															{...field}
-															className={`form-control ${errors.country ? 'is-invalid' : ''}`}
+													<input
+															onChange={(e) => setCountry(e.target.value)}
+															className={`form-control`}
 															type="text"
 															placeholder=""
-														/>
-														)}
+															value={country}
 														/>
 												</div>
 										</div>
@@ -798,72 +712,47 @@ console.log('salary data : ',salarymasterData);
 															<th></th>
 															</tr>
 														</thead>
-
 														<tbody>
-															{tableRow.map((row, index) => (
+															{tablerow.map((row, index) => (
+															
 															<tr key={row.id}>
 																<td>
-																	
-
-												
-													
-													
-													<input
-														value={row.id}
-														className="form-control"
-														type="text"
-														placeholder=""
-														readOnly
-													/>
-													
-													
-																
+																<input type="text" className="form-control" value={index + 1} readOnly />
 																</td>
 																<td>
+																<select className="form-control"
+																onMouseEnter={handlesalarymasterclick}
+																onChange={(event) => handlesalarymasterchange(event, index)}
+																>
+																	<option value={row._id} key={row._id}>{row.tabledata}</option>
+																	{salarymasterData.map((option)=>(
+																		<option value={option._id} key={option._id}>
+																			{option.name}
+																		</option>
 																	
-														
-															<select className="form-control"
-															
-															onMouseEnter={handlesalarymasterclick}
-															onChange={(event) => handlesalarymasterchange(event, index)}
-															
-															>
-																 <option value={row._id}>{row.salaryComponent || 'salaryComponent'}</option>
-
-																{salarymasterData.map((option)=>(
-																	
-																	<option value={option._id} key={option._id}>
-																		{option.name}
-																	</option>
-																
-																))}
-															</select>
-													
-													
-																
+																	))}
+																</select>
 																</td>
 																
 																<td>
 																<input
 																		
 																		type="number"
-																		className={`form-control ${errors.percentage ? 'is-invalid' : ''}`}
+																		className={`form-control`}
 																		placeholder="%"
 																		// onChange={handleChange}
 																		// value={percentage}
-																		// value={row.percentage ? row.percentage : ''}
+																		value={row.percentage ? row.percentage : ''}
                                                                         onChange={(e) => handleChange(index, e.target.value)}
 																		/>
 																	
-																		{errors.percentage && errors.percentage.type === 'pattern' && (
-																		<span className="text-danger">Please enter a valid percentage</span>
-																		)}
+																		
 															</td>
 																<td>
 																<input
 																	type="text"
 																	className="form-control"
-																	// value={row.value ? row.value : ''}
+																	value={row.value ? row.value : ''}
 																	onChange={(e) => handleSecondInputChange(index, e.target.value)}
 																	
 																/>
@@ -888,8 +777,8 @@ console.log('salary data : ',salarymasterData);
 															</tr>
 															))}
 
-															{tableRows.length === 0 && (
-															settableRows(prevRows => [...prevRows, {
+															{tablerow.length === 0 && (
+															setTablerow(prevRows => [...prevRows, {
 																id: 1,
 																salaryComponent: '',
 																percentage: '',
@@ -902,21 +791,7 @@ console.log('salary data : ',salarymasterData);
 															
 															<tr>
 															<td colSpan="5" className="text-end"><strong>Total Amount:</strong></td>
-															<td>
-																<Controller
-
-														name="TotalSalary"
-														control={control}
-														render={({ field }) => (
-														<input
-															{...field}
-															className={`form-control ${errors.TotalSalary ? 'is-invalid' : ''}`}
-															type="text"
-															placeholder=""
-															readOnly/>
-														)}
-														/>
-																{/* <input className="form-control" type="number" value={totalAmount?totalAmount:basicsalary} readOnly/> */}
+															<td><input className="form-control" type="number" value={TotalSalary?TotalSalary:basicSalary} readOnly/>
 																{/* Display the total amount here */}
 																{/* You can use the 'calculateTotalAmount' function to get the total */}
 															</td>
@@ -930,7 +805,6 @@ console.log('salary data : ',salarymasterData);
 											</div>
 											</div>
 										</div>
-
 										<div className="col-12">
 											<div className="doctor-submit text-end">
 												<button type="submit" className="btn btn-primary submit-form me-2">Submit</button>
@@ -942,7 +816,10 @@ console.log('salary data : ',salarymasterData);
 							</div>
 						</div>							
 					</div>					
-				</div>
+				</div></div> }
+				
+				{employelist&&<Employeemasterlist   formdata={formdata} setformdata={setFormdata} />}
+
     </div>
     
   )

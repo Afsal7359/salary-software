@@ -28,7 +28,7 @@ export const editemployeemaster = async (payload) => {
     }
   };
 
-  export const deleteemployeetype = async (payload) => {
+  export const deleteemployee = async (payload) => {
     try {
       // Make a PUT request to edit the employeetype
       const response = await instance.delete(`employee/deleteemployee/${payload}`);

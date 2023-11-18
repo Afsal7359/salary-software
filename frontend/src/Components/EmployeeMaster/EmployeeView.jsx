@@ -1,13 +1,30 @@
 import React, { useState } from 'react'
+import AddEmployeemaster from './AddEmployeemaster';
+import { useNavigate } from 'react-router-dom';
+import Employeemasterlist from './Employeemasterlist';
+import { getallemployeemaster } from '../../Apicalls/EmployeeMater';
+import { toast } from 'react-toastify';
 
-function EmployeeView({  item, setData, Data }){
-
+function EmployeeView({  item, setData, Data,setShowview ,formdata}){
+const [formdatas,setFormdatas]=useState(formdata)
     // const [tableRows, setTablerRows]=useState([])
-
+const navigate=useNavigate()
+const [isemployeeData,setIsEmployeeData]=useState('');
+const [employeedata,setEmployeeData]=useState('');
     const tableRows = item.tablerow
+    const [employeeview,setEmployeeview]=useState(true);
+    const [employeelist,setEmployeelist]=useState(false)
+    const handleclicktable =()=>{
+        setEmployeeview(false)
+       setEmployeelist(true)
+    }
+    
+  
   return (
-    <div>
-        <div className="row">
+    <>
+       {employeeview&& <>        <button className='btn btn-primary submit-form me-2 ' onClick={handleclicktable}>table</button>
+
+                                 <div className="row">
 											<div className="col-md-12">
 											<div className="card invoices-add-card">
 												<div className="card-body">
@@ -20,14 +37,14 @@ function EmployeeView({  item, setData, Data }){
                                                                 <th>Name</th>
                                                                 <td>{item.name}</td>
                                                             </tr>
-                                                            <tr>
+                                                            {/* <tr>
                                                                     <th>Employee Type</th>
                                                                     <td>{item.EmployeeTypeId}</td>
-                                                            </tr>
-                                                            <tr>
+                                                            </tr> */}
+                                                            {/* <tr>
                                                                 <th> Post </th>
                                                                 <td>{item.PostId}</td>
-                                                            </tr>
+                                                            </tr> */}
                                                             <tr>
                                                                 <th> Employee N.O </th>
                                                                 <td>{item.employeeno}</td>
@@ -141,8 +158,11 @@ function EmployeeView({  item, setData, Data }){
 												</div>
 											</div>
 											</div>
-										</div>
-    </div>
+										</div></>}
+                                        {employeelist&&<Employeemasterlist item={employeelist} formdata={formdata}/>}
+                   
+                                       
+    </>
   )
 }
 

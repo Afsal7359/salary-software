@@ -9,11 +9,14 @@ import csvicon from '../../assets/img/icons/pdf-icon-03.svg';
 import Excelicon from '../../assets/img/icons/pdf-icon-04.svg';
 import { editemployeemaster, getallemployeemaster } from '../../Apicalls/EmployeeMater';
 import EditEmployeeMaster from './EditEmployeeMaster';
+import EmployeeDelete from '../Modal/EmployeeDelete';
+import EmployeeView from './EmployeeView';
 
 const Employeemasterlist = React.memo(({ formdata, setformdata }) =>{
     const [Data, setData] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
-    const [showEditModal, setShowEditModal] = useState(false);
+    const [showEdit, setShowEdit] = useState(false);
+    const [showview,setShowview]=useState(false)
     const [showDeleteModal, setshowDeleteModal] = useState(false);
     const [selectedItem, setSelectedItem] = useState(null);
     const [selected, setSelected] = useState(false);
@@ -45,8 +48,10 @@ const Employeemasterlist = React.memo(({ formdata, setformdata }) =>{
   const handleEditClick = (item) => {
     // Set showEditModal to true when the "Edit" button is clicked
     setSelectedItem(item);
-    setShowEditModal(true);
+    setShowEdit(true);
+    setTablelist(false);
     setSelected(!selected)
+    setShowview(false);
   };
   
    // Function to handle the click event
@@ -54,19 +59,38 @@ const Employeemasterlist = React.memo(({ formdata, setformdata }) =>{
    console.log(item);
    setshowDeleteModal(true)
    setSelectedItem(item)
+   setShowview(false);
+
   };
-  
+   // Function to handle the click event
+   const handleViewClick = (item) => {
+    console.log(item);
+    setShowview(true);
+    setTablelist(false);
+    setSelectedItem(item)
+    setShowview(false);
+
+   };
+
+   const closeView = () => {
+    // Set showEditModal to false when the modal is closed
+    setShowview(false);
+  };   
   const closeDeleteModal = () => {
     // Set showEditModal to false when the modal is closed
     setshowDeleteModal(false);
   };
   
   // Function to close the modal
-  const closeEditModal = () => {
+  const closeEdit = () => {
     // Set showEditModal to false when the modal is closed
-    setShowEditModal(false);
+    setShowEdit(false);
+    
   };
-  
+
+  const [tablelist,setTablelist]=useState(true);
+
+
   
     if (isLoading) {
       return <div>Loading...</div>; // You can render a loading indicator here
@@ -74,7 +98,8 @@ const Employeemasterlist = React.memo(({ formdata, setformdata }) =>{
 
   return (
     <>
-        <div className="row">
+    
+    {tablelist&& <div className="row">
         <div className="col-sm-12">
           
             <div className="card  card-table show-entire">
@@ -154,6 +179,7 @@ const Employeemasterlist = React.memo(({ formdata, setformdata }) =>{
                               <i className="fa fa-ellipsis-v"></i>
                             </a>
                             <div className="dropdown-menu dropdown-menu-end">
+                            
                               <a
                             
                             
@@ -162,11 +188,8 @@ const Employeemasterlist = React.memo(({ formdata, setformdata }) =>{
                                 <i className="fa-solid fa-pen-to-square m-r-5"></i> Edit
                               </a>
                               <a
-                               onMouseEnter={() => {
-                                setshowDeleteModal(true);
-                                setSelectedItem(item);
-                              }}
-                              onClick={() => handleDeleteClick(item)}
+                             
+                              onClick={() => {handleDeleteClick(item);  setshowDeleteModal(true); setSelectedItem(item); }}
                                 className="dropdown-item"
                                 data-bs-toggle="modal"
                                 data-bs-target="#delete_patient"
@@ -174,16 +197,14 @@ const Employeemasterlist = React.memo(({ formdata, setformdata }) =>{
                                 <i className="fa fa-trash-alt m-r-5"></i> Delete
                               </a>
                               <a
-                               onMouseEnter={() => {
-                                setshowDeleteModal(true);
-                                setSelectedItem(item);
-                              }}
-                              onClick={() => handleDeleteClick(item)}
+                               
+                              onClick={() => {handleViewClick(item); setShowview(true);
+                                setSelectedItem(item);}}
                                 className="dropdown-item"
                                 data-bs-toggle="modal"
                                 data-bs-target="#delete_patient"
                               >
-                                <i className="fa fa-trash-alt m-r-5"></i> View
+                                <i className="fa fa-eye m-r-5"></i> View
                               </a>
                             </div>
                           </div>
@@ -196,11 +217,22 @@ const Employeemasterlist = React.memo(({ formdata, setformdata }) =>{
             </div>
           
         </div>
-      </div>
+      </div>}
 
-      {showEditModal && selectedItem && (
-  <EditEmployeeMaster item={selectedItem} setData={setData} Data={Data} />
+      {showEdit && selectedItem && (
+  <EditEmployeeMaster item={selectedItem} setData={setData} Data={Data}  closeEdit={closeEdit}/>
 )}
+
+{showview && selectedItem &&(
+  <EmployeeView item={selectedItem} setData={setData} Data={Data}  closeEdit={setShowview} formdata={formdata}/>
+)}
+
+{showDeleteModal && selectedItem &&(<EmployeeDelete
+ setData={setData}
+ Data={Data}
+ item={selectedItem}
+ closeDeleteModal={closeDeleteModal}
+/>)}
 
     </>
 
