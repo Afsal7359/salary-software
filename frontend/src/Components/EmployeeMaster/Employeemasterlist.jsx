@@ -58,10 +58,8 @@ const Employeemasterlist = React.memo(({ formdata, setformdata }) =>{
    const handleDeleteClick = (item) => {
    console.log(item);
    setshowDeleteModal(true)
-   setSelectedItem(item)
-   setShowview(false);
-
-  };
+ setSelectedItem(item)
+};
    // Function to handle the click event
    const handleViewClick = (item) => {
     console.log(item);
@@ -188,8 +186,11 @@ const Employeemasterlist = React.memo(({ formdata, setformdata }) =>{
                                 <i className="fa-solid fa-pen-to-square m-r-5"></i> Edit
                               </a>
                               <a
-                             
-                              onClick={() => {handleDeleteClick(item);  setshowDeleteModal(true); setSelectedItem(item); }}
+                                onMouseEnter={() => {
+                                  setshowDeleteModal(true);
+                                  setSelectedItem(item);
+                                }}
+                                onClick={() => handleDeleteClick(item)}
                                 className="dropdown-item"
                                 data-bs-toggle="modal"
                                 data-bs-target="#delete_patient"
