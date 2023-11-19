@@ -175,6 +175,11 @@ const closeEditModal = () => {
                                 setSelectedItem(item);
                               }}
                               onClick={() => handleDeleteClick(item)}
+                              onTouchStart={() => {
+                                // Touch devices do not have onMouseEnter, so use onTouchStart
+                                setshowDeleteModal(true);
+                                setSelectedItem(item);
+                              }}
                                 className="dropdown-item"
                                 data-bs-toggle="modal"
                                 data-bs-target="#delete_patient"
