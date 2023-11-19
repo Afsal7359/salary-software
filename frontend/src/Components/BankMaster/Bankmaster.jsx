@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import PageHeader from '../PageHeader';
 import { useForm } from 'react-hook-form';
-import { Addemployeetype } from '../../Apicalls/Employee';
 import { toast } from 'react-toastify';
 import { Addbank } from '../../Apicalls/Bank';
 import Banklist from './Banklist';
