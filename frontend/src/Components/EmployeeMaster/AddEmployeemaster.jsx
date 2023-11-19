@@ -219,37 +219,47 @@ console.log('salary data : ',salarymasterData);
 	
 
 	  useEffect(() => {
-		
-		
-		const totalAmount = tableRows.reduce((acc, row) => {
-			// const Salarytype = row.salaryComponent.type
-			const salarytype = salarymasterData.filter((item) => {
-				return item._id === row.salaryComponent;
-			});
-			
-			console.log('Filtered salary type:', salarytype);
-	
-			if (salarytype[0]?.type === 'Increment') {
-			  return acc + parseFloat(row.price);
-			} else if (salarytype[0]?.type === 'Decrement') {
-			  return acc - parseFloat(row.price);
+		try {
+		  const totalAmount = tableRows.reduce((acc, row) => {
+			const salaryType = salarymasterData.find((item) => item._id === row.salaryComponent);
+	  
+			if (salaryType && (salaryType.type === 'Increment' || salaryType.type === 'Decrement')) {
+			  const price = parseFloat(row.price);
+	  
+			  if (!isNaN(price)) {
+				// Check if the parsed price is a valid number
+				return acc + (salaryType.type === 'Increment' ? price : -price);
+			  } else {
+				console.error('Invalid price for row:', row);
+			  }
 			}
+	  
 			return acc;
-		  }, basicsalary); // Initialize accumulator with basicsalary
-		  setTotalAmount(totalAmount);
-	
-	  }, [tableRows, basicsalary]);
+		  }, parseFloat(basicsalary));
+	  
+		  if (!isNaN(totalAmount)) {
+			// Check if the calculated totalAmount is a valid number
+			setTotalAmount(totalAmount);
+		  } else {
+			console.error('Invalid totalAmount:', totalAmount);
+		  }
+		} catch (error) {
+		  console.error('Error in useEffect:', error);
+		}
+	  }, [tableRows, basicsalary, salarymasterData]);
+	  
 	  
 
 
 	  const handleChange = (index,percentage) => {
-		
+		console.log(percentage,"ttttttttttt");
+		console.log(basicsalary,"tttttttttttttttttttttttt");
 		const updatedTableRows = [...tableRows];
 		
 		
         updatedTableRows[index].percentage = Number(percentage);
        // Recalculate the price based on the updated percentage and basic salary
-    const newPrice = (basicsalary * Number(percentage)) / 100;
+    const newPrice = (Number(basicsalary) * Number(percentage)) / 100;
     updatedTableRows[index].price = newPrice;
     settableRows(updatedTableRows);
 	};
@@ -281,7 +291,7 @@ const [state,setstate]=useState(false)
   return (
    <>
    <PageHeader/>
-   <button className='btn btn-success submit-form' onClick={handleclick} >Add Employee</button>
+   <button className='btn btn-success submit-form ' onClick={handleclick} >Add Employee</button>
    {state&& <>   <button className='btn btn-success submit-form' onClick={handletableclick} >View Table</button>
  <div className="row">
 					<div className="col-sm-12">
