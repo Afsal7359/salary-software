@@ -202,8 +202,7 @@ const Employeemasterlist = React.memo(({ formdata, setformdata }) =>{
                               onClick={() => {handleViewClick(item); setShowview(true);
                                 setSelectedItem(item);}}
                                 className="dropdown-item"
-                                data-bs-toggle="modal"
-                                data-bs-target="#delete_patient"
+                               
                               >
                                 <i className="fa fa-eye m-r-5"></i> View
                               </a>
