@@ -8,7 +8,7 @@ import csvicon from '../../assets/img/icons/pdf-icon-03.svg';
 import Excelicon from '../../assets/img/icons/pdf-icon-04.svg';
 import SalaryMasteredit from '../Modal/SalaryMasteredit';
 import { getallSalary } from '../../Apicalls/salarymaster';
-import Salarymasterdelete from '../Modal/salarymasterdelete';
+import Salarymasterdelete from '../Modal/Salarymasterdelete';
 
 function Salarylist({ formdata, setformdata }) {
   console.log(formdata, 'yyyyyyyyyyyyyyyy');
