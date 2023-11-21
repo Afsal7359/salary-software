@@ -9,7 +9,28 @@ import { getallSalary } from '../../Apicalls/salarymaster';
 import { Addemployee } from '../../Apicalls/EmployeeMater';
 import Employeemasterlist from './Employeemasterlist';
 const AddEmployeemaster = () => {
+	const [employeeId, setEmployeeId] = useState('');
 
+
+  const generateUniqueSixLetterID = () => {
+    const characters = '765464565434354364564560123456789';
+    let id = '';
+    for (let i = 0; i < 6; i++) {
+      const randomIndex = Math.floor(Math.random() * characters.length);
+      id += characters[randomIndex];
+    }
+    return id;
+  };
+  useEffect(() => {
+  const uniqueSixLetterID = generateUniqueSixLetterID();
+  setEmployeeId(uniqueSixLetterID);
+}, []);
+
+	// console.log(data);
+	
+	console.log('frrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr');
+	
+	  
 	const [employeeTypeData, setEmployeeTypeData]=useState([]);
 	const [employeeTypeId, setEmployeeTypeId]=useState('');
 	const [isemployeeTypeDataFetch, setisEmployeeTypeDataFetch]=useState(false);
@@ -128,25 +149,14 @@ console.log('salary data : ',salarymasterData);
 	  });
 	const [formdata , setFormdata]=useState([])
 	  const onSubmit = async (data) => {
+		const uniqueSixCharacterID = generateUniqueSixLetterID(); // Reusing the same function
+		setEmployeeId(uniqueSixCharacterID);
 		
-		
-		// console.log(data);
-		function generateUniqueSixLetterID() {
-		  const currentDate = new Date();
-		  const year = String(currentDate.getFullYear()).slice(-2);
-		  const month = String(currentDate.getMonth() + 1).padStart(2, '0');
-		  const day = String(currentDate.getDate()).padStart(2, '0');
-		  const hours = String(currentDate.getHours()).padStart(2, '0');
-		  const minutes = String(currentDate.getMinutes()).padStart(2, '0');
-		  const seconds = String(currentDate.getSeconds()).padStart(2, '0');
 	
-		  const id = `${year}${month}${day}${hours}${minutes}${seconds}`;
 	
-		  return id;
-		}
-	
-		const uniqueSixLetterID = generateUniqueSixLetterID();
-		data.employeeid = uniqueSixLetterID;
+		// const uniqueSixLetterID = generateUniqueSixLetterID();
+		// setEmployeeId(uniqueSixLetterID)
+		data.employeeid = employeeId;
 	     data.EmployeeTypeId=employeeTypeId
 		 data.PostId=postId
 		 data.tablerow=tableRows
@@ -308,7 +318,7 @@ const [state,setstate]=useState(false)
 										<div className="col-12 col-md-6 col-xl-6">
 											<div className="form-group local-forms">
 											<label>Employee Id</label>
-											<input className="form-control" type="text" placeholder=""   style={{ backgroundColor: "#cbd0d6" }}
+											<input className="form-control" type="text" placeholder="" value={employeeId} style={{ backgroundColor: "#cbd0d6" }} 
 												readOnly />
 											</div>
 										</div>
@@ -385,20 +395,6 @@ const [state,setstate]=useState(false)
 											</div>
 										</div>
 										<div className="col-12 col-md-6 col-xl-6">
-											<div className="form-group local-forms">
-												<label >Address-2 <span className="login-danger">*</span></label>
-												<input
-													{...register('address2')}
-													type="text"
-													className={`form-control ${errors.address2 ? 'is-invalid' : ''}`}
-													placeholder=""
-													value={address2}
-													onChange={(e) => setAddress2(e.target.value)}
-												/>
-											</div>
-										</div>
-
-										<div className="col-12 col-md-6 col-xl-6">
 												<div className="form-group local-forms">
 													<label>Address-1 <span className="login-danger">*</span></label>
 													<input
@@ -416,6 +412,33 @@ const [state,setstate]=useState(false)
 													<span className="text-danger">Address-1 must be at least 2 characters</span>
 													)}
 												</div>
+										</div>
+										<div className="col-12 col-md-6 col-xl-6">
+											<div className="form-group local-forms">
+												<label >Address-2 <span className="login-danger">*</span></label>
+												<input
+													{...register('address2')}
+													type="text"
+													className={`form-control ${errors.address2 ? 'is-invalid' : ''}`}
+													placeholder=""
+													value={address2}
+													onChange={(e) => setAddress2(e.target.value)}
+												/>
+											</div>
+										</div>
+
+										<div className="col-12 col-md-6 col-xl-6">
+											<div className="form-group local-forms">
+												<label >Address-3 <span className="login-danger">*</span></label>
+												<input
+													{...register('address3')}
+													type='text'
+													className={`form-control ${errors.address3 ? 'is-nvalid' : ''}`}
+													placeholder=''
+													value={address3}
+													onChange={(e)=> setAddress3(e.target.value)}
+												/>
+											</div>
 										</div>
 
 										<div className="col-12 col-md-6 col-xl-6">
@@ -459,19 +482,7 @@ const [state,setstate]=useState(false)
 											</div>
 											</div>
 									    </div>
-                                        <div className="col-12 col-md-6 col-xl-6">
-											<div className="form-group local-forms">
-												<label >Address-3 <span className="login-danger">*</span></label>
-												<input
-													{...register('address3')}
-													type='text'
-													className={`form-control ${errors.address3 ? 'is-nvalid' : ''}`}
-													placeholder=''
-													value={address3}
-													onChange={(e)=> setAddress3(e.target.value)}
-												/>
-											</div>
-										</div>
+                                       
                                         <div className="col-12 col-md-6 col-xl-6">
 											<div className="form-group local-forms">
 												<label >Email <span className="login-danger">*</span></label>

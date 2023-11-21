@@ -189,7 +189,7 @@ const closeEditModal = () => {
       </div>
       {showEditModal && selectedItem && (
   <BankEdit  setData={setData}
-  Data={Data}
+    Data={Data}
     item={selectedItem}
     closeEditModal={closeEditModal}/>
 )}

@@ -76,7 +76,7 @@ const updatedData = Data.map((dataItem) => {
 
   return (
     modalVisible && (
-    <div id="delete_patients" className="modal fade" role="dialog">
+    <div id="delete_patients" className="modal fade" role="dialog"  data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
       <div className="modal-dialog modal-dialog-centered">
         <div className="modal-content">
           <div className="modal-header">

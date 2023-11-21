@@ -5,23 +5,37 @@ module.exports = {
     try {
       const data = req.body;
       const existingEmployeetype = await Employeetype.findOne({ name: data.name });
-
-      if (existingEmployeetype) {
+  
+      if (existingEmployeetype && existingEmployeetype.isdeleted) {
+        // Update the isdeleted flag to false and get the updated document
+        const updatedEmployeetype = await Employeetype.findOneAndUpdate(
+          { name: data.name },
+          { isdeleted: false },
+          { new: true } // To get the updated document
+        );
+  
+        console.log("Employeetype marked as not deleted.");
+        res.status(200).json({
+          success: true,
+          message: "Employeetype added successfully.",
+          data: updatedEmployeetype,
+        });
+      } else if (existingEmployeetype) {
         return res.status(409).json({
           success: false,
           message: "Employeetype already exists.",
         });
+      } else {
+        const newEmployeetype = new Employeetype(data);
+        await newEmployeetype.save();
+  
+        console.log("Employeetype Added Successfully");
+        res.status(200).json({
+          success: true,
+          message: "Employeetype added successfully.",
+          data: newEmployeetype,
+        });
       }
-
-      const newEmployeetype = new Employeetype(data);
-      await newEmployeetype.save();
-
-      console.log("Employeetype Added Successfully");
-      res.status(200).json({
-        success: true,
-        message: "Employeetype added successfully.",
-        data:newEmployeetype
-      });
     } catch (err) {
       res.status(500).json({
         success: false,
@@ -30,7 +44,6 @@ module.exports = {
       });
     }
   },
-
   EditEmployeetype: async (req, res) => {
     try {
       const data = req.body;

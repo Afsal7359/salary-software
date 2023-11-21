@@ -5,24 +5,37 @@ module.exports = {
     try {
       const data = req.body;
       const existingPurpose = await Purpose.findOne({ name: data.name });
-
-      if (existingPurpose) {
+  
+      if (existingPurpose && existingPurpose.isdeleted) {
+        // Update the isdeleted flag to false and get the updated document
+        const updatedPurpose = await Purpose.findOneAndUpdate(
+          { name: data.name },
+          { isdeleted: false },
+          { new: true } // To get the updated document
+        );
+  
+        console.log("Purpose marked as not deleted.");
+        res.status(200).json({
+          success: true,
+          message: "Purpose added successfully.",
+          data: updatedPurpose,
+        });
+      } else if (existingPurpose) {
         return res.status(409).json({
           success: false,
           message: "Purpose already exists.",
         });
+      } else {
+        const newPurpose = new Purpose(data);
+        await newPurpose.save();
+  
+        console.log("Purpose Added Successfully");
+        res.status(200).json({
+          success: true,
+          message: "Purpose added successfully.",
+          data: newPurpose,
+        });
       }
-
-      const newPurpose = new Purpose(data);
-
-      await newPurpose.save();
-
-      console.log("Purpose Added Successfully");
-      res.status(200).json({
-        success: true,
-        message: "Purpose added successfully.",
-        data:newPurpose
-      });
     } catch (err) {
       res.status(500).json({
         success: false,

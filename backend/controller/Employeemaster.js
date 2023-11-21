@@ -3,29 +3,40 @@ const Employee = require("../models/Employeemaster");
 module.exports = {
   AddEmployee: async (req, res) => {
     try {
-      console.log(req.body);
       const data = req.body;
       const existingEmployee = await Employee.findOne({ employeeno: data.employeeno });
-
-      if (existingEmployee) {
+  
+      if (existingEmployee && existingEmployee.isdeleted) {
+        // Update the isdeleted flag to false and get the updated document
+        const updatedEmployee = await Employee.findOneAndUpdate(
+          { employeeno: data.employeeno },
+          { isdeleted: false },
+          { new: true } // To get the updated document
+        );
+  
+        console.log("Employee marked as not deleted.");
+        res.status(200).json({
+          success: true,
+          message: "Employee added successfully.",
+          data: updatedEmployee,
+        });
+      } else if (existingEmployee) {
         return res.status(409).json({
           success: false,
           message: "Employee already exists.",
         });
+      } else {
+        const newEmployee = new Employee(data);
+        await newEmployee.save();
+  
+        console.log("Employee Added Successfully");
+        res.status(200).json({
+          success: true,
+          message: "Employee added successfully.",
+          data: newEmployee,
+        });
       }
-console.log('haaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',data);
-      const newEmployee = new Employee(data);
-      console.log('jaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',newEmployee);
-      await newEmployee.save();
-
-      console.log("Employee Added Successfully");
-      res.status(200).json({
-        success: true,
-        message: "Employee added successfully.",
-        data:newEmployee
-      });
     } catch (err) {
-      console.log(err,"error");
       res.status(500).json({
         success: false,
         message: "Failed to add Employee.",
@@ -33,7 +44,6 @@ console.log('haaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',data);
       });
     }
   },
-
   EditEmployee: async (req, res) => {
     console.log('okokokokokokokokokookoookoookokk');
     try {

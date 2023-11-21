@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import PageHeader from '../PageHeader';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
@@ -16,25 +16,31 @@ function OperatinalType() {
     formState: { errors },
   } = useForm();
   
+  const [operationalTypeid,setOperationTypeId]=useState('');
+  const generateUniqueSixLetterID = () => {
+    const characters = '765464565434354364564560123456789';
+    let id = '';
+    for (let i = 0; i < 6; i++) {
+      const randomIndex = Math.floor(Math.random() * characters.length);
+      id += characters[randomIndex];
+    }
+    return id;
+  };
+  
+  
+  useEffect(() => {
+    const uniqueSixCharacterID = generateUniqueSixLetterID();
+    setOperationTypeId(uniqueSixCharacterID);
+  }, []);
 
   const onSubmit = async (data) => {
-    function generateUniqueSixLetterID() {
-      const currentDate = new Date();
-      const year = String(currentDate.getFullYear()).slice(-2);
-      const month = String(currentDate.getMonth() + 1).padStart(2, '0');
-      const day = String(currentDate.getDate()).padStart(2, '0');
-      const hours = String(currentDate.getHours()).padStart(2, '0');
-      const minutes = String(currentDate.getMinutes()).padStart(2, '0');
-      const seconds = String(currentDate.getSeconds()).padStart(2, '0');
-      
-      // Combine the date and time components to create a 6-letter ID
-      const id = `${year}${month}${day}${hours}${minutes}${seconds}`;
-      
-      return id;
-      }
+   
       
       // Example usage:
       const uniqueSixLetterID = generateUniqueSixLetterID();
+      setOperationTypeId(uniqueSixLetterID)
+
+
         data.operationalid=uniqueSixLetterID
     try {
       const response = await AddOperationalType(data);
@@ -73,6 +79,7 @@ function OperatinalType() {
                         type="text"
                         className={`form-control ${errors.operationaltypeId ? 'is-invalid' : ''}`}
                         placeholder=""
+                        value={operationalTypeid}
                         style={{ backgroundColor: "#cbd0d6" }}
                         readOnly // Make the input field non-editable
                       />

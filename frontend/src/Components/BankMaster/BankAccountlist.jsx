@@ -6,33 +6,39 @@ import pdficon from '../../assets/img/icons/pdf-icon-01.svg';
 import TXticon from '../../assets/img/icons/pdf-icon-02.svg';
 import csvicon from '../../assets/img/icons/pdf-icon-03.svg';
 import Excelicon from '../../assets/img/icons/pdf-icon-04.svg';
+import { getallbankAccount } from '../../Apicalls/BankAccount';
+import BankAccountDelete from '../Modal/BankAccountDelete';
+import BankAccountEdit from '../Modal/BankAccountEdit';
 
-import { getallDepartment } from '../../Apicalls/Department';
-import Departmentedit from '../Modal/Departmentedit';
-import DepartmentDelete from '../Modal/DepartmentDelete';
 
-function Departmentlist({DepartmentData,setDepartmentData}) {
-    const [Data, setData] = useState([]);
-    const [showEditModal, setShowEditModal] = useState(false);
-    const [showDeleteModal, setshowDeleteModal] = useState(false);
-    const [selectedItem, setSelectedItem] = useState(null);
+const BankAccountlist =({ formdata, setformdata }) => {
+    console.log(formdata,"rrrrrrrrrrrrrrrrrrrrrrrrr");
+  const [Data, setData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [showDeleteModal, setshowDeleteModal] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(null);
+ 
 
-    if (DepartmentData.length!=0) {
-        const isNameInData = Data.some((item) => item.name === DepartmentData.name);
-        if (!isNameInData) {
-          setData((prevData) => [...prevData, DepartmentData]);
-          setDepartmentData([])
-        }
-    }
+    // if (formdata.length !== 0) {
+    //     setData((prevData) => [...prevData, formdata]);
+    //     setformdata([]);
+    //   }
+   
+    useEffect(() => {
+      if (formdata.length !== 0) {
+        setData((prevData) => [...prevData, formdata]);
+        setformdata([]);
+      }
+    }, [formdata]);
 
     
-
-  const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
     async function fetchData() {
       try {
-        const result = await getallDepartment();
-        setData(result.data);
+        const response = await getallbankAccount();
+        setData(response.data);
+        console.log('ffffffffffffffffffffffffffr',Data);
         setIsLoading(false);
         // setrender(!render)
       } catch (error) {
@@ -43,30 +49,31 @@ function Departmentlist({DepartmentData,setDepartmentData}) {
     fetchData();
   }, []);
 
+ // Function to handle the click event
+const handleEditClick = (item) => {
+  // Set showEditModal to true when the "Edit" button is clicked
+  setShowEditModal(true);
+  setSelectedItem(item);
+};
 
  // Function to handle the click event
- const handleEditClick = (item) => {
-    // Set showEditModal to true when the "Edit" button is clicked
-    setShowEditModal(true);
-    setSelectedItem(item);
-  };
+ const handleDeleteClick = (item) => {
+ console.log(item);
+ setshowDeleteModal(true)
+ setSelectedItem(item)
+};
 
+const closeDeleteModal = () => {
+  // Set showEditModal to false when the modal is closed
+  setshowDeleteModal(false);
+};
 
-  
 // Function to close the modal
 const closeEditModal = () => {
-    // Set showEditModal to false when the modal is closed
-    setShowEditModal(false);
-  };
-   // Function to handle the click event
- const handleDeleteClick = (item) => {
-    setshowDeleteModal(true)
-    setSelectedItem(item)
-   };
-   const closeDeleteModal = () => {
-     // Set showEditModal to false when the modal is closed
-     setshowDeleteModal(false);
-   };
+  // Set showEditModal to false when the modal is closed
+  setShowEditModal(false);
+};
+
 
   if (isLoading) {
     return <div>Loading...</div>; // You can render a loading indicator here
@@ -85,7 +92,7 @@ const closeEditModal = () => {
                   <div className="row align-items-center">
                     <div className="col">
                       <div className="doctor-table-blk">
-                        <h3>Department List</h3>
+                        <h3>Bank List</h3>
                         <div className="doctor-search-blk">
                           <div className="top-nav-search table-search-blk">
                             <form>
@@ -128,17 +135,24 @@ const closeEditModal = () => {
                   <thead>
                     <tr>
                       <th>No</th>
-                      <th>Department Id</th>
+                      <th>Bank Id</th>
                       <th>Name</th>
+                      <th>Adress</th>
+                      <th>branch</th>
+                      <th>phone</th>
                       <th></th>
                     </tr>
                   </thead>
                   <tbody>
                     {Data.map((item, index) => (
                       <tr  key={`${item._id}-${index}`}>
-                        <td>{index + 1}</td>
-                        <td>{item.Departmentid}</td>
-                        <td>{item.name}</td>
+                          <td>{index + 1}</td>
+                        <td>{item.accountNo}</td>
+                        <td>{item.BankId.name}</td>
+                        <td>{item.departmentId.name}</td>
+                        <td>{item.accountTypeId.name}</td>
+                        <td>{item.OperationalId.name}</td>
+                        <td>{item.unitId.name}</td>
                         <td className="text-end">
                           <div className="dropdown dropdown-action">
                             <a
@@ -151,18 +165,17 @@ const closeEditModal = () => {
                             </a>
                             <div className="dropdown-menu dropdown-menu-end">
                               <a
-                               onMouseEnter={() => {
+                              onMouseEnter={() => {
                                 setSelectedItem(item);
                                 setShowEditModal(true);
                               }}
-                               onClick={() => handleEditClick(item)}
-                              className="dropdown-item" data-bs-toggle="modal"
+                               onClick={() => handleEditClick(item)} className="dropdown-item" data-bs-toggle="modal"
                                 data-bs-target="#delete_patients"
                                 >
                                 <i className="fa-solid fa-pen-to-square m-r-5"></i> Edit
                               </a>
                               <a
-                              onMouseEnter={() => {
+                               onMouseEnter={() => {
                                 setshowDeleteModal(true);
                                 setSelectedItem(item);
                               }}
@@ -185,26 +198,21 @@ const closeEditModal = () => {
           )}
         </div>
       </div>
-
       {showEditModal && selectedItem && (
-  <Departmentedit
-  setData={setData}
+  <BankAccountEdit  setData={setData}
   Data={Data}
     item={selectedItem}
-    closeEditModal={closeEditModal}
-   
-  />
+    closeEditModal={closeEditModal}/>
 )}
 
-{showDeleteModal && selectedItem &&(<DepartmentDelete
- setData={setData}
+{showDeleteModal && selectedItem &&(<BankAccountDelete  setData={setData}
  Data={Data}
  item={selectedItem}
- closeDeleteModal={closeDeleteModal}
-/>)}
-
+ closeDeleteModal={closeDeleteModal}/>)}
     </>
   );
 }
 
-export default Departmentlist;
+// export default BankAccountlist;
+
+export default React.memo(BankAccountlist);

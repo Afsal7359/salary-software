@@ -4,33 +4,47 @@ module.exports = {
   Adaccounttype: async (req, res) => {
     try {
       const data = req.body;
-      const existingaccounttype = await accounttype.findOne({ name: data.name });
-
-      if (existingaccounttype) {
+      const existingAccountType = await accounttype.findOne({ name: data.name });
+  
+      if (existingAccountType && existingAccountType.isdeleted) {
+        // Update the isdeleted flag to false and get the updated document
+        const updatedAccountType = await accounttype.findOneAndUpdate(
+          { name: data.name },
+          { isdeleted: false },
+          { new: true } // To get the updated document
+        );
+  
+        console.log("Account type Added successfully.");
+        res.status(200).json({
+          success: true,
+          message: "Account type Added successfully.",
+          data: updatedAccountType,
+        });
+      } else if (existingAccountType) {
         return res.status(409).json({
           success: false,
-          message: "accounttype type already exists.",
+          message: "Account type already exists.",
+        });
+      } else {
+        const newAccountType = new accounttype(data);
+        await newAccountType.save();
+  
+        console.log("Account type added successfully.");
+        res.status(200).json({
+          success: true,
+          message: "Account type added successfully.",
+          data: newAccountType,
         });
       }
-
-      const newaccounttype = new accounttype(data);
-        
-      await newaccounttype.save();
-
-      console.log("accounttype Added Successfully");
-      res.status(200).json({
-        success: true,
-        message: "accounttype added successfully.",
-        data:newaccounttype
-      });
-    } catch (err) {
+    } catch (error) {
+      console.error("Error:", error);
       res.status(500).json({
         success: false,
-        message: "Failed to add accounttype.",
-        error: err.message,
+        message: "Internal server error.",
       });
     }
   },
+  
 
   Editaccounttype: async (req, res) => {
     try {

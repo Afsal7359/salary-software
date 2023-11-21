@@ -166,7 +166,6 @@ const Sidebar = () => {
 							<a href="#"><span className="menu-side"><img src={settings} alt=""/></span> <span> Settings </span> <span className="menu-arrow"></span></a>
 							<ul style={{ display:'none'}}>
                             <li><Link to="/add-employeetype"> Add EmployeeType</Link></li>
-                            <li><Link to="/add-Post"> Add Post</Link></li>
                             <li><Link to="/add-Department"> Add Department</Link></li>
                             <li><Link to="/add-unit"> Add unit</Link></li>
                             <li><Link to="/add-Designation"> Add Designation</Link></li>

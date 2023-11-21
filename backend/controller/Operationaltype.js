@@ -4,25 +4,38 @@ module.exports = {
   Addoperational: async (req, res) => {
     try {
       const data = req.body;
-      const existingoperational = await operational.findOne({ name: data.name });
-
-      if (existingoperational) {
+      const existingoperational= await operational.findOne({ name: data.name });
+  
+      if (existingoperational && existingoperational.isdeleted) {
+        // Update the isdeleted flag to false and get the updated document
+        const updatedoperational = await operational.findOneAndUpdate(
+          { name: data.name },
+          { isdeleted: false },
+          { new: true } // To get the updated document
+        );
+  
+        console.log("operational marked as not deleted.");
+        res.status(200).json({
+          success: true,
+          message: "operational added successfully.",
+          data: updatedoperational,
+        });
+      } else if (existingoperational) {
         return res.status(409).json({
           success: false,
-          message: "operational type already exists.",
+          message: "operational already exists.",
+        });
+      } else {
+        const newoperational = new operational(data);
+        await newoperational.save();
+  
+        console.log("operational Added Successfully");
+        res.status(200).json({
+          success: true,
+          message: "operational added successfully.",
+          data: newoperational,
         });
       }
-
-      const newoperational = new operational(data);
-
-      await newoperational.save();
-
-      console.log("operational Added Successfully");
-      res.status(200).json({
-        success: true,
-        message: "operational added successfully.",
-        data:newoperational
-      });
     } catch (err) {
       res.status(500).json({
         success: false,

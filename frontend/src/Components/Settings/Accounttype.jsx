@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import PageHeader from '../PageHeader';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
@@ -9,6 +9,25 @@ function Accounttype() {
   const [formData, setFormData] = useState('');
   // const [render, setrender] = useState(false);
   const [formdata, setformdata] =useState([]);
+
+  const [accounttypeId,setAccountTypeId]=useState('')
+
+  const generateUniqueSixLetterID = () => {
+    const characters = '765464565434354364564560123456789';
+    let id = '';
+    for (let i = 0; i < 6; i++) {
+      const randomIndex = Math.floor(Math.random() * characters.length);
+      id += characters[randomIndex];
+    }
+    return id;
+  };
+  
+  
+  useEffect(() => {
+    const uniqueSixCharacterID = generateUniqueSixLetterID();
+    setAccountTypeId(uniqueSixCharacterID);
+  }, []);
+
   const {
     register,
     handleSubmit,
@@ -17,31 +36,19 @@ function Accounttype() {
   
 
   const onSubmit = async (data) => {
-    function generateUniqueSixLetterID() {
-      const currentDate = new Date();
-      const year = String(currentDate.getFullYear()).slice(-2);
-      const month = String(currentDate.getMonth() + 1).padStart(2, '0');
-      const day = String(currentDate.getDate()).padStart(2, '0');
-      const hours = String(currentDate.getHours()).padStart(2, '0');
-      const minutes = String(currentDate.getMinutes()).padStart(2, '0');
-      const seconds = String(currentDate.getSeconds()).padStart(2, '0');
-      
-      // Combine the date and time components to create a 6-letter ID
-      const id = `${year}${month}${day}${hours}${minutes}${seconds}`;
-      
-      return id;
-      }
-      
-      // Example usage:
-      const uniqueSixLetterID = generateUniqueSixLetterID();
-        data.accounttypeid=uniqueSixLetterID
+   
+    const uniqueSixCharacterID = generateUniqueSixLetterID(); // Reusing the same function
+    setAccountTypeId(uniqueSixCharacterID);
+      // // Example usage:
+      // const uniqueSixLetterID = generateUniqueSixLetterID();
+        data.accounttypeid=accounttypeId
     try {
       const response = await AddAccountType(data);
       if (response.success) {
         setformdata(response.data)
         toast.success(response.message);
-        setFormData(''); // Clear the form data after a successful submission
-        // setrender(!render)
+        setFormData('');
+        setAccountTypeId
       } else {
         toast.error(response.message);
       }
@@ -69,8 +76,10 @@ function Accounttype() {
                     <div className="form-group local-forms">
                       <label>Account Type Id<span className="login-danger">*</span></label>
                       <input
+                        {...register('accounttypeid')}
                         type="text"
                         className={`form-control ${errors.accounttypeId ? 'is-invalid' : ''}`}
+                        value={accounttypeId}
                         placeholder=""
                         style={{ backgroundColor: "#cbd0d6" }}
                         readOnly // Make the input field non-editable

@@ -18,6 +18,7 @@ const  PostRouter = require('./routes/PostRouter');
 const  BankRouter = require('./routes/BankRouter');
 const salary = require('./routes/SalarymasterRouter');
 const employeeRouters = require('./routes/EmployeeRouter')
+const BankaccountRouter = require('./routes/BankaccountRouter')
 
 dotenv.config()
 
@@ -51,6 +52,7 @@ app.use('/api/post',PostRouter)
 app.use('/api/bank',BankRouter)
 app.use('/api/salary',salary)
 app.use('/api/employee',employeeRouters)
+app.use('/api/BankAccount',BankaccountRouter)
 
 
 

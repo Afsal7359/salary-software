@@ -96,7 +96,7 @@ console.log(item);
 
 console.log('salary data : ',salarymasterData);
 	
-	
+	const [employeeid, setEmployeeId] = useState(item?.employeeid);
 	const [name, setName] = useState(item?.name);
 	const [email, setEmail]=useState(item?.email);
 	const [phone,setPhone]=useState(item?.phone);
@@ -314,7 +314,7 @@ const [formdata,setFormdata]=useState('')
 										<div className="col-12 col-md-6 col-xl-6">
 											<div className="form-group local-forms">
 											<label>Employee Id</label>
-											<input className="form-control" type="text" placeholder=""   style={{ backgroundColor: "#cbd0d6" }}
+											<input className="form-control" type="text" placeholder="" value={employeeid}  style={{ backgroundColor: "#cbd0d6" }}
 												readOnly />
 											</div>
 										</div>
@@ -392,21 +392,6 @@ const [formdata,setFormdata]=useState('')
 											</div>
 										</div>
 										<div className="col-12 col-md-6 col-xl-6">
-											<div className="form-group local-forms">
-												<label >Address-2 <span className="login-danger">*</span></label>
-											
-														<input
-														onChange={(e) => setAddress2(e.target.value)}
-															className={`form-control `}
-															type="text"
-															placeholder=""
-															value={address2}
-														/>
-													
-											</div>
-										</div>
-
-										<div className="col-12 col-md-6 col-xl-6">
 												<div className="form-group local-forms">
 													<label>Address-1 <span className="login-danger">*</span></label>
 											
@@ -424,47 +409,20 @@ const [formdata,setFormdata]=useState('')
 										</div>
 
 										<div className="col-12 col-md-6 col-xl-6">
-											<div className="form-group select-gender">
-											<label className="gen-label">Gender<span className="login-danger">*</span></label>
-											<div className="form-check-inline">
-												<label className="form-check-label">
-												<input
-													type="radio"
-													name={gender}
-													className="form-check-input mt-0"
-													value="Male"
-													onChange={(e) => setGender(e.target.value)}
-												/>
-												Male
-												</label>
+											<div className="form-group local-forms">
+												<label >Address-2 <span className="login-danger">*</span></label>
+											
+														<input
+														onChange={(e) => setAddress2(e.target.value)}
+															className={`form-control `}
+															type="text"
+															placeholder=""
+															value={address2}
+														/>
+													
 											</div>
-											<div className="form-check-inline">
-												<label className="form-check-label">
-												<input
-													type="radio"
-													name={gender}
-													className="form-check-input mt-0"
-													value="Female"
-													onChange={(e) => setGender(e.target.value)}
-												/>
-												Female
-												</label>
-											</div>
-											<div className="form-check-inline">
-												<label className="form-check-label">
-												<input
-													type="radio"
-													name={gender}
-													className="form-check-input mt-0"
-													value="Others"
-													onChange={(e) => setGender(e.target.value)}
-												/>
-												Others
-												</label>
-											</div>
-											</div>
-									    </div>
-                                        <div className="col-12 col-md-6 col-xl-6">
+										</div>
+										<div className="col-12 col-md-6 col-xl-6">
 											<div className="form-group local-forms">
 												<label >Address-3 <span className="login-danger">*</span></label>
 												
@@ -479,6 +437,53 @@ const [formdata,setFormdata]=useState('')
 														
 											</div>
 										</div>
+										
+										<div className="col-12 col-md-6 col-xl-6">
+											<div className="form-group select-gender">
+											<label className="gen-label">Gender<span className="login-danger">*</span></label>
+											<div className="form-check-inline">
+												<label className="form-check-label">
+												<input
+													type="radio"
+													name={gender}
+													className="form-check-input mt-0"
+													value="Male"
+													onChange={(e) => setGender(e.target.value)}
+													checked={gender === 'Male'}
+												/>
+												Male
+												</label>
+											</div>
+											<div className="form-check-inline">
+												<label className="form-check-label">
+												<input
+													type="radio"
+													name={gender}
+													className="form-check-input mt-0"
+													value="Female"
+													onChange={(e) => setGender(e.target.value)}
+													checked={gender === 'Female'}
+												/>
+												Female
+												</label>
+											</div>
+											<div className="form-check-inline">
+												<label className="form-check-label">
+												<input
+													type="radio"
+													name={gender}
+													className="form-check-input mt-0"
+													value="Others"
+													onChange={(e) => setGender(e.target.value)}
+													checked={gender === 'Others'}
+													
+												/>
+												Others
+												</label>
+											</div>
+											</div>
+									    </div>
+                                       
                                         <div className="col-12 col-md-6 col-xl-6">
 											<div className="form-group local-forms">
 												<label >Email <span className="login-danger">*</span></label>

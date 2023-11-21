@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import PageHeader from '../PageHeader';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
@@ -27,22 +27,27 @@ function Bankmaster() {
     },
   });
 
-  const onSubmit = async (data) => {
-    function generateUniqueSixLetterID() {
-      const currentDate = new Date();
-      const year = String(currentDate.getFullYear()).slice(-2);
-      const month = String(currentDate.getMonth() + 1).padStart(2, '0');
-      const day = String(currentDate.getDate()).padStart(2, '0');
-      const hours = String(currentDate.getHours()).padStart(2, '0');
-      const minutes = String(currentDate.getMinutes()).padStart(2, '0');
-      const seconds = String(currentDate.getSeconds()).padStart(2, '0');
-
-      const id = `${year}${month}${day}${hours}${minutes}${seconds}`;
-
-      return id;
+  const [bankId,setBankId]=useState('');
+  const generateUniqueSixLetterID = () => {
+    const characters = '765464565434354364564560123456789';
+    let id = '';
+    for (let i = 0; i < 6; i++) {
+      const randomIndex = Math.floor(Math.random() * characters.length);
+      id += characters[randomIndex];
     }
+    return id;
+  };
+  
+  
+  useEffect(() => {
+    const uniqueSixCharacterID = generateUniqueSixLetterID();
+    setBankId(uniqueSixCharacterID);
+  },[]);
 
+  const onSubmit = async (data) => {
+  
     const uniqueSixLetterID = generateUniqueSixLetterID();
+    setBankId(uniqueSixLetterID)
     data.bankid = uniqueSixLetterID;
 
     try {
@@ -79,7 +84,7 @@ function Bankmaster() {
                   <div className="col-12 col-md-6 col-xl-6">
                     <div className="form-group local-forms">
                       <label>Bank Id</label>
-                      <input className="form-control" type="text" placeholder=""   style={{ backgroundColor: "#cbd0d6" }}
+                      <input className="form-control" type="text" placeholder="" value={bankId}  style={{ backgroundColor: "#cbd0d6" }}
                         readOnly />
                     </div>
                   </div>

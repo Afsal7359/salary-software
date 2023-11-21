@@ -20,35 +20,47 @@ module.exports={
         }
     },
     AddDepartment:async(req,res)=>{
-        try{
-            const data = req.body;
-
-            const existingDepartment = await Department.findOne({ name: data.name });
-
-            if (existingDepartment) {
-              return res.status(409).json({
-                success: false,
-                message: "Department already exists.",
-              });
-            }
-            const newDepartment = new Department(data)
-
-            await newDepartment.save()
-
-            console.log("Department Added Successfully");
+      try {
+        const data = req.body;
+        const existingDepartment = await Department.findOne({ name: data.name });
+    
+        if (existingDepartment && existingDepartment.isdeleted) {
+          // Update the isdeleted flag to false and get the updated document
+          const updatedDepartment = await Department.findOneAndUpdate(
+            { name: data.name },
+            { isdeleted: false },
+            { new: true } // To get the updated document
+          );
+    
+          console.log("Department Added successfully.");
+          res.status(200).json({
+            success: true,
+            message: "Department Added successfully.",
+            data: updatedDepartment,
+          });
+        } else if (existingDepartment) {
+          return res.status(409).json({
+            success: false,
+            message: "Department already exists.",
+          });
+        } else {
+          const newAccountType = new Department(data);
+          await newAccountType.save();
+    
+          console.log("Department added successfully.");
           res.status(200).json({
             success: true,
             message: "Department added successfully.",
-            data:newDepartment
+            data: newAccountType,
           });
-
-        }catch(err){
-            res.status(500).json({
-                success: false,
-                message: "Failed to add Department.",
-                error: err.message,
-            });
         }
+      } catch (error) {
+        console.error("Error:", error);
+        res.status(500).json({
+          success: false,
+          message: "Internal server error.",
+        });
+      }
     },
     UpdateDepartment:async(req,res)=>{
         try{

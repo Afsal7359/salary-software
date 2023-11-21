@@ -18,37 +18,50 @@ module.exports={
             });
         }
     },
-    AddDesignation:async(req,res)=>{
-        try{
-            const data = req.body;
-
-            const existingDesignation = await Designation.findOne({ name: data.name});
-
-            if (existingDesignation) {
-              return res.status(409).json({
-                success: false,
-                message: "Designation already exists.",
-              });
-            }
-            const newDesignation = new Designation(data)
-
-            await newDesignation.save()
-
-            console.log("Designation Added Successfully");
+    AddDesignation: async (req, res) => {
+      try {
+        const data = req.body;
+        const existingDesignation = await Designation.findOne({ name: data.name });
+    
+        if (existingDesignation && existingDesignation.isdeleted) {
+          // Update the isdeleted flag to false and get the updated document
+          const updatedDesignation = await Designation.findOneAndUpdate(
+            { name: data.name },
+            { isdeleted: false },
+            { new: true } // To get the updated document
+          );
+    
+          console.log("Designation marked as not deleted.");
           res.status(200).json({
             success: true,
             message: "Designation added successfully.",
-            data:newDesignation
+            data: updatedDesignation,
           });
-
-        }catch(err){
-            res.status(500).json({
-                success: false,
-                message: "Failed to add Designation.",
-                error: err.message,
-            });
+        } else if (existingDesignation) {
+          return res.status(409).json({
+            success: false,
+            message: "Designation already exists.",
+          });
+        } else {
+          const newDesignation = new Designation(data);
+          await newDesignation.save();
+    
+          console.log("Designation Added Successfully");
+          res.status(200).json({
+            success: true,
+            message: "Designation added successfully.",
+            data: newDesignation,
+          });
         }
+      } catch (err) {
+        res.status(500).json({
+          success: false,
+          message: "Failed to add/update Designation.",
+          error: err.message,
+        });
+      }
     },
+    
     EditDesignation: async (req, res) => {
         try {
           const data = req.body;

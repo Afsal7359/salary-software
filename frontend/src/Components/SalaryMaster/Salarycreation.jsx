@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState ,useEffect} from 'react';
 import PageHeader from '../PageHeader'
 import { getallPurposee } from '../../Apicalls/Purpose';
 import { toast } from 'react-toastify';
@@ -11,6 +11,24 @@ const MemoizedSalarylist = React.memo(Salarylist);
 
 function Salarycreation() {
 
+	const [salarymasterId, setSalarymasterId] = useState('');
+
+	const generateUniqueSixLetterID = () => {
+		const characters = '765464565434354364564560123456789';
+		let id = '';
+		for (let i = 0; i < 6; i++) {
+		  const randomIndex = Math.floor(Math.random() * characters.length);
+		  id += characters[randomIndex];
+		}
+		return id;
+	  };
+	  
+	  
+	  useEffect(() => {
+		const uniqueSixCharacterID = generateUniqueSixLetterID();
+		setSalarymasterId(uniqueSixCharacterID);
+	  }, []);
+	
 	const [PurposeData, setPurposeData] = useState([]);
 	const [type, setType]=useState([]);
 	const [name, setName] = useState([]);
@@ -76,6 +94,8 @@ function Salarycreation() {
 	console.log('ifffffffif : ',type);
 	  const handleSubmit = async (event) => {
 		event.preventDefault();
+		const uniqueSixCharacterID = generateUniqueSixLetterID(); // Reusing the same function
+		setSalarymasterId(uniqueSixCharacterID);
 		// Use unitId, departmentId, designationId as needed
 		console.log('Purpose ID:', PurposeId);
 	
@@ -83,29 +103,13 @@ function Salarycreation() {
 			name,
 			PurposeId,
 			type,
-			
-			
+			salarymasterId
 		  };
 		  console.log(formdatas);
 		  try {
-			function generateUniqueSixLetterID() {
-			  const currentDate = new Date();
-			  const year = String(currentDate.getFullYear()).slice(-2);
-			  const month = String(currentDate.getMonth() + 1).padStart(2, '0');
-			  const day = String(currentDate.getDate()).padStart(2, '0');
-			  const hours = String(currentDate.getHours()).padStart(2, '0');
-			  const minutes = String(currentDate.getMinutes()).padStart(2, '0');
-			  const seconds = String(currentDate.getSeconds()).padStart(2, '0');
-	  
-			  // Combine the date and time components to create a 6-letter ID
-			  const id = `${year}${month}${day}${hours}${minutes}${seconds}`;
-	  
-			  return id;
-			}
+		
 	  
 			// Example usage:
-			const uniqueSixLetterID = generateUniqueSixLetterID();
-			formdatas.salarymasterId = uniqueSixLetterID;
 	  
 			const response = await Addsalarymaster(formdatas);
 			console.log(response, 'tereresponse');
@@ -114,6 +118,7 @@ function Salarycreation() {
 			  setName('');
 			  setType('');
 			  setPurposeId('');
+			  setSalarymasterId
 			  toast.success(response.message);
 			} else {
 			  toast.error(response.message);
@@ -141,7 +146,7 @@ function Salarycreation() {
 										<div className="col-12 col-md-6 col-xl-6">  
 											<div className="form-group local-forms">
 												<label >Salary Component Id<span className="login-danger">*</span></label>
-												<p className="form-control" type="text" placeholder="" style={{ backgroundColor: "#cbd0d6" }} readOnly/>
+												<input className="form-control" type="text" placeholder="" value={salarymasterId}  style={{ backgroundColor: "#cbd0d6" }} readOnly/>
 											</div>
 										</div>
 										<div className="col-12 col-md-6 col-xl-6">

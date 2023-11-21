@@ -3,8 +3,9 @@ import alerticon from '../../assets/img/sent.png'
 
 import { toast } from 'react-toastify';
 import { deletebank } from '../../Apicalls/Bank';
+import { deletebankaAccount } from '../../Apicalls/BankAccount';
 
-function Bankdelete({ closeDeleteModal, item,setData,Data}) {
+function BankAccountDelete({ closeDeleteModal, item,setData,Data}) {
 
 
 const handleDelete = async () => {
@@ -16,7 +17,7 @@ const handleDelete = async () => {
     closeDeleteModal();
 
     // Perform the deletion logic here, based on itemid
-    const response = await deletebank(item._id);
+    const response = await deletebankaAccount(item._id);
 
     if (response.success) {
       toast.success(response.message);
@@ -54,4 +55,4 @@ const handleDelete = async () => {
   )
 }
 
-export default Bankdelete
+export default BankAccountDelete

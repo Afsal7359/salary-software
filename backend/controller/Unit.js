@@ -19,33 +19,47 @@ module.exports={
         }
     },
     AddUnit:async(req,res)=>{
-        try{
-            const data = req.body;
-            const existingUnit = await Unit.findOne({ unitid: data.unitid });
-
-            if (existingUnit) {
-              return res.status(409).json({
-                success: false,
-                message: "Unit already exists.",
-              });
-            }
-            const newUnit = new Unit(data)
-            await newUnit.save()
-
-            console.log("Unit Added Successfully");
+      try {
+        const data = req.body;
+        const existingUnit = await Unit.findOne({ name: data.name });
+    
+        if (existingUnit && existingUnit.isdeleted) {
+          // Update the isdeleted flag to false and get the updated document
+          const updatedUnit = await Unit.findOneAndUpdate(
+            { name: data.name },
+            { isdeleted: false },
+            { new: true } // To get the updated document
+          );
+    
+          console.log("Unit marked as not deleted.");
           res.status(200).json({
             success: true,
             message: "Unit added successfully.",
-            data:newUnit
+            data: updatedUnit,
           });
-
-        }catch(err){
-            res.status(500).json({
-                success: false,
-                message: "Failed to add Unit.",
-                error: err.message,
-            });
+        } else if (existingUnit) {
+          return res.status(409).json({
+            success: false,
+            message: "Unit already exists.",
+          });
+        } else {
+          const newUnit = new Unit(data);
+          await newUnit.save();
+    
+          console.log("Unit Added Successfully");
+          res.status(200).json({
+            success: true,
+            message: "Unit added successfully.",
+            data: newUnit,
+          });
         }
+      } catch (err) {
+        res.status(500).json({
+          success: false,
+          message: "Failed to add Unit.",
+          error: err.message,
+        });
+      }
     },
     EditUnit: async (req, res) => {
         try {

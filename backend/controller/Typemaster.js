@@ -5,24 +5,37 @@ module.exports = {
     try {
       const data = req.body;
       const existingType = await Type.findOne({ name: data.name });
-
-      if (existingType) {
+  
+      if (existingType && existingType.isdeleted) {
+        // Update the isdeleted flag to false and get the updated document
+        const updatedType = await Type.findOneAndUpdate(
+          { name: data.name },
+          { isdeleted: false },
+          { new: true } // To get the updated document
+        );
+  
+        console.log("Type marked as not deleted.");
+        res.status(200).json({
+          success: true,
+          message: "Type added successfully.",
+          data: updatedType,
+        });
+      } else if (existingType) {
         return res.status(409).json({
           success: false,
           message: "Type already exists.",
         });
+      } else {
+        const newType = new Type(data);
+        await newType.save();
+  
+        console.log("Type Added Successfully");
+        res.status(200).json({
+          success: true,
+          message: "Type added successfully.",
+          data: newType,
+        });
       }
-
-      const newType = new Type(data);
-
-      await newType.save();
-
-      console.log("Type Added Successfully");
-      res.status(200).json({
-        success: true,
-        message: "Type added successfully.",
-        data:newType
-      });
     } catch (err) {
       res.status(500).json({
         success: false,

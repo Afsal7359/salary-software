@@ -18,12 +18,12 @@ function Postlist({ formdata, setformdata }) {
   const [selectedItem, setSelectedItem] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   
-useEffect(() => {
+
 	if (formdata.length !== 0) {
 	  setData((prevData) => [...prevData, formdata]);
 	  setformdata([]);
 	}
-  }, [formdata]);
+  
 
   useEffect(() => {
     async function fetchData() {

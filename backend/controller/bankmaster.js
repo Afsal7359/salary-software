@@ -21,36 +21,50 @@ module.exports={
         }
     },
     AddBankMaster: async (req, res) => { 
-        try{
-          const data = req.body;
-
-          const existingBankmaster = await Bankmaster.findOne({ name: data.name });
-
-          if (existingBankmaster) {
-            return res.status(409).json({
-              success: false,
-              message: "Bankmaster already exists.",
-            });
-          }
-          const newBankmaster = new Bankmaster(data)
-
-          await newBankmaster.save()
-
-          console.log("Bankmaster Added Successfully");
-        res.status(200).json({
-          success: true,
-          message: "Bankmaster added successfully.",
-          data:newBankmaster
-        });
-
-      }catch(err){
-          res.status(500).json({
-              success: false,
-              message: "Failed to add Bankmaster.",
-              error: err.message,
+      try {
+        const data = req.body;
+    
+        const existingBankmaster = await Bankmaster.findOne({ bankid: data.bankid });
+    
+        if (existingBankmaster && existingBankmaster.isdeleted) {
+          // Update the isdeleted flag to false and get the updated document
+          const updatedBankmaster = await Bankmaster.findOneAndUpdate(
+            { bankid: data.bankid  },
+            { isdeleted: false },
+            { new: true } // To get the updated document
+          );
+    
+          console.log("Bankmaster marked as not deleted.");
+          res.status(200).json({
+            success: true,
+            message: "Bankmaster updated successfully.",
+            data: updatedBankmaster,
           });
+        } else if (existingBankmaster) {
+          return res.status(409).json({
+            success: false,
+            message: "Bankmaster already exists.",
+          });
+        } else {
+          const newBankmaster = new Bankmaster(data);
+          await newBankmaster.save();
+    
+          console.log("Bankmaster Added Successfully");
+          res.status(200).json({
+            success: true,
+            message: "Bankmaster added successfully.",
+            data: newBankmaster,
+          });
+        }
+      } catch (err) {
+        res.status(500).json({
+          success: false,
+          message: "Failed to add/update Bankmaster.",
+          error: err.message,
+        });
       }
-      },
+    },
+    
       EditBankMaster: async (req, res) => {
         try {
           const data = req.body;
