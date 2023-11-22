@@ -107,7 +107,7 @@ module.exports = {
   GetallPurpose: async (req, res) => {
     try {
       // Retrieve a single Employeetype record based on the specified employeeid
-      const Purposedata = await Purpose.find({ isdeleted: { $ne: true } });
+      const Purposedata = await Purpose.find({ isdeleted: { $ne: true } }).sort({_id:-1});
 
       if (!Purposedata) {
         return res.status(404).json({
