@@ -4,7 +4,7 @@ module.exports={
 
     GetDepartment:async(req,res)=>{
         try{
-            const response= await Department.find({ isdeleted: { $ne: true } })
+            const response= await Department.find({ isdeleted: { $ne: true } }).sort({_id:-1})
             console.log("Department data get Successfully");
             res.status(200).json({
               success: true,

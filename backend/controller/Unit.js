@@ -3,7 +3,7 @@ const Unit = require("../models/Unit");
 module.exports={
     GetUnit:async(req,res)=>{
         try{
-            const response= await Unit.find({ isdeleted: { $ne: true } })
+            const response= await Unit.find({ isdeleted: { $ne: true } }).sort({_id:-1})
             console.log("Unit data get Successfully");
             res.status(200).json({
               success: true,

@@ -46,7 +46,7 @@ const Sidebar = () => {
 							<a href="#"><span className="menu-side"><img src={Bankicon} alt=""/></span> <span> Bank Master</span> <span className="menu-arrow"></span></a>
 							<ul style={{ display:'none'}}>
                             <li><Link to="/add-Bankaccount-master">Add BankAccount</Link></li>
-                            <li><Link to="/add-Bank-master"> Add Bank</Link></li>
+                            {/* <li><Link to="/add-Bank-master"> Add Bank</Link></li> */}
                             {/* <li><Link to="/add-doctor">Add Doctor</Link></li>
                             <li><Link to="/edit-doctor">Edit Doctor</Link></li>
                             <li><Link to="/doctor-profile">Doctor Profile</Link></li> */}
