@@ -19,7 +19,7 @@ const BankAccountlist =({ formdata, setformdata }) => {
   const [showDeleteModal, setshowDeleteModal] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
  
-
+console.log('daaata',Data);
     // if (formdata.length !== 0) {
     //     setData((prevData) => [...prevData, formdata]);
     //     setformdata([]);

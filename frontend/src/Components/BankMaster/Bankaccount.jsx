@@ -275,7 +275,7 @@ function Bankaccount() {
                                         <div className="col-12 col-md-6 col-xl-3">
 											<div className="form-group local-forms">
 												<label >Account Type<span className="login-danger">*</span></label>
-												<select className="form-control select"
+												<select className="form-control  "
 												onKeyDown={handleAccountTypeClick}
 												onMouseEnter={handleAccountTypeClick}
 												onChange={handleAccountTypeChange}>

@@ -111,7 +111,7 @@ module.exports = {
     try {
       // Retrieve a single operational record based on the specified operational
       const accounttypedata = await accounttype.find({ isdeleted: { $ne: true } })    .sort({ _id: -1 }); // Sorting by _id in descending order
-      ;
+      
 
       if (!accounttypedata) {
         return res.status(404).json({
