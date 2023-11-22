@@ -37,3 +37,15 @@ export const editemployeemaster = async (payload) => {
       return err.response.data;
     }
   };
+
+  
+export const getallemployeemastercount = async () => {
+  try {
+      const response = await instance.get('employee/getallemployeecount');
+      return response.data
+  } catch (err) {
+      return err.response.data;
+  }
+}
+
+  

@@ -301,9 +301,10 @@ const [formdata,setFormdata]=useState('')
     <div>
     
 
-     {editemployee&& <div>   <button className='btn btn-primary submit-form  ' style={{marginRight:0}} onClick={handleclicktable}>View Table</button><div className="row">
+     {editemployee&& <div>  
+		 <button className='btn btn-primary submit-form mb-3  'onClick={handleclicktable}>View Table</button>
+	        <div className="row">
 					<div className="col-sm-12">
-					
 						<div className="card">
 							<div className="card-body">
 								<form onSubmit={handleclick}>

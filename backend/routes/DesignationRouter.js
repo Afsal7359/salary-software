@@ -7,6 +7,7 @@ router.post('/addDesignation',Designation.AddDesignation);
 router.put('/editDesignation/:id',Designation.EditDesignation);
 router.delete('/deleteDesignation/:id',Designation.DeleteDesignation)
 router.get('/getallDesignation',Designation.GetDesignation)
+router.get('/getallDesignationcount',Designation.GetallDesignationCount)
 
 
 module.exports = router;

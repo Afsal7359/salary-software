@@ -7,28 +7,27 @@ import { getallDepartment } from '../../Apicalls/Department';
 import { toast } from 'react-toastify';
 import { getallUnite } from '../../Apicalls/Unit';
 import { getallDesignation } from '../../Apicalls/Designation';
-import { Addpost } from '../../Apicalls/Post';
+import { Addpost, getallpostcount } from '../../Apicalls/Post';
 
 const MemoizedPostlist = React.memo(Postlist);
 
 const Postmaster = () => {
 
-  const [postid,setPostId]=useState('')
+  const [count,setcount]=useState(0)
 
-  const generateUniqueSixLetterID = () => {
-    const characters = '765464565434354364564560123456789';
-    let id = '';
-    for (let i = 0; i < 6; i++) {
-      const randomIndex = Math.floor(Math.random() * characters.length);
-      id += characters[randomIndex];
-    }
-    return id;
-  };
-  
-  
+
+  // Usage in useEffect
   useEffect(() => {
-    const uniqueSixCharacterID = generateUniqueSixLetterID();
-    setPostId(uniqueSixCharacterID);
+    const fetchUniqueSixCharacterID = async () => {
+      try {
+        const response = await getallpostcount();
+        setcount( response.data.count+1);
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    };
+  
+    fetchUniqueSixCharacterID();
   }, []);
 
 
@@ -107,19 +106,13 @@ const Postmaster = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const uniqueSixCharacterID = generateUniqueSixLetterID(); // Reusing the same function
-    setPostId(uniqueSixCharacterID);
-    // Use unitId, departmentId, designationId as needed
-    console.log('Unit ID:', unitId);
-    console.log('Department ID:', departmentId);
-    console.log('Designation ID:', designationId);
 
     // Perform your submit logic here
     const formdatas = {
       unitId,
       departmentId,
       designationId,
-      postid  
+      postid: `MP${count.toString().padStart(3, '0')}` 
     };
 
     try {
@@ -129,11 +122,11 @@ const Postmaster = () => {
       const response = await Addpost(formdatas);
       console.log(response, 'tereresponse');
       if (response.success) {
+        setcount((prevCount) => prevCount + 1);
         setformdata(response.data);
         setUnitId('');
         setDepartmentId('');
         setDesignationId('');
-        setPostId
         toast.success(response.message);
       } else {
         toast.error(response.message);
@@ -160,7 +153,7 @@ const Postmaster = () => {
                   <div className="col-12 col-md-6 col-xl-3">
                     <div className="form-group local-forms">
                        <label>Post Id<span className="login-danger">*</span></label>
-                      <input className="form-control" type="text" placeholder="" value={postid} style={{ backgroundColor: "#cbd0d6" }} readOnly/>
+                      <input className="form-control" type="text" placeholder="" value={`MP${count.toString().padStart(3, '0')}`} style={{ backgroundColor: "#cbd0d6" }} readOnly/>
                      </div>
                    </div>
                    <div className="col-12 col-md-6 col-xl-3">

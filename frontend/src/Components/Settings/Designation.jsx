@@ -2,7 +2,7 @@ import React, { useState ,useEffect} from 'react'
 import PageHeader from '../PageHeader'
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
-import { AddDesignation } from '../../Apicalls/Designation';
+import { AddDesignation, getallDesignationcount } from '../../Apicalls/Designation';
 import Designationlist from './Designationlist';
 function Designation() {
 	const [formData, setFormData] = useState('');
@@ -14,38 +14,33 @@ function Designation() {
 	  formState: { errors },
 	} = useForm();
 	
-  const [designationid,setDesignationId]=useState('');
+	const [count,setcount]=useState(0)
 
-  const generateUniqueSixLetterID = () => {
-    const characters = '765464565434354364564560123456789';
-    let id = '';
-    for (let i = 0; i < 6; i++) {
-      const randomIndex = Math.floor(Math.random() * characters.length);
-      id += characters[randomIndex];
-    }
-    return id;
-  };
-  
-  
-  useEffect(() => {
-    const uniqueSixCharacterID = generateUniqueSixLetterID();
-    setDesignationId(uniqueSixCharacterID);
-  }, []);
+
+	// Usage in useEffect
+	useEffect(() => {
+	  const fetchUniqueSixCharacterID = async () => {
+		try {
+		  const response = await getallDesignationcount();
+		  setcount( response.data.count+1);
+		} catch (error) {
+		  console.error("Error:", error);
+		}
+	  };
+	
+	  fetchUniqueSixCharacterID();
+	}, []);
 
 	const onSubmit = async (data) => {
 
-		const uniqueSixCharacterID = generateUniqueSixLetterID(); // Reusing the same function
-		setDesignationId(uniqueSixCharacterID);
-
-		// Example usage:
-		  data.designationid=uniqueSixCharacterID
+		data.designationid=`MD${count.toString().padStart(3, '0')}`
 	  try {
 		const response = await AddDesignation(data);
 		if (response.success) {
+			setcount((prevCount) => prevCount + 1);
 		  setformdata(response.data)
 		  toast.success(response.message);
 		  setFormData('');
-		  setDesignationId // Clear the form data after a successful submission
 		  // setrender(!render)
 		} else {
 			
@@ -76,7 +71,7 @@ function Designation() {
                         type="text"
                         className={`form-control ${errors.designationId ? 'is-invalid' : ''}`}
                         placeholder=""
-						value={designationid}
+						value={`MD${count.toString().padStart(3, '0')}`}
                         style={{ backgroundColor: "#cbd0d6" }}
                         readOnly // Make the input field non-editable
                       />

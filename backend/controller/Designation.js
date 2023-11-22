@@ -121,4 +121,22 @@ module.exports={
           });
         }
       },
+      GetallDesignationCount : async (req, res) => {
+        try {
+          const DesignationCount = await Designation.countDocuments();
+          
+          res.status(200).json({
+            success: true,
+            message: "Designation count retrieved successfully.",
+            data: { count: DesignationCount },
+          });
+        } catch (error) {
+          console.error("Error:", error);
+          res.status(500).json({
+            success: false,
+            message: "Internal server error.",
+            error: error.message,
+          });
+        }
+      }
 }

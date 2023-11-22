@@ -6,29 +6,27 @@ import { useForm } from 'react-hook-form';
 import { getallemployeetype } from '../../Apicalls/Employeetype';
 import { getallpost } from '../../Apicalls/Post';
 import { getallSalary } from '../../Apicalls/salarymaster';
-import { Addemployee } from '../../Apicalls/EmployeeMater';
+import { Addemployee, getallemployeemastercount } from '../../Apicalls/EmployeeMater';
 import Employeemasterlist from './Employeemasterlist';
 const AddEmployeemaster = () => {
-	const [employeeId, setEmployeeId] = useState('');
+	const [count,setcount]=useState(0)
 
 
-  const generateUniqueSixLetterID = () => {
-    const characters = '765464565434354364564560123456789';
-    let id = '';
-    for (let i = 0; i < 6; i++) {
-      const randomIndex = Math.floor(Math.random() * characters.length);
-      id += characters[randomIndex];
-    }
-    return id;
-  };
-  useEffect(() => {
-  const uniqueSixLetterID = generateUniqueSixLetterID();
-  setEmployeeId(uniqueSixLetterID);
-}, []);
-
-	// console.log(data);
+	// Usage in useEffect
+	useEffect(() => {
+	  const fetchUniqueSixCharacterID = async () => {
+		try {
+		  const response = await getallemployeemastercount();
+		  setcount( response.data.count+1);
+		} catch (error) {
+		  console.error("Error:", error);
+		}
+	  };
 	
-	console.log('frrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr');
+	  fetchUniqueSixCharacterID();
+	}, []);
+  
+
 	
 	  
 	const [employeeTypeData, setEmployeeTypeData]=useState([]);
@@ -85,7 +83,7 @@ const AddEmployeemaster = () => {
 			if(!issalarymasterDataFetched){
 				const response = await getallSalary();
 				if(response.success){
-					console.log('ffffffffrrrrrrrrrrrrrrrrrrrr',response.data);
+					
 					setSalarymasterData(response.data);
 				}else{
 					setSalarymasterData([]);
@@ -149,14 +147,7 @@ console.log('salary data : ',salarymasterData);
 	  });
 	const [formdata , setFormdata]=useState([])
 	  const onSubmit = async (data) => {
-		const uniqueSixCharacterID = generateUniqueSixLetterID(); // Reusing the same function
-		setEmployeeId(uniqueSixCharacterID);
-		
-	
-	
-		// const uniqueSixLetterID = generateUniqueSixLetterID();
-		// setEmployeeId(uniqueSixLetterID)
-		data.employeeid = employeeId;
+		data.employeeid=`ME${count.toString().padStart(3, '0')}`
 	     data.EmployeeTypeId=employeeTypeId
 		 data.PostId=postId
 		 data.tablerow=tableRows
@@ -165,6 +156,7 @@ console.log('salary data : ',salarymasterData);
 			console.log('Afsal :' , data);
 		  const response = await Addemployee(data);
 		  if (response.success) {
+			setcount((prevCount) => prevCount + 1);
 			setFormdata(response.data);
 			toast.success(response.message);
 			setstate(false)
@@ -262,11 +254,7 @@ console.log('salary data : ',salarymasterData);
 
 
 	  const handleChange = (index,percentage) => {
-		console.log(percentage,"ttttttttttt");
-		console.log(basicsalary,"tttttttttttttttttttttttt");
 		const updatedTableRows = [...tableRows];
-		
-		
         updatedTableRows[index].percentage = Number(percentage);
        // Recalculate the price based on the updated percentage and basic salary
     const newPrice = (Number(basicsalary) * Number(percentage)) / 100;
@@ -302,7 +290,7 @@ const [tablestate,settablestate]=useState(false)
   return (
    <>
    <PageHeader/>
-   {!state ?<button className='btn btn-success submit-form ' onClick={handleclick} >Add Employee</button>: <button className='btn btn-success submit-form' onClick={handletableclick} >View Table</button>}
+   {!state ?<button className='btn btn-success submit-form mb-4 ' onClick={handleclick} >Add Employee</button>: <button className='btn btn-success submit-form mb-4' onClick={handletableclick} >View Table</button>}
   
    {state&& <>  
  <div className="row">
@@ -320,7 +308,7 @@ const [tablestate,settablestate]=useState(false)
 										<div className="col-12 col-md-6 col-xl-6">
 											<div className="form-group local-forms">
 											<label>Employee Id</label>
-											<input className="form-control" type="text" placeholder="" value={employeeId} style={{ backgroundColor: "#cbd0d6" }} 
+											<input className="form-control" type="text" placeholder="" value={`ME${count.toString().padStart(3, '0')}`} style={{ backgroundColor: "#cbd0d6" }} 
 												readOnly />
 											</div>
 										</div>

@@ -38,7 +38,7 @@ console.log('daaata',Data);
       try {
         const response = await getallbankAccount();
         setData(response.data);
-        console.log('ffffffffffffffffffffffffffr',Data);
+
         setIsLoading(false);
         // setrender(!render)
       } catch (error) {
@@ -135,6 +135,7 @@ const closeEditModal = () => {
                   <thead>
                     <tr>
                       <th>No</th>
+                      {/* <th>Bank ID</th> */}
                       <th>Account Number</th>
                       <th>Bank</th>
                       <th>Department</th>
@@ -147,6 +148,7 @@ const closeEditModal = () => {
                     {Data.map((item, index) => (
                       <tr  key={`${item._id}-${index}`}>
                           <td>{index + 1}</td>
+                          {/* <td>{item.bankAccountId}</td> */}
                         <td>{item.accountNo}</td>
                         <td>{item.BankId.name}</td>
                         <td>{item.departmentId.name}</td>

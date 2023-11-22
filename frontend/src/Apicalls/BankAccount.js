@@ -37,3 +37,12 @@ export const editbankAccount = async (payload) => {
       return err.response.data;
     }
   };
+
+export const getallbankAccountcount = async () => {
+    try {
+        const response = await instance.get('BankAccount/getallbankaccountcount');
+        return response.data
+    } catch (err) {
+        return err.response.data;
+    }
+}

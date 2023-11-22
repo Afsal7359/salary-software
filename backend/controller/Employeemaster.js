@@ -141,4 +141,22 @@ module.exports = {
       });
     }
   },
+  GetallEmployeeCount : async (req, res) => {
+    try {
+      const EmployeeCount = await Employee.countDocuments();
+      
+      res.status(200).json({
+        success: true,
+        message: "BankAccountCount retrieved successfully.",
+        data: { count: EmployeeCount },
+      });
+    } catch (error) {
+      console.error("Error:", error);
+      res.status(500).json({
+        success: false,
+        message: "Internal server error.",
+        error: error.message,
+      });
+    }
+  }
 };

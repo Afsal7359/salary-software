@@ -108,7 +108,7 @@ module.exports={
             ]);
           
 
-            console.log(populatedpost,"rrrrrrrrrrrrrrrrrrrrrrr");
+ 
     
             console.log("post Edited Successfully");
             res.status(200).json({
@@ -124,5 +124,23 @@ module.exports={
             });
         }
     },
+    GetpostaccountCount : async (req, res) => {
+      try {
+        const PostCount = await Post.countDocuments();
+        
+        res.status(200).json({
+          success: true,
+          message: "PostCount retrieved successfully.",
+          data: { count: PostCount },
+        });
+      } catch (error) {
+        console.error("Error:", error);
+        res.status(500).json({
+          success: false,
+          message: "Internal server error.",
+          error: error.message,
+        });
+      }
+    }
     
 }
