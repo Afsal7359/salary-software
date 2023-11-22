@@ -4,22 +4,25 @@ module.exports = {
   Adaccounttype: async (req, res) => {
     try {
       const data = req.body;
-      const existingAccountType = await accounttype.findOne({ name: data.name });
+      const uppercasedName = data.name.toUpperCase();
+      const existingAccountType = await accounttype.findOne({
+        $or: [{ name: uppercasedName }, { name: data.name.toLowerCase() }],
+      });
   
       if (existingAccountType && existingAccountType.isdeleted) {
         // Update the isdeleted flag to false and get the updated document
-        const updatedAccountType = await accounttype
-        .findOneAndUpdate(
-          { name: data.name },
+        const updatedAccountType = await accounttype.findOneAndUpdate(
+          {
+            $or: [{ name: uppercasedName }, { name: data.name.toLowerCase() }],
+          },
           { isdeleted: false },
           { new: true } // To get the updated document
         )
-        .sort({ _id: -1 }); // Sorting by _id in descending order
   
-        console.log("Account type Added successfully.");
+        console.log("Account type updated successfully.");
         res.status(200).json({
           success: true,
-          message: "Account type Added successfully.",
+          message: "Account type updated successfully.",
           data: updatedAccountType,
         });
       } else if (existingAccountType) {
@@ -110,7 +113,7 @@ module.exports = {
   Getallaccounttype: async (req, res) => {
     try {
       // Retrieve a single operational record based on the specified operational
-      const accounttypedata = await accounttype.find({ isdeleted: { $ne: true } })    .sort({ _id: -1 }); // Sorting by _id in descending order
+      const accounttypedata = await accounttype.find({ isdeleted: { $ne: true } }).sort({ _id: -1 }); // Sorting by _id in descending order
       ;
 
       if (!accounttypedata) {

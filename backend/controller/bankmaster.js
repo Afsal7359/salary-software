@@ -95,7 +95,7 @@ module.exports={
       },
       GetallBank:async(req,res)=>{
         try{
-            const response= await Bankmaster.find({ isdeleted: { $ne: true } })
+            const response= await Bankmaster.find({ isdeleted: { $ne: true } }).sort({_id:-1})
             console.log("Bankmaster data get Successfully");
             res.status(200).json({
               success: true,

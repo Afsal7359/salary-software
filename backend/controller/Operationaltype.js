@@ -107,7 +107,7 @@ module.exports = {
   Getalloperational: async (req, res) => {
     try {
       // Retrieve a single operational record based on the specified operational
-      const operationaldata = await operational.find({ isdeleted: { $ne: true } });
+      const operationaldata = await operational.find({ isdeleted: { $ne: true } }).sort({_id:-1});
 
       if (!operationaldata) {
         return res.status(404).json({

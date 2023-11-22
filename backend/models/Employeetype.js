@@ -18,6 +18,8 @@ const EmployeetypeSchema= new mongoose.Schema({
     }
    
 
+},{
+    timestamps:true
 })
 const Employeetype = mongoose.model('Employeetype',EmployeetypeSchema);
 module.exports=Employeetype;
