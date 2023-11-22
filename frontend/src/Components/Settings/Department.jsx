@@ -2,7 +2,7 @@ import React, { useState,useEffect } from 'react';
 import PageHeader from '../PageHeader';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
-import { AddDepartment } from '../../Apicalls/Department';
+import { AddDepartment, getallDepartmentcount } from '../../Apicalls/Department';
 import Departmentlist from './Departmentlist';
 
 function Department() {
@@ -14,39 +14,35 @@ function Department() {
     formState: { errors },
   } = useForm();
 
-    const [Departmentid,setDepartmentId]=useState('')
-  const generateUniqueSixLetterID = () => {
-    const characters = '765464565434354364564560123456789';
-    let id = '';
-    for (let i = 0; i < 6; i++) {
-      const randomIndex = Math.floor(Math.random() * characters.length);
-      id += characters[randomIndex];
-    }
-    return id;
-  };
-  
-  
+  const [count,setcount]=useState(0)
+
+
+  // Usage in useEffect
   useEffect(() => {
-    const uniqueSixCharacterID = generateUniqueSixLetterID();
-    setDepartmentId(uniqueSixCharacterID);
+    const fetchUniqueSixCharacterID = async () => {
+      try {
+        const response = await getallDepartmentcount();
+        setcount( response.data.count+1);
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    };
+  
+    fetchUniqueSixCharacterID();
   }, []);
 
 
   const onSubmit = async (data) => {
-    const uniqueSixCharacterID = generateUniqueSixLetterID(); // Reusing the same function
-    setDepartmentId(uniqueSixCharacterID);
-
     // Example usage:
-   
-    data.Departmentid =uniqueSixCharacterID
+    data.Departmentid=`MD${count.toString().padStart(3, '0')}`
     try {
       const response = await AddDepartment(data);
       if (response.success) {
+        setcount((prevCount) => prevCount + 1);
         setDepartmentData(response.data);
         toast.success(response.message);
         setFormData('');
-        setDepartmentId // Clear the form data after a successful submission
-        // setrender(!render)
+      
       } else {
         toast.error(response.message);
       }
@@ -77,7 +73,7 @@ function Department() {
                         className="form-control"
                         placeholder=""
                         style={{ backgroundColor: "#cbd0d6" }}
-                        value={Departmentid}
+                        value={`MD${count.toString().padStart(3, '0')}`}
                         readOnly // Make the input field non-editable
                       />
                     </div>

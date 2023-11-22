@@ -1,48 +1,40 @@
 import React, { useState,useEffect } from 'react';
 import PageHeader from '../PageHeader';
 import { useForm } from 'react-hook-form';
-import { Addemployeetype } from '../../Apicalls/Employeetype';
+import { Addemployeetype, getallemployeetypecount } from '../../Apicalls/Employeetype';
 import { toast } from 'react-toastify';
 import Employeetypelist from './Employeetypelist';
 
+
 function Employeetype() {
   const [formData, setFormData] = useState('');
-  // const [render, setrender] = useState(false);
   const [formdata, setformdata] =useState([]);
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const [employeetypeid,setEmployeeTypeId]=useState('');
-  const generateUniqueSixLetterID = () => {
-    const characters = '765464565434354364564560123456789';
-    let id = '';
-    for (let i = 0; i < 6; i++) {
-      const randomIndex = Math.floor(Math.random() * characters.length);
-      id += characters[randomIndex];
-    }
-    return id;
-  };
-  
-  
+  const [count,setcount]=useState(0)
+
   useEffect(() => {
-    const uniqueSixCharacterID = generateUniqueSixLetterID();
-    setEmployeeTypeId(uniqueSixCharacterID);
+    const fetchUniqueSixCharacterID = async () => {
+      try {
+        const response = await getallemployeetypecount();
+        setcount( response.data.count+1);
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    };
+  
+    fetchUniqueSixCharacterID();
   }, []);
 
   const onSubmit = async (data) => {
-   
-      
-      // Example usage:
-      const uniqueSixLetterID = generateUniqueSixLetterID();
-      setEmployeeTypeId(uniqueSixLetterID);
-
-
-        data.employeeid=uniqueSixLetterID
+     data.employeeid=`MET${count.toString().padStart(3, '0')}`
     try {
       const response = await Addemployeetype(data);
       if (response.success) {
+        setcount((prevCount) => prevCount + 1);
         setformdata(response.data)
         toast.success(response.message);
         setFormData(''); // Clear the form data after a successful submission
@@ -74,6 +66,7 @@ function Employeetype() {
                     <div className="form-group local-forms">
                       <label>Employee Id<span className="login-danger">*</span></label>
                       <input
+                       value={`MET${count.toString().padStart(3, '0')}`}
                         type="text"
                         className={`form-control ${errors.employeeId ? 'is-invalid' : ''}`}
                         placeholder=""

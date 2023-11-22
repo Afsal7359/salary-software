@@ -37,3 +37,12 @@ export const editUnit = async (payload) => {
       return err.response.data;
     }
   };
+
+  export const getallUnitecount = async () => {
+    try {
+        const response = await instance.get('Unit/getallUnitcount');
+        return response.data
+    } catch (err) {
+        return err.response.data;
+    }
+}

@@ -118,4 +118,22 @@ module.exports={
           });
         }
       },
+      GetallDepartmentCount : async (req, res) => {
+        try {
+          const DepartmentCount = await Department.countDocuments();
+          
+          res.status(200).json({
+            success: true,
+            message: "EmployeetypeCount count retrieved successfully.",
+            data: { count: DepartmentCount },
+          });
+        } catch (error) {
+          console.error("Error:", error);
+          res.status(500).json({
+            success: false,
+            message: "Internal server error.",
+            error: error.message,
+          });
+        }
+      }
 }

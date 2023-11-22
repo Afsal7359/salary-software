@@ -7,6 +7,6 @@ router.post('/addDepartment',Department.AddDepartment);
 router.put('/editDepartment/:id',Department.UpdateDepartment);
 router.delete('/deleteDepartment/:id',Department.DeleteDepartment)
 router.get('/getallDepartment',Department.GetDepartment)
-
+router.get('/getallDepartmentcount',Department.GetallDepartmentCount)
 
 module.exports = router;

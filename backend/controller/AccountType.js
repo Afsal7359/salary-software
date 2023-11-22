@@ -136,4 +136,22 @@ module.exports = {
       });
     }
   },
-};
+GetAccountTypeCount : async (req, res) => {
+  try {
+    const accountTypeCount = await accounttype.countDocuments();
+    
+    res.status(200).json({
+      success: true,
+      message: "Account type count retrieved successfully.",
+      data: { count: accountTypeCount },
+    });
+  } catch (error) {
+    console.error("Error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Internal server error.",
+      error: error.message,
+    });
+  }
+}
+}
