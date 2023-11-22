@@ -37,3 +37,12 @@ export const editAccountType= async (payload) => {
       return err.response.data;
     }
   };
+
+  export const getallAccountTypecount = async () => {
+    try {
+        const response = await instance.get('accounttype/accounttypecount');
+        return response.data
+    } catch (err) {
+        return err.response.data;
+    }
+}

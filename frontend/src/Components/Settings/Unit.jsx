@@ -2,7 +2,7 @@ import React, { useState,useEffect } from 'react'
 import PageHeader from '../PageHeader'
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
-import { AddUnit } from '../../Apicalls/Unit';
+import { AddUnit, getallUnitecount } from '../../Apicalls/Unit';
 import Unitlist from './Unitlist';
 function Unit() {
 	const [formData, setFormData] = useState('');
@@ -14,33 +14,29 @@ function Unit() {
     formState: { errors },
   } = useForm();
 
-  const [unitid,setUnitId]=useState('');
+  const [count,setcount]=useState(0)
 
-  const generateUniqueSixLetterID = () => {
-    const characters = '765464565434354364564560123456789';
-    let id = '';
-    for (let i = 0; i < 6; i++) {
-      const randomIndex = Math.floor(Math.random() * characters.length);
-      id += characters[randomIndex];
-    }
-    return id;
-  };
-  
-  
+
+  // Usage in useEffect
   useEffect(() => {
-    const uniqueSixCharacterID = generateUniqueSixLetterID();
-    setUnitId(uniqueSixCharacterID);
+    const fetchUniqueSixCharacterID = async () => {
+      try {
+        const response = await getallUnitecount();
+        setcount( response.data.count+1);
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    };
+  
+    fetchUniqueSixCharacterID();
   }, []);
   
   const onSubmit = async (data) => {
-    
-      // Example usage:
-      const uniqueSixLetterID = generateUniqueSixLetterID();
-      setUnitId(uniqueSixLetterID)
-        data.unitid=uniqueSixLetterID
+      data.unitid=`MU${count.toString().padStart(3, '0')}`
     try {
       const response = await AddUnit(data);
       if (response.success) {
+        setcount((prevCount) => prevCount + 1);
         setformdata(response.data)
         toast.success(response.message);
         setFormData(''); // Clear the form data after a successful submission
@@ -80,7 +76,7 @@ function Unit() {
                         type="text"
                         className={`form-control ${errors.unitid ? 'is-invalid' : ''}`}
                         placeholder=""
-                        value={unitid}
+                        value={`MU${count.toString().padStart(3, '0')}`}
                         style={{ backgroundColor: "#cbd0d6" }}
                         readOnly // Make the input field non-editable
                       />

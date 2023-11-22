@@ -122,4 +122,22 @@ module.exports={
           });
         }
       },
+      GetAllunitCount : async (req, res) => {
+        try {
+          const UnitCount = await Unit.countDocuments();
+          
+          res.status(200).json({
+            success: true,
+            message: "EmployeetypeCount count retrieved successfully.",
+            data: { count: UnitCount },
+          });
+        } catch (error) {
+          console.error("Error:", error);
+          res.status(500).json({
+            success: false,
+            message: "Internal server error.",
+            error: error.message,
+          });
+        }
+      }
 }

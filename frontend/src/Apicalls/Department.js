@@ -37,3 +37,12 @@ export const editDepartment = async (payload) => {
       return err.response.data;
     }
   };
+
+  export const getallDepartmentcount = async () => {
+    try {
+        const response = await instance.get('Department/getallDepartmentcount');
+        return response.data
+    } catch (err) {
+        return err.response.data;
+    }
+}

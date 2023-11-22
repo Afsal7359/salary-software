@@ -37,3 +37,12 @@ export const editemployeetype = async (payload) => {
       return err.response.data;
     }
   };
+
+  export const getallemployeetypecount = async () => {
+    try {
+        const response = await instance.get('employeetype/getallemployeecount');
+        return response.data
+    } catch (err) {
+        return err.response.data;
+    }
+}

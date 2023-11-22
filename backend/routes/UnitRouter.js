@@ -7,6 +7,7 @@ router.post('/addUnit',Unit.AddUnit);
 router.put('/editUnit/:id',Unit.EditUnit);
 router.delete('/deleteUnit/:id',Unit.DeleteUnit)
 router.get('/getallUnit',Unit.GetUnit)
+router.get('/getallUnitcount',Unit.GetAllunitCount)
 
 
 module.exports = router;

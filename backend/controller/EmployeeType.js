@@ -151,4 +151,22 @@ module.exports = {
       });
     }
   },
+  GetEmployeeTypeCount : async (req, res) => {
+    try {
+      const EmployeetypeCount = await Employeetype.countDocuments();
+      
+      res.status(200).json({
+        success: true,
+        message: "EmployeetypeCount count retrieved successfully.",
+        data: { count: EmployeetypeCount },
+      });
+    } catch (error) {
+      console.error("Error:", error);
+      res.status(500).json({
+        success: false,
+        message: "Internal server error.",
+        error: error.message,
+      });
+    }
+  }
 };

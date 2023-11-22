@@ -2,31 +2,30 @@ import React, { useState,useEffect } from 'react';
 import PageHeader from '../PageHeader';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
-import { AddAccountType } from '../../Apicalls/Accounttype';
+import { AddAccountType, getallAccountTypecount } from '../../Apicalls/Accounttype';
 import Accounttypelist from './Accounttypelist';
 
 function Accounttype() {
   const [formData, setFormData] = useState('');
-  // const [render, setrender] = useState(false);
   const [formdata, setformdata] =useState([]);
+const [count,setcount]=useState(0)
 
-  const [accounttypeId,setAccountTypeId]=useState('')
 
-  const generateUniqueSixLetterID = () => {
-    const characters = '765464565434354364564560123456789';
-    let id = '';
-    for (let i = 0; i < 6; i++) {
-      const randomIndex = Math.floor(Math.random() * characters.length);
-      id += characters[randomIndex];
-    }
-    return id;
-  };
-  
-  
+  // Usage in useEffect
   useEffect(() => {
-    const uniqueSixCharacterID = generateUniqueSixLetterID();
-    setAccountTypeId(uniqueSixCharacterID);
+    const fetchUniqueSixCharacterID = async () => {
+      try {
+        const response = await getallAccountTypecount();
+        setcount( response.data.count+1);
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    };
+  
+    fetchUniqueSixCharacterID();
   }, []);
+
+
 
   const {
     register,
@@ -36,19 +35,15 @@ function Accounttype() {
   
 
   const onSubmit = async (data) => {
-   
-    const uniqueSixCharacterID = generateUniqueSixLetterID(); // Reusing the same function
-    setAccountTypeId(uniqueSixCharacterID);
-      // // Example usage:
-      // const uniqueSixLetterID = generateUniqueSixLetterID();
-        data.accounttypeid=accounttypeId
+    data.accounttypeid=`MA${count.toString().padStart(3, '0')}`
     try {
       const response = await AddAccountType(data);
       if (response.success) {
+        setcount((prevCount) => prevCount + 1);
         setformdata(response.data)
         toast.success(response.message);
         setFormData('');
-        setAccountTypeId
+        // setAccountTypeId
       } else {
         toast.error(response.message);
       }
@@ -76,14 +71,14 @@ function Accounttype() {
                     <div className="form-group local-forms">
                       <label>Account Type Id<span className="login-danger">*</span></label>
                       <input
-                        {...register('accounttypeid')}
-                        type="text"
-                        className={`form-control ${errors.accounttypeId ? 'is-invalid' : ''}`}
-                        value={accounttypeId}
-                        placeholder=""
-                        style={{ backgroundColor: "#cbd0d6" }}
-                        readOnly // Make the input field non-editable
-                      />
+  {...register('accounttypeid')}
+  className={`form-control ${errors.accounttypeid ? 'is-invalid' : ''}`}
+  type="text"
+  value={`MA${count.toString().padStart(3, '0')}`}
+  placeholder=""
+  style={{ backgroundColor: "#cbd0d6" }}
+  readOnly // Make the input field non-editable
+/>
                     </div>
                   </div>
                   <div className="col-12 col-md-6 col-xl-4">
