@@ -33,6 +33,16 @@ const Sidebar = () => {
 							</ul>
 						</li>
                         <li className="submenu">
+							<a href="#"><span className="menu-side"><img src={Doctors} alt=""/></span> <span> Salary</span> <span className="menu-arrow"></span></a>
+							<ul style={{ display:'none'}}>
+                            <li><Link to="/salary-bill">Salary Bill</Link></li>
+                            
+                            {/* <li><Link to="/add-doctor">Add Doctor</Link></li>
+                            <li><Link to="/edit-doctor">Edit Doctor</Link></li>
+                            <li><Link to="/doctor-profile">Doctor Profile</Link></li> */}
+							</ul>
+						</li>
+                        <li className="submenu">
 							<a href="#"><span className="menu-side"><img src={Bankicon} alt=""/></span> <span> Bank Master</span> <span className="menu-arrow"></span></a>
 							<ul style={{ display:'none'}}>
                             <li><Link to="/add-Bankaccount-master">Add BankAccount</Link></li>

@@ -135,12 +135,12 @@ const closeEditModal = () => {
                   <thead>
                     <tr>
                       <th>No</th>
-                      <th>Bank Id</th>
-                      <th>Name</th>
-                      <th>Adress</th>
-                      <th>branch</th>
-                      <th>phone</th>
-                      <th></th>
+                      <th>Account Number</th>
+                      <th>Bank</th>
+                      <th>Department</th>
+                      <th>Account Type</th>
+                      <th>Unit</th>
+                      <th>Operational Type</th>
                     </tr>
                   </thead>
                   <tbody>

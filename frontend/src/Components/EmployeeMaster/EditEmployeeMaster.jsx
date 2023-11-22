@@ -518,7 +518,7 @@ const [formdata,setFormdata]=useState('')
 													<label>Bank <span className="login-danger">*</span></label>
 													
 													<input
-													onChange={(e) => setBank(e.target.value)}
+														onChange={(e) => setBank(e.target.value)}
 														className={`form-control`}
 														type="text"
 														placeholder=""
@@ -533,7 +533,7 @@ const [formdata,setFormdata]=useState('')
 													<label>Account No<span className="login-danger">*</span></label>
 													
 													<input
-												onChange={(e) => setAccountno(e.target.value)}
+														onChange={(e) => setAccountno(e.target.value)}
 														className={`form-control`}
 														type="text"
 														placeholder=""

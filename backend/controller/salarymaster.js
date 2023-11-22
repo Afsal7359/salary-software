@@ -32,6 +32,7 @@ module.exports={
                 type: type,
                 salarymasterId
             });
+            console.log(newPost,'daaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaataaaaaaaaaaaaaaaaaaaaaaaaaa');
     
             await newPost.save();
              // Populate the fields and return the populated post
@@ -46,6 +47,7 @@ module.exports={
                         data: Salary,
                     });
                 } catch (err) {
+                  console.log(err);
                     res.status(500).json({
                         success: false,
                         message: "Failed to add Salary Master.",

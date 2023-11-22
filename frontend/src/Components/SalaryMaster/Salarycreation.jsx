@@ -117,7 +117,7 @@ function Salarycreation() {
 			  setformdata(response.data);
 			  setName('');
 			  setType('');
-			  setPurposeId('');
+			 
 			  setSalarymasterId
 			  toast.success(response.message);
 			} else {

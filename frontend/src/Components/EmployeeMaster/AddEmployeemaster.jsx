@@ -285,15 +285,16 @@ console.log('salary data : ',salarymasterData);
         settableRows(updatedTableRows);
 	};
 const [state,setstate]=useState(false)
+const [tablestate,settablestate]=useState(false)
 
 	const handleclick=()=>{
 		setstate(!state)
-		setemployeelist(false)
+		setemployeelist(!employeelist)
 		
 	}
 	const handletableclick=()=>{
-		setstate(false)
-		setemployeelist(true)
+		setstate(!state)
+		setemployeelist(!employeelist)
 	}
 	
 
@@ -301,8 +302,9 @@ const [state,setstate]=useState(false)
   return (
    <>
    <PageHeader/>
-   <button className='btn btn-success submit-form ' onClick={handleclick} >Add Employee</button>
-   {state&& <>   <button className='btn btn-success submit-form' onClick={handletableclick} >View Table</button>
+   {!state ?<button className='btn btn-success submit-form ' onClick={handleclick} >Add Employee</button>: <button className='btn btn-success submit-form' onClick={handletableclick} >View Table</button>}
+  
+   {state&& <>  
  <div className="row">
 					<div className="col-sm-12">
 					

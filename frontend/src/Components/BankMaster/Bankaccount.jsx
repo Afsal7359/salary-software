@@ -227,7 +227,8 @@ function Bankaccount() {
                                        <div className="col-12 col-md-6 col-xl-4">
 											<div className="form-group local-forms">
 												<label >Bank  <span className="login-danger">*</span></label>
-												<select className="form-control select"    
+												<select className="form-control select"   
+												onKeyDown={handleBankClick} 
 												onMouseEnter={handleBankClick}
 												onChange={handleBankChange}>
 												<option value="">Select Bank</option>
@@ -243,6 +244,7 @@ function Bankaccount() {
 											<div className="form-group local-forms">
 												<label >Operational Type  <span className="login-danger">*</span></label>
 												<select className="form-control select"
+												onKeyDown={handleOperationalTypeClick}
 												onMouseEnter={handleOperationalTypeClick}
 												onChange={handleOperationalTypeChange}>
 													<option value="">Select Operational Type</option>
@@ -258,6 +260,7 @@ function Bankaccount() {
 											<div className="form-group local-forms">
 												<label >Unit<span className="login-danger">*</span></label>
 												<select className="form-control select"
+												onKeyDown={handleUnitClick}
 												onMouseEnter={handleUnitClick}
 												onChange={handleUnitChange}>
 													<option>Select Unit</option>
@@ -273,6 +276,7 @@ function Bankaccount() {
 											<div className="form-group local-forms">
 												<label >Account Type<span className="login-danger">*</span></label>
 												<select className="form-control select"
+												onKeyDown={handleAccountTypeClick}
 												onMouseEnter={handleAccountTypeClick}
 												onChange={handleAccountTypeChange}>
 
@@ -289,6 +293,7 @@ function Bankaccount() {
 											<div className="form-group local-forms">
 												<label >Department<span className="login-danger">*</span></label>
 												<select className="form-control select"
+												onKeyDown={handleDepartmentClick}
 												onMouseEnter={handleDepartmentClick}
 												onChange={handleDepartmentChange}>
 													<option>Select Department</option>
