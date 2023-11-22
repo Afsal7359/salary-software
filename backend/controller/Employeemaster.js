@@ -113,7 +113,7 @@ module.exports = {
     try {
       // Retrieve a single Employee record based on the specified employeeid
       const Employees = await Employee
-      .find({ isdeleted: { $ne: true } })
+      .find({ isdeleted: { $ne: true } }).sort({_id:-1})
       .populate({
         path: 'PostId',
         // Include 'designation' and 'DesignationId' fields from the referenced document
