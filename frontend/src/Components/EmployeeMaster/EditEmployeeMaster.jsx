@@ -228,36 +228,38 @@ const [formdata,setFormdata]=useState('')
 
 	
 	 
+	  useEffect(() => {
+		try {
+		  const totalAmount = tablerow.reduce((acc, row) => {
+			const salaryType = salarymasterData.find((item) => item._id === row.salaryComponent);
+	  
+			if (salaryType && (salaryType.type === 'Increment' || salaryType.type === 'Decrement')) {
+			  const price = parseFloat(row.price);
+	  
+			  if (!isNaN(price)) {
+				// Check if the parsed price is a valid number
+				return acc + (salaryType.type === 'Increment' ? price : -price);
+			  } else {
+				console.error('Invalid price for row:', row);
+			  }
+			}
+	  
+			return acc;
+		  }, parseFloat(basicSalary));
+	  
+		  if (!isNaN(totalAmount)) {
+			// Check if the calculated totalAmount is a valid number
+			setTotalSalary(totalAmount);
+		  } else {
+			console.error('Invalid totalAmount:', totalAmount);
+		  }
+		} catch (error) {
+		  console.error('Error in useEffect:', error);
+		}
+	  }, [tablerow, basicSalary, salarymasterData]);
 	  
 
-	  useEffect(() => {
-	
-		console.log('haaaaaaiaaaaaaaaaaia');
-		const TotalSalary = tablerow.reduce((acc, row) => {
-			console.log('frrrrrrrrrrrrrrrrrrrrrrrrrrr',row.salaryComponent);
-			console.log('kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk',salarymasterData);
-			// const Salarytype = row.salaryComponent.type
-			const salarytype = salarymasterData.filter((item) => {
-				return item._id=== row.salaryComponent;
-			});
-			
-			console.log('Filtered salary type:', salarytype);
-			
-			
-		
-			if (salarytype[0]?.type === 'Increment') {
-			  return acc + parseFloat(row.price);
-			} else if (salarytype[0]?.type === 'Decrement') {
-			  return acc - parseFloat(row.price);
-			}
-			
-			
-			return acc;
-		  }, basicSalary); // Initialize accumulator with basicsalary
-		  setTotalSalary(TotalSalary);
-	console.log('ooooolaaaa',TotalSalary,tabledata);
-	  }, [tablerow, basicSalary]);
-	  
+	 
 
 
 	  const handleSecondInputChange = (index, value) => {
