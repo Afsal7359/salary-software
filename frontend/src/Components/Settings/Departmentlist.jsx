@@ -20,7 +20,7 @@ function Departmentlist({DepartmentData,setDepartmentData}) {
     if (DepartmentData.length!=0) {
         const isNameInData = Data.some((item) => item.name === DepartmentData.name);
         if (!isNameInData) {
-          setData((prevData) => [...prevData, DepartmentData]);
+          setData((prevData) => [DepartmentData,...prevData]);
           setDepartmentData([])
         }
     }

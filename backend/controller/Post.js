@@ -3,7 +3,7 @@ const Post = require("../models/Post");
 module.exports={
     GetPost:async(req,res)=>{
         try{
-            const response = await Post.find({ isdeleted: { $ne: true } })
+            const response = await Post.find({ isdeleted: { $ne: true } }).sort({_id:-1})
             .populate('designation')
             .populate('department')
             .populate('unit');
