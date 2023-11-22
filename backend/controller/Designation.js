@@ -3,7 +3,7 @@ const Designation = require("../models/Designation");
 module.exports={
     GetDesignation:async(req,res)=>{
         try{
-            const response= await Designation.find({ isdeleted: { $ne: true } })
+            const response= await Designation.find({ isdeleted: { $ne: true } }).sort({_id:-1})
             console.log("Designation data get Successfully");
             res.status(200).json({
               success: true,

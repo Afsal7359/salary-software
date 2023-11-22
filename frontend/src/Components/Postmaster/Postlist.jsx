@@ -11,7 +11,7 @@ import Postdelete from '../Modal/Postdelete';
 import Postedit from '../Modal/Postedit';
 
 function Postlist({ formdata, setformdata }) {
-  console.log(formdata, 'yyyyyyyyyyyyyyyy');
+  console.log(formdata, 'yyyyyyyyyyyyyyyypostdata');
   const [Data, setData] = useState([]);
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteModal, setshowDeleteModal] = useState(false);
