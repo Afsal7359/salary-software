@@ -1,4 +1,4 @@
-import React,{useEffect, useState} from 'react'
+import React,{useEffect, useMemo, useState} from 'react'
 import PageHeader from '../PageHeader'
 import { toast } from 'react-toastify';
 import { getallemployeemaster } from '../../Apicalls/EmployeeMater';
@@ -50,11 +50,16 @@ console.log('employeee name',EmployeeId);
 
 
 console.log('filtered data :',filterEmployeeData);
-
+const headerdata = useMemo(() => {
+	return {
+	  data:"Salary master",
+	  page:"salary bill"
+	};
+  }, []);
 // console.log('filtered data NAME:',filterEmployeeData[0].name);
   return (
     <>
-      <PageHeader/>
+      <PageHeader headerdata={headerdata}/>
 
 
 							<form>
@@ -158,7 +163,7 @@ console.log('filtered data :',filterEmployeeData);
 														<tfoot>
 															<tr>
 																<td colSpan="4" className='text-end'>Allowed Leaves</td>
-																<td><input className="form-control" type="number" value={10} style={{backgroundColor:"#cbd0d6"}} readOnly/></td>
+																<td><input className="form-control" type="number" value={filterEmployeeData[0]&&filterEmployeeData[0].allowedleave?filterEmployeeData[0].allowedleave : ""} style={{backgroundColor:"#cbd0d6"}} readOnly/></td>
 															</tr>
 															<tr>
 																<td colSpan="4" className='text-end'>Absent</td>

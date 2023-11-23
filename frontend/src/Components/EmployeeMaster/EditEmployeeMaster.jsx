@@ -95,7 +95,7 @@ function EditEmployeeMaster({ closeEdit, item, setData, Data, show, setshow }) {
   // console.log('ghfdgfygfghfghf',salarymasterId);
 
   console.log("salary data : ", salarymasterData);
-
+console.log('itemmmm',item);
   const [employeeid, setEmployeeId] = useState(item?.employeeid);
   const [name, setName] = useState(item?.name);
   const [email, setEmail] = useState(item?.email);
@@ -120,7 +120,7 @@ function EditEmployeeMaster({ closeEdit, item, setData, Data, show, setshow }) {
   const [tabledata, setTabledata] = useState(item?.tableRow);
   const [TotalSalary, setTotalSalary] = useState(item?.TotalSalary);
   const [gender, setGender] = useState(item?.gender);
-
+  const [allowedleave,setAllowedLeave]=useState(item?.allowedleave);
   const [employelist, setEmployelist] = useState(false);
   const [editemployee, setEditemployee] = useState(true);
 
@@ -130,7 +130,7 @@ function EditEmployeeMaster({ closeEdit, item, setData, Data, show, setshow }) {
       : [
           {
             id: 1,
-            salaryComponent: "",
+            salaryComponent: '',
             percentage: "",
             value: "",
             price: "",
@@ -172,14 +172,14 @@ function EditEmployeeMaster({ closeEdit, item, setData, Data, show, setshow }) {
       dateOfBirth,
       guardianname,
       basicSalary,
+	  allowedleave,
       universalAcNo,
       city,
       country,
       tablerow,
       TotalSalary,
     };
-    setFormdata(formData);
-    console.log("ffffooooorrrrrmmmmdddaaatttaaa", formData);
+   
     // Update Data array if itemid matches
     const updatedData = Data.map((dataItem) => {
       if (dataItem._id === item._id) {
@@ -250,6 +250,7 @@ function EditEmployeeMaster({ closeEdit, item, setData, Data, show, setshow }) {
 
       if (!isNaN(totalAmount)) {
         // Check if the calculated totalAmount is a valid number
+		console.log("good by salary",totalAmount);
         setTotalSalary(totalAmount);
       } else {
         console.error("Invalid totalAmount:", totalAmount);
@@ -258,6 +259,7 @@ function EditEmployeeMaster({ closeEdit, item, setData, Data, show, setshow }) {
       console.error("Error in useEffect:", error);
     }
   }, [tablerow, basicSalary, salarymasterData]);
+
 
   const handleSecondInputChange = (index, value) => {
     const updatedTableRows = [...tablerow];
@@ -686,6 +688,21 @@ function EditEmployeeMaster({ closeEdit, item, setData, Data, show, setshow }) {
                         </div>
                       </div>
 
+					  <div className="col-12 col-md-6 col-xl-6">
+                        <div className="form-group local-forms">
+                          <label>
+                           Allowed Leave<span className="login-danger">*</span>
+                          </label>
+                          <input
+                            className="form-control"
+                            type="number"
+                            placeholder=""
+                            value={allowedleave}
+                            onChange={(e) => setAllowedLeave(e.target.value)}
+                          />
+                        </div>
+                      </div>
+
                       <div className="col-12 col-md-6 col-xl-6">
                         <div className="form-group local-forms">
                           <label>
@@ -778,7 +795,7 @@ function EditEmployeeMaster({ closeEdit, item, setData, Data, show, setshow }) {
                                                 value={row._id}
                                                 key={row._id}
                                               >
-                                                {row.tabledata}
+                                                {row.salaryComponent.name}
                                               </option>
                                               {salarymasterData.map(
                                                 (option) => (
@@ -877,11 +894,7 @@ function EditEmployeeMaster({ closeEdit, item, setData, Data, show, setshow }) {
                                           <input
                                             className="form-control"
                                             type="number"
-                                            value={
-                                              TotalSalary
-                                                ? TotalSalary
-                                                : basicSalary
-                                            }
+                                           value={ TotalSalary ? TotalSalary : basicSalary}
                                             readOnly
                                           />
                                           {/* Display the total amount here */}
