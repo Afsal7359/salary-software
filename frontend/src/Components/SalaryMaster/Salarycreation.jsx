@@ -2,7 +2,6 @@ import React, { useState ,useEffect, useMemo} from 'react';
 import PageHeader from '../PageHeader'
 import { getallPurposee } from '../../Apicalls/Purpose';
 import { toast } from 'react-toastify';
-import { getallType } from '../../Apicalls/Type';
 import { useForm } from 'react-hook-form';
 import { Addsalarymaster, getallSalarycount } from '../../Apicalls/salarymaster';
 import Salarylist from './Salarylist';
@@ -31,11 +30,8 @@ function Salarycreation() {
 	const [type, setType]=useState([]);
 	const [name, setName] = useState([]);
 	const [PurposeId, setPurposeId]=useState('');
-	const [TypeId, setTypeId]=useState('');
 	const [formdata, setformdata] = useState([]);
-
 	const [isPurposeDataFetched, setIsPurposeDataFetched] = useState(false);
-	const [isTypeDataFetched, setIsTypeDataFetched] = useState(false);
 
 
 	const {
@@ -60,30 +56,10 @@ function Salarycreation() {
 		}
 	  };
 
-	//   const handleTypeClick = async () =>{
-	// 	try {
-	// 		if(!isTypeDataFetched){
-	// 			const response = await getallType();
-	// 			if(response.success){
-	// 				setTypeData(response.data);
-	// 			}else{
-	// 				setTypeData([]);
-	// 			}
-	// 			setIsTypeDataFetched(true);
-	// 		}
-	// 	}catch(error){
-	// 		toast.error(error.message);
-	// 	}
-	//   }
-
-
-
 	  const handlePurposeChange = (event) => {
 		setPurposeId(event.target.value);
 	  };
-	//   const handleTypeChange = (event)=>{
-	// 	setType(event.target.value);
-	//   }
+
 
 	// Function to handle change in the dropdown
 	const handleSelectChange = (event) => {
@@ -92,18 +68,21 @@ function Salarycreation() {
 
 	  const handleSubmit = async (event) => {
 		event.preventDefault();
+		if (!name) {
+			toast.error("Name is required");
+			return;
+		  }
+		  if (!type) {
+			toast.error("type is required");
+			return;
+		  }
 		const formdatas = {
 			name,
 			PurposeId,
 			type,
 			salarymasterId:`MS${count.toString().padStart(3, '0')}`
 		  };
-		  console.log(formdatas);
 		  try {
-		
-	  
-			// Example usage:
-	  
 			const response = await Addsalarymaster(formdatas);
 			
 			if (response.success) {
@@ -111,7 +90,6 @@ function Salarycreation() {
 			  setformdata(response.data);
 			  setName('');
 			  setType('');
-		
 			  toast.success(response.message);
 			} else {
 			  toast.error(response.message);

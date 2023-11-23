@@ -17,12 +17,10 @@ function SalaryMasteredit({ closeEditModal, item,setData,Data}) {
 
 
   const [PurposeData, setPurposeData] = useState([]);
-	const [TypeData, setTypeData]=useState([]);
 	const [PurposeId, setPurposeId]=useState('');
 	const [Type, setType]=useState('');
 
 	const [isPurposeDataFetched, setIsPurposeDataFetched] = useState(false);
-	const [isTypeDataFetched, setIsTypeDataFetched] = useState(false);
 
   const handlePurposeClick = async () => {
    
@@ -40,23 +38,6 @@ function SalaryMasteredit({ closeEditModal, item,setData,Data}) {
       toast.error(error.message);
     }
   };
-
-  // const handleTypeClick = async () =>{
-  //   try {
-  //       if(!isTypeDataFetched){
-  //           const response = await getallType();
-  //           if(response.success){
-  //               setTypeData(response.data);
-  //           }else{
-  //               setTypeData([]);
-  //           }
-  //           setIsTypeDataFetched(true);
-  //       }
-  //   }catch(error){
-  //       toast.error(error.message);
-  //   }
-  // }
-
 
 
   const handlePurposeChange = (event) => {
@@ -81,18 +62,16 @@ function SalaryMasteredit({ closeEditModal, item,setData,Data}) {
   
     formData._id =itemid;
     try {
-        console.log(formData,'dddddddddddddddddddddddddddd');
       const response = await editsalarymaster(formData);
       if (response.success) {
         const updatedData = Data.map((dataItem) => {
           if (dataItem._id === response.data._id) {
-              console.log("itemid is here");
             // Update the name with the new value from formData
             return {
               ...dataItem,
               name: response.data.name,
               purpose: { name:response.data.purpose.name }, // Update purpose with the value from formData
-              type: { name:response.data.type }, // Update type with the value from formData
+              type: response.data.type , // Update type with the value from formData
             };
           } 
           return dataItem;
@@ -201,16 +180,9 @@ function SalaryMasteredit({ closeEditModal, item,setData,Data}) {
                                      
                                         <option value="Increment">Increment</option>
                                         <option value="Decrement">Decrement</option>
-                                        {/* {TypeData.map((option) => (
-                                            <option key={option._id} value={option._id}>
-                                                {option.name}
-                                            </option>
-                                        ))} */}
                                     </select>
                                 )}
                             />
-
-                          
                             {errors.name && <span className="text-danger">{errors.name.message}</span>}
                           </div>
                         </div>
