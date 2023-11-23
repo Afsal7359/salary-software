@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState,useEffect, useMemo } from 'react';
 import PageHeader from '../PageHeader';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
@@ -33,6 +33,12 @@ const [count,setcount]=useState(0)
     formState: { errors },
   } = useForm();
   
+  const headerdata = useMemo(() => {
+		return {
+		  data:"Employee master",
+		  page:"AccountType"
+		};
+	  }, []);
 
   const onSubmit = async (data) => {
     data.accounttypeid=`MA${count.toString().padStart(3, '0')}`
@@ -43,7 +49,6 @@ const [count,setcount]=useState(0)
         setformdata(response.data)
         toast.success(response.message);
         setFormData('');
-        // setAccountTypeId
       } else {
         toast.error(response.message);
       }
@@ -55,7 +60,7 @@ const [count,setcount]=useState(0)
  
   return (
     <>
-      <PageHeader />
+      <PageHeader headerdata={headerdata}/>
       <div className="row">
         <div className="col-sm-12">
           <div className="card">

@@ -4,7 +4,6 @@ module.exports={
     GetDesignation:async(req,res)=>{
         try{
             const response= await Designation.find({ isdeleted: { $ne: true } }).sort({_id:-1})
-            console.log("Designation data get Successfully");
             res.status(200).json({
               success: true,
               message: "Designation data get Successfully",
@@ -30,8 +29,6 @@ module.exports={
             { isdeleted: false },
             { new: true } // To get the updated document
           );
-    
-          console.log("Designation marked as not deleted.");
           res.status(200).json({
             success: true,
             message: "Designation added successfully.",
@@ -45,8 +42,6 @@ module.exports={
         } else {
           const newDesignation = new Designation(data);
           await newDesignation.save();
-    
-          console.log("Designation Added Successfully");
           res.status(200).json({
             success: true,
             message: "Designation added successfully.",
@@ -79,7 +74,6 @@ module.exports={
     
           // Update the existing Employeetype with new data
           await Designation.updateOne({ _id: id }, data);
-          console.log("Designation Edited Successfully");
           res.status(200).json({
             success: true,
             message: "Designation edited successfully.",

@@ -38,3 +38,12 @@ export const editsalarymaster= async (payload) => {
       return err.response.data;
     }
   };
+
+  export const getallSalarycount = async () => {
+    try {
+        const response = await instance.get('salary/getallsalarycount');
+        return response.data
+    } catch (err) {
+        return err.response.data;
+    }
+}

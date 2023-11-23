@@ -37,3 +37,12 @@ export const editType= async (payload) => {
       return err.response.data;
     }
   };
+
+  export const getallTypecount = async () => {
+    try {
+        const response = await instance.get('Type/getalltypecount');
+        return response.data
+    } catch (err) {
+        return err.response.data;
+    }
+}

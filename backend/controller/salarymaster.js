@@ -4,9 +4,8 @@ const Salarymaster = require("../models/salary");
 module.exports={
     GetSalarymaster:async(req,res)=>{
         try{
-            const response = await Salarymaster.find({ isdeleted: { $ne: true } })
+            const response = await Salarymaster.find({ isdeleted: { $ne: true } }).sort({ _id: -1 })
             .populate('purpose')
-            console.log("Salarymaster data get Successfully");
             res.status(200).json({
               success: true,
               message: "Salarymaster data get Successfully",
@@ -22,25 +21,19 @@ module.exports={
     },
     AddSalarymaster:async(req,res)=>{
         try {
-          console.log(req.body);
             const { name, PurposeId, type,salarymasterId } = req.body;
-    
-            // Create a new Post document with the provided departmentId, unitId, and designationId
             const newPost = new Salarymaster({
                 name,
                 purpose: PurposeId,
                 type: type,
                 salarymasterId
             });
-            console.log(newPost,'daaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaataaaaaaaaaaaaaaaaaaaaaaaaaa');
-    
             await newPost.save();
              // Populate the fields and return the populated post
             const Salary = await Salarymaster.populate(newPost, [
                 { path: 'purpose' },
               ]);
             
-                    console.log("Salarymaster Added Successfully");
                     res.status(200).json({
                         success: true,
                         message: "Salary master added successfully.",
@@ -57,7 +50,6 @@ module.exports={
             },
 
             EditSalaryMaster: async (req, res) => {
-              console.log(req.body, 'gggggggggggggggggggggggggggggggg');
               try {
                   const { name, purposeId, type, salarymasterId } = req.body;
                   const { id } = req.params;
@@ -74,11 +66,6 @@ module.exports={
                   .populate([
                     { path: 'purpose' },
                   ]);
-                
-
-                  console.log(populatedSalary,"rrrrrrrrrrrrrrrrrrrrrrr");
-          
-                  console.log("Salarymaster Edited Successfully");
                   res.status(200).json({
                       success: true,
                       message: "Salary master Edited successfully.",
@@ -112,7 +99,6 @@ module.exports={
          
          // Soft delete by updating isdeleted field
       await Salarymaster.updateOne({ _id: id }, { $set: { isdeleted: true } });
-          console.log(" Deleted Successfully");
           res.status(200).json({
             success: true,
             message: "Deleted successfully.",
@@ -125,4 +111,22 @@ module.exports={
           });
         }
       },
+      GetsalarymasterCount : async (req, res) => {
+        try {
+          const SalarymasterCount = await Salarymaster.countDocuments();
+          
+          res.status(200).json({
+            success: true,
+            message: "Account type count retrieved successfully.",
+            data: { count: SalarymasterCount },
+          });
+        } catch (error) {
+          console.error("Error:", error);
+          res.status(500).json({
+            success: false,
+            message: "Internal server error.",
+            error: error.message,
+          });
+        }
+      }
 }

@@ -7,7 +7,6 @@ module.exports={
             .populate('designation')
             .populate('department')
             .populate('unit');
-            console.log("Post data get Successfully");
             res.status(200).json({
               success: true,
               message: "Post data get Successfully",
@@ -40,8 +39,6 @@ module.exports={
         { path: 'unit' },
         { path: 'designation' },
       ]);
-    
-            console.log("Post Added Successfully");
             res.status(200).json({
                 success: true,
                 message: "Post added successfully.",
@@ -73,7 +70,6 @@ module.exports={
          
          // Soft delete by updating isdeleted field
       await Post.updateOne({ _id: id }, { $set: { isdeleted: true } });
-          console.log(" Deleted Successfully");
           res.status(200).json({
             success: true,
             message: "Deleted successfully.",
@@ -87,7 +83,6 @@ module.exports={
         }
       },
       EditPost: async (req, res) => {
-        console.log(req.body, 'gggggggggggggggggggggggggggggggg');
         try {
             const {  departmentId, unitId, designationId } = req.body;
             const { id } = req.params;
@@ -106,11 +101,6 @@ module.exports={
               { path: 'unit' },
               { path: 'designation' },
             ]);
-          
-
- 
-    
-            console.log("post Edited Successfully");
             res.status(200).json({
                 success: true,
                 message: "post master Edited successfully.",

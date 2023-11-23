@@ -42,7 +42,6 @@ function Accounttypelist({formdata,setformdata}) {
 
  // Function to handle the click event
 const handleEditClick = (item) => {
-  // Set showEditModal to true when the "Edit" button is clicked
   setShowEditModal(true);
   setSelectedItem(item);
 };
@@ -55,19 +54,17 @@ const handleEditClick = (item) => {
 };
 
 const closeDeleteModal = () => {
-  // Set showEditModal to false when the modal is closed
   setshowDeleteModal(false);
 };
 
 // Function to close the modal
 const closeEditModal = () => {
-  // Set showEditModal to false when the modal is closed
   setShowEditModal(false);
 };
 
 
   if (isLoading) {
-    return <div>Loading...</div>; // You can render a loading indicator here
+    return <div>Loading...</div>; 
   }
 
   return (

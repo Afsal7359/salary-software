@@ -194,11 +194,16 @@ function Bankaccount() {
 		  console.log(err);
 		}
 	  };
-	
+	  const headerdata = useMemo(() => {
+		return {
+		  data:"BankAccount master",
+		  page:"Add BankAccount"
+		};
+	  }, []);
 	
   return (
     <>
-    <PageHeader/>
+    <PageHeader headerdata={headerdata}/>
     <div className="row">
                    <div className="col-sm-12">
                        <div className="card">

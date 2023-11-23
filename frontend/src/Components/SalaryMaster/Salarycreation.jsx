@@ -1,34 +1,32 @@
-import React, { useState ,useEffect} from 'react';
+import React, { useState ,useEffect, useMemo} from 'react';
 import PageHeader from '../PageHeader'
 import { getallPurposee } from '../../Apicalls/Purpose';
 import { toast } from 'react-toastify';
 import { getallType } from '../../Apicalls/Type';
 import { useForm } from 'react-hook-form';
-import { Addsalarymaster } from '../../Apicalls/salarymaster';
+import { Addsalarymaster, getallSalarycount } from '../../Apicalls/salarymaster';
 import Salarylist from './Salarylist';
 
 const MemoizedSalarylist = React.memo(Salarylist);
 
 function Salarycreation() {
 
-	const [salarymasterId, setSalarymasterId] = useState('');
+	const [count,setcount]=useState(0)
 
-	const generateUniqueSixLetterID = () => {
-		const characters = '765464565434354364564560123456789';
-		let id = '';
-		for (let i = 0; i < 6; i++) {
-		  const randomIndex = Math.floor(Math.random() * characters.length);
-		  id += characters[randomIndex];
-		}
-		return id;
-	  };
-	  
-	  
-	  useEffect(() => {
-		const uniqueSixCharacterID = generateUniqueSixLetterID();
-		setSalarymasterId(uniqueSixCharacterID);
-	  }, []);
-	
+
+  // Usage in useEffect
+  useEffect(() => {
+    const fetchUniqueSixCharacterID = async () => {
+      try {
+        const response = await getallSalarycount();
+        setcount( response.data.count+1);
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    };
+  
+    fetchUniqueSixCharacterID();
+  }, []);
 	const [PurposeData, setPurposeData] = useState([]);
 	const [type, setType]=useState([]);
 	const [name, setName] = useState([]);
@@ -91,19 +89,14 @@ function Salarycreation() {
 	const handleSelectChange = (event) => {
 	  setType(event.target.value); // Update the selected value in the state
 	};
-	console.log('ifffffffif : ',type);
+
 	  const handleSubmit = async (event) => {
 		event.preventDefault();
-		const uniqueSixCharacterID = generateUniqueSixLetterID(); // Reusing the same function
-		setSalarymasterId(uniqueSixCharacterID);
-		// Use unitId, departmentId, designationId as needed
-		console.log('Purpose ID:', PurposeId);
-	
 		const formdatas = {
 			name,
 			PurposeId,
 			type,
-			salarymasterId
+			salarymasterId:`MS${count.toString().padStart(3, '0')}`
 		  };
 		  console.log(formdatas);
 		  try {
@@ -112,13 +105,13 @@ function Salarycreation() {
 			// Example usage:
 	  
 			const response = await Addsalarymaster(formdatas);
-			console.log(response, 'tereresponse');
+			
 			if (response.success) {
+				setcount((prevCount) => prevCount + 1);
 			  setformdata(response.data);
 			  setName('');
 			  setType('');
-			 
-			  setSalarymasterId
+		
 			  toast.success(response.message);
 			} else {
 			  toast.error(response.message);
@@ -127,10 +120,15 @@ function Salarycreation() {
 			console.log(err);
 		  }
 		};
-
+		const headerdata = useMemo(() => {
+			return {
+			  data:"Salary master",
+			  page:"Add Salarymaster"
+			};
+		  }, []);
   return (
    <>
-    <PageHeader/>
+    <PageHeader headerdata={headerdata}/>
      <div className="row">
 					<div className="col-sm-12">
 					
@@ -146,7 +144,7 @@ function Salarycreation() {
 										<div className="col-12 col-md-6 col-xl-6">  
 											<div className="form-group local-forms">
 												<label >Salary Component Id<span className="login-danger">*</span></label>
-												<input className="form-control" type="text" placeholder="" value={salarymasterId}  style={{ backgroundColor: "#cbd0d6" }} readOnly/>
+												<input className="form-control" type="text" placeholder="" value={`MS${count.toString().padStart(3, '0')}`}  style={{ backgroundColor: "#cbd0d6" }} readOnly/>
 											</div>
 										</div>
 										<div className="col-12 col-md-6 col-xl-6">

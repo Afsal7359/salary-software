@@ -1,4 +1,4 @@
-const accounttype =require('../models/AccountType')
+const accounttype = require("../models/AccountType");
 
 module.exports = {
   Adaccounttype: async (req, res) => {
@@ -8,7 +8,6 @@ module.exports = {
       const existingAccountType = await accounttype.findOne({
         $or: [{ name: uppercasedName }, { name: data.name.toLowerCase() }],
       });
-  
       if (existingAccountType && existingAccountType.isdeleted) {
         // Update the isdeleted flag to false and get the updated document
         const updatedAccountType = await accounttype.findOneAndUpdate(
@@ -17,9 +16,7 @@ module.exports = {
           },
           { isdeleted: false },
           { new: true } // To get the updated document
-        )
-  
-        console.log("Account type updated successfully.");
+        );
         res.status(200).json({
           success: true,
           message: "Account type updated successfully.",
@@ -33,8 +30,6 @@ module.exports = {
       } else {
         const newAccountType = new accounttype(data);
         await newAccountType.save();
-  
-        console.log("Account type added successfully.");
         res.status(200).json({
           success: true,
           message: "Account type added successfully.",
@@ -49,14 +44,13 @@ module.exports = {
       });
     }
   },
-  
 
   Editaccounttype: async (req, res) => {
     try {
       const data = req.body;
-      const {id } = req.params;
+      const { id } = req.params;
       // Check if an Employeetype with the specified employeeid exists
-      const existingaccounttype= await accounttype.findOne({_id:id});
+      const existingaccounttype = await accounttype.findOne({ _id: id });
 
       if (!existingaccounttype) {
         return res.status(404).json({
@@ -66,7 +60,6 @@ module.exports = {
       }
       // Update the existing Employeetype with new data
       await accounttype.updateOne({ _id: id }, data);
-      console.log("accounttype Edited Successfully");
       res.status(200).json({
         success: true,
         message: "accounttype edited successfully.",
@@ -82,22 +75,20 @@ module.exports = {
 
   Deleteaccounttype: async (req, res) => {
     try {
-      const {id } = req.params;
+      const { id } = req.params;
 
       // Check if an operational with the specified employeeid exists
-      const existingaccounttype = await accounttype.findOne({_id:id });
+      const existingaccounttype = await accounttype.findOne({ _id: id });
 
       if (!existingaccounttype) {
         return res.status(404).json({
           success: false,
           message: "accounttype not found.",
-          
         });
       }
 
       // Delete the existing operational
       await accounttype.updateOne({ _id: id }, { $set: { isdeleted: true } });
-      console.log(" Deleted Successfully");
       res.status(200).json({
         success: true,
         message: "Deleted successfully.",
@@ -112,21 +103,18 @@ module.exports = {
   },
   Getallaccounttype: async (req, res) => {
     try {
-
-      const accounttypedata = await accounttype.find({ isdeleted: { $ne: true } }).sort({ _id: -1 }); // Sorting by _id in descending order
-      
-
-
+      const accounttypedata = await accounttype
+        .find({ isdeleted: { $ne: true } })
+        .sort({ _id: -1 }); // Sorting by _id in descending order
       if (!accounttypedata) {
         return res.status(404).json({
           success: false,
           message: "accounttype not found.",
         });
       }
-
       res.status(200).json({
         success: true,
-       data: accounttypedata,
+        data: accounttypedata,
       });
     } catch (err) {
       res.status(500).json({
@@ -136,22 +124,22 @@ module.exports = {
       });
     }
   },
-GetAccountTypeCount : async (req, res) => {
-  try {
-    const accountTypeCount = await accounttype.countDocuments();
-    
-    res.status(200).json({
-      success: true,
-      message: "Account type count retrieved successfully.",
-      data: { count: accountTypeCount },
-    });
-  } catch (error) {
-    console.error("Error:", error);
-    res.status(500).json({
-      success: false,
-      message: "Internal server error.",
-      error: error.message,
-    });
-  }
-}
-}
+  GetAccountTypeCount: async (req, res) => {
+    try {
+      const accountTypeCount = await accounttype.countDocuments();
+
+      res.status(200).json({
+        success: true,
+        message: "Account type count retrieved successfully.",
+        data: { count: accountTypeCount },
+      });
+    } catch (error) {
+      console.error("Error:", error);
+      res.status(500).json({
+        success: false,
+        message: "Internal server error.",
+        error: error.message,
+      });
+    }
+  },
+};

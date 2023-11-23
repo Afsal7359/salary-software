@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from 'react'
+import React, { useState,useEffect, useMemo } from 'react'
 import PageHeader from '../PageHeader'
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
@@ -48,10 +48,16 @@ function Unit() {
       toast.error(err.message);
     }
   };
+  const headerdata = useMemo(() => {
+		return {
+		  data:"Employee master",
+		  page:"Unit"
+		};
+	  }, []);
 
   return (
     <>
-      <PageHeader/>
+      <PageHeader headerdata={headerdata}/>
     <div className="row">
 					<div className="col-sm-12">
 						<div className="card">

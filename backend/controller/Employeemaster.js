@@ -15,8 +15,11 @@ module.exports = {
           { isdeleted: false },
           { new: true } // To get the updated document
         );
+<<<<<<< HEAD
 
         console.log("Employee marked as not deleted.");
+=======
+>>>>>>> 4461d7e7df0f3503a73cfd7248c69ad1d41ccb29
         res.status(200).json({
           success: true,
           message: "Employee added successfully.",
@@ -30,8 +33,11 @@ module.exports = {
       } else {
         const newEmployee = new Employee(data);
         await newEmployee.save();
+<<<<<<< HEAD
 
         console.log("Employee Added Successfully");
+=======
+>>>>>>> 4461d7e7df0f3503a73cfd7248c69ad1d41ccb29
         res.status(200).json({
           success: true,
           message: "Employee added successfully.",
@@ -47,12 +53,18 @@ module.exports = {
     }
   },
   EditEmployee: async (req, res) => {
+<<<<<<< HEAD
     console.log("okokokokokokokokokookoookoookokk");
     try {
       console.log("reqqqqbody", req.body);
       const data = req.body;
 
       const { id } = req.params;
+=======
+    try {
+      const data = req.body;
+      const {id } = req.params;
+>>>>>>> 4461d7e7df0f3503a73cfd7248c69ad1d41ccb29
       // Check if an Employee with the specified employeeid exists
       const existingEmployee = await Employee.findOne({ _id: id });
 
@@ -64,7 +76,6 @@ module.exports = {
       }
       // Update the existing Employee with new data
       await Employee.updateOne({ _id: id }, data);
-      console.log("Employee Edited Successfully");
       res.status(200).json({
         success: true,
         message: "Employee edited successfully.",
@@ -80,8 +91,12 @@ module.exports = {
 
   DeleteEmployee: async (req, res) => {
     try {
+<<<<<<< HEAD
       console.log("haaaaaaaaaaaaaaaaai", req.params);
       const { id } = req.params;
+=======
+      const {id } = req.params;
+>>>>>>> 4461d7e7df0f3503a73cfd7248c69ad1d41ccb29
 
       // Check if an Employee with the specified employeeid exists
       const existingEmployee = await Employee.findOne({ _id: id });
@@ -92,10 +107,17 @@ module.exports = {
           message: "Employee not found.",
         });
       }
+<<<<<<< HEAD
 
       // Soft delete by updating isdeleted field
       await Employee.updateOne({ _id: id }, { $set: { isdeleted: true } });
       console.log(" Deleted Successfully");
+=======
+     
+     
+     // Soft delete by updating isdeleted field
+  await Employee.updateOne({ _id: id }, { $set: { isdeleted: true } });
+>>>>>>> 4461d7e7df0f3503a73cfd7248c69ad1d41ccb29
       res.status(200).json({
         success: true,
         message: "Deleted successfully.",
@@ -156,7 +178,7 @@ module.exports = {
 
       res.status(200).json({
         success: true,
-        message: "BankAccountCount retrieved successfully.",
+        message: "EmployeeCount retrieved successfully.",
         data: { count: EmployeeCount },
       });
     } catch (error) {

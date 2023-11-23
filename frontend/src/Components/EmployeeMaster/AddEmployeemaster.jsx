@@ -1,16 +1,15 @@
-import React, { useEffect, useState } from "react";
-import PageHeader from "../PageHeader";
-import SalaryComponent from "./SalaryComponent";
-import { toast } from "react-toastify";
-import { useForm } from "react-hook-form";
-import { getallemployeetype } from "../../Apicalls/Employeetype";
-import { getallpost } from "../../Apicalls/Post";
-import { getallSalary } from "../../Apicalls/salarymaster";
-import {
-  Addemployee,
-  getallemployeemastercount,
-} from "../../Apicalls/EmployeeMater";
-import Employeemasterlist from "./Employeemasterlist";
+
+import React,{useEffect, useMemo, useState} from 'react'
+import PageHeader from '../PageHeader'
+import SalaryComponent from './SalaryComponent'
+import { toast } from 'react-toastify';
+import { useForm } from 'react-hook-form';
+import { getallemployeetype } from '../../Apicalls/Employeetype';
+import { getallpost } from '../../Apicalls/Post';
+import { getallSalary } from '../../Apicalls/salarymaster';
+import { Addemployee, getallemployeemastercount } from '../../Apicalls/EmployeeMater';
+import Employeemasterlist from './Employeemasterlist';
+
 const AddEmployeemaster = () => {
   const [count, setcount] = useState(0);
 
@@ -105,6 +104,7 @@ const AddEmployeemaster = () => {
   };
   // console.log('ghfdgfygfghfghf',salarymasterId);
 
+
   console.log("salary data : ", salarymasterData);
 
   const [name, setName] = useState("");
@@ -129,6 +129,19 @@ const AddEmployeemaster = () => {
   const [city, setCity] = useState("");
   const [country, setCountry] = useState("");
 
+
+
+
+
+
+	  const headerdata = useMemo(() => {
+		return {
+		  data:"Employee master",
+		  page:"Add employeemaster"
+		};
+	  }, []);
+	
+	
   const [tableRows, settableRows] = useState([]);
   const [percentage, setPercentage] = useState("");
   const [calculatePercentage, setCalculatePercentage] = useState("");
@@ -191,24 +204,30 @@ const AddEmployeemaster = () => {
     }
   };
 
-  const handleAddRow = () => {
-    settableRows((prevRows) => [
-      ...prevRows,
-      {
-        id: Date.now(),
-        salaryComponent: "",
-        percentage: "",
-        value: "",
-        price: "",
-      },
-    ]);
-  };
 
-  const handleRemoveRow = (id) => {
-    settableRows((prevRows) => prevRows.filter((row) => row.id !== id));
-  };
+
+
 
   const [totalAmount, setTotalAmount] = useState(0);
+
+	
+	  const handleAddRow = () => {
+		settableRows((prevRows) => [
+		  ...prevRows,
+		  {
+			id: Date.now(),
+			salaryComponent: '',
+			percentage: '',
+			value: '',
+			price: '',
+		  },
+		]);
+	  };
+	
+	  const handleRemoveRow = (id) => {
+		settableRows((prevRows) => prevRows.filter((row) => row.id !== id));
+	  };
+
 
   useEffect(() => {
     try {
@@ -275,6 +294,7 @@ const AddEmployeemaster = () => {
   };
 
   return (
+
     <>
       <PageHeader />
       {!state ? (
@@ -293,6 +313,8 @@ const AddEmployeemaster = () => {
         </button>
       )}
 
+   
+  
       {state && (
         <>
           <div className="row">
