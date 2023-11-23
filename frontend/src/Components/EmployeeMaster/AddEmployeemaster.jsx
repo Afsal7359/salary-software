@@ -104,8 +104,6 @@ const AddEmployeemaster = () => {
 		settableRows(updatedTableRows); // Update the state with the modified rows
 	  }
 
-
-
 	  const headerdata = useMemo(() => {
 		return {
 		  data:"Employee master",
