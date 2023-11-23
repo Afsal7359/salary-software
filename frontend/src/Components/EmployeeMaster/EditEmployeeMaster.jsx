@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import PageHeader from "../PageHeader";
-import SalaryComponent from "./SalaryComponent";
 import { toast } from "react-toastify";
-import { Controller, useForm } from "react-hook-form";
 import { getallemployeetype } from "../../Apicalls/Employeetype";
 import { getallpost } from "../../Apicalls/Post";
 import { getallSalary } from "../../Apicalls/salarymaster";
@@ -59,8 +56,7 @@ function EditEmployeeMaster({ closeEdit, item, setData, Data, show, setshow }) {
     setPostId(event.target.value);
   };
 
-  const [issalarymasterDataFetched, setIsSalarymasterDataFetched] =
-    useState(false);
+  const [issalarymasterDataFetched, setIsSalarymasterDataFetched] =useState(false);
   const [salarymasterData, setSalarymasterData] = useState([]);
   const [salarymasterId, setSalarymasterId] = useState("");
 
@@ -79,6 +75,10 @@ function EditEmployeeMaster({ closeEdit, item, setData, Data, show, setshow }) {
       toast.error(error.message);
     }
   };
+
+  useEffect(()=>{
+	handlesalarymasterclick()
+  },[])
   const [salarycomponent, setSalaryComponent] = useState([]);
 
   const handlesalarymasterchange = (event, index) => {
@@ -119,6 +119,7 @@ console.log('itemmmm',item);
   const [country, setCountry] = useState(item?.country);
   const [tabledata, setTabledata] = useState(item?.tableRow);
   const [TotalSalary, setTotalSalary] = useState(item?.TotalSalary);
+  
   const [gender, setGender] = useState(item?.gender);
   const [allowedleave,setAllowedLeave]=useState(item?.allowedleave);
   const [employelist, setEmployelist] = useState(false);
@@ -225,39 +226,53 @@ console.log('itemmmm',item);
   };
 
   useEffect(() => {
-    try {
-      const totalAmount = tablerow.reduce((acc, row) => {
-        const salaryType = salarymasterData.find(
-          (item) => item._id === row.salaryComponent
-        );
-		
-        if (
-          salaryType &&
-          (salaryType.type === "Increment" || salaryType.type === "Decrement")
-        ) {
-          const price = parseFloat(row.price);
 
-          if (!isNaN(price)) {
-            // Check if the parsed price is a valid number
-            return acc + (salaryType.type === "Increment" ? price : -price);
-          } else {
-            console.error("Invalid price for row:", row);
-          }
-        }
+	try {
 
-        return acc;
-      }, parseFloat(basicSalary));
+	  const totalAmount = tablerow.reduce((acc, row) => {
+		if (row.salaryComponent) {
+		  const salaryType = salarymasterData.find(
+			(item) => item._id === row.salaryComponent._id
+		  );
+  
+		  if (
+			salaryType &&
+			(salaryType.type === "Increment" || salaryType.type === "Decrement")
+		  ) {
+			const price = parseFloat(row.price);
+  
+			if (!isNaN(price)) {
+			  // Check if the parsed price is a valid number
+			  return acc + (salaryType.type === "Increment" ? price : -price);
+			} else {
+			  console.error("Invalid price for row:", row);
+			}
+		  }
+		} else if (row.type === "Increment" || row.type === "Decrement") {
+		  const price = parseFloat(row.price);
+  
+		  if (!isNaN(price)) {
+			// Check if the parsed price is a valid number
+			return acc + (row.type === "Increment" ? price : -price);
+		  } else {
+			console.error("Invalid price for row:", row);
+		  }
+		}
+  
+		return acc;
+	  }, parseFloat(basicSalary));
+  
+	  if (!isNaN(totalAmount)) {
+		// Check if the calculated totalAmount is a valid number
+		console.log("good by salary", totalAmount);
+		setTotalSalary(totalAmount);
+	  } else {
+		console.error("Invalid totalAmount:", totalAmount);
+	  }
+	} catch (error) {
+	  console.error("Error in useEffect:", error);
+	}
 
-      if (!isNaN(totalAmount)) {
-        // Check if the calculated totalAmount is a valid number
-		console.log("good by salary",totalAmount);
-        setTotalSalary(totalAmount);
-      } else {
-        console.error("Invalid totalAmount:", totalAmount);
-      }
-    } catch (error) {
-      console.error("Error in useEffect:", error);
-    }
   }, [tablerow, basicSalary, salarymasterData]);
 
 
@@ -286,12 +301,7 @@ console.log('itemmmm',item);
     setTablerow(updatedTableRows);
   };
 
-  //   const [editpage,setEditpage]=useState('')
-  //   const [tablelist,setTablelist]=useState(false)
-
-  //   if(setEditpage(false)){
-  // 	setTablelist(true)
-  //   }
+ 
   const handleclicktable = () => {
     setEditemployee(false);
     setEmployelist(true);
@@ -781,9 +791,9 @@ console.log('itemmmm',item);
                                           <td>
                                             <select
                                               className="form-control"
-                                              onMouseEnter={
-                                                handlesalarymasterclick
-                                              }
+                                            //   onMouseEnter={
+                                            //     handlesalarymasterclick
+                                            //   }
                                               onChange={(event) =>
                                                 handlesalarymasterchange(
                                                   event,

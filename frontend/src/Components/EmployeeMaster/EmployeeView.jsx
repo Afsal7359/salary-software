@@ -1,9 +1,6 @@
 import React, { useState } from 'react'
-import AddEmployeemaster from './AddEmployeemaster';
 import { useNavigate } from 'react-router-dom';
 import Employeemasterlist from './Employeemasterlist';
-import { getallemployeemaster } from '../../Apicalls/EmployeeMater';
-import { toast } from 'react-toastify';
 
 function EmployeeView({  item, setData, Data,setShowview ,formdata}){
 const [formdatas,setFormdatas]=useState(formdata)

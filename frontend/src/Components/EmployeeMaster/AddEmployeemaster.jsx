@@ -1,6 +1,6 @@
 import React,{useEffect, useMemo, useState} from 'react'
 import PageHeader from '../PageHeader'
-import SalaryComponent from './SalaryComponent'
+
 import { toast } from 'react-toastify';
 import { useForm } from 'react-hook-form';
 import { getallemployeetype } from '../../Apicalls/Employeetype';
@@ -103,6 +103,7 @@ const AddEmployeemaster = () => {
 	  console.log(updatedTableRows,"ii");
 		settableRows(updatedTableRows);
 	  }
+
 
 
 	  
@@ -738,7 +739,7 @@ const [tablestate,settablestate]=useState(false)
 												</div>
 										</div>
 
-										<div className="col-12 col-md-6 col-xl-6">
+										<div className="col-12 col-md-6 col-xl-4">
 												<div className="form-group local-forms">
 													<label>Universal Account Number<span className="login-danger">*</span></label>
 													<input
@@ -759,7 +760,7 @@ const [tablestate,settablestate]=useState(false)
 										</div>
 
 										
-										<div className="col-12 col-md-6 col-xl-6">
+										<div className="col-12 col-md-6 col-xl-4">
 												<div className="form-group local-forms">
 													<label>City <span className="login-danger">*</span></label>
 													<input
@@ -779,7 +780,7 @@ const [tablestate,settablestate]=useState(false)
 												</div>
 										</div>
 
-										<div className="col-12 col-md-6 col-xl-6">
+										<div className="col-12 col-md-6 col-xl-4">
 												<div className="form-group local-forms">
 													<label>Country <span className="login-danger">*</span></label>
 													<input
