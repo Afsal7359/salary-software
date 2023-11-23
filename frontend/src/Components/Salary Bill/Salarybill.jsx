@@ -32,16 +32,17 @@ function Salarybill() {
    };
    console.log('ggggggggggggggggggggggg',EmployeeData);
    const handleEmployeeChange = (event) => {
-	 setEmployeeId(event.target.value);
-	 filteredEmployees();
-	 if (EmployeeData) {
-		const filteredEmployees = EmployeeData.filter(data => data.name === EmployeeId);
-		setFilterEmployeeData(filteredEmployees);
-	} else {
-		setFilterEmployeeData([]);
-	}
-	
-   };
+    const newEmployeeId = event.target.value;
+    setEmployeeId(newEmployeeId);
+
+    if (EmployeeData) {
+        const filteredEmployees = EmployeeData.filter(data => data.name === newEmployeeId);
+        setFilterEmployeeData(filteredEmployees);
+    } else {
+        setFilterEmployeeData([]);
+    }
+};
+
 console.log('employeee name',EmployeeId);
 
 
@@ -50,6 +51,7 @@ console.log('employeee name',EmployeeId);
 
 console.log('filtered data :',filterEmployeeData);
 
+// console.log('filtered data NAME:',filterEmployeeData[0].name);
   return (
     <>
       <PageHeader/>
@@ -78,29 +80,44 @@ console.log('filtered data :',filterEmployeeData);
 										<datalist id="browsers">
 											{EmployeeData.map((data) => (
 												<option value={data.name} key={data._id}>
-													{data._id}
+													{data.name}
 												</option>
 											))}
 										</datalist>
 									</div>
 								</div>
 
-									<div class="col-sm-4">
-									   <div className="form-group local-forms">
-											<label>Unit <span className="login-danger">*</span></label>
-										    <input type="text" className="form-control" style={{backgroundColor:"#cbd0d6"}} readOnly/>
-										</div>
+								<div class="col-sm-4">
+									<div className="form-group local-forms">
+										<label>Unit <span className="login-danger">*</span></label>
+										<input
+											type="text"
+											className="form-control" style={{backgroundColor:"#cbd0d6"}}
+											value={filterEmployeeData[0] && filterEmployeeData[0].PostId.unit.name ? filterEmployeeData[0].PostId.unit.name:""}
+
+											// style={{ backgroundColor: "#cbd0d6" }}
+											readOnly
+										/>
 									</div>
+								</div>
+
 									<div class="col-sm-4">
 									   <div className="form-group local-forms">
-											<label>Employee <span className="login-danger">*</span></label>
-										    <input type="text" className="form-control" style={{backgroundColor:"#cbd0d6"}}  readOnly/>
+											<label>Department <span className="login-danger">*</span></label>
+										    <input type="text" className="form-control" style={{backgroundColor:"#cbd0d6"}}
+											value={filterEmployeeData[0] && filterEmployeeData[0].PostId.department.name ? filterEmployeeData[0].PostId.department.name:""
+											}
+											readOnly/>
 										</div>
 									</div>
 									<div class="col-sm-4">
 									   <div className="form-group local-forms">
 											<label>Basic Salary <span className="login-danger">*</span></label>
-										    <input type="text" className="form-control" style={{backgroundColor:"#cbd0d6"}}  readOnly/>
+										    <input type="text" className="form-control" style={{backgroundColor:"#cbd0d6"}} 
+												value={filterEmployeeData[0] && filterEmployeeData[0].basicSalary
+													? filterEmployeeData[0].basicSalary
+													: ""}
+											readOnly/>
 										</div>
 									</div>
 								</div>	
@@ -127,13 +144,16 @@ console.log('filtered data :',filterEmployeeData);
 														</thead>
 														<tbody>
 															
-															<tr>
-																<td><input type="text" className="form-control"  style={{backgroundColor:"#cbd0d6"}}  readOnly/></td>
-																<td><input type="text" className="form-control"  style={{backgroundColor:"#cbd0d6"}}  readOnly/></td>
-																<td><input type="text" className="form-control"  style={{backgroundColor:"#cbd0d6"}}  readOnly/></td>
-																<td><input type="text" className="form-control"  style={{backgroundColor:"#cbd0d6"}}  readOnly/></td>
-																<td><input type="text" className="form-control"  style={{backgroundColor:"#cbd0d6"}}  readOnly/></td>
-															</tr>
+													{filterEmployeeData[0] && filterEmployeeData[0].tablerow.map((row,index)=>(
+														<tr>
+														<td><input type="text" className="form-control"  style={{backgroundColor:"#cbd0d6"}} value={index+1}  readOnly/></td>
+														<td><input type="text" className="form-control"  style={{backgroundColor:"#cbd0d6"}} value={row.salaryComponent.name ? row.salaryComponent.name : ''}   readOnly/></td>
+														<td><input type="text" className="form-control"  style={{backgroundColor:"#cbd0d6"}} value={row.percentage ? row.percentage : ''} readOnly/></td>
+														<td><input type="text" className="form-control"  style={{backgroundColor:"#cbd0d6"}} value={row.value ? row.value : ""} readOnly/></td>
+														<td><input type="text" className="form-control"  style={{backgroundColor:"#cbd0d6"}} value={row.price ? row.price : ""} readOnly/></td>
+													</tr>
+													))}
+															
 														</tbody>
 														<tfoot>
 															<tr>
@@ -147,9 +167,8 @@ console.log('filtered data :',filterEmployeeData);
 															<div style={{display:"none"}}>balance Leave</div>
 															<tr>
 															<td colSpan="4" className="text-end"><strong>Total Amount:</strong></td>
-															<td><input className="form-control" type="number" value={210} readOnly/>
-																{/* Display the total amount here */}
-																{/* You can use the 'calculateTotalAmount' function to get the total */}
+															<td><input className="form-control" type="number" value={filterEmployeeData[0] && filterEmployeeData[0].TotalSalary?filterEmployeeData[0].TotalSalary : ""} readOnly/>
+															
 															</td>
 															
 															</tr>
