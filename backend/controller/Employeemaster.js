@@ -62,11 +62,15 @@ module.exports = {
           message: "Employee not found.",
         });
       }
-      // Update the existing Employee with new data
-      await Employee.updateOne({ _id: id }, data);
+      const updatedEmployee = await Employee.findOneAndUpdate(
+        { _id: id },
+        data,
+        { new: true }
+      );
       res.status(200).json({
         success: true,
         message: "Employee edited successfully.",
+        data:updatedEmployee,
       });
     } catch (err) {
       res.status(500).json({
