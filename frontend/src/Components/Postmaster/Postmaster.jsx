@@ -1,6 +1,6 @@
 
 
-import React, { useState,useEffect } from 'react';
+import React, { useState,useEffect, useMemo } from 'react';
 import PageHeader from '../PageHeader';
 import Postlist from './Postlist';
 import { getallDepartment } from '../../Apicalls/Department';
@@ -120,7 +120,6 @@ const Postmaster = () => {
       // Example usage:
 
       const response = await Addpost(formdatas);
-      console.log(response, 'tereresponse');
       if (response.success) {
         setcount((prevCount) => prevCount + 1);
         setformdata(response.data);
@@ -135,10 +134,15 @@ const Postmaster = () => {
       console.log(err);
     }
   };
-
+  const headerdata = useMemo(() => {
+		return {
+		  data:"Post master",
+		  page:"Add postmaster"
+		};
+	  }, []);
   return (
     <>
-      <PageHeader />
+      <PageHeader headerdata={headerdata}/>
       <div className="row">
         <div className="col-sm-12">
           <div className="card">

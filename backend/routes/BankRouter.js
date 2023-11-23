@@ -7,4 +7,5 @@ router.post('/addbank',Bankcontroller.AddBankMaster);
 router.put('/editbank/:id',Bankcontroller.EditBankMaster);
 router.get('/getallbank',Bankcontroller.GetallBank)
 router.delete('/deletebank/:id',Bankcontroller.DeleteBank)
+router.get('/getallbankcount',Bankcontroller.GetBankCount)
 module.exports = router;

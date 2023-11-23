@@ -128,4 +128,22 @@ module.exports = {
       });
     }
   },
+  GetoperationalTypeCount : async (req, res) => {
+    try {
+      const operationalTypeCount = await operational.countDocuments();
+      
+      res.status(200).json({
+        success: true,
+        message: "operationalTypeCount retrieved successfully.",
+        data: { count: operationalTypeCount },
+      });
+    } catch (error) {
+      console.error("Error:", error);
+      res.status(500).json({
+        success: false,
+        message: "Internal server error.",
+        error: error.message,
+      });
+    }
+  }
 };

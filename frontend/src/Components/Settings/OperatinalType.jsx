@@ -1,8 +1,8 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState,useEffect, useMemo } from 'react';
 import PageHeader from '../PageHeader';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
-import { AddOperationalType } from '../../Apicalls/Operational';
+import { AddOperationalType, getallOperationalTypecount } from '../../Apicalls/Operational';
 import Operationaltypelist from './Operationaltypelist';
 
 
@@ -16,35 +16,30 @@ function OperatinalType() {
     formState: { errors },
   } = useForm();
   
-  const [operationalTypeid,setOperationTypeId]=useState('');
-  const generateUniqueSixLetterID = () => {
-    const characters = '765464565434354364564560123456789';
-    let id = '';
-    for (let i = 0; i < 6; i++) {
-      const randomIndex = Math.floor(Math.random() * characters.length);
-      id += characters[randomIndex];
-    }
-    return id;
-  };
-  
-  
+  const [count,setcount]=useState(0)
+
+
+  // Usage in useEffect
   useEffect(() => {
-    const uniqueSixCharacterID = generateUniqueSixLetterID();
-    setOperationTypeId(uniqueSixCharacterID);
+    const fetchUniqueSixCharacterID = async () => {
+      try {
+        const response = await getallOperationalTypecount();
+        setcount( response.data.count+1);
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    };
+  
+    fetchUniqueSixCharacterID();
   }, []);
 
   const onSubmit = async (data) => {
-   
-      
-      // Example usage:
-      const uniqueSixLetterID = generateUniqueSixLetterID();
-      setOperationTypeId(uniqueSixLetterID)
 
-
-        data.operationalid=uniqueSixLetterID
+      data.operationalid=`MOT${count.toString().padStart(3, '0')}`
     try {
       const response = await AddOperationalType(data);
       if (response.success) {
+        setcount((prevCount) => prevCount + 1);
         setformdata(response.data)
         toast.success(response.message);
         setFormData(''); // Clear the form data after a successful submission
@@ -56,11 +51,16 @@ function OperatinalType() {
       toast.error(err.message);
     }
   };
-
+  const headerdata = useMemo(() => {
+		return {
+		  data:"Employee master",
+		  page:"OperationalType"
+		};
+	  }, []);
  
   return (
     <>
-      <PageHeader />
+      <PageHeader headerdata={headerdata}/>
       <div className="row">
         <div className="col-sm-12">
           <div className="card">
@@ -79,7 +79,7 @@ function OperatinalType() {
                         type="text"
                         className={`form-control ${errors.operationaltypeId ? 'is-invalid' : ''}`}
                         placeholder=""
-                        value={operationalTypeid}
+                        value={`MOT${count.toString().padStart(3, '0')}`}
                         style={{ backgroundColor: "#cbd0d6" }}
                         readOnly // Make the input field non-editable
                       />

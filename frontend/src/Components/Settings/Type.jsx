@@ -1,8 +1,8 @@
-import React, { useState,useEffect } from 'react'
+import React, { useState,useEffect, useMemo } from 'react'
 import PageHeader from '../PageHeader'
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
-import { AddType } from '../../Apicalls/Type';
+import { AddType, getallTypecount } from '../../Apicalls/Type';
 import Typelist from './Typelist';
 function Type() {
     const [formData, setFormData] = useState('');
@@ -14,35 +14,31 @@ function Type() {
       formState: { errors },
     } = useForm();
     
-    const [typeid,setTypeId]=useState('');
+    const [count,setcount]=useState(0)
 
-    const generateUniqueSixLetterID = () => {
-      const characters = '765464565434354364564560123456789';
-      let id = '';
-      for (let i = 0; i < 6; i++) {
-        const randomIndex = Math.floor(Math.random() * characters.length);
-        id += characters[randomIndex];
-      }
-      return id;
-    };
-    
-    
+
+    // Usage in useEffect
     useEffect(() => {
-      const uniqueSixCharacterID = generateUniqueSixLetterID();
-      setTypeId(uniqueSixCharacterID);
+      const fetchUniqueSixCharacterID = async () => {
+        try {
+          const response = await getallTypecount();
+          setcount( response.data.count+1);
+        } catch (error) {
+          console.error("Error:", error);
+        }
+      };
+    
+      fetchUniqueSixCharacterID();
     }, []);
-
     const onSubmit = async (data) => {
      
         
-        // Example usage:
-        const uniqueSixLetterID = generateUniqueSixLetterID();
-        setTypeId(uniqueSixLetterID);
+      data.Typeid=`MT${count.toString().padStart(3, '0')}`
 
-          data.Typeid=uniqueSixLetterID
       try {
         const response = await AddType(data);
         if (response.success) {
+          setcount((prevCount) => prevCount + 1);
           setformdata(response.data)
           toast.success(response.message);
           setFormData(''); // Clear the form data after a successful submission
@@ -54,10 +50,17 @@ function Type() {
         toast.error(err.message);
       }
     };
+
+    const headerdata = useMemo(() => {
+      return {
+        data:"Employee master",
+        page:"Type"
+      };
+      }, []);
   
   return (
     <>
-    <PageHeader/>
+    <PageHeader headerdata={headerdata}/>
   <div className="row">
                   <div className="col-sm-12">
                       <div className="card">
@@ -77,7 +80,7 @@ function Type() {
                         className={`form-control ${errors.TypeId ? 'is-invalid' : ''}`}
                         placeholder=""
                         style={{ backgroundColor: "#cbd0d6" }}
-                        value={typeid}
+                        value={`MT${count.toString().padStart(3, '0')}`}
                         readOnly // Make the input field non-editable
                       />
                     </div>

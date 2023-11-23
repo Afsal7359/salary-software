@@ -13,8 +13,6 @@ module.exports = {
           { isdeleted: false },
           { new: true } // To get the updated document
         );
-  
-        console.log("Type marked as not deleted.");
         res.status(200).json({
           success: true,
           message: "Type added successfully.",
@@ -28,8 +26,6 @@ module.exports = {
       } else {
         const newType = new Type(data);
         await newType.save();
-  
-        console.log("Type Added Successfully");
         res.status(200).json({
           success: true,
           message: "Type added successfully.",
@@ -60,7 +56,6 @@ module.exports = {
       }
       // Update the existing Employeetype with new data
       await Type.updateOne({ _id: id }, data);
-      console.log("Type Edited Successfully");
       res.status(200).json({
         success: true,
         message: "Type edited successfully.",
@@ -91,7 +86,6 @@ module.exports = {
 
       // Delete the existing Employeetype
       await Type.updateOne({ _id: id }, { $set: { isdeleted: true } });
-      console.log(" Deleted Successfully");
       res.status(200).json({
         success: true,
         message: "Deleted successfully.",
@@ -128,4 +122,23 @@ module.exports = {
       });
     }
   },
+
+  GetTypeCount : async (req, res) => {
+    try {
+      const TypeCount = await Type.countDocuments();
+      
+      res.status(200).json({
+        success: true,
+        message: "Type count retrieved successfully.",
+        data: { count: TypeCount },
+      });
+    } catch (error) {
+      console.error("Error:", error);
+      res.status(500).json({
+        success: false,
+        message: "Internal server error.",
+        error: error.message,
+      });
+    }
+  }
 };

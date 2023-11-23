@@ -1,8 +1,8 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState,useEffect, useMemo } from 'react';
 import PageHeader from '../PageHeader';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
-import { AddPurpose } from '../../Apicalls/Purpose';
+import { AddPurpose, getallPurposeecount } from '../../Apicalls/Purpose';
 import Purposelist from './Purposelist';
 
 
@@ -17,32 +17,29 @@ function Purpose() {
     } = useForm();
     
   
-    const [purposeid,setPurposeId]=useState('');
-    const generateUniqueSixLetterID = () => {
-      const characters = '765464565434354364564560123456789';
-      let id = '';
-      for (let i = 0; i < 6; i++) {
-        const randomIndex = Math.floor(Math.random() * characters.length);
-        id += characters[randomIndex];
-      }
-      return id;
-    };
-    
-    
+    const [count,setcount]=useState(0)
+
+
+    // Usage in useEffect
     useEffect(() => {
-      const uniqueSixCharacterID = generateUniqueSixLetterID();
-      setPurposeId(uniqueSixCharacterID);
+      const fetchUniqueSixCharacterID = async () => {
+        try {
+          const response = await getallPurposeecount();
+          setcount( response.data.count+1);
+        } catch (error) {
+          console.error("Error:", error);
+        }
+      };
+    
+      fetchUniqueSixCharacterID();
     }, []);
     const onSubmit = async (data) => {
     
-          // Example usage:
-          const uniqueSixLetterID = generateUniqueSixLetterID();
-          setPurposeId(uniqueSixLetterID);
-
-            data.Purposeid=uniqueSixLetterID
+      data.Purposeid=`MP${count.toString().padStart(3, '0')}`
         try {
           const response = await AddPurpose(data);
           if (response.success) {
+            setcount((prevCount) => prevCount + 1);
             setformdata(response.data)
             toast.success(response.message);
             setFormData(''); // Clear the form data after a successful submission
@@ -54,9 +51,16 @@ function Purpose() {
           toast.error(err.message);
         }
       };
+
+      const headerdata = useMemo(() => {
+        return {
+          data:"Employee master",
+          page:"Purpose"
+        };
+        }, []);
   return (
     <>
-      <PageHeader />
+      <PageHeader headerdata={headerdata} />
       <div className="row">
         <div className="col-sm-12">
           <div className="card">
@@ -75,7 +79,7 @@ function Purpose() {
                         type="text"
                         className={`form-control ${errors.PurposeId ? 'is-invalid' : ''}`}
                         placeholder=""
-                        value={purposeid}
+                        value={`MP${count.toString().padStart(3, '0')}`}
                         style={{ backgroundColor: "#cbd0d6" }}
                         readOnly
                       />

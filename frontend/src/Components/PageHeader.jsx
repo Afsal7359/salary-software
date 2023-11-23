@@ -1,6 +1,6 @@
 import React from 'react'
 
-function PageHeader() {
+function PageHeader({headerdata}) {
   return (
     <>
 
@@ -8,9 +8,9 @@ function PageHeader() {
 					<div className="row">
 						<div className="col-sm-12">
 							<ul className="breadcrumb">
-								<li className="breadcrumb-item"><a href="index.html">Employee Master</a></li>
+								<li className="breadcrumb-item"><a href="index.html">{headerdata.data}</a></li>
 								<li className="breadcrumb-item"><i className="feather-chevron-right"></i></li>
-								<li className="breadcrumb-item active">Add Employee</li>
+								<li className="breadcrumb-item active">{headerdata.page}</li>
 							</ul>
 						</div>
 					</div>

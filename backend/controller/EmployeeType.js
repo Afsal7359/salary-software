@@ -13,8 +13,6 @@ module.exports = {
           { isdeleted: false },
           { new: true } // To get the updated document
         );
-  
-        console.log("Employeetype marked as not deleted.");
         res.status(200).json({
           success: true,
           message: "Employeetype added successfully.",
@@ -28,8 +26,6 @@ module.exports = {
       } else {
         const newEmployeetype = new Employeetype(data);
         await newEmployeetype.save();
-  
-        console.log("Employeetype Added Successfully");
         res.status(200).json({
           success: true,
           message: "Employeetype added successfully.",
@@ -59,7 +55,6 @@ module.exports = {
       }
       // Update the existing Employeetype with new data
       await Employeetype.updateOne({ _id: id }, data);
-      console.log("Employeetype Edited Successfully");
       res.status(200).json({
         success: true,
         message: "Employeetype edited successfully.",
@@ -91,7 +86,6 @@ module.exports = {
      
      // Soft delete by updating isdeleted field
   await Employeetype.updateOne({ _id: id }, { $set: { isdeleted: true } });
-      console.log(" Deleted Successfully");
       res.status(200).json({
         success: true,
         message: "Deleted successfully.",

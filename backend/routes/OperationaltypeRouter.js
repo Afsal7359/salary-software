@@ -7,6 +7,6 @@ router.post('/addoperatinaltype',Operationaltypecontroller.Addoperational);
 router.put('/editoperatinaltype/:id',Operationaltypecontroller.Editoperational);
 router.delete('/deleteoperatinaltype/:id',Operationaltypecontroller.Deleteoperational)
 router.get('/getalloperatinaltype',Operationaltypecontroller.Getalloperational)
-
+router.get('/getalloperatinaltypecount',Operationaltypecontroller.GetoperationalTypeCount)
 
 module.exports = router;

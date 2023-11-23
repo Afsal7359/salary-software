@@ -7,7 +7,7 @@ import pdficon from '../../assets/img/icons/pdf-icon-01.svg';
 import TXticon from '../../assets/img/icons/pdf-icon-02.svg';
 import csvicon from '../../assets/img/icons/pdf-icon-03.svg';
 import Excelicon from '../../assets/img/icons/pdf-icon-04.svg';
-import { editemployeemaster, getallemployeemaster } from '../../Apicalls/EmployeeMater';
+import {getallemployeemaster } from '../../Apicalls/EmployeeMater';
 import EditEmployeeMaster from './EditEmployeeMaster';
 import EmployeeDelete from '../Modal/EmployeeDelete';
 import EmployeeView from './EmployeeView';
@@ -33,14 +33,11 @@ const Employeemasterlist = React.memo(({ formdata, setformdata }) =>{
         try {
           const result = await getallemployeemaster();
           setData(result.data);
-          console.log(Data);
           setIsLoading(false);
-          // setrender(!render)
         } catch (error) {
           console.error('Error fetching data:', error);
         }
       }
-  
       fetchData();
     }, []);
   

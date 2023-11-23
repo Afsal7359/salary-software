@@ -4,7 +4,6 @@ module.exports={
     GetUnit:async(req,res)=>{
         try{
             const response= await Unit.find({ isdeleted: { $ne: true } }).sort({_id:-1})
-            console.log("Unit data get Successfully");
             res.status(200).json({
               success: true,
               message: "Unit data get Successfully",
@@ -31,7 +30,6 @@ module.exports={
             { new: true } // To get the updated document
           );
     
-          console.log("Unit marked as not deleted.");
           res.status(200).json({
             success: true,
             message: "Unit added successfully.",
@@ -45,8 +43,6 @@ module.exports={
         } else {
           const newUnit = new Unit(data);
           await newUnit.save();
-    
-          console.log("Unit Added Successfully");
           res.status(200).json({
             success: true,
             message: "Unit added successfully.",
@@ -79,8 +75,6 @@ module.exports={
           // Update the existing Employeetype with new data
           await Unit.updateOne({ _id: id }, data);
           // await Unit.updateOne(data);
-    
-          console.log("Unit Edited Successfully");
           res.status(200).json({
             success: true,
             message: "Unit edited successfully.",

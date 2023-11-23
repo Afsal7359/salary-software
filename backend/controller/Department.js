@@ -5,7 +5,6 @@ module.exports={
     GetDepartment:async(req,res)=>{
         try{
             const response= await Department.find({ isdeleted: { $ne: true } }).sort({_id:-1})
-            console.log("Department data get Successfully");
             res.status(200).json({
               success: true,
               message: "Department data get Successfully",
@@ -31,8 +30,6 @@ module.exports={
             { isdeleted: false },
             { new: true } // To get the updated document
           );
-    
-          console.log("Department Added successfully.");
           res.status(200).json({
             success: true,
             message: "Department Added successfully.",
@@ -46,8 +43,6 @@ module.exports={
         } else {
           const newAccountType = new Department(data);
           await newAccountType.save();
-    
-          console.log("Department added successfully.");
           res.status(200).json({
             success: true,
             message: "Department added successfully.",

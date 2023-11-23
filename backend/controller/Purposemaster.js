@@ -13,8 +13,6 @@ module.exports = {
           { isdeleted: false },
           { new: true } // To get the updated document
         );
-  
-        console.log("Purpose marked as not deleted.");
         res.status(200).json({
           success: true,
           message: "Purpose added successfully.",
@@ -28,8 +26,6 @@ module.exports = {
       } else {
         const newPurpose = new Purpose(data);
         await newPurpose.save();
-  
-        console.log("Purpose Added Successfully");
         res.status(200).json({
           success: true,
           message: "Purpose added successfully.",
@@ -60,7 +56,6 @@ module.exports = {
       }
       // Update the existing Employeetype with new data
       await Purpose.updateOne({ _id: id }, data);
-      console.log("Purpose Edited Successfully");
       res.status(200).json({
         success: true,
         message: "Purpose edited successfully.",
@@ -91,7 +86,6 @@ module.exports = {
 
       // Delete the existing Employeetype
       await Purpose.updateOne({ _id: id }, { $set: { isdeleted: true } });
-      console.log(" Deleted Successfully");
       res.status(200).json({
         success: true,
         message: "Deleted successfully.",
@@ -128,4 +122,23 @@ module.exports = {
       });
     }
   },
+
+  GetpurposeCount : async (req, res) => {
+    try {
+      const PurposeCount = await Purpose.countDocuments();
+      
+      res.status(200).json({
+        success: true,
+        message: "Account type count retrieved successfully.",
+        data: { count: PurposeCount },
+      });
+    } catch (error) {
+      console.error("Error:", error);
+      res.status(500).json({
+        success: false,
+        message: "Internal server error.",
+        error: error.message,
+      });
+    }
+  }
 };

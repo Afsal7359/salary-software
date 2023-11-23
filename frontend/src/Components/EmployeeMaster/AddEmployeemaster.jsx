@@ -1,4 +1,4 @@
-import React,{useEffect, useState} from 'react'
+import React,{useEffect, useMemo, useState} from 'react'
 import PageHeader from '../PageHeader'
 import SalaryComponent from './SalaryComponent'
 import { toast } from 'react-toastify';
@@ -103,10 +103,15 @@ const AddEmployeemaster = () => {
 	  console.log(updatedTableRows,"ii");
 		settableRows(updatedTableRows); // Update the state with the modified rows
 	  }
-	// console.log('ghfdgfygfghfghf',salarymasterId);
 
-console.log('salary data : ',salarymasterData);
-	
+
+
+	  const headerdata = useMemo(() => {
+		return {
+		  data:"Employee master",
+		  page:"Add employeemaster"
+		};
+	  }, []);
 	
 	const [name, setName] = useState('');
 	const [email, setEmail]=useState('');
@@ -196,7 +201,6 @@ console.log('salary data : ',salarymasterData);
 	  
 
 
-	 
 	
 	  const handleAddRow = () => {
 		settableRows((prevRows) => [
@@ -289,7 +293,7 @@ const [tablestate,settablestate]=useState(false)
 
   return (
    <>
-   <PageHeader/>
+   <PageHeader headerdata={headerdata}/>
    {!state ?<button className='btn btn-success submit-form mb-4 ' onClick={handleclick} >Add Employee</button>: <button className='btn btn-success submit-form mb-4' onClick={handletableclick} >View Table</button>}
   
    {state&& <>  
