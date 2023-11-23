@@ -105,12 +105,6 @@ const AddEmployeemaster = () => {
 	  }
 
 
-	  const headerdata = useMemo(() => {
-		return {
-		  data:"Employee master",
-		  page:"Add employeemaster"
-		};
-	  }, []);
 
 
 console.log('salary daaaata : ',salarymasterData);
@@ -743,7 +737,7 @@ const [tablestate,settablestate]=useState(false)
 												</div>
 										</div>
 
-										<div className="col-12 col-md-6 col-xl-6">
+										<div className="col-12 col-md-6 col-xl-4">
 												<div className="form-group local-forms">
 													<label>Universal Account Number<span className="login-danger">*</span></label>
 													<input
@@ -764,7 +758,7 @@ const [tablestate,settablestate]=useState(false)
 										</div>
 
 										
-										<div className="col-12 col-md-6 col-xl-6">
+										<div className="col-12 col-md-6 col-xl-4">
 												<div className="form-group local-forms">
 													<label>City <span className="login-danger">*</span></label>
 													<input
@@ -784,7 +778,7 @@ const [tablestate,settablestate]=useState(false)
 												</div>
 										</div>
 
-										<div className="col-12 col-md-6 col-xl-6">
+										<div className="col-12 col-md-6 col-xl-4">
 												<div className="form-group local-forms">
 													<label>Country <span className="login-danger">*</span></label>
 													<input
