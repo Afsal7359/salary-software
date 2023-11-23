@@ -1,11 +1,54 @@
-import React from 'react'
+import React,{useEffect, useState} from 'react'
 import PageHeader from '../PageHeader'
+import { toast } from 'react-toastify';
+import { getallemployeemaster } from '../../Apicalls/EmployeeMater';
 
 
 
 
 function Salarybill() {
 
+	
+	const [EmployeeData, setEmployeeData] = useState([]);
+	const [EmployeeId, setEmployeeId] = useState('');
+	const [isEmployeeDataFetched, setIsEmployeeDataFetched] = useState(false);
+
+	const [filterEmployeeData,setFilterEmployeeData]=useState('');
+	const handleEmployeeclick = async () => {
+	 console.log('ddddddddddEmployee');
+	 try {
+	   if (!isEmployeeDataFetched) {
+		 const response = await getallemployeemaster ();
+		 if (response.success) {
+		   setEmployeeData(response.data);
+		 } else {
+		   setEmployeeData([]);
+		 }
+		 setIsEmployeeDataFetched(true);
+	   }
+	 } catch (error) {
+	   toast.error(error.message);
+	 }
+   };
+   console.log('ggggggggggggggggggggggg',EmployeeData);
+   const handleEmployeeChange = (event) => {
+	 setEmployeeId(event.target.value);
+	 filteredEmployees();
+	 if (EmployeeData) {
+		const filteredEmployees = EmployeeData.filter(data => data.name === EmployeeId);
+		setFilterEmployeeData(filteredEmployees);
+	} else {
+		setFilterEmployeeData([]);
+	}
+	
+   };
+console.log('employeee name',EmployeeId);
+
+
+
+
+
+console.log('filtered data :',filterEmployeeData);
 
   return (
     <>
@@ -28,13 +71,20 @@ function Salarybill() {
 										    <input type="date" className="form-control"  />
 										</div>
 									</div>
-									<div class="col-sm-4">
-									   <div className="form-group local-forms">
-											<label>Employee Name <span className="login-danger">*</span></label>
-										    <input type="search" className="form-control" placeholder='search....' />
-										
-										</div>
+								<div class="col-sm-4">
+									<div className="form-group local-forms">
+										<label>Employee Name <span className="login-danger">*</span></label>
+										<input list="browsers" name="browser" id="browser" className='form-control' onClick={handleEmployeeclick} onChange={handleEmployeeChange}/>
+										<datalist id="browsers">
+											{EmployeeData.map((data) => (
+												<option value={data.name} key={data._id}>
+													{data._id}
+												</option>
+											))}
+										</datalist>
 									</div>
+								</div>
+
 									<div class="col-sm-4">
 									   <div className="form-group local-forms">
 											<label>Unit <span className="login-danger">*</span></label>
@@ -43,7 +93,7 @@ function Salarybill() {
 									</div>
 									<div class="col-sm-4">
 									   <div className="form-group local-forms">
-											<label>Department <span className="login-danger">*</span></label>
+											<label>Employee <span className="login-danger">*</span></label>
 										    <input type="text" className="form-control" style={{backgroundColor:"#cbd0d6"}}  readOnly/>
 										</div>
 									</div>
@@ -78,11 +128,11 @@ function Salarybill() {
 														<tbody>
 															
 															<tr>
-																<td><input type="text" className="form-control" /></td>
-																<td><input type="text" className="form-control" /></td>
-																<td><input type="text" className="form-control" /></td>
-																<td><input type="text" className="form-control" /></td>
-																<td><input type="text" className="form-control" /></td>
+																<td><input type="text" className="form-control"  style={{backgroundColor:"#cbd0d6"}}  readOnly/></td>
+																<td><input type="text" className="form-control"  style={{backgroundColor:"#cbd0d6"}}  readOnly/></td>
+																<td><input type="text" className="form-control"  style={{backgroundColor:"#cbd0d6"}}  readOnly/></td>
+																<td><input type="text" className="form-control"  style={{backgroundColor:"#cbd0d6"}}  readOnly/></td>
+																<td><input type="text" className="form-control"  style={{backgroundColor:"#cbd0d6"}}  readOnly/></td>
 															</tr>
 														</tbody>
 														<tfoot>
