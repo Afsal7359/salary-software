@@ -99,6 +99,11 @@ const EmployeeSchema= new mongoose.Schema({
         
         trim:true
     },
+    allowedleave:{
+        type: Number,
+        require:true,
+        trim:true
+    },
    
     gender:{
         type: String,

@@ -4,8 +4,10 @@ module.exports = {
   AddEmployee: async (req, res) => {
     try {
       const data = req.body;
-      const existingEmployee = await Employee.findOne({ employeeno: data.employeeno });
-  
+      const existingEmployee = await  Employee.findOne({
+        employeeno: data.employeeno,
+      });
+
       if (existingEmployee && existingEmployee.isdeleted) {
         // Update the isdeleted flag to false and get the updated document
         const updatedEmployee = await Employee.findOneAndUpdate(
@@ -13,6 +15,9 @@ module.exports = {
           { isdeleted: false },
           { new: true } // To get the updated document
         );
+
+
+
         res.status(200).json({
           success: true,
           message: "Employee added successfully.",
@@ -26,6 +31,8 @@ module.exports = {
       } else {
         const newEmployee = new Employee(data);
         await newEmployee.save();
+
+
         res.status(200).json({
           success: true,
           message: "Employee added successfully.",
@@ -41,11 +48,13 @@ module.exports = {
     }
   },
   EditEmployee: async (req, res) => {
+
     try {
       const data = req.body;
       const {id } = req.params;
+
       // Check if an Employee with the specified employeeid exists
-      const existingEmployee = await Employee.findOne({_id:id});
+      const existingEmployee = await Employee.findOne({ _id: id });
 
       if (!existingEmployee) {
         return res.status(404).json({
@@ -72,20 +81,20 @@ module.exports = {
     try {
       const {id } = req.params;
 
+
       // Check if an Employee with the specified employeeid exists
-      const existingEmployee = await Employee.findOne({_id:id });
+      const existingEmployee = await Employee.findOne({ _id: id });
 
       if (!existingEmployee) {
         return res.status(404).json({
           success: false,
           message: "Employee not found.",
-          
         });
       }
-     
-     
-     // Soft delete by updating isdeleted field
-  await Employee.updateOne({ _id: id }, { $set: { isdeleted: true } });
+
+
+      // Soft delete by updating isdeleted field
+      await Employee.updateOne({ _id: id }, { $set: { isdeleted: true } });
       res.status(200).json({
         success: true,
         message: "Deleted successfully.",
@@ -101,40 +110,50 @@ module.exports = {
 
   GetallEmployee: async (req, res) => {
     try {
-      // Retrieve a single Employee record based on the specified employeeid
-      const Employees = await Employee
-      .find({ isdeleted: { $ne: true } }).sort({_id:-1})
-      .populate({
-        path: 'PostId',
-        // Include 'designation' and 'DesignationId' fields from the referenced document
-        populate: {
-          path: 'designation' // Populate the 'DesignationId' field within the 'PostId'
-        }
-      })
-      .populate('EmployeeTypeId');
-      if (!Employee) {
+      const Employees = await Employee.find({ isdeleted: { $ne: true } })
+        .sort({ _id: -1 })
+        .populate("EmployeeTypeId")
+        .populate({
+          path: "PostId",
+          populate: [
+            { path: "unit" },
+            { path: "department" },
+            { path: "designation" }
+          ],
+        })
+        .populate({
+          path: "tablerow",
+          populate: [
+            { path: "salaryComponent" },
+           
+          ],
+        })
+      
+  
+      if (!Employees || Employees.length === 0) {
         return res.status(404).json({
           success: false,
-          message: "Employee not found.",
+          message: "No Employees found.",
         });
       }
-
+  
       res.status(200).json({
         success: true,
-       data: Employees,
+        data: Employees,
       });
     } catch (err) {
       res.status(500).json({
         success: false,
-        message: "Failed to get Employee.",
+        message: "Failed to get Employees.",
         error: err.message,
       });
     }
   },
-  GetallEmployeeCount : async (req, res) => {
+  
+  GetallEmployeeCount: async (req, res) => {
     try {
       const EmployeeCount = await Employee.countDocuments();
-      
+
       res.status(200).json({
         success: true,
         message: "EmployeeCount retrieved successfully.",
@@ -148,5 +167,5 @@ module.exports = {
         error: error.message,
       });
     }
-  }
+  },
 };

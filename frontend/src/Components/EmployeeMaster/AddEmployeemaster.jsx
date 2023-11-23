@@ -101,8 +101,9 @@ const AddEmployeemaster = () => {
 		  
 		};
 	  console.log(updatedTableRows,"ii");
-		settableRows(updatedTableRows); // Update the state with the modified rows
+		settableRows(updatedTableRows);
 	  }
+
 
 	  const headerdata = useMemo(() => {
 		return {
@@ -110,6 +111,10 @@ const AddEmployeemaster = () => {
 		  page:"Add employeemaster"
 		};
 	  }, []);
+
+
+console.log('salary daaaata : ',salarymasterData);
+
 	
 	const [name, setName] = useState('');
 	const [email, setEmail]=useState('');
@@ -128,6 +133,7 @@ const AddEmployeemaster = () => {
 	const [dateOfBirth,setDateOfBirth]=useState('');
 	const [guardianname, setGuardianName]=useState('');
 	const [basicsalary, setBasicSalary]=useState('');
+	const [allowedLeave, setAllowedLeave]=useState('');
 	const [universalAcNo, setUniversalAcNo]=useState('');
 	const [city, setCity]=useState('');
 	const [country, setCountry]=useState('');
@@ -199,6 +205,7 @@ const AddEmployeemaster = () => {
 	  
 
 
+	 
 	
 	  const handleAddRow = () => {
 		settableRows((prevRows) => [
@@ -286,7 +293,12 @@ const [tablestate,settablestate]=useState(false)
 		setstate(!state)
 		setemployeelist(!employeelist)
 	}
-	
+	const headerdata = useMemo(() => {
+		return {
+		  data:"Employee master",
+		  page:"Add Employeemaster"
+		};
+	  }, []);
 
 
   return (
@@ -707,6 +719,26 @@ const [tablestate,settablestate]=useState(false)
 													)}
 													{errors.basicSalary && errors.basicSalary.type === 'min' && (
 													<span className="text-danger">Basic Salary must be a positive number</span>
+													)}
+												</div>
+										</div>
+
+										<div className="col-12 col-md-6 col-xl-6">
+												<div className="form-group local-forms">
+													<label>Allowed Leave<span className="login-danger">*</span></label>
+													<input
+													{...register('allowedleave', { required: true, min: 0 })}
+													type="number"
+													className={`form-control ${errors.basicSalary ? 'is-invalid' : ''}`}
+													placeholder=""
+													value={allowedLeave}
+													onChange={(e) => setAllowedLeave(e.target.value)}
+													/>
+													{errors.basicSalary && errors.basicSalary.type === 'required' && (
+													<span className="text-danger">Allowed Leave is required</span>
+													)}
+													{errors.basicSalary && errors.basicSalary.type === 'min' && (
+													<span className="text-danger">Allowed Leave must be a positive number</span>
 													)}
 												</div>
 										</div>
