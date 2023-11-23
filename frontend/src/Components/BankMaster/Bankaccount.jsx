@@ -5,29 +5,29 @@ import { getallbank } from '../../Apicalls/Bank';
 import { getallUnite } from '../../Apicalls/Unit';
 import { getallAccountType } from '../../Apicalls/Accounttype';
 import { getallDepartment } from '../../Apicalls/Department';
-import { AddbankAccount } from '../../Apicalls/BankAccount';
+import { AddbankAccount, getallbankAccountcount } from '../../Apicalls/BankAccount';
 import { toast } from 'react-toastify';
 import BankAccountlist from './BankAccountlist';
 
 const MemoizedBankAccountlist = React.memo(BankAccountlist);
 
 function Bankaccount() {
-	console.log('mmmmmmmmmain ppppppppppppage');
-	const [bankaccountId,setBankAccountId]=useState('');
+	const [count,setcount]=useState(0)
 
-	const generateUniqueSixLetterID = () => {
-	  const characters = '765464565434354364564560123456789';
-	  let id = '';
-	  for (let i = 0; i < 6; i++) {
-		const randomIndex = Math.floor(Math.random() * characters.length);
-		id += characters[randomIndex];
-	  }
-	  return id;
-	};
-	useEffect(() => {
-		const uniqueID = generateUniqueSixLetterID(); // Invoke the function to get the ID
-		setBankAccountId(uniqueID);
-	  }, []);
+
+  // Usage in useEffect
+  useEffect(() => {
+    const fetchUniqueSixCharacterID = async () => {
+      try {
+        const response = await getallbankAccountcount();
+        setcount( response.data.count+1);
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    };
+  
+    fetchUniqueSixCharacterID();
+  }, []);
 	  
 
 	const [isOperationalDataFetched, setIsOperationalDataFetched] = useState(false);
@@ -160,7 +160,6 @@ function Bankaccount() {
 	  const [formData,setFormData]=useState('');
 
 	  const formdatas = useMemo(() => {
-		console.log('tttttttttttttttttttmemo');
 		return {
 		  accountNo,
 		  BankId,
@@ -168,9 +167,9 @@ function Bankaccount() {
 		  unitId,
 		  accountTypeId,
 		  departmentId,
-		  bankAccountId: bankaccountId,
+		  bankAccountId:`MB${count.toString().padStart(3, '0')}`,
 		};
-	  }, [accountNo, BankId, OperationalId, unitId, accountTypeId, departmentId, bankaccountId]);
+	  }, [accountNo, BankId, OperationalId, unitId, accountTypeId, departmentId,count]);
 	
 	  // Your existing logic for form submission
 	  const handleSubmit = async (event) => {
@@ -181,7 +180,7 @@ function Bankaccount() {
 		  const response = await AddbankAccount(formdatas);
 		  console.log(response, 'tereresponse');
 		  if (response.success) {
-			console.log(response, "shahisdddd");
+			setcount((prevCount) => prevCount + 1);
 			setFormData(response.data);
 			setUnitId('');
 			setDepartmentId('');
@@ -214,7 +213,7 @@ function Bankaccount() {
                                        <div className="col-12 col-md-6 col-xl-4">  
                                            <div className="form-group local-forms">
                                                <label >Bank Id <span className="login-danger">*</span></label>
-                                               <input className="form-control" type="text" value={bankaccountId} placeholder="" style={{ backgroundColor: "#cbd0d6" }}  readOnly/>
+                                               <input className="form-control" type="text" value={`MB${count.toString().padStart(3, '0')}`} placeholder="" style={{ backgroundColor: "#cbd0d6" }}  readOnly/>
                                            </div>
                                        </div>
                                        <div className="col-12 col-md-6 col-xl-4">

@@ -19,7 +19,6 @@ export const getallpost = async () => {
     }
 }
 export const editpost= async (payload) => {
-  console.log(payload,"iiiiiiiiiiiiiiiiiiiiiiiaaaaiiiiiiiiiii");
     try {
       // Make a PUT request to edit the employeetype
       const response = await instance.put(`post/editpost/${payload._id}`, payload);
@@ -38,3 +37,12 @@ export const editpost= async (payload) => {
       return err.response.data;
     }
   };
+
+  export const getallpostcount = async () => {
+    try {
+        const response = await instance.get('post/getallpostcount');
+        return response.data
+    } catch (err) {
+        return err.response.data;
+    }
+}

@@ -37,3 +37,12 @@ export const editDesignation = async (payload) => {
       return err.response.data;
     }
   };
+
+  export const getallDesignationcount = async () => {
+    try {
+        const response = await instance.get('Designation/getallDesignationcount');
+        return response.data
+    } catch (err) {
+        return err.response.data;
+    }
+}

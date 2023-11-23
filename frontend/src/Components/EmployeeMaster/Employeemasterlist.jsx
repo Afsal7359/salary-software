@@ -23,7 +23,7 @@ const Employeemasterlist = React.memo(({ formdata, setformdata }) =>{
       if (formdata.length!=0) {
          const isNameInData = Data.some((item) => item.name === formdata.name);
          if (!isNameInData) {
-           setData((prevData) => [...prevData, formdata]);
+           setData((prevData) => [formdata,...prevData]);
            setformdata([])
          }
       }
