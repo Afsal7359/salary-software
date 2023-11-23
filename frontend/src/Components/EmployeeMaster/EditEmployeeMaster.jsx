@@ -230,7 +230,7 @@ console.log('itemmmm',item);
         const salaryType = salarymasterData.find(
           (item) => item._id === row.salaryComponent
         );
-
+		
         if (
           salaryType &&
           (salaryType.type === "Increment" || salaryType.type === "Decrement")

@@ -12,8 +12,11 @@ function Salarybill() {
 	const [EmployeeData, setEmployeeData] = useState([]);
 	const [EmployeeId, setEmployeeId] = useState('');
 	const [isEmployeeDataFetched, setIsEmployeeDataFetched] = useState(false);
+	const [absentvalue,setAbsentValue]=useState('')
+	const [allowedleave,setAllowedLeave]=useState('')
 
-	const [filterEmployeeData,setFilterEmployeeData]=useState('');
+	const [basicSalary,setBasicSalary]=useState(0)
+	const [filterEmployeeData,setFilterEmployeeData]=useState([]);
 	const handleEmployeeclick = async () => {
 	 console.log('ddddddddddEmployee');
 	 try {
@@ -37,16 +40,16 @@ function Salarybill() {
 
     if (EmployeeData) {
         const filteredEmployees = EmployeeData.filter(data => data.name === newEmployeeId);
+		setAllowedLeave(filteredEmployees[0]?filteredEmployees[0].allowedleave :"")
         setFilterEmployeeData(filteredEmployees);
+		
     } else {
         setFilterEmployeeData([]);
     }
 };
 
+console.log('setdata',allowedleave);
 console.log('employeee name',EmployeeId);
-
-
-
 
 
 console.log('filtered data :',filterEmployeeData);
@@ -56,8 +59,12 @@ const headerdata = useMemo(() => {
 	  page:"salary bill"
 	};
   }, []);
-// console.log('filtered data NAME:',filterEmployeeData[0].name);
-  return (
+ 
+console.log("absent",absentvalue);
+
+
+console.log('ssssss',basicSalary);
+return (
     <>
       <PageHeader headerdata={headerdata}/>
 
@@ -118,11 +125,11 @@ const headerdata = useMemo(() => {
 									<div class="col-sm-4">
 									   <div className="form-group local-forms">
 											<label>Basic Salary <span className="login-danger">*</span></label>
-										    <input type="text" className="form-control" style={{backgroundColor:"#cbd0d6"}} 
+										    <input type="text" className="form-control" 
+												style={{backgroundColor:"#cbd0d6"}}
 												value={filterEmployeeData[0] && filterEmployeeData[0].basicSalary
 													? filterEmployeeData[0].basicSalary
-													: ""}
-											readOnly/>
+													: ""} readOnly/>
 										</div>
 									</div>
 								</div>	
@@ -163,11 +170,11 @@ const headerdata = useMemo(() => {
 														<tfoot>
 															<tr>
 																<td colSpan="4" className='text-end'>Allowed Leaves</td>
-																<td><input className="form-control" type="number" value={filterEmployeeData[0]&&filterEmployeeData[0].allowedleave?filterEmployeeData[0].allowedleave : ""} style={{backgroundColor:"#cbd0d6"}} readOnly/></td>
+																<td><input className="form-control" type="number" value={allowedleave ? allowedleave :''} style={{backgroundColor:"#cbd0d6"}} readOnly/></td>
 															</tr>
 															<tr>
 																<td colSpan="4" className='text-end'>Absent</td>
-																<td><input className="form-control" type="number" /></td>
+																<td><input className="form-control" type="number"  onChange={(e) => setAbsentValue(e.target.value)}/></td>
 															</tr>
 															<div style={{display:"none"}}>balance Leave</div>
 															<tr>

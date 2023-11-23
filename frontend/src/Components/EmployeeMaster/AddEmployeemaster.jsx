@@ -105,12 +105,7 @@ const AddEmployeemaster = () => {
 	  }
 
 
-	  const headerdata = useMemo(() => {
-		return {
-		  data:"Employee master",
-		  page:"Add employeemaster"
-		};
-	  }, []);
+	  
 
 
 console.log('salary daaaata : ',salarymasterData);
