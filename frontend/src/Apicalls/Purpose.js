@@ -37,3 +37,12 @@ export const editPurpose= async (payload) => {
       return err.response.data;
     }
   };
+
+  export const getallPurposeecount = async () => {
+    try {
+        const response = await instance.get('purpose/getallpurposecount');
+        return response.data
+    } catch (err) {
+        return err.response.data;
+    }
+}

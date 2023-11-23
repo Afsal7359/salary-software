@@ -20,7 +20,7 @@ function Salarylist({ formdata, setformdata }) {
   
 useEffect(() => {
 	if (formdata.length !== 0) {
-	  setData((prevData) => [...prevData, formdata]);
+	  setData((prevData) => [formdata,...prevData]);
 	  setformdata([]);
 	}
   }, [formdata]);

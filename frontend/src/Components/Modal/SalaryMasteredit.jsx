@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import { editsalarymaster } from '../../Apicalls/salarymaster';
-import { getallType } from '../../Apicalls/Type';
 import { getallPurposee } from '../../Apicalls/Purpose';
 
 function SalaryMasteredit({ closeEditModal, item,setData,Data}) {

@@ -1,21 +1,21 @@
-import React, { useState ,useEffect} from 'react'
+import React, { useState ,useEffect, useMemo} from 'react'
 import PageHeader from '../PageHeader'
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import { AddDesignation, getallDesignationcount } from '../../Apicalls/Designation';
 import Designationlist from './Designationlist';
+
+
 function Designation() {
 	const [formData, setFormData] = useState('');
-	// const [render, setrender] = useState(false);
 	const [formdata, setformdata] =useState([]);
+	const [count,setcount]=useState(0)
 	const {
 	  register,
 	  handleSubmit,
 	  formState: { errors },
 	} = useForm();
 	
-	const [count,setcount]=useState(0)
-
 
 	// Usage in useEffect
 	useEffect(() => {
@@ -31,8 +31,9 @@ function Designation() {
 	  fetchUniqueSixCharacterID();
 	}, []);
 
-	const onSubmit = async (data) => {
 
+	
+	const onSubmit = async (data) => {
 		data.designationid=`MD${count.toString().padStart(3, '0')}`
 	  try {
 		const response = await AddDesignation(data);
@@ -41,18 +42,27 @@ function Designation() {
 		  setformdata(response.data)
 		  toast.success(response.message);
 		  setFormData('');
-		  // setrender(!render)
 		} else {
-			
 		  toast.error(response.message);
 		}
 	  } catch (err) {
 		toast.error(err.message);
 	  }
 	};
+
+
+	const headerdata = useMemo(() => {
+		return {
+		  data:"Employee master",
+		  page:"Designation"
+		};
+	  }, []);
+
+
+
   return (
     <>
-      <PageHeader/>
+      <PageHeader headerdata={headerdata}/>
     <div className="row">
 					<div className="col-sm-12">
 						<div className="card">
@@ -73,7 +83,7 @@ function Designation() {
                         placeholder=""
 						value={`MD${count.toString().padStart(3, '0')}`}
                         style={{ backgroundColor: "#cbd0d6" }}
-                        readOnly // Make the input field non-editable
+                        readOnly 
                       />
                     </div>
                   </div>

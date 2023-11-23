@@ -1,8 +1,8 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState,useEffect, useMemo } from 'react';
 import PageHeader from '../PageHeader';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
-import { Addbank } from '../../Apicalls/Bank';
+import { Addbank, getallbankcount } from '../../Apicalls/Bank';
 import Banklist from './Banklist';
 
 
@@ -27,32 +27,32 @@ function Bankmaster() {
     },
   });
 
-  const [bankId,setBankId]=useState('');
-  const generateUniqueSixLetterID = () => {
-    const characters = '765464565434354364564560123456789';
-    let id = '';
-    for (let i = 0; i < 6; i++) {
-      const randomIndex = Math.floor(Math.random() * characters.length);
-      id += characters[randomIndex];
-    }
-    return id;
-  };
-  
-  
+  const [count,setcount]=useState(0)
+
+
+  // Usage in useEffect
   useEffect(() => {
-    const uniqueSixCharacterID = generateUniqueSixLetterID();
-    setBankId(uniqueSixCharacterID);
-  },[]);
+    const fetchUniqueSixCharacterID = async () => {
+      try {
+        const response = await getallbankcount();
+        setcount( response.data.count+1);
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    };
+  
+    fetchUniqueSixCharacterID();
+  }, []);
 
   const onSubmit = async (data) => {
   
-    const uniqueSixLetterID = generateUniqueSixLetterID();
-    setBankId(uniqueSixLetterID)
-    data.bankid = uniqueSixLetterID;
+    data.bankid=`MB${count.toString().padStart(3, '0')}`
+
 
     try {
       const response = await Addbank(data);
       if (response.success) {
+        setcount((prevCount) => prevCount + 1);
         setformdata(response.data);
         toast.success(response.message);
         setFormData('');
@@ -66,10 +66,15 @@ function Bankmaster() {
       toast.error(err.message);
     }
   };
-
+  const headerdata = useMemo(() => {
+		return {
+		  data:"Bank master",
+		  page:"Add Bank"
+		};
+	  }, []);
   return (
     <>
-      <PageHeader />
+      <PageHeader headerdata={headerdata} />
       <div className="row">
         <div className="col-sm-12">
           <div className="card">
@@ -84,7 +89,7 @@ function Bankmaster() {
                   <div className="col-12 col-md-6 col-xl-6">
                     <div className="form-group local-forms">
                       <label>Bank Id</label>
-                      <input className="form-control" type="text" placeholder="" value={bankId}  style={{ backgroundColor: "#cbd0d6" }}
+                      <input className="form-control" type="text" placeholder="" value={`MB${count.toString().padStart(3, '0')}`}  style={{ backgroundColor: "#cbd0d6" }}
                         readOnly />
                     </div>
                   </div>

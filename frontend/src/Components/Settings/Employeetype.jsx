@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState,useEffect, useMemo } from 'react';
 import PageHeader from '../PageHeader';
 import { useForm } from 'react-hook-form';
 import { Addemployeetype, getallemployeetypecount } from '../../Apicalls/Employeetype';
@@ -46,11 +46,16 @@ function Employeetype() {
       toast.error(err.message);
     }
   };
-
+  const headerdata = useMemo(() => {
+		return {
+		  data:"Employee master",
+		  page:"EmployeeType"
+		};
+	  }, []);
  
   return (
     <>
-      <PageHeader />
+      <PageHeader headerdata={headerdata} />
       <div className="row">
         <div className="col-sm-12">
           <div className="card">

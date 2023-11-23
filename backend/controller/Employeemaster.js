@@ -13,8 +13,6 @@ module.exports = {
           { isdeleted: false },
           { new: true } // To get the updated document
         );
-  
-        console.log("Employee marked as not deleted.");
         res.status(200).json({
           success: true,
           message: "Employee added successfully.",
@@ -28,8 +26,6 @@ module.exports = {
       } else {
         const newEmployee = new Employee(data);
         await newEmployee.save();
-  
-        console.log("Employee Added Successfully");
         res.status(200).json({
           success: true,
           message: "Employee added successfully.",
@@ -45,11 +41,8 @@ module.exports = {
     }
   },
   EditEmployee: async (req, res) => {
-    console.log('okokokokokokokokokookoookoookokk');
     try {
-      console.log('reqqqqbody',req.body);
       const data = req.body;
-      
       const {id } = req.params;
       // Check if an Employee with the specified employeeid exists
       const existingEmployee = await Employee.findOne({_id:id});
@@ -62,7 +55,6 @@ module.exports = {
       }
       // Update the existing Employee with new data
       await Employee.updateOne({ _id: id }, data);
-      console.log("Employee Edited Successfully");
       res.status(200).json({
         success: true,
         message: "Employee edited successfully.",
@@ -78,7 +70,6 @@ module.exports = {
 
   DeleteEmployee: async (req, res) => {
     try {
-      console.log('haaaaaaaaaaaaaaaaai',req.params);
       const {id } = req.params;
 
       // Check if an Employee with the specified employeeid exists
@@ -95,7 +86,6 @@ module.exports = {
      
      // Soft delete by updating isdeleted field
   await Employee.updateOne({ _id: id }, { $set: { isdeleted: true } });
-      console.log(" Deleted Successfully");
       res.status(200).json({
         success: true,
         message: "Deleted successfully.",
@@ -147,7 +137,7 @@ module.exports = {
       
       res.status(200).json({
         success: true,
-        message: "BankAccountCount retrieved successfully.",
+        message: "EmployeeCount retrieved successfully.",
         data: { count: EmployeeCount },
       });
     } catch (error) {

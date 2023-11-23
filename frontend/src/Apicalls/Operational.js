@@ -37,3 +37,12 @@ export const editOperationalType= async (payload) => {
       return err.response.data;
     }
   };
+
+  export const getallOperationalTypecount = async () => {
+    try {
+        const response = await instance.get('operatonaltype/getalloperatinaltypecount');
+        return response.data
+    } catch (err) {
+        return err.response.data;
+    }
+}
