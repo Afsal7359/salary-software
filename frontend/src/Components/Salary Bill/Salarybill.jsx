@@ -1,7 +1,8 @@
-import React,{ useMemo, useState} from 'react'
+import React,{ useMemo,useEffect, useState} from 'react'
 import PageHeader from '../PageHeader'
 import { toast } from 'react-toastify';
 import { getallemployeemaster } from '../../Apicalls/EmployeeMater';
+import { getallSalary } from '../../Apicalls/salarymaster';
 
 
 
@@ -14,9 +15,13 @@ function Salarybill() {
 	const [isEmployeeDataFetched, setIsEmployeeDataFetched] = useState(false);
 	const [absentvalue,setAbsentValue]=useState('')
 	const [allowedleave,setAllowedLeave]=useState('')
-
-	const [basicSalary,setBasicSalary]=useState(0)
+	const [tablerow, setTablerow] = useState([]);
+	const [basicSalary,setBasicSalary]=useState('')
 	const [filterEmployeeData,setFilterEmployeeData]=useState([]);
+	const [TotalSalary, setTotalSalary] = useState('');
+	const [Totalamount, setTotalAmount] = useState('');
+	const [totalrowprice,setTotalRowPrice]=useState([]);
+
 	const handleEmployeeclick = async () => {
 	 console.log('ddddddddddEmployee');
 	 try {
@@ -41,8 +46,19 @@ function Salarybill() {
     if (EmployeeData) {
         const filteredEmployees = EmployeeData.filter(data => data.name === newEmployeeId);
 		setAllowedLeave(filteredEmployees[0]?filteredEmployees[0].allowedleave :"")
-        setFilterEmployeeData(filteredEmployees);
+		const tablerowData = filteredEmployees[0]?.tablerow;
+
+			if (Array.isArray(tablerowData)) {
+			setTablerow(tablerowData);
+			} else {
+			setTablerow([]);
+			}
+		setBasicSalary(filteredEmployees[0]?filteredEmployees[0].basicSalary :"")
+		// setTotalSalary(filteredEmployees[0]?filteredEmployees[0].TotalSalary:"")
 		
+        setFilterEmployeeData(filteredEmployees);
+
+		  console.log('tablerow',tablerow);
     } else {
         setFilterEmployeeData([]);
     }
@@ -59,7 +75,127 @@ const headerdata = useMemo(() => {
 	  page:"salary bill"
 	};
   }, []);
+
+
+
+  const handleAddRow = () => {
+    setTablerow((prevRows) => [
+      ...prevRows,
+      {
+        id: Date.now(),
+        salaryComponent: "",
+        percentage: "",
+        value: "",
+        price: "",
+      },
+    ]);
+  };
+  const handleRemoveRow = (id) => {
+    setTablerow((prevRows) => prevRows.filter((row) => row.id !== id));
+  };
+
+
+
+  const [issalarymasterDataFetched, setIsSalarymasterDataFetched] =useState(false);
+  const [salarymasterData, setSalarymasterData] = useState([]);
+  const [salarymasterId, setSalarymasterId] = useState("");
+
+  
  
+  const handlesalarymasterclick = async () => {
+    try {
+      if (!issalarymasterDataFetched) {
+        const response = await getallSalary();
+        if (response.success) {
+          setSalarymasterData(response.data);
+        } else {
+          setSalarymasterData([]);
+        }
+      }
+      setIsSalarymasterDataFetched(true);
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+  useEffect(()=>{
+	handlesalarymasterclick()
+  },[])
+
+console.log("salary fetch",salarymasterData);
+
+const handlesalarymasterchange = (event, index) => {
+	const updatedTableRows = [...tablerow];
+	updatedTableRows[index] = {
+	  ...updatedTableRows[index],
+	  salaryComponent: event.target.value,
+	};
+	console.log(updatedTableRows, "ii");
+	setTablerow(updatedTableRows);
+  };
+  
+  const [salarycomponent, setSalaryComponent] = useState([]);
+console.log('totalrssow',totalrowprice);
+
+useEffect(() => {
+	try {
+	  console.log('tablerow:', tablerow);
+	  console.log('basicSalary:', basicSalary);
+	  console.log('salarymasterData:', salarymasterData);
+  
+	  const calculateTotalSalary = () => {
+		let totalAmount = parseFloat(basicSalary);
+  
+		tablerow.forEach((row) => {
+		  if (row.salaryComponent) {
+			const salaryType = salarymasterData.find(
+			  (item) => item._id === row.salaryComponent._id
+			);
+  
+			if (salaryType) {
+			  if (salaryType.type === "Increment") {
+				totalAmount += parseFloat(row.price);
+			  } else if (salaryType.type === "Decrement") {
+				totalAmount -= parseFloat(row.price);
+			  }
+			}
+		  }
+		});
+		console.log('Total Salary1111:', totalAmount);
+		setTotalSalary(totalAmount);
+	  };
+  
+	  calculateTotalSalary();
+	} catch (error) {
+	  console.error("Error in useEffect:", error);
+	}
+  }, [tablerow, basicSalary, salarymasterData]);
+  
+  const handleSecondInputChange = (index, value) => {
+    const updatedTableRows = [...tablerow];
+    updatedTableRows[index].percentage = "";
+    updatedTableRows[index].value = value.trim() !== "" ? Number(value) : "";
+    const newPrice = value.trim() !== "" ? value : "";
+    updatedTableRows[index].price = newPrice;
+    setTablerow(updatedTableRows);
+  };
+
+  const   handleChange = (index, percentage) => {
+    const updatedTableRows = [...tablerow];
+    updatedTableRows[index].percentage = Number(percentage);
+
+    // Reset second field's value when first field is updated
+    updatedTableRows[index].value = "";
+
+    // Recalculate the price based on the updated percentage and basic salary
+    const newPrice = basicSalary
+      ? (basicSalary * Number(percentage)) / 100
+      : "";
+    updatedTableRows[index].price = newPrice || "";
+
+    setTablerow(updatedTableRows);
+  };
+
+
 console.log("absent",absentvalue);
 
 
@@ -127,9 +263,7 @@ return (
 											<label>Basic Salary <span className="login-danger">*</span></label>
 										    <input type="text" className="form-control" 
 												style={{backgroundColor:"#cbd0d6"}}
-												value={filterEmployeeData[0] && filterEmployeeData[0].basicSalary
-													? filterEmployeeData[0].basicSalary
-													: ""} readOnly/>
+												value={basicSalary} readOnly/>
 										</div>
 									</div>
 								</div>	
@@ -156,16 +290,81 @@ return (
 														</thead>
 														<tbody>
 															
-													{filterEmployeeData[0] && filterEmployeeData[0].tablerow.map((row,index)=>(
-														<tr>
-														<td><input type="text" className="form-control"  style={{backgroundColor:"#cbd0d6"}} value={index+1}  readOnly/></td>
-														<td><input type="text" className="form-control"  style={{backgroundColor:"#cbd0d6"}} value={row.salaryComponent.name ? row.salaryComponent.name : ''}   readOnly/></td>
-														<td><input type="text" className="form-control"  style={{backgroundColor:"#cbd0d6"}} value={row.percentage ? row.percentage : ''} readOnly/></td>
-														<td><input type="text" className="form-control"  style={{backgroundColor:"#cbd0d6"}} value={row.value ? row.value : ""} readOnly/></td>
-														<td><input type="text" className="form-control"  style={{backgroundColor:"#cbd0d6"}} value={row.price ? row.price : ""} readOnly/></td>
+													{tablerow.map((row,index)=>(
+														<tr key={row.id}>
+														<td><input type="text" className="form-control"  value={index+1}  readOnly/></td>
+														<td>
+														<select
+															className="form-control"
+															
+																onClick={(event) => handlesalarymasterchange(event, index)}
+															
+															  onChange= {handlesalarymasterclick}
+															
+															>
+															<option
+																value={row._id}
+																key={row._id}
+															>
+																{row.salaryComponent.name}
+															</option>
+															{salarymasterData.map(
+																(option) => (
+																<option
+																	value={option._id}
+																	key={option._id}
+																>
+																	{option.name}
+																</option>
+																)
+															)}
+															</select>
+															</td>
+														<td><input type="text" className="form-control" value={row.percentage ? row.percentage : ""}   onChange={(e) =>
+																	handleChange(
+																	index,
+																	e.target.value
+																	)
+																}/></td>
+														<td><input type="text" className="form-control" value={row.value ? row.value : ""}   onChange={(e) =>
+																	handleSecondInputChange(
+																	index,
+																	e.target.value
+																	)
+																}/></td>
+														<td><input type="text" className="form-control"   value={row.price ? row.price : ""} onChange={(e)=>setTotalRowPrice(index,e.target.value)} readOnly/></td>
+														 <td className="add-remove text-end">
+															<a
+															href="javascript:void(0);"
+															className="me-2"
+															onClick={handleAddRow}
+															>
+															<i className="fas fa-plus-circle"></i>
+															</a>
+
+															<a
+															href="javascript:void(0);"
+															className="remove-btn"
+															onClick={() =>
+																handleRemoveRow(row.id)
+															}
+															>
+															<i className="fa fa-trash-alt"></i>
+															</a>
+														</td>
 													</tr>
 													))}
-															
+														  {tablerow.length === 0 &&
+															setTablerow((prevRows) => [
+															...prevRows,
+															{
+																id: 1,
+																salaryComponent: "",
+																percentage: "",
+																value: "",
+																price: "",
+															},
+															])}	
 														</tbody>
 														<tfoot>
 															<tr>
@@ -179,7 +378,7 @@ return (
 															<div style={{display:"none"}}>balance Leave</div>
 															<tr>
 															<td colSpan="4" className="text-end"><strong>Total Amount:</strong></td>
-															<td><input className="form-control" type="number" value={filterEmployeeData[0] && filterEmployeeData[0].TotalSalary?filterEmployeeData[0].TotalSalary : ""} readOnly/>
+															<td><input className="form-control" type="number" value={ TotalSalary ?TotalSalary : Totalamount} readOnly/>
 															
 															</td>
 															

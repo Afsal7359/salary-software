@@ -285,7 +285,7 @@ console.log('itemmmm',item);
     setTablerow(updatedTableRows);
   };
 
-  const handleChange = (index, percentage) => {
+  const   handleChange = (index, percentage) => {
     const updatedTableRows = [...tablerow];
     updatedTableRows[index].percentage = Number(percentage);
 
