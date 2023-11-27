@@ -124,9 +124,6 @@ function EditEmployeeMaster({ closeEdit, item, setData, Data, show, setshow }) {
       ...updatedTableRows[index],
       salaryComponent: event.target.value, // Update salaryComponent based on the event value
     };
-
-    console.log(updatedTableRows, "updated tablerow");
-
     setTablerow(updatedTableRows); // Update the state with the modified rows
   };
  
@@ -141,6 +138,7 @@ function EditEmployeeMaster({ closeEdit, item, setData, Data, show, setshow }) {
         price: "",
   };
     setTablerow([...tablerow, newRow]);
+   
   };
 
 
@@ -148,54 +146,52 @@ function EditEmployeeMaster({ closeEdit, item, setData, Data, show, setshow }) {
     setTablerow((prevRows) => prevRows.filter((row) => row.id !== id));
   };
 
-  useEffect(() => {
+    // Function to handle changes in basic salary
+    const handleBasicSalaryChange = (newBasicSalary) => {
+      setBasicSalary(newBasicSalary);
+      // Recalculate prices for all rows based on the new basicSalary
+      const updatedTablerow = tablerow.map((row) => {
+        const newPrice = (Number(newBasicSalary) * Number(row.percentage)) / 100;
+        return { ...row, price: newPrice };
+      });
+  
+      setTablerow(updatedTablerow);
+    };
 
-	try {
 
-	  const totalAmount = tablerow.reduce((acc, row) => {
-		if (row.salaryComponent) {
-		  const salaryType = salarymasterData.find(
-			(item) => item._id === row.salaryComponent._id
-		  );
-  
-		  if (
-			salaryType &&
-			(salaryType.type === "Increment" || salaryType.type === "Decrement")
-		  ) {
-			const price = parseFloat(row.price);
-  
-			if (!isNaN(price)) {
-			  // Check if the parsed price is a valid number
-			  return acc + (salaryType.type === "Increment" ? price : -price);
-			} else {
-			  console.error("Invalid price for row:", row);
-			}
-		  }
-		} else if (row.type === "Increment" || row.type === "Decrement") {
-		  const price = parseFloat(row.price);
-  
-		  if (!isNaN(price)) {
-			// Check if the parsed price is a valid number
-			return acc + (row.type === "Increment" ? price : -price);
-		  } else {
-			console.error("Invalid price for row:", row);
-		  }
-		}
-  
-		return acc;
-	  }, parseFloat(basicSalary));
-  
-	  if (!isNaN(totalAmount)) {
-		// Check if the calculated totalAmount is a valid number
-		console.log("good by salary", totalAmount);
-		setTotalSalary(totalAmount);
-	  } else {
-		console.error("Invalid totalAmount:", totalAmount);
-	  }
-	} catch (error) {
-	  console.error("Error in useEffect:", error);
-	}
+useEffect(() => {
+try {
+  const totalAmount = tablerow.reduce((acc, row) => {
+    const salaryType = salarymasterData.find(
+      (item) =>
+        item._id === row.salaryComponent?._id || item._id === row.salaryComponent
+    );
 
+    if (salaryType && (salaryType.type === 'Increment' || salaryType.type === 'Decrement')) {
+      const price = parseFloat(row.price);
+
+      if (!isNaN(price)) {
+        // Check if the parsed price is a valid number
+        return acc + (salaryType.type === 'Increment' ? price : -price);
+      } else {
+        console.error('Invalid price for row:', row);
+      }
+    }
+    return acc;
+  }, parseFloat(basicSalary));
+
+  if (!isNaN(totalAmount)) {
+    // Check if the calculated totalAmount is a valid number
+    setitemdata({
+      ...itemdata,
+      TotalSalary: totalAmount,
+    });
+  } else {
+    console.error('Invalid totalAmount:', totalAmount);
+  }
+} catch (error) {
+  console.error('Error in useEffect:', error);
+}
   }, [tablerow, basicSalary, salarymasterData]);
 
 
@@ -259,7 +255,7 @@ function EditEmployeeMaster({ closeEdit, item, setData, Data, show, setshow }) {
       city,
       country,
       tablerow,
-      TotalSalary,
+      TotalSalary:itemdata.TotalSalary
     };
    
     // Update Data array if itemid matches
@@ -275,17 +271,17 @@ function EditEmployeeMaster({ closeEdit, item, setData, Data, show, setshow }) {
     try {
 
       console.log(formData,"dataaaaaaaaaaashahid");
-      // const response = await editemployeemaster(formData);
-      // if (response.success) {
-      //   toast.success(response.message);
-      //   setEditemployee(false);
-      //   setEmployelist(true);
+      const response = await editemployeemaster(formData);
+      if (response.success) {
+        toast.success(response.message);
+        setEditemployee(false);
+        setEmployelist(true);
 
-      //   // Update any state or flags to manage component visibility
-      //   // For example, setVisibility(false);
-      // } else {
-      //   toast.error(response.message);
-      // }
+        // Update any state or flags to manage component visibility
+        // For example, setVisibility(false);
+      } else {
+        toast.error(response.message);
+      }
     } catch (err) {
       toast.error(err.message);
     }
@@ -680,7 +676,7 @@ function EditEmployeeMaster({ closeEdit, item, setData, Data, show, setshow }) {
                             type="number"
                             placeholder=""
                             value={basicSalary}
-                            onChange={(e) => setBasicSalary(e.target.value)}
+                            onChange={(e) => handleBasicSalaryChange(e.target.value)}
                           />
                         </div>
                       </div>
@@ -891,7 +887,7 @@ function EditEmployeeMaster({ closeEdit, item, setData, Data, show, setshow }) {
                                           <input
                                             className="form-control"
                                             type="number"
-                                           value={itemdata?.TotalSalary}
+                                           value={itemdata?.TotalSalary?itemdata.TotalSalary:basicSalary}
                                             readOnly
                                           />
                                           {/* Display the total amount here */}
