@@ -20,13 +20,20 @@ const Employeemasterlist = React.memo(({ formdata, setformdata }) =>{
     const [showDeleteModal, setshowDeleteModal] = useState(false);
     const [selectedItem, setSelectedItem] = useState(null);
     const [selected, setSelected] = useState(false);
-      if (formdata.length!=0) {
-         const isNameInData = Data.some((item) => item.name === formdata.name);
-         if (!isNameInData) {
-           setData((prevData) => [formdata,...prevData]);
-           setformdata([])
-         }
-      }
+
+      // if (formdata.length!=0) {
+      //    const isNameInData = Data.some((item) => item.name === formdata.name);
+      //    if (!isNameInData) {
+      //      setData((prevData) => [formdata,...prevData]);
+      //      setformdata([])
+      //    }
+      // }
+      useEffect(() => {
+        if (formdata.length !== 0) {
+          setData((prevData) => [formdata,...prevData]);
+          setformdata([]);
+        }
+      }, [formdata]);
   
     useEffect(() => {
       async function fetchData() {
@@ -96,7 +103,9 @@ const Employeemasterlist = React.memo(({ formdata, setformdata }) =>{
     
     {tablelist&& <div className="row">
         <div className="col-sm-12">
-          
+        {formdata.length ===0 ? (
+            <p>No Data available</p> // You can customize this message
+          ) : (
             <div className="card  card-table show-entire">
               <div className="card-body">
                 <div className="page-table-header mb-2">
@@ -212,7 +221,7 @@ const Employeemasterlist = React.memo(({ formdata, setformdata }) =>{
                 </table>
               </div>
             </div>
-          
+          )}
         </div>
       </div>}
 

@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { getallemployeetype } from "../../Apicalls/Employeetype";
 import { getallpost } from "../../Apicalls/Post";
@@ -7,12 +6,54 @@ import { getallSalary } from "../../Apicalls/salarymaster";
 import { editemployeemaster } from "../../Apicalls/EmployeeMater";
 import Employeemasterlist from "./Employeemasterlist";
 function EditEmployeeMaster({ closeEdit, item, setData, Data, show, setshow }) {
-  console.log(item);
-  const [tableRow, settableRow] = useState(item?.tablerow);
-  console.log("kakakakakakakaka", tableRow);
+  console.log(item,"item");
+  const [itemdata,setitemdata]=useState(item)
+  // const [tableRow, settableRow] = useState(item?.tablerow);
   const [employeeTypeData, setEmployeeTypeData] = useState([]);
   const [employeeTypeId, setEmployeeTypeId] = useState("");
   const [isemployeeTypeDataFetch, setisEmployeeTypeDataFetch] = useState(false);
+  const [postData, setPostData] = useState([]);
+  const [postId, setPostId] = useState("");
+  const [ispostDataFetched, setIspostDataFetched] = useState(false);
+  const [issalarymasterDataFetched, setIsSalarymasterDataFetched] =useState(false);
+  const [salarymasterData, setSalarymasterData] = useState([]);
+  // const [salarymasterId, setSalarymasterId] = useState("");
+  // const [salarycomponent, setSalaryComponent] = useState([]);
+   const [employeeid, setEmployeeId] = useState(item?.employeeid);
+   const [name, setName] = useState(item?.name);
+   const [email, setEmail] = useState(item?.email);
+   const [phone, setPhone] = useState(item?.phone);
+   const [employeeno, setEmployeeno] = useState(item?.employeeno);
+   const [address1, setAddress1] = useState(item?.address1);
+   const [address2, setAddress2] = useState(item?.address2);
+   const [address3, setAddress3] = useState(item?.address3);
+   const [bank, setBank] = useState(item?.bank);
+   const [accountNo, setAccountno] = useState(item?.accountNo);
+   const [branch, setBranch] = useState(item?.branch);
+   const [ifsc, setIfsc] = useState(item?.ifsc);
+   const [panNo, setPanNo] = useState(item?.panNo);
+   const [panName, setPanName] = useState(item?.panName);
+   const [dateOfJoining, setDateOfJoining] = useState(item?.dateOfJoining);
+   const [dateOfBirth, setDateOfBirth] = useState(item?.dateOfBirth);
+   const [guardianname, setGuardianName] = useState(item?.guardianName);
+   const [basicSalary, setBasicSalary] = useState(item?.basicSalary);
+   const [universalAcNo, setUniversalAcNo] = useState(item?.universalAcNo);
+   const [city, setCity] = useState(item?.city);
+   const [country, setCountry] = useState(item?.country);
+   const [tabledata, setTabledata] = useState(item?.tableRow);
+   const [TotalSalary, setTotalSalary] = useState(item?.TotalSalary);
+   const [gender, setGender] = useState(item?.gender);
+   const [allowedleave,setAllowedLeave]=useState(item?.allowedleave);
+   const [employelist, setEmployelist] = useState(false);
+   const [editemployee, setEditemployee] = useState(true);
+  //  const [percentage, setPercentage] = useState("");
+  //  const [calculatePercentage, setCalculatePercentage] = useState("");
+  //  const [secondInputValue, setSecondInputValue] = useState("");
+   const [formdata, setFormdata] = useState("");
+   const [itemid, setitemid] = useState(item._id);
+   const [tablerow, setTablerow] = useState(item?.tablerow);
+
+
 
   const handlemployeetypeclick = async () => {
     try {
@@ -33,9 +74,7 @@ function EditEmployeeMaster({ closeEdit, item, setData, Data, show, setshow }) {
     setEmployeeTypeId(event.target.value);
   };
 
-  const [postData, setPostData] = useState([]);
-  const [postId, setPostId] = useState("");
-  const [ispostDataFetched, setIspostDataFetched] = useState(false);
+
 
   const handlePostClick = async () => {
     try {
@@ -56,9 +95,7 @@ function EditEmployeeMaster({ closeEdit, item, setData, Data, show, setshow }) {
     setPostId(event.target.value);
   };
 
-  const [issalarymasterDataFetched, setIsSalarymasterDataFetched] =useState(false);
-  const [salarymasterData, setSalarymasterData] = useState([]);
-  const [salarymasterId, setSalarymasterId] = useState("");
+
 
   const handlesalarymasterclick = async () => {
     try {
@@ -79,7 +116,7 @@ function EditEmployeeMaster({ closeEdit, item, setData, Data, show, setshow }) {
   useEffect(()=>{
 	handlesalarymasterclick()
   },[])
-  const [salarycomponent, setSalaryComponent] = useState([]);
+
 
   const handlesalarymasterchange = (event, index) => {
     const updatedTableRows = [...tablerow];
@@ -88,138 +125,24 @@ function EditEmployeeMaster({ closeEdit, item, setData, Data, show, setshow }) {
       salaryComponent: event.target.value, // Update salaryComponent based on the event value
     };
 
-    console.log(updatedTableRows, "ii");
+    console.log(updatedTableRows, "updated tablerow");
 
     setTablerow(updatedTableRows); // Update the state with the modified rows
   };
-  // console.log('ghfdgfygfghfghf',salarymasterId);
+ 
 
-  console.log("salary data : ", salarymasterData);
-console.log('itemmmm',item);
-  const [employeeid, setEmployeeId] = useState(item?.employeeid);
-  const [name, setName] = useState(item?.name);
-  const [email, setEmail] = useState(item?.email);
-  const [phone, setPhone] = useState(item?.phone);
-  const [employeeno, setEmployeeno] = useState(item?.employeeno);
-  const [address1, setAddress1] = useState(item?.address1);
-  const [address2, setAddress2] = useState(item?.address2);
-  const [address3, setAddress3] = useState(item?.address3);
-  const [bank, setBank] = useState(item?.bank);
-  const [accountNo, setAccountno] = useState(item?.accountNo);
-  const [branch, setBranch] = useState(item?.branch);
-  const [ifsc, setIfsc] = useState(item?.ifsc);
-  const [panNo, setPanNo] = useState(item?.panNo);
-  const [panName, setPanName] = useState(item?.panName);
-  const [dateOfJoining, setDateOfJoining] = useState(item?.dateOfJoining);
-  const [dateOfBirth, setDateOfBirth] = useState(item?.dateOfBirth);
-  const [guardianname, setGuardianName] = useState(item?.guardianName);
-  const [basicSalary, setBasicSalary] = useState(item?.basicSalary);
-  const [universalAcNo, setUniversalAcNo] = useState(item?.universalAcNo);
-  const [city, setCity] = useState(item?.city);
-  const [country, setCountry] = useState(item?.country);
-  const [tabledata, setTabledata] = useState(item?.tableRow);
-  const [TotalSalary, setTotalSalary] = useState(item?.TotalSalary);
-  
-  const [gender, setGender] = useState(item?.gender);
-  const [allowedleave,setAllowedLeave]=useState(item?.allowedleave);
-  const [employelist, setEmployelist] = useState(false);
-  const [editemployee, setEditemployee] = useState(true);
-
-  const [tablerow, setTablerow] = useState(
-    item?.tablerow
-      ? item.tablerow
-      : [
-          {
-            id: 1,
-            salaryComponent: '',
-            percentage: "",
-            value: "",
-            price: "",
-          },
-        ]
-  );
-  const [percentage, setPercentage] = useState("");
-  const [calculatePercentage, setCalculatePercentage] = useState("");
-  const [secondInputValue, setSecondInputValue] = useState("");
-  const navigate = useNavigate();
-  const [formdata, setFormdata] = useState("");
-  // const {
-  // 	control,
-  // 	handleSubmit,
-  // 	register,
-  // 	field
-  //   } = useForm
-  const [itemid, setitemid] = useState(item._id);
-  const handleclick = async (event) => {
-    event.preventDefault(); // Prevent default form submission
-
-    // Prepare formData with all necessary fields
-    const formData = {
-      name,
-      email,
-      phone,
-      gender,
-      employeeno,
-      address1,
-      address2,
-      address3,
-      bank,
-      accountNo,
-      ifsc,
-      branch,
-      panNo,
-      panName,
-      dateOfJoining,
-      dateOfBirth,
-      guardianname,
-      basicSalary,
-	  allowedleave,
-      universalAcNo,
-      city,
-      country,
-      tablerow,
-      TotalSalary,
-    };
-   
-    // Update Data array if itemid matches
-    const updatedData = Data.map((dataItem) => {
-      if (dataItem._id === item._id) {
-        return { ...dataItem, name: formData.name }; // Update the relevant field here
-      }
-      return dataItem;
-    });
-    setData(updatedData);
-
-    formData._id = itemid;
-    try {
-      const response = await editemployeemaster(formData);
-      if (response.success) {
-        toast.success(response.message);
-        setEditemployee(false);
-        setEmployelist(true);
-
-        // Update any state or flags to manage component visibility
-        // For example, setVisibility(false);
-      } else {
-        toast.error(response.message);
-      }
-    } catch (err) {
-      toast.error(err.message);
-    }
-  };
 
   const handleAddRow = () => {
-    setTablerow((prevRows) => [
-      ...prevRows,
-      {
-        id: Date.now(),
+    const newRow = {
+        id: tablerow.length + 1,
         salaryComponent: "",
         percentage: "",
         value: "",
         price: "",
-      },
-    ]);
   };
+    setTablerow([...tablerow, newRow]);
+  };
+
 
   const handleRemoveRow = (id) => {
     setTablerow((prevRows) => prevRows.filter((row) => row.id !== id));
@@ -306,6 +229,70 @@ console.log('itemmmm',item);
     setEditemployee(false);
     setEmployelist(true);
   };
+
+
+  const handleclick = async (event) => {
+    event.preventDefault(); // Prevent default form submission
+
+    // Prepare formData with all necessary fields
+    const formData = {
+      name,
+      email,
+      phone,
+      gender,
+      employeeno,
+      address1,
+      address2,
+      address3,
+      bank,
+      accountNo,
+      ifsc,
+      branch,
+      panNo,
+      panName,
+      dateOfJoining,
+      dateOfBirth,
+      guardianname,
+      basicSalary,
+	  allowedleave,
+      universalAcNo,
+      city,
+      country,
+      tablerow,
+      TotalSalary,
+    };
+   
+    // Update Data array if itemid matches
+    const updatedData = Data.map((dataItem) => {
+      if (dataItem._id === item._id) {
+        return { ...dataItem, name: formData.name }; // Update the relevant field here
+      }
+      return dataItem;
+    });
+    setData(updatedData);
+
+    formData._id = itemid;
+    try {
+
+      console.log(formData,"dataaaaaaaaaaashahid");
+      // const response = await editemployeemaster(formData);
+      // if (response.success) {
+      //   toast.success(response.message);
+      //   setEditemployee(false);
+      //   setEmployelist(true);
+
+      //   // Update any state or flags to manage component visibility
+      //   // For example, setVisibility(false);
+      // } else {
+      //   toast.error(response.message);
+      // }
+    } catch (err) {
+      toast.error(err.message);
+    }
+  };
+
+
+
 
   return (
     <div>
@@ -887,7 +874,7 @@ console.log('itemmmm',item);
                                         setTablerow((prevRows) => [
                                           ...prevRows,
                                           {
-                                            id: 1,
+                                            id: tablerow.length+1,
                                             salaryComponent: "",
                                             percentage: "",
                                             value: "",
@@ -904,7 +891,7 @@ console.log('itemmmm',item);
                                           <input
                                             className="form-control"
                                             type="number"
-                                           value={ TotalSalary ? TotalSalary : basicSalary}
+                                           value={itemdata?.TotalSalary}
                                             readOnly
                                           />
                                           {/* Display the total amount here */}
