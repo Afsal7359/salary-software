@@ -146,18 +146,32 @@ function EditEmployeeMaster({ closeEdit, item, setData, Data, show, setshow }) {
     setTablerow((prevRows) => prevRows.filter((row) => row.id !== id));
   };
 
-    // Function to handle changes in basic salary
+    // // Function to handle changes in basic salary
+    // const handleBasicSalaryChange = (newBasicSalary) => {
+    //   setBasicSalary(newBasicSalary);
+    //   // Recalculate prices for all rows based on the new basicSalary
+    //   const updatedTablerow = tablerow.map((row) => {
+    //     const newPrice = (Number(newBasicSalary) * Number(row.percentage)) / 100;
+    //     return { ...row, price: newPrice };
+    //   });
+  
+    //   setTablerow(updatedTablerow);
+    // };
+
+
     const handleBasicSalaryChange = (newBasicSalary) => {
       setBasicSalary(newBasicSalary);
       // Recalculate prices for all rows based on the new basicSalary
       const updatedTablerow = tablerow.map((row) => {
-        const newPrice = (Number(newBasicSalary) * Number(row.percentage)) / 100;
+        // Calculate the new price based on percentage and fallback to value if percentage is not available
+        const newPrice = Number(row.percentage || 0)
+          ? (Number(newBasicSalary) * Number(row.percentage)) / 100
+          : Number(row.value || 0);
         return { ...row, price: newPrice };
       });
-  
+    
       setTablerow(updatedTablerow);
     };
-
 
 useEffect(() => {
 try {
@@ -269,14 +283,17 @@ try {
 
     formData._id = itemid;
     try {
-
-      console.log(formData,"dataaaaaaaaaaashahid");
+      // const tablerowValue = formData.tablerow?.price;
+      // if (!tablerowValue) {
+      //   toast.error("Add atl ")
+      //   return;
+      // }
+      // console.log(formData,"dataaaaaaaaaaashahid");
       const response = await editemployeemaster(formData);
       if (response.success) {
         toast.success(response.message);
         setEditemployee(false);
         setEmployelist(true);
-
         // Update any state or flags to manage component visibility
         // For example, setVisibility(false);
       } else {
