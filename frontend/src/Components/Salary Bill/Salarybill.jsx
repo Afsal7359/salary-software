@@ -196,6 +196,37 @@ useEffect(() => {
   };
 
 
+
+  const [absentDays, setAbsentDays] = useState(0);
+  const [perDaySalary, setPerDaySalary] = useState(0);
+  const [salaryTotal, setSalaryTotal] = useState(0);
+
+  
+  useEffect(() => {
+	// Calculate per day salary
+	const calculatedPerDaySalary = basicSalary / 30;
+  console.log("perday Salary",calculatedPerDaySalary);
+	// Calculate the difference between allowed and absent leaves
+	if(absentDays > allowedleave){
+		const leaveDifference = absentDays - allowedleave  ;
+		// console.log("leave",leave);
+		// console.log("leaveallowed",allowedleave);
+		// const leaveDifference= allowedleave - leave
+		console.log("leavedifference",leaveDifference);
+		const calculatedTotal = basicSalary - (leaveDifference * calculatedPerDaySalary);
+		setSalaryTotal(calculatedTotal);
+	}else {
+		// If the difference is not positive, set the total to basic salary
+		setSalaryTotal(basicSalary);
+	  }
+  
+	
+	
+  }, [basicSalary, allowedleave, absentDays]);
+
+  
+
+
 console.log("absent",absentvalue);
 
 
@@ -369,15 +400,28 @@ return (
 														<tfoot>
 															<tr>
 																<td colSpan="4" className='text-end'>Allowed Leaves</td>
-																<td><input className="form-control" type="number" value={allowedleave ? allowedleave :''} style={{backgroundColor:"#cbd0d6"}} readOnly/></td>
+																<td><input
+																className="form-control"
+																type="number"
+																value={allowedleave ? allowedleave : ''}
+																style={{ backgroundColor: "#cbd0d6" }}
+																readOnly
+																/>
+																</td>
 															</tr>
 															<tr>
 																<td colSpan="4" className='text-end'>Absent</td>
-																<td><input className="form-control" type="number"  onChange={(e) => setAbsentValue(e.target.value)}/></td>
+																<input
+																className="form-control"
+																type="number"
+																onChange={(e) => setAbsentDays(parseInt(e.target.value))}
+																value={absentDays}
+    />
 															</tr>
 															<div style={{display:"none"}}>balance Leave</div>
 															<tr>
 															<td colSpan="4" className="text-end"><strong>Total Amount:</strong></td>
+															<td><input type="text" className="form-control"  value={salaryTotal}/></td>
 															<td><input className="form-control" type="number" value={ TotalSalary ?TotalSalary : Totalamount} readOnly/>
 															
 															</td>

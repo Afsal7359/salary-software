@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useMemo } from 'react';
 import searchicon from '../../assets/img/icons/search-normal.svg';
 import addicon from '../../assets/img/icons/plus.svg';
 import refreshicon from '../../assets/img/icons/re-fresh.svg';
@@ -47,6 +47,8 @@ const Employeemasterlist = React.memo(({ formdata, setformdata }) =>{
       }
       fetchData();
     }, []);
+    
+  const memoizedData = useMemo(() => Data, [Data]);
   
    // Function to handle the click event
   const handleEditClick = (item) => {
@@ -103,8 +105,8 @@ const Employeemasterlist = React.memo(({ formdata, setformdata }) =>{
     
     {tablelist&& <div className="row">
         <div className="col-sm-12">
-        {formdata.length ===0 ? (
-            <p>No Data available</p> // You can customize this message
+        {memoizedData.length === 0 ? (
+            <p>No Data available</p>
           ) : (
             <div className="card  card-table show-entire">
               <div className="card-body">

@@ -134,7 +134,7 @@ module.exports = {
         })
       
   
-      if (!Employees || Employees.length === 0) {
+      if (!Employees ) {
         return res.status(404).json({
           success: false,
           message: "No Employees found.",

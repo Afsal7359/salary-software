@@ -1,4 +1,4 @@
-import React, { useEffect, useState,useMemo,useCallback  } from 'react';
+import React, { useEffect, useState,useCallback  } from 'react';
 import searchicon from '../../assets/img/icons/search-normal.svg';
 import addicon from '../../assets/img/icons/plus.svg';
 import refreshicon from '../../assets/img/icons/re-fresh.svg';
@@ -40,7 +40,7 @@ useEffect(() => {
     fetchData();
   }, []);
 
-  const memoizedData = useMemo(() => Data, [Data]);
+
 
 
   const handleEditClick = useCallback((item) => {
@@ -74,7 +74,7 @@ const closeEditModal = () => {
     <>
       <div className="row">
         <div className="col-sm-12">
-          {memoizedData.length === 0 ? (
+          {Data.length === 0 ? (
             <p>No Data available</p>
           ) : (
             <div className="card card-table show-entire">
