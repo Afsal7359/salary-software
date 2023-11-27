@@ -21,7 +21,7 @@ function Salarybill() {
 	const [TotalSalary, setTotalSalary] = useState('');
 	const [Totalamount, setTotalAmount] = useState('');
 	const [totalrowprice,setTotalRowPrice]=useState([]);
-
+	
 	const handleEmployeeclick = async () => {
 	 console.log('ddddddddddEmployee');
 	 try {
@@ -53,8 +53,9 @@ function Salarybill() {
 			} else {
 			setTablerow([]);
 			}
+		
 		setBasicSalary(filteredEmployees[0]?filteredEmployees[0].basicSalary :"")
-		// setTotalSalary(filteredEmployees[0]?filteredEmployees[0].TotalSalary:"")
+		setTotalSalary(filteredEmployees[0]?filteredEmployees[0].TotalSalary:"")
 		
         setFilterEmployeeData(filteredEmployees);
 
@@ -62,7 +63,7 @@ function Salarybill() {
     } else {
         setFilterEmployeeData([]);
     }
-};
+};	const [itemdata,setitemdata]=useState(filterEmployeeData[0])
 
 console.log('setdata',allowedleave);
 console.log('employeee name',EmployeeId);
@@ -121,6 +122,38 @@ const headerdata = useMemo(() => {
 	handlesalarymasterclick()
   },[])
 
+
+  
+  const [absentDays, setAbsentDays] = useState(0);
+  const [perDaySalary, setPerDaySalary] = useState(0);
+  const [salaryTotal, setSalaryTotal] = useState(0);
+
+  
+  useEffect(() => {
+	// Calculate per day salary
+	const calculatedPerDaySalary = basicSalary / 30;
+  console.log("perday Salary",calculatedPerDaySalary);
+	// Calculate the difference between allowed and absent leaves
+	if(absentDays > allowedleave){
+		const leaveDifference = absentDays - allowedleave  ;
+		// console.log("leave",leave);
+		// console.log("leaveallowed",allowedleave);
+		// const leaveDifference= allowedleave - leave
+		console.log("leavedifference",leaveDifference);
+		const calculatedTotal = basicSalary - (leaveDifference * calculatedPerDaySalary);
+		setSalaryTotal(calculatedTotal);
+		
+	}else {
+		// If the difference is not positive, set the total to basic salary
+		setSalaryTotal(basicSalary);
+	  }
+  
+	
+	
+  }, [basicSalary, allowedleave, absentDays]);
+
+
+
 console.log("salary fetch",salarymasterData);
 
 const handlesalarymasterchange = (event, index) => {
@@ -136,40 +169,56 @@ const handlesalarymasterchange = (event, index) => {
   const [salarycomponent, setSalaryComponent] = useState([]);
 console.log('totalrssow',totalrowprice);
 
+
+    // // Function to handle changes in basic salary
+    // const handleBasicSalaryChange = (newBasicSalary) => {
+    //   setBasicSalary(newBasicSalary);
+    //   // Recalculate prices for all rows based on the new basicSalary
+    //   const updatedTablerow = tablerow.map((row) => {
+    //     const newPrice = (Number(newBasicSalary) * Number(row.percentage)) / 100;
+    //     return { ...row, price: newPrice };
+    //   });
+  
+    //   setTablerow(updatedTablerow);
+    // };
+
+
 useEffect(() => {
-	try {
-	  console.log('tablerow:', tablerow);
-	  console.log('basicSalary:', basicSalary);
-	  console.log('salarymasterData:', salarymasterData);
-  
-	  const calculateTotalSalary = () => {
-		let totalAmount = parseFloat(basicSalary);
-  
-		tablerow.forEach((row) => {
-		  if (row.salaryComponent) {
-			const salaryType = salarymasterData.find(
-			  (item) => item._id === row.salaryComponent._id
-			);
-  
-			if (salaryType) {
-			  if (salaryType.type === "Increment") {
-				totalAmount += parseFloat(row.price);
-			  } else if (salaryType.type === "Decrement") {
-				totalAmount -= parseFloat(row.price);
-			  }
-			}
-		  }
-		});
-		console.log('Total Salary1111:', totalAmount);
-		setTotalSalary(totalAmount);
-	  };
-  
-	  calculateTotalSalary();
-	} catch (error) {
-	  console.error("Error in useEffect:", error);
-	}
+try {
+  const totalAmount = tablerow.reduce((acc, row) => {
+    const salaryType = salarymasterData.find(
+      (item) =>
+        item._id === row.salaryComponent?._id || item._id === row.salaryComponent
+    );
+
+    if (salaryType && (salaryType.type === 'Increment' || salaryType.type === 'Decrement')) {
+      const price = parseFloat(row.price);
+
+      if (!isNaN(price)) {
+        // Check if the parsed price is a valid number
+        return acc + (salaryType.type === 'Increment' ? price : -price);
+      } else {
+        console.error('Invalid price for row:', row);
+      }
+    }
+    return acc;
+  }, parseFloat(salaryTotal));
+
+  if (!isNaN(totalAmount)) {
+    // Check if the calculated totalAmount is a valid number
+    setitemdata({
+      ...itemdata,
+      TotalSalary: totalAmount,
+    });
+  } else {
+    console.error('Invalid totalAmount:', totalAmount);
+  }
+} catch (error) {
+  console.error('Error in useEffect:', error);
+}
   }, [tablerow, basicSalary, salarymasterData]);
-  
+
+
   const handleSecondInputChange = (index, value) => {
     const updatedTableRows = [...tablerow];
     updatedTableRows[index].percentage = "";
@@ -194,35 +243,6 @@ useEffect(() => {
 
     setTablerow(updatedTableRows);
   };
-
-
-
-  const [absentDays, setAbsentDays] = useState(0);
-  const [perDaySalary, setPerDaySalary] = useState(0);
-  const [salaryTotal, setSalaryTotal] = useState(0);
-
-  
-  useEffect(() => {
-	// Calculate per day salary
-	const calculatedPerDaySalary = basicSalary / 30;
-  console.log("perday Salary",calculatedPerDaySalary);
-	// Calculate the difference between allowed and absent leaves
-	if(absentDays > allowedleave){
-		const leaveDifference = absentDays - allowedleave  ;
-		// console.log("leave",leave);
-		// console.log("leaveallowed",allowedleave);
-		// const leaveDifference= allowedleave - leave
-		console.log("leavedifference",leaveDifference);
-		const calculatedTotal = basicSalary - (leaveDifference * calculatedPerDaySalary);
-		setSalaryTotal(calculatedTotal);
-	}else {
-		// If the difference is not positive, set the total to basic salary
-		setSalaryTotal(basicSalary);
-	  }
-  
-	
-	
-  }, [basicSalary, allowedleave, absentDays]);
 
   
 
@@ -414,6 +434,7 @@ return (
 																<input
 																className="form-control"
 																type="number"
+																min={0}
 																onChange={(e) => setAbsentDays(parseInt(e.target.value))}
 																value={absentDays}
     />
@@ -421,8 +442,8 @@ return (
 															<div style={{display:"none"}}>balance Leave</div>
 															<tr>
 															<td colSpan="4" className="text-end"><strong>Total Amount:</strong></td>
-															<td><input type="text" className="form-control"  value={salaryTotal}/></td>
-															<td><input className="form-control" type="number" value={ TotalSalary ?TotalSalary : Totalamount} readOnly/>
+															<td><input type="number" className="form-control"   value={salaryTotal} onChange={(e) => setSalaryTotal(parseInt(e.target.value))}/></td>
+															<td><input className="form-control" type="number" value={itemdata?.TotalSalary?itemdata.TotalSalary :TotalSalary}  readOnly/>
 															
 															</td>
 															
