@@ -119,7 +119,7 @@ function EditEmployeeMaster({ closeEdit, item, setData, Data, show, setshow }) {
     const updatedTableRows = [...tablerow];
     updatedTableRows[index] = {
       ...updatedTableRows[index],
-      salaryComponent: event.target.value, // Update salaryComponent based on the event value
+      salaryComponent: event.target.value,
     };
     setTablerow(updatedTableRows); // Update the state with the modified rows
   };
@@ -907,7 +907,7 @@ try {
                                           <input
                                             className="form-control"
                                             type="number"
-                                           value={itemdata?.TotalSalary?itemdata.TotalSalary:basicSalary}
+                                           value={itemdata?.TotalSalary}
                                             readOnly
                                           />
                                           {/* Display the total amount here */}

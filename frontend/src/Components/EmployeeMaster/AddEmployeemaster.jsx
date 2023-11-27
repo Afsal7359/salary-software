@@ -304,7 +304,20 @@ const [tablestate,settablestate]=useState(false)
 		  page:"Add Employeemaster"
 		};
 	  }, []);
-
+	  const handleBasicSalaryChange = (newBasicSalary) => {
+		setBasicSalary(newBasicSalary);
+		// Recalculate prices for all rows based on the new basicSalary
+		const updatedTablerow = tableRows.map((row) => {
+		  // Calculate the new price based on percentage and fallback to value if percentage is not available
+		  const newPrice = Number(row.percentage || 0)
+			? (Number(newBasicSalary) * Number(row.percentage)) / 100
+			: Number(row.value || 0);
+		  return { ...row, price: newPrice };
+		});
+	  
+		settableRows(updatedTablerow);
+	  };
+  
 
   return (
    <>
@@ -717,7 +730,7 @@ const [tablestate,settablestate]=useState(false)
 													className={`form-control ${errors.basicSalary ? 'is-invalid' : ''}`}
 													placeholder=""
 													value={basicsalary}
-													onChange={(e) => setBasicSalary(e.target.value)}
+													onChange={(e) => handleBasicSalaryChange(e.target.value)}
 													/>
 													{errors.basicSalary && errors.basicSalary.type === 'required' && (
 													<span className="text-danger">Basic Salary is required</span>
@@ -908,7 +921,7 @@ const [tablestate,settablestate]=useState(false)
 															
 															<tr>
 															<td colSpan="5" className="text-end"><strong>Total Amount:</strong></td>
-															<td><input className="form-control" type="number" value={totalAmount?totalAmount:basicsalary} readOnly/>
+															<td><input className="form-control" type="number" value={totalAmount} readOnly/>
 																{/* Display the total amount here */}
 																{/* You can use the 'calculateTotalAmount' function to get the total */}
 															</td>
