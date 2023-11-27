@@ -155,11 +155,19 @@ console.log('salary daaaata : ',salarymasterData);
 		data.employeeid=`ME${count.toString().padStart(3, '0')}`
 	     data.EmployeeTypeId=employeeTypeId
 		 data.PostId=postId
-		 data.tablerow=tableRows
+		//  data.tablerow=tableRows
+		data.tablerow = (tableRows && Array.isArray(tableRows) && tableRows.length === 1 &&
+  tableRows[0].value === '' &&
+  tableRows[0].percentage === '' &&
+  tableRows[0].price === '')
+  ? []
+  : (tableRows || []);
+		
 		 data.TotalSalary=totalAmount?totalAmount:basicsalary
 		try {
 			console.log('Afsal :' , data);
 		  const response = await Addemployee(data);
+		  console.log(response,"ii");
 		  if (response.success) {
 			setcount((prevCount) => prevCount + 1);
 			setFormdata(response.data);
@@ -193,6 +201,7 @@ console.log('salary daaaata : ',salarymasterData);
 
 		  } else {
 			toast.error(response.message);
+			
 		  }
 		} catch (err) {
 		  toast.error(err.message);

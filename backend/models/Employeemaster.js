@@ -126,30 +126,52 @@ const EmployeeSchema= new mongoose.Schema({
         trim:true
     },
 
-    tablerow: [{
-        id: {
-            type: mongoose.Schema.Types.Mixed,
-            required: true
-        },
-        salaryComponent: {
-            type: mongoose.Schema.Types.ObjectId,
-        ref: 'Salarymaster', // This should be the model name that you want to reference
+    // tablerow: [{
+    //     id: {
+    //         type: mongoose.Schema.Types.Mixed,
+    //         required: true
+    //     },
+    //     salaryComponent: {
+    //         type: mongoose.Schema.Types.ObjectId,
+    //     ref: 'Salarymaster', // This should be the model name that you want to reference
        
-        },
-        percentage: {
-            type: Number,
+    //     },
+    //     percentage: {
+    //         type: Number,
             
-        },
-        value: {
-            type: String,
+    //     },
+    //     value: {
+    //         type: String,
          
-        },
-        price: {
-            type: Number,
-            required: true
-        }
-    }],
-   
+    //     },
+    //     price: {
+    //         type: Number,
+    //         required: true
+    //     }
+    // }],
+    tablerow: {
+        type: [{
+            id: {
+                type: mongoose.Schema.Types.Mixed,
+            },
+            salaryComponent: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'Salarymaster',
+                default: null, // Set default value to null or remove this line if not needed
+            },
+            percentage: {
+                type: Number,
+            },
+            value: {
+                type: String,
+            },
+            price: {
+                type: Number,
+            }
+        }],
+        default: [] // Default value as an empty array
+    },
+    
     
     TotalSalary:{
         type:Number

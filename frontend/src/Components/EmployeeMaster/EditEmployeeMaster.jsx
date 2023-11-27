@@ -8,7 +8,6 @@ import Employeemasterlist from "./Employeemasterlist";
 function EditEmployeeMaster({ closeEdit, item, setData, Data, show, setshow }) {
   console.log(item,"item");
   const [itemdata,setitemdata]=useState(item)
-  // const [tableRow, settableRow] = useState(item?.tablerow);
   const [employeeTypeData, setEmployeeTypeData] = useState([]);
   const [employeeTypeId, setEmployeeTypeId] = useState("");
   const [isemployeeTypeDataFetch, setisEmployeeTypeDataFetch] = useState(false);
@@ -17,8 +16,6 @@ function EditEmployeeMaster({ closeEdit, item, setData, Data, show, setshow }) {
   const [ispostDataFetched, setIspostDataFetched] = useState(false);
   const [issalarymasterDataFetched, setIsSalarymasterDataFetched] =useState(false);
   const [salarymasterData, setSalarymasterData] = useState([]);
-  // const [salarymasterId, setSalarymasterId] = useState("");
-  // const [salarycomponent, setSalaryComponent] = useState([]);
    const [employeeid, setEmployeeId] = useState(item?.employeeid);
    const [name, setName] = useState(item?.name);
    const [email, setEmail] = useState(item?.email);
@@ -289,6 +286,12 @@ try {
       //   return;
       // }
       // console.log(formData,"dataaaaaaaaaaashahid");
+      formData.tablerow = (tablerow && Array.isArray(tablerow) && tablerow.length === 1 &&
+      tablerow[0].value === '' &&
+      tablerow[0].percentage === '' &&
+      tablerow[0].price === '')
+      ? []
+      : (tablerow || []);
       const response = await editemployeemaster(formData);
       if (response.success) {
         toast.success(response.message);
