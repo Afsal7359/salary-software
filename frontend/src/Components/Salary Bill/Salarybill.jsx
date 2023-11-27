@@ -1,7 +1,7 @@
 import React,{ useMemo,useEffect, useState} from 'react'
 import PageHeader from '../PageHeader'
 import { toast } from 'react-toastify';
-import { getallemployeemaster } from '../../Apicalls/EmployeeMater';
+import { editemployeemaster, getallemployeemaster } from '../../Apicalls/EmployeeMater';
 import { getallSalary } from '../../Apicalls/salarymaster';
 
 
@@ -124,36 +124,6 @@ const headerdata = useMemo(() => {
 
 
   
-  const [absentDays, setAbsentDays] = useState(0);
-  const [perDaySalary, setPerDaySalary] = useState(0);
-  const [salaryTotal, setSalaryTotal] = useState(0);
-
-  
-  useEffect(() => {
-	// Calculate per day salary
-	const calculatedPerDaySalary = basicSalary / 30;
-  console.log("perday Salary",calculatedPerDaySalary);
-	// Calculate the difference between allowed and absent leaves
-	if(absentDays > allowedleave){
-		const leaveDifference = absentDays - allowedleave  ;
-		// console.log("leave",leave);
-		// console.log("leaveallowed",allowedleave);
-		// const leaveDifference= allowedleave - leave
-		console.log("leavedifference",leaveDifference);
-		const calculatedTotal = basicSalary - (leaveDifference * calculatedPerDaySalary);
-		setSalaryTotal(calculatedTotal);
-		
-	}else {
-		// If the difference is not positive, set the total to basic salary
-		setSalaryTotal(basicSalary);
-	  }
-  
-	
-	
-  }, [basicSalary, allowedleave, absentDays]);
-
-
-
 console.log("salary fetch",salarymasterData);
 
 const handlesalarymasterchange = (event, index) => {
@@ -181,7 +151,10 @@ console.log('totalrssow',totalrowprice);
   
     //   setTablerow(updatedTablerow);
     // };
-
+	const [absentDays, setAbsentDays] = useState('');
+	const [perDaySalary, setPerDaySalary] = useState('');
+	const [salaryTotal, setSalaryTotal] = useState('');
+    const [leaveDifference,setLeaveDifference]=useState('');
 
 useEffect(() => {
 try {
@@ -202,21 +175,58 @@ try {
       }
     }
     return acc;
-  }, parseFloat(salaryTotal));
+  }, parseFloat(basicSalary));
+	// Calculate per day salary
+	const calculatedPerDaySalary = basicSalary / 30;
+	setPerDaySalary(calculatedPerDaySalary)
+	console.log("perday Salary",perDaySalary);
+	
+	  // Calculate the difference between allowed and absent leaves
+	  if(absentDays > allowedleave){
+		console.log("absentdays",absentDays);
+		console.log('alloweddays',allowedleave);
+		const leaveDifferences = absentDays - allowedleave  ;
+		console.log('LeaveDifferencesss',leaveDifferences);
+		
+		// setLeaveDifference(leaveDifferences);
+		// console.log('LeaveDifference',leaveDifference);
+		  const calculatedTotal = totalAmount - (leaveDifferences * perDaySalary);
+		  setSalaryTotal(calculatedTotal);
+		  
+	  }else {
+		  // If the difference is not positive, set the total to basic salary
+		  setSalaryTotal({
+			...itemdata,
+			TotalSalary: totalAmount,
+		  });
+		}
 
-  if (!isNaN(totalAmount)) {
-    // Check if the calculated totalAmount is a valid number
-    setitemdata({
-      ...itemdata,
-      TotalSalary: totalAmount,
-    });
-  } else {
-    console.error('Invalid totalAmount:', totalAmount);
-  }
+	const balanceleave = allowedleave - absentDays
+	if(balanceleave < 0){
+		setLeaveDifference(0)
+	}else{
+		setLeaveDifference(balanceleave)
+	}
+	
+ 
+//   if (!isNaN(totalAmount)) {
+
+	
+
+//     // Check if the calculated totalAmount is a valid number
+//     setitemdata({
+//       ...itemdata,
+//       TotalSalary: totalAmount,
+//     });
+//   } else {
+//     console.error('Invalid totalAmount:', totalAmount);
+//   }
+
+  
 } catch (error) {
   console.error('Error in useEffect:', error);
 }
-  }, [tablerow, basicSalary, salarymasterData]);
+  }, [tablerow, basicSalary, salarymasterData, allowedleave, absentDays]);
 
 
   const handleSecondInputChange = (index, value) => {
@@ -243,6 +253,22 @@ try {
 
     setTablerow(updatedTableRows);
   };
+
+
+//   const handleAllowedLeaveChange = async () => {
+//     console.log('haaaaaaaaaaaaaaaaaaaa');
+//     const formData = {
+//         _id: filterEmployeeData[0]._id,
+//         allowedleave: Number(leaveDifference)
+//     };
+//     console.log('formdaaats:', formData);
+//     const response = await editemployeemaster(formData);
+//     if (response.success) {
+//         toast.success(response.message);
+//     } else {
+//         toast.error(response.message);
+//     }
+// };
 
   
 
@@ -435,19 +461,22 @@ return (
 																className="form-control"
 																type="number"
 																min={0}
-																onChange={(e) => setAbsentDays(parseInt(e.target.value))}
+																onChange={(e) => setAbsentDays(e.target.value)}
 																value={absentDays}
     />
 															</tr>
 															<div style={{display:"none"}}>balance Leave</div>
 															<tr>
 															<td colSpan="4" className="text-end"><strong>Total Amount:</strong></td>
-															<td><input type="number" className="form-control"   value={salaryTotal} onChange={(e) => setSalaryTotal(parseInt(e.target.value))}/></td>
-															<td><input className="form-control" type="number" value={itemdata?.TotalSalary?itemdata.TotalSalary :TotalSalary}  readOnly/>
+															<td><input type="number" className="form-control"   value={salaryTotal?.TotalSalary?salaryTotal.TotalSalary :salaryTotal} readOnly/></td>
+															{/* <td><input className="form-control" type="number" value={itemdata?.TotalSalary?itemdata.TotalSalary :TotalSalary}  readOnly/>
 															
-															</td>
+															</td> */}
 															
 															</tr>
+															{/* <tr>
+																<td><input type="text" style={{display:"flex"}} value={leaveDifference} onChange={handleAllowedLeaveChange()}/></td>
+															</tr> */}
 														</tfoot>
 														</table>
 														
