@@ -3,13 +3,16 @@ import PageHeader from '../PageHeader'
 import { toast } from 'react-toastify';
 import { editemployeemaster, getallemployeemaster } from '../../Apicalls/EmployeeMater';
 import { getallSalary } from '../../Apicalls/salarymaster';
+import { AddSalaryBill } from '../../Apicalls/salaryBill';
 
 
 
 
 function Salarybill() {
 
-	
+
+	const [unit,setUnit]=useState('');
+	const [department,setDepartment]=useState('');
 	const [EmployeeData, setEmployeeData] = useState([]);
 	const [EmployeeId, setEmployeeId] = useState('');
 	const [isEmployeeDataFetched, setIsEmployeeDataFetched] = useState(false);
@@ -21,7 +24,10 @@ function Salarybill() {
 	const [TotalSalary, setTotalSalary] = useState('');
 	const [Totalamount, setTotalAmount] = useState('');
 	const [totalrowprice,setTotalRowPrice]=useState([]);
-	
+	const [employeeid,setEmployeeid]=useState('');
+	const [data,setData]=useState([]);
+
+
 	const handleEmployeeclick = async () => {
 	 console.log('ddddddddddEmployee');
 	 try {
@@ -53,7 +59,9 @@ function Salarybill() {
 			} else {
 			setTablerow([]);
 			}
-		
+		setEmployeeid(filteredEmployees[0]?filteredEmployees[0]._id :"")
+		setDepartment(filteredEmployees[0]?filteredEmployees[0].PostId.department._id : '')
+		setUnit(filteredEmployees[0]?filteredEmployees[0].PostId.unit._id : ""	)
 		setBasicSalary(filteredEmployees[0]?filteredEmployees[0].basicSalary :"")
 		setTotalSalary(filteredEmployees[0]?filteredEmployees[0].TotalSalary:"")
 		
@@ -66,8 +74,8 @@ function Salarybill() {
 };	const [itemdata,setitemdata]=useState(filterEmployeeData[0])
 
 console.log('setdata',allowedleave);
-console.log('employeee name',EmployeeId);
 
+console.log("employeeid",EmployeeId);
 
 console.log('filtered data :',filterEmployeeData);
 const headerdata = useMemo(() => {
@@ -132,7 +140,7 @@ const handlesalarymasterchange = (event, index) => {
 	  ...updatedTableRows[index],
 	  salaryComponent: event.target.value,
 	};
-	console.log(updatedTableRows, "ii");
+	console.log("iiiiiiiiiiiiiiiiiiiiii",updatedTableRows);
 	setTablerow(updatedTableRows);
   };
   
@@ -269,10 +277,44 @@ try {
 //         toast.error(response.message);
 //     }
 // };
+const handleformsubmit = async(event)=>{
+	event.preventDefault();
+		try {
+			const formdata = {
+			employeeid:employeeid,
+			departmentid : department,
+			unitid : unit,
+			basicSalary:basicSalary,
+			tablerow: tablerow.map(row => {
+				return {
+					...row,
+					salaryComponent: row.salaryComponent._id ? row.salaryComponent._id : row.salaryComponent // or provide a default value if _id doesn't exist
+				};
+			}),
+			allowedleave:allowedleave,
+			absentDays : absentDays,
+			totalAmount: salaryTotal?.TotalSalary?salaryTotal.TotalSalary :salaryTotal
+			}
+			console.log(formdata);
 
-  
+			const response = await AddSalaryBill(formdata);
 
+			 if (response.success){
+			setData(response.data);
+			toast.success(response.message);
+			}
+			else {
+				toast.error(response.message);
+			  }
+			
+		} catch (error) {
+			toast.error(error.message);
+			console.log(error);
+		}
 
+	}
+
+	console.log('Added Data',data);
 console.log("absent",absentvalue);
 
 
@@ -282,7 +324,7 @@ return (
       <PageHeader headerdata={headerdata}/>
 
 
-							<form>
+							<form onSubmit={handleformsubmit}>
 							<div class="container mt-5">
 								<div class="row">
 									<div class="col-sm-4">
