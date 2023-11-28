@@ -133,12 +133,6 @@ const AddEmployeemaster = () => {
 
 
 
-	  
-
-
-	
-	
-
 	const {
 		
 		register,
