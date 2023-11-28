@@ -394,11 +394,11 @@ try {
                             onChange={handlePostChange}
                           >
                             <option value={item.PostId._id}>
-                              {item.PostId.designation.name}
+                              {item.PostId.designation}
                             </option>
                             {postData.map((option) => (
                               <option value={option._id} key={option._id}>
-                                {option.designation.name}
+                                {option.designation}
                               </option>
                             ))}
                           </select>

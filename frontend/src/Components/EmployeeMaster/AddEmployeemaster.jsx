@@ -383,7 +383,7 @@ const [tablestate,settablestate]=useState(false)
 													<option>Select Post</option>
 													{postData.map((option)=>(
 														<option value={option._id} key={option._id}>
-															{option.designation.name}
+															{option.designation}
 														</option>
 													))}
 												  </select>

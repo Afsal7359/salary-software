@@ -37,7 +37,7 @@ module.exports={
     const populatedPost = await Post.populate(newPost, [
         { path: 'department' },
         { path: 'unit' },
-        // { path: 'designation' },
+       
       ]);
             res.status(200).json({
                 success: true,
