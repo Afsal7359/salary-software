@@ -135,7 +135,7 @@ const closeEditModal = () => {
                         <tr key={item._id}>
                           <td>{index + 1}</td>
                           <td>{item.department.name}</td>
-                          <td>{item.designation.name}</td>
+                          <td>{item.designation}</td>
                           <td>{item.unit.name}</td>
                           <td className="text-end">
                             <div className="dropdown dropdown-action">

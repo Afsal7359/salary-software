@@ -11,10 +11,15 @@ const PostSchema = new mongoose.Schema({
         ref: 'Unit', // This should be the model name that you want to reference
         required: true,
     },
+    // designation: {
+    //     type: mongoose.Schema.Types.ObjectId,
+    //     ref: 'Designation', // This should be the model name that you want to reference
+    //     required: true,
+    // },
     designation: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Designation', // This should be the model name that you want to reference
-        required: true,
+        type: String,
+        require: true,
+        trim: true,
     },
     postid:{
         type: String,

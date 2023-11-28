@@ -38,6 +38,7 @@ const Postmaster = () => {
   const [unitId, setUnitId] = useState('');
   const [departmentId, setDepartmentId] = useState('');
   const [designationId, setDesignationId] = useState('');
+  const [designation, setDesignation] = useState('');
 
   // Ensure that fetching data is done only once
   const [isDepartmentDataFetched, setIsDepartmentDataFetched] = useState(false);
@@ -60,21 +61,21 @@ const Postmaster = () => {
     }
   };
 
-  const handleDesignationClick = async () => {
-    try {
-      if (!isDesignationDataFetched) {
-        const response = await getallDesignation();
-        if (response.success) {
-          setDesignationData(response.data);
-        } else {
-          setDesignationData([]);
-        }
-        setIsDesignationDataFetched(true);
-      }
-    } catch (error) {
-      toast.error(error.message);
-    }
-  };
+  // const handleDesignationClick = async () => {
+  //   try {
+  //     if (!isDesignationDataFetched) {
+  //       const response = await getallDesignation();
+  //       if (response.success) {
+  //         setDesignationData(response.data);
+  //       } else {
+  //         setDesignationData([]);
+  //       }
+  //       setIsDesignationDataFetched(true);
+  //     }
+  //   } catch (error) {
+  //     toast.error(error.message);
+  //   }
+  // };
 
   const handleUnitClick = async () => {
     try {
@@ -92,6 +93,10 @@ const Postmaster = () => {
     }
   };
 
+  const handleDesignationChange = (event) => {
+    setDesignation(event.target.value);
+  };
+
   const handleUnitChange = (event) => {
     setUnitId(event.target.value);
   };
@@ -100,9 +105,9 @@ const Postmaster = () => {
     setDepartmentId(event.target.value);
   };
 
-  const handleDesignationChange = (event) => {
-    setDesignationId(event.target.value);
-  };
+  // const handleDesignationChange = (event) => {
+  //   setDesignationId(event.target.value);
+  // };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -111,10 +116,10 @@ const Postmaster = () => {
     const formdatas = {
       unitId,
       departmentId,
-      designationId,
+      designation,
       postid: `MP${count.toString().padStart(3, '0')}` 
     };
-
+console.log(formdatas,"fffffffffffffffffffff");
     try {
     
       // Example usage:
@@ -125,7 +130,7 @@ const Postmaster = () => {
         setformdata(response.data);
         setUnitId('');
         setDepartmentId('');
-        setDesignationId('');
+        setDesignation('')
         toast.success(response.message);
       } else {
         toast.error(response.message);
@@ -194,7 +199,7 @@ const Postmaster = () => {
                       </select>
                     </div>
                   </div>
-                  <div className="col-12 col-md-6 col-xl-3">
+                  {/* <div className="col-12 col-md-6 col-xl-3">
                     <div className="form-group local-forms">
                       <label>Designation<span className="login-danger">*</span></label>
                       <select
@@ -210,7 +215,18 @@ const Postmaster = () => {
                         ))}
                       </select>
                     </div>
-                  </div>
+                  </div> */}
+                   <div className="col-12 col-md-6 col-xl-3">
+                   <div className="form-group local-forms">
+                  <label>Designation<span className="login-danger">*</span></label>
+                   <input
+                   type="text"
+                    className="form-control"
+                   value={designation}
+                  onChange={handleDesignationChange}
+                 />
+                 </div>
+                     </div>
                   <div className="col-12">
                     <div className="doctor-submit text-end">
                       <button type="submit" className="btn btn-primary submit-form me-2"onClick={handleSubmit}>

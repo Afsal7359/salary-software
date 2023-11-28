@@ -4,7 +4,7 @@ module.exports={
     GetPost:async(req,res)=>{
         try{
             const response = await Post.find({ isdeleted: { $ne: true } }).sort({_id:-1})
-            .populate('designation')
+            // .populate('designation')
             .populate('department')
             .populate('unit');
             res.status(200).json({
@@ -22,13 +22,13 @@ module.exports={
     },
     AddPost:async(req,res)=>{
         try {
-            const { departmentId, unitId, designationId,postid } = req.body;
+            const { departmentId, unitId, designation,postid } = req.body;
     
             // Create a new Post document with the provided departmentId, unitId, and designationId
             const newPost = new Post({
                 department: departmentId,
                 unit: unitId,
-                designation: designationId,
+                designation,
                 postid
             });
     
@@ -37,7 +37,7 @@ module.exports={
     const populatedPost = await Post.populate(newPost, [
         { path: 'department' },
         { path: 'unit' },
-        { path: 'designation' },
+        // { path: 'designation' },
       ]);
             res.status(200).json({
                 success: true,
