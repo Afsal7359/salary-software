@@ -108,36 +108,44 @@ function EmployeeView({item}){
                                                                 <th>  Country </th>
                                                                 <td>{item?.country}</td>
                                                             </tr>
-                                                            <tr>
-                                                                 <th>Id</th>
-                                                                 <th>Salary Components</th>
-                                                                 <th>Percentage</th>
-                                                                 <th>Value</th>
-                                                                 <th>Price</th>
-                                                            </tr>
-
-{tableRows && tableRows.length > 0 ? (
-    tableRows.map((data) => (
-        <tr key={data._id}>
-            <td>{data.id}</td>
-            <td>{data.salaryComponent && data.salaryComponent.name}</td>
-            <td>{data.percentage}</td>
-            <td>{data.value}</td>
-            <td>{data.price}</td>
-        </tr>
+                                                          
+                                                            </thead>
+                                                            {tableRows && tableRows.length > 0 ? (
+    tableRows.map((data, index) => (
+        <thead key={index}>
+            <tr>
+                <th>Id:</th> <td>{data.id}</td>
+            </tr>
+            <tr>
+            <th>Salary Components:</th> <td> {data.salaryComponent && data.salaryComponent.name}</td>
+            </tr>
+            <tr>
+                <th>Percentage:</th> <td> {data.percentage}</td>
+            </tr>
+            <tr>
+                <th>Value:</th> <td>{data.value}</td>
+            </tr>
+            <tr>
+                <th>Price:</th> <td>{data.price}</td>
+            </tr>
+        </thead>
     ))
 ) : (
-    <tr>
-        <td colSpan="5">No data available</td>
-    </tr>
+    <tbody>
+        <tr>
+            <td colSpan="1">No data available</td>
+        </tr>
+    </tbody>
 )}
 
+
+<thead>
 <tr>
     <th>Total Salary</th>
     <th>{item.TotalSalary}</th>
 </tr>
-
-														</thead>
+</thead>
+														
 														</table>
 													</div>
 													</div>

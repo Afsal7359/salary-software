@@ -4,10 +4,12 @@ import { toast } from 'react-toastify';
 import { editemployeemaster, getallemployeemaster } from '../../Apicalls/EmployeeMater';
 import { getallSalary } from '../../Apicalls/salarymaster';
 import { AddSalaryBill } from '../../Apicalls/salaryBill';
+import list_salary_bill from './list_salary_bill';
 
 
 
 
+const MemoizedSalaryBill = React.memo(list_salary_bill);
 function Salarybill() {
 
 
@@ -25,7 +27,7 @@ function Salarybill() {
 	const [Totalamount, setTotalAmount] = useState('');
 	const [totalrowprice,setTotalRowPrice]=useState([]);
 	const [employeeid,setEmployeeid]=useState('');
-	const [data,setData]=useState([]);
+	const [formdata,setformData]=useState([]);
 
 
 	const handleEmployeeclick = async () => {
@@ -314,7 +316,7 @@ const handleformsubmit = async(event)=>{
 			const response = await AddSalaryBill(formdata);
 
 			 if (response.success){
-			setData(response.data);
+			setformData(response.data);
 			toast.success(response.message);
 			}
 			else {
@@ -328,7 +330,7 @@ const handleformsubmit = async(event)=>{
 
 	}
 
-	console.log('Added Data',data);
+	
 console.log("absent",absentvalue);
 
 
@@ -552,7 +554,7 @@ return (
 										</form>
 
 
-
+			<MemoizedSalaryBill formdata={formdata} setformdata={setformData} />
     </>
   )
 }

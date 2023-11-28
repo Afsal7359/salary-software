@@ -9,3 +9,20 @@ export const AddSalaryBill = async (payload) =>{
         return error.response.data;
     }
 }
+export const getallSalarybill = async () =>{
+    try {
+        const response = await instance.get('salarybill/getallSalarybill')
+        return response.data
+    } catch (error) {
+        return error.response.data;
+    }
+}
+
+export const DeleteSalaryBill = async(payload)=>{
+    try {
+        const response = await instance.get(`salarybill/deleteSalarybill/${payload}`)
+        return response.data
+    } catch (error) {
+        return error.response.data;
+    }
+}
