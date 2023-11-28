@@ -57,7 +57,11 @@ const SalarybillSchema = new mongoose.Schema({
         type:Number,
         require:true
     },
-
+    isdeleted:{
+        type:Boolean,
+        require:true,
+        default:false
+    }
 
 },{timestamps:true});
 const SalaryBill = mongoose.model('SalaryBill',SalarybillSchema);

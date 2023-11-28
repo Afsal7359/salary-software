@@ -6,13 +6,11 @@ import pdficon from '../../assets/img/icons/pdf-icon-01.svg';
 import TXticon from '../../assets/img/icons/pdf-icon-02.svg';
 import csvicon from '../../assets/img/icons/pdf-icon-03.svg';
 import Excelicon from '../../assets/img/icons/pdf-icon-04.svg';
-import { getallpost } from '../../Apicalls/Post';
-import Postdelete from '../Modal/Postdelete';
-import Postedit from '../Modal/Postedit';
+
 import { getallSalarybill } from '../../Apicalls/salaryBill';
 import SalaryBill from '../Modal/SalaryBill';
 
-function list_salary_bill({ formdata, setformdata }) {
+function List_salary_bill({ formdata, setformdata }) {
   const [Data, setData] = useState([]);
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteModal, setshowDeleteModal] = useState(false);
@@ -196,4 +194,4 @@ console.log('memoizedData',memoizedData);
   );
 }
 
-export default React.memo(list_salary_bill);
+export default React.memo(List_salary_bill);
