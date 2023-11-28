@@ -19,35 +19,61 @@ module.exports={
             });
         }
     },
-    AddSalarymaster:async(req,res)=>{
-        try {
-            const { name, PurposeId, type,salarymasterId } = req.body;
-            const newPost = new Salarymaster({
-                name,
-                purpose: PurposeId,
-                type: type,
-                salarymasterId
+    AddSalarymaster: async (req, res) => {
+      try {
+        const { name, PurposeId, type, salarymasterId } = req.body;
+        const existingSalaryMaster = await Salarymaster.findOne({ name: name });
+    
+        if (existingSalaryMaster) {
+          if (existingSalaryMaster.isdeleted) {
+            const updatedSalaryMaster = await Salarymaster.findOneAndUpdate(
+              { name: name },
+              { isdeleted: false },
+              { new: true }
+            );
+            res.status(200).json({
+              success: true,
+              message: "Salary master added successfully.",
+              data: updatedSalaryMaster,
             });
-            await newPost.save();
-             // Populate the fields and return the populated post
-            const Salary = await Salarymaster.populate(newPost, [
-                { path: 'purpose' },
-              ]);
-            
-                    res.status(200).json({
-                        success: true,
-                        message: "Salary master added successfully.",
-                        data: Salary,
-                    });
-                } catch (err) {
-                  console.log(err);
-                    res.status(500).json({
-                        success: false,
-                        message: "Failed to add Salary Master.",
-                        error: err.message,
-                    });
-                }
-            },
+          } else {
+            return res.status(409).json({
+              success: false,
+              message: "Salary master already exists.",
+            });
+          }
+        } else {
+          const newSalaryMaster = new Salarymaster({
+            name,
+            purpose: PurposeId,
+            type,
+            salarymasterId,
+          });
+    
+          await newSalaryMaster.save();
+    
+          // Populate the fields and return the populated post
+          const Salary = await Salarymaster.populate(newSalaryMaster, [
+            { path: 'purpose' },
+          ]);
+    
+          res.status(200).json({
+            success: true,
+            message: "Salary master added successfully.",
+            data: Salary,
+          });
+        }
+      } catch (err) {
+        console.log(err);
+        res.status(500).json({
+          success: false,
+          message: "Failed to add Salary Master.",
+          error: err.message,
+        });
+      }
+    },
+    
+    
 
             EditSalaryMaster: async (req, res) => {
               try {

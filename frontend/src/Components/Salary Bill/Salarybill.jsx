@@ -199,15 +199,17 @@ try {
 		// setLeaveDifference(leaveDifferences);
 		// console.log('LeaveDifference',leaveDifference);
 		  const calculatedTotal = totalAmount - (leaveDifferences * perDaySalary);
-		  setSalaryTotal(calculatedTotal);
+		  setSalaryTotal(calculatedTotal.toFixed(2));
 		  
 	  }else {
 		  // If the difference is not positive, set the total to basic salary
 		  setSalaryTotal({
 			...itemdata,
-			TotalSalary: totalAmount,
+			TotalSalary: totalAmount.toFixed(2),
 		  });
 		}
+
+
 
 	const balanceleave = allowedleave - absentDays
 	if(balanceleave < 0){
@@ -262,24 +264,36 @@ try {
     setTablerow(updatedTableRows);
   };
 
+// const [balanceleave,setBalanceLeave]=useState('');
 
-//   const handleAllowedLeaveChange = async () => {
-//     console.log('haaaaaaaaaaaaaaaaaaaa');
-//     const formData = {
-//         _id: filterEmployeeData[0]._id,
-//         allowedleave: Number(leaveDifference)
-//     };
-//     console.log('formdaaats:', formData);
-//     const response = await editemployeemaster(formData);
-//     if (response.success) {
-//         toast.success(response.message);
-//     } else {
-//         toast.error(response.message);
-//     }
-// };
+// useEffect(()=>{
+// 	const handleAllowedLeaveChange = async () => {
+// 		console.log('haaaaaaaaaaaaaaaaaaaa');
+// 		const LeaveBalance = {
+// 			_id: filterEmployeeData[0]._id,
+// 			allowedleave: Number(leaveDifference)
+// 		};
+// 		console.log('formdaaats:', LeaveBalance);
+// 		setBalanceLeave(LeaveBalance);
+	  
+// 	};
+// })
+
+
+
+
 const handleformsubmit = async(event)=>{
 	event.preventDefault();
 		try {
+			const LeaveBalance = {
+				_id: filterEmployeeData[0]._id,
+				allowedleave: Number(leaveDifference)
+			};
+			console.log('formdaaats:', LeaveBalance);
+			const responses = await editemployeemaster(LeaveBalance);
+			if (responses.success){
+				console.log("sucessfully updated");
+			}
 			const formdata = {
 			employeeid:employeeid,
 			departmentid : department,
@@ -516,9 +530,9 @@ return (
 															</td> */}
 															
 															</tr>
-															{/* <tr>
-																<td><input type="text" style={{display:"flex"}} value={leaveDifference} onChange={handleAllowedLeaveChange()}/></td>
-															</tr> */}
+															<tr>
+																<td><input type="text" style={{display:"none"}} value={leaveDifference}/></td>
+															</tr>
 														</tfoot>
 														</table>
 														

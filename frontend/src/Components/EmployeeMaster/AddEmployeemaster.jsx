@@ -152,6 +152,7 @@ const AddEmployeemaster = () => {
 		data.employeeid=`ME${count.toString().padStart(3, '0')}`
 	     data.EmployeeTypeId=employeeTypeId
 		 data.PostId=postId
+		 data.previousAllowedleave=allowedLeave
 		//  data.tablerow=tableRows
 		data.tablerow = (tableRows && Array.isArray(tableRows) && tableRows.length === 1 &&
   tableRows[0].value === '' &&
@@ -527,19 +528,22 @@ const [tablestate,settablestate]=useState(false)
                                         <div className="col-12 col-md-6 col-xl-6">
 											<div className="form-group local-forms">
 												<label >Phone <span className="login-danger">*</span></label>
-												<input  {...register('phone', {
-													required: 'Phone number is required',
-													pattern: {
-														value: /^[0-9]{10}$/,
-														message: 'Please enter a valid phone number',
-													},
+												<input
+													{...register('phone', {
+														required: true,
+														pattern: /^[0-9]{0,10}$/,
 													})}
 													className={`form-control ${errors.phone ? 'is-invalid' : ''}`}
-													type="number"
+													type="text" // Using type="text" for numeric input with max length
 													placeholder=""
 													value={phone}
-													onChange={(e)=> setPhone(e.target.value)}
-												/>
+													onChange={(e) => {
+														const onlyNumbers = e.target.value.replace(/[^0-9]/g, ''); // Remove non-numeric characters
+														if (onlyNumbers.length <= 10) {
+														setPhone(onlyNumbers);
+														}
+													}}
+													/>
 												{errors.phone && (
 													<span className="text-danger">{errors.phone.message}</span>
 												)}

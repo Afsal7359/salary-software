@@ -104,6 +104,11 @@ const EmployeeSchema= new mongoose.Schema({
         require:true,
         trim:true
     },
+    previousAllowedleave:{
+        type: Number,
+        require:true,
+        trim:true
+    },
    
     gender:{
         type: String,

@@ -153,17 +153,23 @@ function Bankmaster() {
                   <div className="col-12 col-md-6 col-xl-6">
                     <div className="form-group local-forms">
                       <label>Phone No</label>
-                      <input
-                        {...register('phone', {
-                          required: true,
-                          pattern: /^[0-9]{10}$/,
-                        })}
-                        className={`form-control ${errors.phone ? 'is-invalid' : ''}`}
-                        type="text"
-                        placeholder=""
-                        value={Phone}
-                        onChange={(e) => setPhone(e.target.value)}
-                      />
+                     <input
+                      {...register('phone', {
+                        required: true,
+                        pattern: /^[0-9]{0,10}$/,
+                      })}
+                      className={`form-control ${errors.phone ? 'is-invalid' : ''}`}
+                      type="text" // Using type="text" for numeric input with max length
+                      placeholder=""
+                      value={Phone}
+                      onChange={(e) => {
+                        const onlyNumbers = e.target.value.replace(/[^0-9]/g, ''); // Remove non-numeric characters
+                        if (onlyNumbers.length <= 10) {
+                          setPhone(onlyNumbers);
+                        }
+                      }}
+                    />
+
                       {errors.phone && errors.phone.type === 'required' && (
                         <span className="text-danger">Phone number is required</span>
                       )}

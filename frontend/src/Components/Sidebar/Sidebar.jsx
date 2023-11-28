@@ -57,6 +57,7 @@ const Sidebar = () => {
 							<ul style={{ display:'none'}}>
                             <li><Link to="/add-post-master">Add Post Master</Link></li>
                             <li><Link to="/add-Designation"> Add Designation</Link></li>
+                            
                             {/* <li><Link to="/add-doctor">Add Doctor</Link></li>
                             <li><Link to="/edit-doctor">Edit Doctor</Link></li>
                             <li><Link to="/doctor-profile">Doctor Profile</Link></li> */}

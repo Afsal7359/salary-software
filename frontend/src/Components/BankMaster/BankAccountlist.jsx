@@ -140,8 +140,8 @@ const closeEditModal = () => {
                       <th>Bank</th>
                       <th>Department</th>
                       <th>Account Type</th>
-                      <th>Unit</th>
                       <th>Operational Type</th>
+                      <th>Unit</th>
                     </tr>
                   </thead>
                   <tbody>
