@@ -10,6 +10,42 @@ import { Addemployee, getallemployeemastercount } from '../../Apicalls/EmployeeM
 import Employeemasterlist from './Employeemasterlist';
 const AddEmployeemaster = () => {
 	const [count,setcount]=useState(0)
+	const [name, setName] = useState('');
+	const [email, setEmail]=useState('');
+	const [phone,setPhone]=useState('');
+	const [employeeno, setEmployeeno]=useState('');
+	const [address1, setAddress1]=useState('');
+	const [address2, setAddress2]=useState('');
+	const [address3, setAddress3]=useState('');
+	const [bank, setBank]=useState('');
+	const [accountno, setAccountno]=useState('');
+	const [branch, setBranch]=useState('');
+	const [ifsc, setIfsc]=useState('');
+	const [panNo,setPanNo]=useState('');
+	const [panName, setPanName]=useState('');
+	const [dateOfJoining, setDateOfJoining]=useState('');
+	const [dateOfBirth,setDateOfBirth]=useState('');
+	const [guardianname, setGuardianName]=useState('');
+	const [basicsalary, setBasicSalary]=useState('');
+	const [allowedLeave, setAllowedLeave]=useState('');
+	const [universalAcNo, setUniversalAcNo]=useState('');
+	const [city, setCity]=useState('');
+	const [country, setCountry]=useState('');
+	const [tableRows, settableRows] = useState([])
+	const [percentage, setPercentage]=useState('');
+	// const [calculatePercentage, setCalculatePercentage]=useState('')
+	const [secondInputValue, setSecondInputValue] = useState('');
+	const [employeelist,setemployeelist]=useState(true)
+	const [employeeTypeData, setEmployeeTypeData]=useState([]);
+	const [employeeTypeId, setEmployeeTypeId]=useState('');
+	const [isemployeeTypeDataFetch, setisEmployeeTypeDataFetch]=useState(false);
+	const [postData, setPostData]=useState([]);
+	const [postId, setPostId]=useState('');
+	const [ispostDataFetched, setIspostDataFetched]=useState(false);
+	const [issalarymasterDataFetched, setIsSalarymasterDataFetched]=useState(false);
+	const [salarymasterData,setSalarymasterData]=useState([]);
+	const [salarymasterId, setSalarymasterId]=useState('');
+	const [formdata , setFormdata]=useState([])
 
 
 	// Usage in useEffect
@@ -29,9 +65,6 @@ const AddEmployeemaster = () => {
 
 	
 	  
-	const [employeeTypeData, setEmployeeTypeData]=useState([]);
-	const [employeeTypeId, setEmployeeTypeId]=useState('');
-	const [isemployeeTypeDataFetch, setisEmployeeTypeDataFetch]=useState(false);
 
 	const handlemployeetypeclick = async()=>{
 		try{
@@ -51,9 +84,6 @@ const AddEmployeemaster = () => {
 		setEmployeeTypeId(event.target.value);
 	};
 
-	const [postData, setPostData]=useState([]);
-	const [postId, setPostId]=useState('');
-	const [ispostDataFetched, setIspostDataFetched]=useState(false);
 
 	const handlePostClick= async()=>{
 		try{
@@ -74,9 +104,6 @@ const AddEmployeemaster = () => {
 	}
 
 
-	const [issalarymasterDataFetched, setIsSalarymasterDataFetched]=useState(false);
-	const [salarymasterData,setSalarymasterData]=useState([]);
-	const [salarymasterId, setSalarymasterId]=useState('');
 
 	const handlesalarymasterclick =async()=>{
 		try{
@@ -109,37 +136,8 @@ const AddEmployeemaster = () => {
 	  
 
 
-console.log('salary daaaata : ',salarymasterData);
-
 	
-	const [name, setName] = useState('');
-	const [email, setEmail]=useState('');
-	const [phone,setPhone]=useState('');
-	const [employeeno, setEmployeeno]=useState('');
-	const [address1, setAddress1]=useState('');
-	const [address2, setAddress2]=useState('');
-	const [address3, setAddress3]=useState('');
-	const [bank, setBank]=useState('');
-	const [accountno, setAccountno]=useState('');
-	const [branch, setBranch]=useState('');
-	const [ifsc, setIfsc]=useState('');
-	const [panNo,setPanNo]=useState('');
-	const [panName, setPanName]=useState('');
-	const [dateOfJoining, setDateOfJoining]=useState('');
-	const [dateOfBirth,setDateOfBirth]=useState('');
-	const [guardianname, setGuardianName]=useState('');
-	const [basicsalary, setBasicSalary]=useState('');
-	const [allowedLeave, setAllowedLeave]=useState('');
-	const [universalAcNo, setUniversalAcNo]=useState('');
-	const [city, setCity]=useState('');
-	const [country, setCountry]=useState('');
-
-
-	const [tableRows, settableRows] = useState([])
-	const [percentage, setPercentage]=useState('');
-	const [calculatePercentage, setCalculatePercentage]=useState('')
-	const [secondInputValue, setSecondInputValue] = useState('');
-	  const [employeelist,setemployeelist]=useState(true)
+	
 
 	const {
 		
@@ -150,7 +148,6 @@ console.log('salary daaaata : ',salarymasterData);
 		criteriaMode: 'all',
 		
 	  });
-	const [formdata , setFormdata]=useState([])
 	  const onSubmit = async (data) => {
 		data.employeeid=`ME${count.toString().padStart(3, '0')}`
 	     data.EmployeeTypeId=employeeTypeId

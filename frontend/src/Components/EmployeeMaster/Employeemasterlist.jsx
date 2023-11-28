@@ -21,19 +21,13 @@ const Employeemasterlist = React.memo(({ formdata, setformdata }) =>{
     const [selectedItem, setSelectedItem] = useState(null);
     const [selected, setSelected] = useState(false);
 
-      // if (formdata.length!=0) {
-      //    const isNameInData = Data.some((item) => item.name === formdata.name);
-      //    if (!isNameInData) {
-      //      setData((prevData) => [formdata,...prevData]);
-      //      setformdata([])
-      //    }
-      // }
       useEffect(() => {
         if (formdata.length !== 0) {
           setData((prevData) => [formdata,...prevData]);
           setformdata([]);
         }
       }, [formdata]);
+      
   
     useEffect(() => {
       async function fetchData() {
@@ -232,7 +226,7 @@ const Employeemasterlist = React.memo(({ formdata, setformdata }) =>{
 )}
 
 {showview && selectedItem &&(
-  <EmployeeView item={selectedItem} setData={setData} Data={Data}  closeEdit={setShowview} formdata={formdata}/>
+  <EmployeeView item={selectedItem}/>
 )}
 
 {showDeleteModal && selectedItem &&(<EmployeeDelete
@@ -243,7 +237,6 @@ const Employeemasterlist = React.memo(({ formdata, setformdata }) =>{
 />)}
 
     </>
-
 
   )
 }
