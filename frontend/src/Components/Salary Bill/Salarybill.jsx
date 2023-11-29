@@ -3,14 +3,15 @@ import PageHeader from '../PageHeader'
 import { toast } from 'react-toastify';
 import { editemployeemaster, getallemployeemaster } from '../../Apicalls/EmployeeMater';
 import { getallSalary } from '../../Apicalls/salarymaster';
-import { AddSalaryBill } from '../../Apicalls/salaryBill';
+import { AddSalaryBill, GetSalaryBillCount } from '../../Apicalls/salaryBill';
 import list_salary_bill from './List_salary_bill';
-
+import { useForm } from 'react-hook-form';
 
 
 
 const MemoizedSalaryBill = React.memo(list_salary_bill);
 function Salarybill() {
+
 
 
 	const [unit,setUnit]=useState('');
@@ -28,7 +29,33 @@ function Salarybill() {
 	const [totalrowprice,setTotalRowPrice]=useState([]);
 	const [employeeid,setEmployeeid]=useState('');
 	const [formdata,setformData]=useState([]);
+	const [date,setDate]=useState('');
+	const[count,setcount]=useState('');
 
+	const {
+		
+		register,
+		handleSubmit,
+		formState: { errors },
+	  } = useForm({
+		criteriaMode: 'all',
+		
+	  });
+
+
+	  useEffect(() => {
+		const fetchUniqueSixCharacterID = async () => {
+		  try {
+			const response = await GetSalaryBillCount();
+			setcount( response.data.count+1);
+		  } catch (error) {
+			console.error("Error:", error);
+		  }
+		};
+	  
+		fetchUniqueSixCharacterID();
+	  }, []);
+	
 
 	const handleEmployeeclick = async () => {
 	 console.log('ddddddddddEmployee');
@@ -149,19 +176,8 @@ const handlesalarymasterchange = (event, index) => {
   const [salarycomponent, setSalaryComponent] = useState([]);
 console.log('totalrssow',totalrowprice);
 
-
-    // // Function to handle changes in basic salary
-    // const handleBasicSalaryChange = (newBasicSalary) => {
-    //   setBasicSalary(newBasicSalary);
-    //   // Recalculate prices for all rows based on the new basicSalary
-    //   const updatedTablerow = tablerow.map((row) => {
-    //     const newPrice = (Number(newBasicSalary) * Number(row.percentage)) / 100;
-    //     return { ...row, price: newPrice };
-    //   });
-  
-    //   setTablerow(updatedTablerow);
-    // };
-	const [absentDays, setAbsentDays] = useState('');
+   
+	const [absentDays, setAbsentDays] = useState(0);
 	const [perDaySalary, setPerDaySalary] = useState('');
 	const [salaryTotal, setSalaryTotal] = useState('');
     const [leaveDifference,setLeaveDifference]=useState('');
@@ -221,18 +237,6 @@ try {
 	}
 	
  
-//   if (!isNaN(totalAmount)) {
-
-	
-
-//     // Check if the calculated totalAmount is a valid number
-//     setitemdata({
-//       ...itemdata,
-//       TotalSalary: totalAmount,
-//     });
-//   } else {
-//     console.error('Invalid totalAmount:', totalAmount);
-//   }
 
   
 } catch (error) {
@@ -266,26 +270,13 @@ try {
     setTablerow(updatedTableRows);
   };
 
-// const [balanceleave,setBalanceLeave]=useState('');
 
-// useEffect(()=>{
-// 	const handleAllowedLeaveChange = async () => {
-// 		console.log('haaaaaaaaaaaaaaaaaaaa');
-// 		const LeaveBalance = {
-// 			_id: filterEmployeeData[0]._id,
-// 			allowedleave: Number(leaveDifference)
-// 		};
-// 		console.log('formdaaats:', LeaveBalance);
-// 		setBalanceLeave(LeaveBalance);
-	  
-// 	};
-// })
 
 
 
 
 const handleformsubmit = async(event)=>{
-	event.preventDefault();
+	// event.preventDefault();
 		try {
 			const LeaveBalance = {
 				_id: filterEmployeeData[0]._id,
@@ -297,7 +288,10 @@ const handleformsubmit = async(event)=>{
 				console.log("sucessfully updated");
 			}
 			const formdata = {
+			SalaryBillNo:`ME${count.toString().padStart(3, '0')}`, 
+			date:date,	
 			employeeid:employeeid,
+			date:date,
 			departmentid : department,
 			unitid : unit,
 			basicSalary:basicSalary,
@@ -312,12 +306,22 @@ const handleformsubmit = async(event)=>{
 			totalAmount: salaryTotal?.TotalSalary?salaryTotal.TotalSalary :salaryTotal
 			}
 			console.log(formdata);
-
+			setcount((prevCount) => prevCount + 1);
+			setFilterEmployeeData([])
+			setDate('')
+			setTablerow([])
+			setSalaryTotal([])
+			setAbsentDays(0)
+			setAllowedLeave('')
+			setEmployeeId([])
+			setBasicSalary([])
+			setSalaryTotal([])
 			const response = await AddSalaryBill(formdata);
 
 			 if (response.success){
 			setformData(response.data);
 			toast.success(response.message);
+			
 			}
 			else {
 				toast.error(response.message);
@@ -340,20 +344,30 @@ return (
       <PageHeader headerdata={headerdata}/>
 
 
-							<form onSubmit={handleformsubmit}>
+							<form onSubmit={handleSubmit(handleformsubmit)}>
 							<div class="container mt-5">
 								<div class="row">
 									<div class="col-sm-4">
 									   <div className="form-group local-forms">
 											<label>Salary No <span className="login-danger">*</span></label>
-										    <input type="text" className="form-control" style={{backgroundColor:"#cbd0d6"}} readOnly/>
+										    <input type="text" className="form-control" value={`MSB${count.toString().padStart(3, '0')}`}  style={{backgroundColor:"#cbd0d6"}} readOnly/>
 										</div>
 									</div>
 									
 									<div class="col-sm-4">
 									   <div className="form-group local-forms">
 											<label>Date <span className="login-danger">*</span></label>
-										    <input type="date" className="form-control"  />
+											   <input
+													{...register('date', { required: true })}
+													type='date'
+													className={`form-control ${errors.date ? 'is-invalid' : ''}`}
+													placeholder=""
+													value={date}
+													onChange={(e) => setDate(e.target.value)}
+													/>
+													{errors.date && errors.date.type === 'required' && (
+													<span className="text-danger">Date  is required</span>
+													)}
 										</div>
 									</div>
 								<div class="col-sm-4">
@@ -430,7 +444,7 @@ return (
 														<td><input type="text" className="form-control"  value={index+1}  readOnly/></td>
 														<td>
 														<select
-															className="form-control"
+															className="form-control select"
 															
 																onClick={(event) => handlesalarymasterchange(event, index)}
 															

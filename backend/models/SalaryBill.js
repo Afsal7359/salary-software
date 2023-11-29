@@ -2,13 +2,19 @@ const mongoose = require('mongoose');
 
 
 const SalarybillSchema = new mongoose.Schema({
-
+    SalaryBillNo:{
+        type: String,
+        trim:true
+    },
     absentDays:{
-        type:String
+        type:Number,
     },
 
     allowedleave:{
         type:Number,
+    },
+    date:{
+        type:String,
     },
 
     basicSalary:{

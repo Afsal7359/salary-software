@@ -26,3 +26,13 @@ export const DeleteSalaryBill = async(payload)=>{
         return error.response.data;
     }
 }
+
+
+export const GetSalaryBillCount = async () => {
+    try {
+        const response = await instance.get('salarybill/getallSalarybillcount');
+        return response.data
+    } catch (err) {
+        return err.response.data;
+    }
+}

@@ -27,7 +27,7 @@ const App = () => {
       
     <div className="main-wrapper">
        <Header/>
-       <Sidebar/>
+       <Sidebar/> 
        <div className="page-wrapper">
        <div className="content">
        <Suspense fallback={<div>Loading...</div>}>

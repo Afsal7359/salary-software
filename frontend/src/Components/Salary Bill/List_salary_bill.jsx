@@ -123,7 +123,8 @@ console.log('memoizedData',memoizedData);
                   <table className="table border-0 custom-table comman-table datatable mb-0">
                     <thead>
                       <tr>
-                        <th>No</th>
+                        <th>Bill No</th>
+                        <th>Date</th>
                         <th>Name</th>
                         <th>Department</th>
                         <th>unit</th>
@@ -133,7 +134,8 @@ console.log('memoizedData',memoizedData);
                     <tbody>
                       {memoizedData.map((item, index) => (
                         <tr key={item._id}>
-                          <td>{index + 1}</td>
+                          <td>{item.SalaryBillNo}</td>
+                          <td>{item.date}</td>
                           <td>{item.employeeid.name}</td>
                           <td>{item.departmentid.name}</td>
                           <td>{item.unitid.name}</td>
