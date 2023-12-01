@@ -9,6 +9,7 @@ import Excelicon from '../../assets/img/icons/pdf-icon-04.svg';
 
 import { getallSalarybill } from '../../Apicalls/salaryBill';
 import SalaryBill from '../Modal/SalaryBill';
+import SalaryBillEdit from './SalaryBillEdit';
 
 function List_salary_bill({ formdata, setformdata }) {
   const [Data, setData] = useState([]);
@@ -17,12 +18,17 @@ function List_salary_bill({ formdata, setformdata }) {
   const [selectedItem, setSelectedItem] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   
+  const [Salarylist,setSalaryList]=useState(true)
+  
+console.log('ffffrooooooom',formdata);
+
   useEffect(() => {
 	if (formdata.length !== 0) {
 	  setData((prevData) => [formdata,...prevData]);
 	  setformdata([]);
 	}
 }, [formdata]);
+
 
   useEffect(() => {
     async function fetchData() {
@@ -39,19 +45,22 @@ function List_salary_bill({ formdata, setformdata }) {
     fetchData();
   }, []);
 
+
   const memoizedData = useMemo(() => Data, [Data]);
 console.log('memoizedData',memoizedData);
 
-//   const handleEditClick = useCallback((item) => {
-// 	setShowEditModal(true);
-// 	setSelectedItem(item);
-//   }, []);
+  const handleEditClick = useCallback((item) => {
+	setShowEditModal(true);
+	setSelectedItem(item);
+  setSalaryList(false)
+ 
+  }, []);
 
-//   // Function to close the modal
-// const closeEditModal = () => {
-// 	// Set showEditModal to false when the modal is closed
-// 	setShowEditModal(false);
-//   };
+  // Function to close the modal
+const closeEditModal = () => {
+	// Set showEditModal to false when the modal is closed
+	setShowEditModal(false);
+  };
 
    // Function to handle the click event
  const handleDeleteClick = (item) => {
@@ -59,6 +68,11 @@ console.log('memoizedData',memoizedData);
 	setshowDeleteModal(true)
 	setSelectedItem(item)
    };
+
+   const handleTableClick =()=>{
+    setShowEditModal(false)
+    setSalaryList(true)
+   }
    
    const closeDeleteModal = () => {
 	 // Set showEditModal to false when the modal is closed
@@ -67,11 +81,18 @@ console.log('memoizedData',memoizedData);
   if (isLoading) {
     return <div>Loading...</div>; // You can render a loading indicator here
   }
+  // const handleAddButton = ()=>{
+    
+  //   setSalaryList(false)
+  //   setSalarybill(true);
+  // }
 
   return (
     <>
+    {Salarylist&& 
       <div className="row">
         <div className="col-sm-12">
+          {/* <button className='btn btn-success submit-form m-2' >Add</button> */}
           {memoizedData.length === 0 ? (
             <p>No Data available</p>
           ) : (
@@ -146,14 +167,14 @@ console.log('memoizedData',memoizedData);
                                 <i className="fa fa-ellipsis-v"></i>
                               </a>
                               <div className="dropdown-menu dropdown-menu-end">
-                                {/* <a  onMouseEnter={() => {
+                                <a  onMouseEnter={() => {
                                 setSelectedItem(item);
-                                setShowEditModal(true);
+                              
                               }}
                                onClick={() => handleEditClick(item)} className="dropdown-item" data-bs-toggle="modal"
                                data-bs-target="#delete_patients">
                                   <i className="fa-solid fa-pen-to-square m-r-5"></i> Edit
-                                </a> */}
+                                </a>
                                 <a className="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#delete_patient"   onMouseEnter={() => {
                                 setshowDeleteModal(true);
                                 setSelectedItem(item);
@@ -174,18 +195,12 @@ console.log('memoizedData',memoizedData);
           )}
         </div>
       </div>
-
+    }
 	  
- {/* {showEditModal&& (
-  <Postedit
-  setData={setData}
-  Data={Data}
-    item={selectedItem}
-    closeEditModal={closeEditModal}
-   
-  />
-)} */}
-
+      {showEditModal && selectedItem && (
+        <div> <button className='btn btn-success mt-2 ' onClick={handleTableClick}>Table</button>
+  <SalaryBillEdit item={selectedItem} setData={setData} Data={Data}  closeEdit={closeEditModal}/></div>
+)}
 {showDeleteModal && selectedItem &&(<SalaryBill
  setData={setData}
  Data={Data}

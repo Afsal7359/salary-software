@@ -5,6 +5,7 @@ import Doctors from '../../assets/img/icons/menu-icon-02.svg'
 import Posts from '../../assets/img/icons/menu-icon-03.svg'
 import settings from '../../assets/img/icons/menu-icon-16.svg'
 import Bankicon from '../../assets/img/icons/menu-icon-04.svg'
+import Company from '../../assets/img/icons/company.png'
 import { Link } from 'react-router-dom';
 const Sidebar = () => {
   return (
@@ -72,7 +73,12 @@ const Sidebar = () => {
                             <li><Link to="/doctor-profile">Doctor Profile</Link></li> */}
 							</ul>
 						</li>
-					
+                        <li className="submenu">
+							<a href="#"><span className="menu-side"><img src={Company} alt=""/></span> <span>Company Master</span> <span className="menu-arrow"></span></a>
+							<ul style={{ display:'none'}}>
+                            <li><Link to="/company-master">Add Company</Link></li>
+							</ul>
+						</li>
                         <li className="submenu">
 							<a href="#"><span className="menu-side"><img src={settings} alt=""/></span> <span> Settings </span> <span className="menu-arrow"></span></a>
 							<ul style={{ display:'none'}}>

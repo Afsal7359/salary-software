@@ -100,6 +100,43 @@ module.exports={
                     error: error.message,
                   });
                 }
-              }
+              },
+              EditSalaryBill: async (req, res) => {
 
+                try {
+                  const data = req.body;
+                  const {id } = req.params;
+                  console.log(id,'idddddddddddddddddddddddd');
+            console.log(data,'dataaaaaaaaaaaaaaaaaaaaaaaaaaaaaas');
+                  // Check if an Employee with the specified employeeid exists
+                  const existingBill = await SalaryBill.findOne({ _id: id });
+            
+                  if (!existingBill) {
+                    return res.status(404).json({
+                      success: false,
+                      message: "Bill not found.",
+                    });
+                  }
+                  const updatedBill = await SalaryBill.findOneAndUpdate(
+                    { _id: id },
+                    data,
+                    { new: true }
+                  );
+                  res.status(200).json({
+                    success: true,
+                    message: "SalaryBill edited successfully.",
+                    data:updatedBill,
+                  });
+                } catch (err) {
+                  console.log(err);
+                  res.status(500).json({
+                    success: false,
+                    message: "Failed to edit SalaryBill.",
+                    error: err.message,
+                  });
+                }
+              },
+            
+
+              
 }

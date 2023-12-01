@@ -21,6 +21,7 @@ const Operationalpage = lazy(() => import('./Pages/Operationalpage'));
 const Accounttypepage = lazy(() => import('./Pages/Accounttypepage'));
 import { BrowserRouter as Router, Routes, Route} from 'react-router-dom'
 import Salarybill from './Components/Salary Bill/Salarybill';
+import AddCompany from './Components/CompanyMaster/AddCompany';
 const App = () => {
   return (
         <Router>
@@ -33,6 +34,7 @@ const App = () => {
        <Suspense fallback={<div>Loading...</div>}>
        <Routes>
        <Route path="/" element={<Dashboardpage/>} />
+       <Route path="/company-master" element={<AddCompany/>} />
        <Route path="/employee-master" element={<AddEmployeemaster/>} />
        <Route path="/add-post-master" element={<AddPostmaster/>} />
        <Route path="/add-employeetype" element={<Employeetypepage/>} />

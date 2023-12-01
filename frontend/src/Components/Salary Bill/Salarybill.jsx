@@ -7,12 +7,11 @@ import { AddSalaryBill, GetSalaryBillCount } from '../../Apicalls/salaryBill';
 import list_salary_bill from './List_salary_bill';
 import { useForm } from 'react-hook-form';
 
-
+import Select from 'react-select';
 
 const MemoizedSalaryBill = React.memo(list_salary_bill);
 function Salarybill() {
-
-
+	
 
 	const [unit,setUnit]=useState('');
 	const [department,setDepartment]=useState('');
@@ -31,6 +30,9 @@ function Salarybill() {
 	const [formdata,setformData]=useState([]);
 	const [date,setDate]=useState('');
 	const[count,setcount]=useState('');
+	const[salarybill,setSalarybill]=useState(false);
+	const [salaryList,setSalaryList]=useState(true)
+
 
 	const {
 		
@@ -73,13 +75,34 @@ function Salarybill() {
 	   toast.error(error.message);
 	 }
    };
-   console.log('ggggggggggggggggggggggg',EmployeeData);
-   const handleEmployeeChange = (event) => {
-    const newEmployeeId = event.target.value;
-    setEmployeeId(newEmployeeId);
+   useEffect(()=>{
+	handleEmployeeclick()
+  },[])
 
-    if (EmployeeData) {
-        const filteredEmployees = EmployeeData.filter(data => data.name === newEmployeeId);
+   console.log('ggggggggggggggggggggggg',EmployeeData);
+
+   const [selectedOption, setSelectedOption] = useState(null);
+   const [options, setOptions] = useState(EmployeeData.map((data) => ({ value: data.name, label: data.name })));
+  
+	const handleInputChange = (newValue) => {
+	  // Implement your search/filter logic here
+	  // For example, filter options based on user input
+	  const filteredOptions = EmployeeData.filter((data) =>
+		data.name.toLowerCase().includes(newValue.toLowerCase())
+	  ).map((data) => ({ value: data.name, label: data.name }));
+	  setOptions(filteredOptions);
+	};
+
+	    
+// console.log('opyions',selectedOption.value);
+console.log("employeeid",EmployeeId);
+
+   const handleSelectChange = (selected) => {
+	setSelectedOption(selected);
+	
+	console.log('opyions',selectedOption.value);
+    if (selectedOption) {
+        const filteredEmployees = EmployeeData.filter(data => data.name === selectedOption.value);
 		setAllowedLeave(filteredEmployees[0]?filteredEmployees[0].allowedleave :"")
 		const tablerowData = filteredEmployees[0]?.tablerow;
 
@@ -102,9 +125,8 @@ function Salarybill() {
     }
 };	const [itemdata,setitemdata]=useState(filterEmployeeData[0])
 
-console.log('setdata',allowedleave);
+ 
 
-console.log("employeeid",EmployeeId);
 
 console.log('filtered data :',filterEmployeeData);
 const headerdata = useMemo(() => {
@@ -321,7 +343,8 @@ const handleformsubmit = async(event)=>{
 			 if (response.success){
 			setformData(response.data);
 			toast.success(response.message);
-			
+			setSalarybill(false);
+			setSalaryList(true)
 			}
 			else {
 				toast.error(response.message);
@@ -333,17 +356,25 @@ const handleformsubmit = async(event)=>{
 		}
 
 	}
+const handleAddClick =()=>{
+	setSalarybill(true);
+	setSalaryList(false)
+}
+const handleTableClick =()=>{
+	setSalarybill(false);
+	setSalaryList(true)
+}
 
-	
 console.log("absent",absentvalue);
 
 
 console.log('ssssss',basicSalary);
+	
 return (
     <>
       <PageHeader headerdata={headerdata}/>
 
-
+							{salarybill&& <div>	<button className='btn btn-success' onClick={handleTableClick}> Table </button>
 							<form onSubmit={handleSubmit(handleformsubmit)}>
 							<div class="container mt-5">
 								<div class="row">
@@ -370,19 +401,7 @@ return (
 													)}
 										</div>
 									</div>
-								<div class="col-sm-4">
-									<div className="form-group local-forms">
-										<label>Employee Name <span className="login-danger">*</span></label>
-										<input list="browsers" name="browser" id="browser" className='form-control' onClick={handleEmployeeclick} onChange={handleEmployeeChange}/>
-										<datalist id="browsers">
-											{EmployeeData.map((data) => (
-												<option value={data.name} key={data._id}>
-													{data.name}
-												</option>
-											))}
-										</datalist>
-									</div>
-								</div>
+								
 
 								<div class="col-sm-4">
 									<div className="form-group local-forms">
@@ -398,6 +417,19 @@ return (
 									</div>
 								</div>
 
+								<div class="col-sm-4">
+									<div className="form-group local-forms">
+										<label>Employee Name <span className="login-danger">*</span></label>
+										<Select
+										value={selectedOption}
+										onChange={handleSelectChange}
+										options={options}
+										onInputChange={handleInputChange}
+										
+										placeholder="Search...."
+										/>
+									</div>
+								</div>
 									<div class="col-sm-4">
 									   <div className="form-group local-forms">
 											<label>Department <span className="login-danger">*</span></label>
@@ -444,7 +476,7 @@ return (
 														<td><input type="text" className="form-control"  value={index+1}  readOnly/></td>
 														<td>
 														<select
-															className="form-control select"
+															className="form-control "
 															
 																onClick={(event) => handlesalarymasterchange(event, index)}
 															
@@ -565,10 +597,13 @@ return (
 											</div>
 										</div>
 										
-										</form>
+										</form></div>	}
 
-
-			<MemoizedSalaryBill formdata={formdata} setformdata={setformData} />
+	
+			{ salaryList&&  <div>
+		<button className='btn btn-success' onClick={handleAddClick}> Add </button>
+			<MemoizedSalaryBill formdata={formdata} setformdata={setformData}/> 	</div>}
+		
     </>
   )
 }

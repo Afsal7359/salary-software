@@ -27,6 +27,14 @@ export const DeleteSalaryBill = async(payload)=>{
     }
 }
 
+export const EditSalaryBill = async(payload)=>{
+    try {
+        const response = await instance.post(`salarybill/editSalarybill/${payload._id}`,payload)
+        return response.data
+    } catch (error) {
+        return error.response.data;
+    }
+}
 
 export const GetSalaryBillCount = async () => {
     try {
