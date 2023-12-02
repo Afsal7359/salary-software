@@ -127,7 +127,7 @@ module.exports = {
   GetAccountTypeCount: async (req, res) => {
     try {
       const accountTypeCount = await accounttype.countDocuments();
-
+        
       res.status(200).json({
         success: true,
         message: "Account type count retrieved successfully.",

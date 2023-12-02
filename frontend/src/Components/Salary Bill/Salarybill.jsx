@@ -28,7 +28,7 @@ function Salarybill() {
 	const [totalrowprice,setTotalRowPrice]=useState([]);
 	const [employeeid,setEmployeeid]=useState('');
 	const [formdata,setformData]=useState([]);
-	const [date,setDate]=useState('');
+	
 	const[count,setcount]=useState('');
 	const[salarybill,setSalarybill]=useState(false);
 	const [salaryList,setSalaryList]=useState(true)
@@ -367,7 +367,19 @@ const handleTableClick =()=>{
 
 console.log("absent",absentvalue);
 
-
+const [date, setDate] = useState(() => {
+	const today = new Date();
+	const year = today.getFullYear();
+	let month = today.getMonth() + 1;
+	let day = today.getDate();
+  
+	// Pad the month and day with leading zeros if needed
+	month = month < 10 ? `0${month}` : month;
+	day = day < 10 ? `0${day}` : day;
+  
+	// Format the date as 'YYYY-MM-DD' (required by input type='date')
+	return `${year}-${month}-${day}`;
+  });
 console.log('ssssss',basicSalary);
 	
 return (
@@ -423,6 +435,7 @@ return (
 										<Select
 										value={selectedOption}
 										onChange={handleSelectChange}
+										
 										options={options}
 										onInputChange={handleInputChange}
 										
