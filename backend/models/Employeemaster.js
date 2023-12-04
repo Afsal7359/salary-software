@@ -13,12 +13,12 @@ const EmployeeSchema= new mongoose.Schema({
     },
     EmployeeTypeId:{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Employeetype', // This should be the model name that you want to reference
+        ref: 'Employeetype',
        
     },
     PostId:{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Post', // This should be the model name that you want to reference
+        ref: 'Post', 
        
     },
     employeeno:{
@@ -144,7 +144,7 @@ const EmployeeSchema= new mongoose.Schema({
             salaryComponent: {
                 type: mongoose.Schema.Types.ObjectId,
                 ref: 'Salarymaster',
-                default: null, // Set default value to null or remove this line if not needed
+                default: null,
             },
             percentage: {
                 type: Number,
@@ -156,7 +156,7 @@ const EmployeeSchema= new mongoose.Schema({
                 type: Number,
             }
         }],
-        default: [] // Default value as an empty array
+        default: [] 
     },
     
     
