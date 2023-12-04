@@ -172,4 +172,37 @@ module.exports = {
       });
     }
   },
+
+
+  GetOneEmployee: async (req, res) => {
+    try {
+      console.log(req.body);
+      const { password, phone } = req.body;
+  
+      const response = await Employee.findOne({ password, phone });
+      console.log(response);
+  
+      if (!response) {
+        return res.status(404).json({
+          success: false,
+          message: "Employee Not Found"
+        });
+      }
+  
+      res.status(200).json({
+        success: true,
+        message: "Employee Found",
+        data: response
+      });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({
+        success: false,
+        message: "Internal Server Error",
+        error: error.message
+      });
+    }
+  }
+  
+
 };

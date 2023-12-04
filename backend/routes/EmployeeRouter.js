@@ -8,4 +8,6 @@ router.put('/editemployee/:id',Employeemaster.EditEmployee);
 router.delete('/deleteemployee/:id',Employeemaster.DeleteEmployee)
 router.get('/getallemployee',Employeemaster.GetallEmployee)
 router.get('/getallemployeecount',Employeemaster.GetallEmployeeCount)
+
+router.get('/employeedata',Employeemaster.GetOneEmployee);
 module.exports = router;

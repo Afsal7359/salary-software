@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+  import React, { useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import { editbank } from '../../Apicalls/Bank';
@@ -75,130 +75,130 @@ const updatedData = Data.map((dataItem) => {
   };
 
   return (
-    modalVisible && (
-    <div id="delete_patients" className="modal fade" role="dialog"  data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-      <div className="modal-dialog modal-dialog-centered">
-        <div className="modal-content">
-          <div className="modal-header">
-            <button className="btn close submit-form" data-bs-dismiss="modal" onClick={closeEditModal}>
-              <i className="fa fa-times" aria-hidden="true"></i>
-            </button>
-          </div>
-          <div className="row">
-            <div className="col-sm-12">
-              <div className="card">
-                <div className="card-body">
-                  <form onSubmit={handleSubmit(onSubmit)}>
-                    <div className="row">
-                      <div className="col-12">
-                        <div className="form-heading">
-                          <h4>Employee Name</h4>
+      modalVisible && (
+      <div id="delete_patients" className="modal fade" role="dialog"  data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div className="modal-dialog modal-dialog-centered">
+          <div className="modal-content">
+            <div className="modal-header">
+              <button className="btn close submit-form" data-bs-dismiss="modal" onClick={closeEditModal}>
+                <i className="fa fa-times" aria-hidden="true"></i>
+              </button>
+            </div>
+            <div className="row">
+              <div className="col-sm-12">
+                <div className="card">
+                  <div className="card-body">
+                    <form onSubmit={handleSubmit(onSubmit)}>
+                      <div className="row">
+                        <div className="col-12">
+                          <div className="form-heading">
+                            <h4>Employee Name</h4>
+                          </div>
                         </div>
-                      </div>
-                      <div className="col-12 col-md-6 col-xl-6">
-                        <div className="form-group local-forms">
-                          <label>Name</label>
-                          <Controller
-                            name="name"
-                            control={control}
-                            render={({ field }) => (
-                              <input
-                                {...field}
-                                className={`form-control ${errors.name ? 'is-invalid' : ''}`}
-                                type="text"
-                                placeholder=""
-                              />
+                        <div className="col-12 col-md-6 col-xl-6">
+                          <div className="form-group local-forms">
+                            <label>Name</label>
+                            <Controller
+                              name="name"
+                              control={control}
+                              render={({ field }) => (
+                                <input
+                                  {...field}
+                                  className={`form-control ${errors.name ? 'is-invalid' : ''}`}
+                                  type="text"
+                                  placeholder=""
+                                />
+                              )}
+                            />
+                            {errors.name && <span className="text-danger">{errors.name.message}</span>}
+                          </div>
+                        </div>
+                        <div className="col-12 col-md-6 col-xl-6">
+                          <div className="form-group local-forms">
+                            <label>Address</label>
+                            <Controller
+                              name="address"
+                              control={control}
+                              render={({ field }) => (
+                                <input
+                                  {...field}
+                                  className={`form-control ${errors.address ? 'is-invalid' : ''}`}
+                                  type="text"
+                                  placeholder=""
+                                />
+                              )}
+                            />
+                            {errors.address && errors.address.type === 'required' && (
+                              <span className="text-danger">Address is required</span>
                             )}
-                          />
-                          {errors.name && <span className="text-danger">{errors.name.message}</span>}
-                        </div>
-                      </div>
-                      <div className="col-12 col-md-6 col-xl-6">
-                        <div className="form-group local-forms">
-                          <label>Address</label>
-                          <Controller
-                            name="address"
-                            control={control}
-                            render={({ field }) => (
-                              <input
-                                {...field}
-                                className={`form-control ${errors.address ? 'is-invalid' : ''}`}
-                                type="text"
-                                placeholder=""
-                              />
+                            {errors.address && errors.address.type === 'minLength' && (
+                              <span className="text-danger">Address must be at least 4 characters</span>
                             )}
-                          />
-                          {errors.address && errors.address.type === 'required' && (
-                            <span className="text-danger">Address is required</span>
-                          )}
-                          {errors.address && errors.address.type === 'minLength' && (
-                            <span className="text-danger">Address must be at least 4 characters</span>
-                          )}
+                          </div>
                         </div>
-                      </div>
-                      <div className="col-12 col-md-6 col-xl-6">
-                        <div className="form-group local-forms">
-                          <label>Branch</label>
-                          <Controller
-                            name="branch"
-                            control={control}
-                            render={({ field }) => (
-                              <input
-                                {...field}
-                                className={`form-control ${errors.branch ? 'is-invalid' : ''}`}
-                                type="text"
-                                placeholder=""
-                              />
+                        <div className="col-12 col-md-6 col-xl-6">
+                          <div className="form-group local-forms">
+                            <label>Branch</label>
+                            <Controller
+                              name="branch"
+                              control={control}
+                              render={({ field }) => (
+                                <input
+                                  {...field}
+                                  className={`form-control ${errors.branch ? 'is-invalid' : ''}`}
+                                  type="text"
+                                  placeholder=""
+                                />
+                              )}
+                            />
+                            {errors.branch && errors.branch.type === 'required' && (
+                              <span className="text-danger">Branch is required</span>
                             )}
-                          />
-                          {errors.branch && errors.branch.type === 'required' && (
-                            <span className="text-danger">Branch is required</span>
-                          )}
-                          {errors.branch && errors.branch.type === 'minLength' && (
-                            <span className="text-danger">Branch must be at least 4 characters</span>
-                          )}
-                        </div>
-                      </div>
-                      <div className="col-12 col-md-6 col-xl-6">
-                        <div className="form-group local-forms">
-                          <label>Phone No</label>
-                          <Controller
-                            name="phone"
-                            control={control}
-                            render={({ field }) => (
-                              <input
-                                {...field}
-                                className={`form-control ${errors.phone ? 'is-invalid' : ''}`}
-                                type="text"
-                                placeholder=""
-                              />
+                            {errors.branch && errors.branch.type === 'minLength' && (
+                              <span className="text-danger">Branch must be at least 4 characters</span>
                             )}
-                          />
-                          {errors.phone && errors.phone.type === 'required' && (
-                            <span className="text-danger">Phone number is required</span>
-                          )}
-                          {errors.phone && errors.phone.type === 'pattern' && (
-                            <span className="text-danger">Please enter a valid 10-digit phone number</span>
-                          )}
+                          </div>
+                        </div>
+                        <div className="col-12 col-md-6 col-xl-6">
+                          <div className="form-group local-forms">
+                            <label>Phone No</label>
+                            <Controller
+                              name="phone"
+                              control={control}
+                              render={({ field }) => (
+                                <input
+                                  {...field}
+                                  className={`form-control ${errors.phone ? 'is-invalid' : ''}`}
+                                  type="text"
+                                  placeholder=""
+                                />
+                              )}
+                            />
+                            {errors.phone && errors.phone.type === 'required' && (
+                              <span className="text-danger">Phone number is required</span>
+                            )}
+                            {errors.phone && errors.phone.type === 'pattern' && (
+                              <span className="text-danger">Please enter a valid 10-digit phone number</span>
+                            )}
+                          </div>
+                        </div>
+                        <div className="col-12 col-md-6 col-xl-3">
+                          <div className="doctor-submit text-end">
+                            <button type="submit"  data-bs-dismiss="modal"  className="btn btn-primary submit-form me-2">
+                              Submit
+                            </button>
+                          </div>
                         </div>
                       </div>
-                      <div className="col-12 col-md-6 col-xl-3">
-                        <div className="doctor-submit text-end">
-                          <button type="submit"  data-bs-dismiss="modal"  className="btn btn-primary submit-form me-2">
-                            Submit
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </form>
+                    </form>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-    )
+      )
   );
 }
 

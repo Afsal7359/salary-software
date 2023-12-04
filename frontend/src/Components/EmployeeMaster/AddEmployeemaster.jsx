@@ -31,6 +31,7 @@ const AddEmployeemaster = () => {
 	const [universalAcNo, setUniversalAcNo]=useState('');
 	const [city, setCity]=useState('');
 	const [country, setCountry]=useState('');
+	const [password,setPassword]=useState('');
 	const [tableRows, settableRows] = useState([])
 	const [percentage, setPercentage]=useState('');
 	// const [calculatePercentage, setCalculatePercentage]=useState('')
@@ -189,6 +190,7 @@ const AddEmployeemaster = () => {
 			setCity('');
 			setCountry('');
 			setPercentage('');
+			setPassword('')
 			setSecondInputValue('');
 
 		  } else {
@@ -756,7 +758,7 @@ const [tablestate,settablestate]=useState(false)
 												</div>
 										</div>
 
-										<div className="col-12 col-md-6 col-xl-4">
+										<div className="col-12 col-md-6 col-xl-6">
 												<div className="form-group local-forms">
 													<label>Universal Account Number<span className="login-danger">*</span></label>
 													<input
@@ -777,7 +779,7 @@ const [tablestate,settablestate]=useState(false)
 										</div>
 
 										
-										<div className="col-12 col-md-6 col-xl-4">
+										<div className="col-12 col-md-6 col-xl-6">
 												<div className="form-group local-forms">
 													<label>City <span className="login-danger">*</span></label>
 													<input
@@ -797,7 +799,7 @@ const [tablestate,settablestate]=useState(false)
 												</div>
 										</div>
 
-										<div className="col-12 col-md-6 col-xl-4">
+										<div className="col-12 col-md-6 col-xl-6">
 												<div className="form-group local-forms">
 													<label>Country <span className="login-danger">*</span></label>
 													<input
@@ -816,7 +818,26 @@ const [tablestate,settablestate]=useState(false)
 													)}
 												</div>
 										</div>
-
+										
+										<div className=" col-12 col-md-6 col-xl-6">
+												<div className="form-group local-forms">
+													<label>User Password <span className="login-danger">*</span></label>
+													<input
+													{...register('password', { required: true, minLength: 6 })}
+													type="text"
+													className={`form-control ${errors.password ? 'is-invalid' : ''}`}
+													placeholder=" password for login  mobile application"
+											 		value={password}
+													onChange={(e) => setPassword(e.target.value)}
+													/>
+													{errors.country && errors.country.type === 'required' && (
+													<span className="text-danger">password is required</span>
+													)}
+													{errors.country && errors.country.type === 'minLength' && (
+													<span className="text-danger">password should be at least 6 characters</span>
+													)}
+												</div>
+										</div>
 										
 										<div className="row">
 											<div className="col-md-12">

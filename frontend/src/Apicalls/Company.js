@@ -8,3 +8,12 @@ export const AddCompanyMaster = async (payload) => {
         return err.response.data;
     }
 }
+
+export const GetAllCompany = async()=>{
+    try {
+        const response = await instance.get('company/getallcompany');
+        return response.data;
+    } catch (error) {
+        return error.response.data;
+    }
+}

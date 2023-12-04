@@ -1,8 +1,9 @@
-import React,{useMemo,useState} from 'react'
+import React,{useEffect, useMemo,useState} from 'react'
 import PageHeader from '../PageHeader';
 import { useForm } from 'react-hook-form';
-import { AddCompanyMaster } from '../../Apicalls/Company';
+import { AddCompanyMaster, GetAllCompany } from '../../Apicalls/Company';
 import { toast } from 'react-toastify';
+import Companylist from './Companylist';
 
 function AddCompany() {
     const [formdata,setFormData]=useState([]);
@@ -64,17 +65,39 @@ const onsubmit = async()=>{
         if (response.success) {
             setFormData(response.data);
             toast.success(response.message);
+           setAddCompany(false)
         }
 
     } catch (error) {
         console.log(error);
     }
 }
+const [companyData,setCompanyData]=useState();
+const [addcompany,setAddCompany]=useState(true);
+
+    useEffect(()=>{
+        companyDatafetched();
+    },[])
+
+    const companyDatafetched =async()=>{
+        try {
+            const response = await GetAllCompany();
+            setCompanyData(response);
+            if( response.data[0]){
+               setAddCompany(false)
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+console.log('Company Data :',companyData);
+
+
 
   return (
     <>
     <PageHeader headerdata={headerdata}/>
-    <div className="row">
+             {addcompany&&<div className="row">
                    <div className="col-sm-12">
                        <div className="card">
                            <div className="card-body">
@@ -317,8 +340,8 @@ const onsubmit = async()=>{
                            </div>
                        </div>							
                    </div>					
-               </div>
-	
+               </div>}
+	<Companylist formdata={formdata} setFormData={setFormData}/>
   </>
   )
 }

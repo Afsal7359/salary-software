@@ -21,6 +21,8 @@ const employeeRouters = require('./routes/EmployeeRouter')
 const BankaccountRouter = require('./routes/BankaccountRouter')
 const SalaryBill = require('./routes/SalaryBill');
 const CompanyRouter = require('./routes/Company');
+const UserLogin = require('./routes/user')
+
 
 dotenv.config()
 
@@ -57,6 +59,7 @@ app.use('/api/employee',employeeRouters)
 app.use('/api/BankAccount',BankaccountRouter)
 app.use('/api/salarybill',SalaryBill)
 app.use('/api/company',CompanyRouter);
+app.use('/api/userlogin',UserLogin)
 
 
 

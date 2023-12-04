@@ -35,4 +35,21 @@ module.exports={
         console.log(err);
         }
     },
+    GetAllCompany: async(req,res) => {
+        try{
+        const response = await Company.find().sort({_id: -1})
+        res.status(200).json({
+            success:true,
+            message:'Company Data Get Sucessfully',
+            data:response
+        });
+       }catch(err){
+        res.status(500).json({
+            success:false,
+            message:"failed to Get Company data",
+            error:err.message
+        });
+       }
+
+    }
 }
