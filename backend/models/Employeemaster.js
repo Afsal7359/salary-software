@@ -134,6 +134,10 @@ const EmployeeSchema= new mongoose.Schema({
         type:String,
         trim:true
     },
+    image:{
+        type:String,
+        trim:true
+    },
 
    
     tablerow: {

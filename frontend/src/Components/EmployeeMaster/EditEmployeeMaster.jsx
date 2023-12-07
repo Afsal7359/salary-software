@@ -49,6 +49,7 @@ function EditEmployeeMaster({ closeEdit, item, setData, Data, show, setshow }) {
    const [formdata, setFormdata] = useState("");
    const [itemid, setitemid] = useState(item._id);
    const [tablerow, setTablerow] = useState(item?.tablerow);
+   const [password, setPassword] = useState(item?.password);
 
 
 
@@ -262,9 +263,11 @@ try {
       guardianname,
       basicSalary,
 	  allowedleave,
+    previousAllowedleave:allowedleave,
       universalAcNo,
       city,
       country,
+      password,
       tablerow,
       TotalSalary:itemdata.TotalSalary
     };
@@ -758,6 +761,21 @@ try {
                             type="text"
                             placeholder=""
                             value={country}
+                          />
+                        </div>
+                      </div>
+
+                      <div className="col-12 col-md-6 col-xl-6">
+                        <div className="form-group local-forms">
+                          <label>
+                            Password <span className="login-danger">*</span>
+                          </label>
+                          <input
+                            onChange={(e) => setPassword(e.target.value)}
+                            className={`form-control`}
+                            type="text"
+                            placeholder=""
+                            value={password}
                           />
                         </div>
                       </div>

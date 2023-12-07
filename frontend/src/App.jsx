@@ -23,6 +23,7 @@ import { BrowserRouter as Router, Routes, Route} from 'react-router-dom'
 import Salarybill from './Components/Salary Bill/Salarybill';
 import AddCompany from './Components/CompanyMaster/AddCompany';
 import Salaryview from './Components/Salary Bill/Salaryview';
+import SalaryvoucherPrint from './Components/SalaryVochuer/SalaryvoucherPrint';
 const App = () => {
   return (
         <Router>
@@ -51,6 +52,7 @@ const App = () => {
        <Route path="/add-accounttype" element={<Accounttypepage/>} />
        <Route path="/salary-bill" element={<Salarybill/>}/>
        <Route path="/salary" element={<Salaryview/>}/>
+       <Route path="/salary-voucher" element={<SalaryvoucherPrint/>}/>
        </Routes>
        </Suspense>
        </div>

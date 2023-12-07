@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const Employee = require('../models/Employeemaster');
+const  cloudinary= require("../util/cloudinary");
 
 module.exports={
      LoginUser : async(req,res)=>{
@@ -68,7 +69,7 @@ module.exports={
                 if (!validaPassword) {
                     throw new Error("Invalid password !");
                 } else {
-                    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: "172800" });
+                    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: "2592000" });
                     
                     res.json({
                         success: true,
@@ -155,6 +156,73 @@ module.exports={
                 message:error.message
             })
         }
+    },
+
+    AddProfilePhoto: async(req,res)=>{
+      try {
+        const userId = req.params.id;
+        const image = req.body.image;
+        const result = await cloudinary.uploader.upload(image);
+        const imageurl = result.url
+
+        const user = await Employee.findByIdAndUpdate({_id:userId,image:imageurl});
+
+        res.status(200).json({
+          success:true,
+          message:'Image Uploaded Successfully',
+          data:user
+        })
+
+      } catch (error) {
+        console.log(error);
+        res.status(500).json({
+          success: false,
+          error: "Error Occured"
+        })
+      }
+    },
+
+    UpdatePassword: async (req, res) => {
+      try {
+        const userId = req.params.id;
+        const oldPassword = req.body.oldpassword;
+        const newPassword = req.body.newpassword;
+    
+        // Find the user by ID
+        const user = await Employee.findById(userId);
+    
+        // Check if the user exists
+        if (!user) {
+          return res.status(404).json({
+            success: false,
+            error: "User not found"
+          });
+        }
+    
+        // Check if the old password matches the stored password directly
+        if (user.password !== oldPassword) {
+          return res.status(400).json({
+            success: false,
+            error: "Invalid old password"
+          });
+        }
+    
+        // If old password is correct, update to the new password
+        user.password = newPassword;
+        await user.save();
+    
+        res.status(200).json({
+          success: true,
+          message: 'Password Updated Successfully'
+        });
+      } catch (error) {
+        console.log(error);
+        res.status(500).json({
+          success: false,
+          error: "Error Occurred"
+        });
+      }
     }
+    
 
      }
