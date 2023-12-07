@@ -21,8 +21,8 @@ module.exports={
                 ],
               });
                 console.log(user);
-                const Employeedata= {
-                id:user._id,
+                const employeedata= {
+                Id:user._id,
                 Name:user.name,
                 Email:user.email,
                 Employeeid:user.employeeid,
@@ -73,8 +73,8 @@ module.exports={
                     res.json({
                         success: true,
                         message: "user logged in successfully",
-                        Authtoken:token,
-                        data: Employeedata
+                        authtoken:token,
+                        data: employeedata
                     })
                 }
             } else {
@@ -109,8 +109,8 @@ module.exports={
                     ],
                   });
                     console.log(user);
-                    const Employeedata= {
-                    id:user._id,
+                    const employeedata= {
+                    Id:user._id,
                     Name:user.name,
                     Email:user.email,
                     Employeeid:user.employeeid,
@@ -121,7 +121,7 @@ module.exports={
                     Bank:user.bank,
                     Phone:user.phone,
                     Branch:user.branch,
-                    AccountNumber:user.accountnumber,
+                    AccountNumber:user.accountNo,
                     Ifsc:user.ifsc,
                     PanNo:user.panNo,
                     PanName:user.panName,
@@ -146,7 +146,7 @@ module.exports={
                 res.status(200).json({
                     success: true,
                     message:"Employee Data Get Sucessfully",
-                    data:Employeedata
+                    data:employeedata
                 })
 
         } catch (error) {
