@@ -33,7 +33,7 @@ module.exports={
                 Bank:user.bank,
                 Phone:user.phone,
                 Branch:user.branch,
-                AccountNumber:user.accountnumber,
+                AccountNumber:user.accountNo,
                 Ifsc:user.ifsc,
                 PanNo:user.panNo,
                 PanName:user.panName,
