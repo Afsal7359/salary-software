@@ -1,5 +1,5 @@
 import React,{useState} from 'react'
-import { Controller, useForm } from 'react-hook-form';
+
 import { toast } from 'react-toastify';
 import { EditCompany } from '../../Apicalls/Company';
 

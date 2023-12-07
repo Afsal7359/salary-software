@@ -1,6 +1,6 @@
 import React,{useEffect,useState} from 'react'
 import { GetAllCompany } from '../../Apicalls/Company';
-import CompanyEdit from '../Modal/companyEdit';
+import CompanyEdit from '../Modal/CompanyEdit';
 
 const Companylist=  React.memo(({formdata,setFormData})=> {
 
