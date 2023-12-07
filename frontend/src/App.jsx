@@ -22,6 +22,7 @@ const Accounttypepage = lazy(() => import('./Pages/Accounttypepage'));
 import { BrowserRouter as Router, Routes, Route} from 'react-router-dom'
 import Salarybill from './Components/Salary Bill/Salarybill';
 import AddCompany from './Components/CompanyMaster/AddCompany';
+import Salaryview from './Components/Salary Bill/Salaryview';
 const App = () => {
   return (
         <Router>
@@ -49,6 +50,7 @@ const App = () => {
        <Route path="/add-operationalType" element={<Operationalpage/>} />
        <Route path="/add-accounttype" element={<Accounttypepage/>} />
        <Route path="/salary-bill" element={<Salarybill/>}/>
+       <Route path="/salary" element={<Salaryview/>}/>
        </Routes>
        </Suspense>
        </div>

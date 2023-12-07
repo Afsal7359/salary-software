@@ -6,6 +6,7 @@ const router =  express.Router();
 
 router.post('/addcompany',Companymaster.Addcompany);
 router.get('/getallcompany',Companymaster.GetAllCompany);
+router.put('/editcompany/:id',Companymaster.EditCompany);
 
 
 module.exports = router;

@@ -51,5 +51,27 @@ module.exports={
         });
        }
 
+    },
+    EditCompany: async(req,res)=>{
+        try {
+            const {id}=req.params;
+            const {name,email,phone,gst,address,pincode }=req.body;
+            const image = req.body.image
+            const result = await cloudinary.uploader.upload(image);
+            const imageurl = result.url
+            await Company.updateOne({ _id: id }, {name:name,email:email,phone:phone,gst:gst,address:address,pincode:pincode,image:imageurl});
+            res.status(200).json({
+                success: true,
+                message: "Company edited successfully."
+            });
+
+        } catch (error) {
+            console.log(error);
+            res.status(500).json({
+                success:false,
+                message:"Company Edit Failed",
+                error:error.message
+            })
+        }
     }
 }

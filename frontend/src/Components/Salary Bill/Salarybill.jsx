@@ -87,6 +87,7 @@ function Salarybill() {
 	const handleInputChange = (newValue) => {
 	  // Implement your search/filter logic here
 	  // For example, filter options based on user input
+	  console.log("newwwvaluees",newValue);
 	  const filteredOptions = EmployeeData.filter((data) =>
 		data.name.toLowerCase().includes(newValue.toLowerCase())
 	  ).map((data) => ({ value: data.name, label: data.name }));
@@ -98,11 +99,15 @@ function Salarybill() {
 console.log("employeeid",EmployeeId);
 
    const handleSelectChange = (selected) => {
-	setSelectedOption(selected);
-	
-	console.log('opyions',selectedOption.value);
-    if (selectedOption) {
-        const filteredEmployees = EmployeeData.filter(data => data.name === selectedOption.value);
+	// setSelectedOption(selected);
+	// console.log(selected,"haaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaai");
+	// console.log(selectedOption,'gggggggggggggggiiiiiiiiiiiiiiiiiiiiiii');
+	// console.log('opyions',selectedOption.value);
+	const select = selected.value
+	console.log(select,"fffffffffffffffffffffdddddddddddddddddddd");
+    if (select) {
+		
+        const filteredEmployees = EmployeeData.filter(data => data.name === select);
 		setAllowedLeave(filteredEmployees[0]?filteredEmployees[0].allowedleave :"")
 		const tablerowData = filteredEmployees[0]?.tablerow;
 
@@ -154,7 +159,8 @@ const headerdata = useMemo(() => {
     setTablerow((prevRows) => prevRows.filter((row) => row.id !== id));
   };
 
-
+  const [month, setmonth] = useState('')
+  
 
   const [issalarymasterDataFetched, setIsSalarymasterDataFetched] =useState(false);
   const [salarymasterData, setSalarymasterData] = useState([]);
@@ -203,69 +209,64 @@ console.log('totalrssow',totalrowprice);
 	const [perDaySalary, setPerDaySalary] = useState('');
 	const [salaryTotal, setSalaryTotal] = useState('');
     const [leaveDifference,setLeaveDifference]=useState('');
-
-useEffect(() => {
-try {
-  const totalAmount = tablerow.reduce((acc, row) => {
-    const salaryType = salarymasterData.find(
-      (item) =>
-        item._id === row.salaryComponent?._id || item._id === row.salaryComponent
-    );
-
-    if (salaryType && (salaryType.type === 'Increment' || salaryType.type === 'Decrement')) {
-      const price = parseFloat(row.price);
-
-      if (!isNaN(price)) {
-        // Check if the parsed price is a valid number
-        return acc + (salaryType.type === 'Increment' ? price : -price);
-      } else {
-        console.error('Invalid price for row:', row);
-      }
-    }
-    return acc;
-  }, parseFloat(basicSalary));
-	// Calculate per day salary
-	const calculatedPerDaySalary = basicSalary / 30;
-	setPerDaySalary(calculatedPerDaySalary)
-	console.log("perday Salary",perDaySalary);
-	
-	  // Calculate the difference between allowed and absent leaves
-	  if(absentDays > allowedleave){
-		console.log("absentdays",absentDays);
-		console.log('alloweddays',allowedleave);
-		const leaveDifferences = absentDays - allowedleave  ;
-		console.log('LeaveDifferencesss',leaveDifferences);
-		
-		// setLeaveDifference(leaveDifferences);
-		// console.log('LeaveDifference',leaveDifference);
-		  const calculatedTotal = totalAmount - (leaveDifferences * perDaySalary);
-		  setSalaryTotal(calculatedTotal.toFixed(2));
-		  
-	  }else {
-		  // If the difference is not positive, set the total to basic salary
-		  setSalaryTotal({
-			...itemdata,
-			TotalSalary: totalAmount.toFixed(2),
+ 	const [totalincrement,setTotalIncrement]=useState(0);
+	const [totaldeduction,setTotalDeduction]=useState(0)
+	useEffect(() => {
+		try {
+		  let totalAmount = basicSalary;
+		  let totalDeduction = 0;
+		  let totalIncrement = 0;
+	  
+		  // Your existing logic for calculating totalAmount
+	  
+		  tablerow.forEach((row) => {
+			const salaryType = salarymasterData.find(
+			  (item) =>
+				item._id === row.salaryComponent?._id || item._id === row.salaryComponent
+			);
+	  
+			if (salaryType) {
+			  if (salaryType.type === 'Increment') {
+				totalIncrement += parseFloat(row.price) || 0;
+			  } else if (salaryType.type === 'Decrement') {
+				totalDeduction += parseFloat(row.price) || 0;
+			  }
+			}
 		  });
+	  
+		  // Calculate the total after deducting deductions and adding increments
+		  totalAmount = totalAmount - totalDeduction + totalIncrement;
+	  
+		  const calculatedPerDaySalary = basicSalary / 30;
+		  setPerDaySalary(calculatedPerDaySalary);
+	  
+		  if (absentDays > allowedleave) {
+			const leaveDifferences = absentDays - allowedleave;
+			const calculatedTotal = totalAmount - leaveDifferences * perDaySalary;
+			setSalaryTotal(calculatedTotal.toFixed(2));
+		  } else {
+			setSalaryTotal(totalAmount.toFixed(2));
+		  }
+	  
+		  const balanceleave = allowedleave - absentDays;
+		  setLeaveDifference(balanceleave < 0 ? 0 : balanceleave);
+	  
+		  setTotalDeduction(totalDeduction.toFixed(2));
+		  setTotalIncrement(totalIncrement.toFixed(2));
+		  setTotalAmount(totalAmount.toFixed(2)); // Set the total amount
+		  console.log('total deduction:',totalDeduction);
+		  console.log('total increment:',totalIncrement);
+		  console.log('total :',totalAmount);
+		} catch (error) {
+		  console.error('Error in useEffect:', error);
 		}
-
-
-
-	const balanceleave = allowedleave - absentDays
-	if(balanceleave < 0){
-		setLeaveDifference(0)
-	}else{
-		setLeaveDifference(balanceleave)
-	}
-	
- 
-
-  
-} catch (error) {
-  console.error('Error in useEffect:', error);
-}
-  }, [tablerow, basicSalary, salarymasterData, allowedleave, absentDays]);
-
+	  }, [tablerow, basicSalary, salarymasterData, allowedleave, absentDays, perDaySalary]);
+	  
+	  
+	  const handlemonthclick =(event)=>{
+            setmonth(event.target.value)
+	  }
+	  console.log("monthhhhhhh",month);
 
   const handleSecondInputChange = (index, value) => {
     const updatedTableRows = [...tablerow];
@@ -312,11 +313,13 @@ const handleformsubmit = async(event)=>{
 			const formdata = {
 			SalaryBillNo:`ME${count.toString().padStart(3, '0')}`, 
 			date:date,	
+			month:month,
 			employeeid:employeeid,
-			date:date,
 			departmentid : department,
 			unitid : unit,
 			basicSalary:basicSalary,
+			totaldeduction:totaldeduction,
+			totalincrement:totalincrement,
 			tablerow: tablerow.map(row => {
 				return {
 					...row,
@@ -327,7 +330,7 @@ const handleformsubmit = async(event)=>{
 			absentDays : absentDays,
 			totalAmount: salaryTotal?.TotalSalary?salaryTotal.TotalSalary :salaryTotal
 			}
-			console.log(formdata);
+			console.log(formdata,"foooooooooooooooorm datasssssssssssssssssssssss");
 			setcount((prevCount) => prevCount + 1);
 			setFilterEmployeeData([])
 			setDate('')
@@ -367,6 +370,7 @@ const handleTableClick =()=>{
 
 console.log("absent",absentvalue);
 
+
 const [date, setDate] = useState(() => {
 	const today = new Date();
 	const year = today.getFullYear();
@@ -380,6 +384,7 @@ const [date, setDate] = useState(() => {
 	// Format the date as 'YYYY-MM-DD' (required by input type='date')
 	return `${year}-${month}-${day}`;
   });
+
 console.log('ssssss',basicSalary);
 	
 return (
@@ -413,6 +418,34 @@ return (
 													)}
 										</div>
 									</div>
+									<div class="col-sm-4">
+									   <div className="form-group local-forms">
+											<label>Month <span className="login-danger">*</span></label>
+											  
+												  <select
+                                                   className="form-control select"
+                                                   {...register('month', { required: 'Please select a month' })}
+												   value={month}
+												   onChange={(e) => setmonth(e.target.value)}
+                                                      >
+                                                         <option value="">Select Type</option>
+														 <option value="january">January</option>
+                                                      	 <option value="february">Feburary</option>
+														<option value="march">March</option>
+														<option value="april">April</option>
+														<option value="may">May</option>
+														<option value="june">June</option>
+														<option value="july">July</option>
+														<option value="august">August</option>
+														<option value="september">September</option>
+														<option value="october">October</option>
+														<option value="november">November</option>
+														<option value="december">December</option>
+                                                     </select>
+                                                       {errors.month && <p className="text-danger">{errors.month.message}</p>}
+											
+										</div>
+									</div>
 								
 
 								<div class="col-sm-4">
@@ -433,9 +466,7 @@ return (
 									<div className="form-group local-forms">
 										<label>Employee Name <span className="login-danger">*</span></label>
 										<Select
-										value={selectedOption}
 										onChange={handleSelectChange}
-										
 										options={options}
 										onInputChange={handleInputChange}
 										

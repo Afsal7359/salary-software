@@ -17,3 +17,11 @@ export const GetAllCompany = async()=>{
         return error.response.data;
     }
 }
+export const EditCompany = async(payload)=>{
+    try {
+        const response = await instance.put(`company/editcompany/${payload._id}`, payload);
+        return response.data
+    } catch (error) {
+        return error.response.data
+    }
+}

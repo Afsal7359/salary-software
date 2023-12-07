@@ -1,5 +1,6 @@
-import jwt from "jsonwebtoken"
-import AppError from "../util/AppError"
+const jwt = require( "jsonwebtoken")
+const AppError = require("../util/AppError")
+
 
 const userAuthMid = (req, res, next) => {
     console.log(req.headers,"dddddddddddddddddddd");
@@ -25,4 +26,4 @@ const userAuthMid = (req, res, next) => {
     }
 }
 
-export default userAuthMid
+module.exports= userAuthMid

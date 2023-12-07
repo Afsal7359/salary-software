@@ -35,7 +35,13 @@ module.exports={
          GetSalaryBill:async(req,res)=>{
                 try{
                     const response = await SalaryBill.find({ isdeleted: { $ne: true } }).sort({ _id: -1 })
-                    .populate('employeeid')
+                    .populate({
+                      path: "employeeid",
+                      populate: [
+                       
+                        { path: "PostId" }
+                      ],
+                    })
                     .populate('departmentid')
                     .populate('unitid')
                     .populate({ path: 'tablerow.salaryComponent' })

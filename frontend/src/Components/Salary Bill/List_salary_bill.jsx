@@ -10,11 +10,13 @@ import Excelicon from '../../assets/img/icons/pdf-icon-04.svg';
 import { getallSalarybill } from '../../Apicalls/salaryBill';
 import SalaryBill from '../Modal/SalaryBill';
 import SalaryBillEdit from './SalaryBillEdit';
+import Salaryview from './Salaryview';
 
 function List_salary_bill({ formdata, setformdata }) {
   const [Data, setData] = useState([]);
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteModal, setshowDeleteModal] = useState(false);
+  const [showPrint, setshowPrint ] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   
@@ -68,6 +70,12 @@ const closeEditModal = () => {
 	setshowDeleteModal(true)
 	setSelectedItem(item)
    };
+
+   const handlePrintClick = (item) => {
+    console.log(item,"DDDDDDSSSSSSSSSSSSSSSSSSSSSS");
+    setshowPrint(true)
+    setSelectedItem(item)
+     };
 
    const handleTableClick =()=>{
     setShowEditModal(false)
@@ -182,6 +190,13 @@ const closeEditModal = () => {
                               onClick={() => handleDeleteClick(item)}>
                                   <i className="fa fa-trash-alt m-r-5"></i> Delete
                                 </a>
+                                <a className="dropdown-item"  onTouchMove={() => {
+                                setshowPrint(true);
+                                setSelectedItem(item);
+                              }}
+                              onClick={() => handlePrintClick(item)}>
+                                  <i className="fa fa-print m-r-5"></i> Print
+                                </a>
                               </div>
                             </div>
                           </td>
@@ -206,6 +221,12 @@ const closeEditModal = () => {
  Data={Data}
  item={selectedItem}
  closeDeleteModal={closeDeleteModal}
+/>)}
+{showPrint && selectedItem &&(<Salaryview
+ setData={setData}
+ Data={Data}
+ item={selectedItem}
+ 
 />)}
     </>
   );

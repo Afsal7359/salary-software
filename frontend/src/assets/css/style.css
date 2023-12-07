@@ -10848,3 +10848,18 @@ textarea.form-control {
 	}
 }
 
+body{
+    margin-top:10px;
+   
+}
+
+@media print {
+	.content-to-print {
+	  display: block;
+	}
+	   /* Optionally, you can hide other elements */
+	   body *:not(.content-to-print) {
+		display: none;
+	  }
+	
+	}

@@ -8,7 +8,7 @@ const Companylist=  React.memo(({formdata,setFormData})=> {
     const [Data, setData] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [showEditModal, setShowEditModal] = useState(false);
-    const [selectedItem, setSelectedItem] = useState();
+    const [selectedItem, setSelectedItem] = useState(null);
 
 
     if (formdata.length!=0) {
@@ -41,7 +41,6 @@ const Companylist=  React.memo(({formdata,setFormData})=> {
        
       const handleEditClick = (item) => {
         setShowEditModal(true);
-        console.log(item,"ukuukjhjtghfghf");
         setSelectedItem(item);
       };
 
@@ -81,7 +80,7 @@ const closeEditModal = () => {
                                 setShowEditModal(true);
                               }}
                                onClick={()=>handleEditClick(item)} 
-                               className="btn btn-primary-item" data-bs-toggle="modal"
+                               className="btn btn-primary submit-form me-2" data-bs-toggle="modal"
                                 data-bs-target="#delete_patients"
                                 >
                                  Edit Profile
@@ -129,11 +128,15 @@ const closeEditModal = () => {
   </div>
 </div>
 
-{showEditModal && selectedItem  && (
-    console.log("Dddddddddattttttttta",selectedItem),
+{showEditModal && selectedItem && (
+  console.log("Data", selectedItem), // Make sure you're seeing the data in the console
+
   <CompanyEdit  
     item={selectedItem}
-    closeEditModal={closeEditModal}/>
+    closeEditModal={closeEditModal}
+    setData={setData}
+    Data={Data}
+  />
 )}
     </>
   )
