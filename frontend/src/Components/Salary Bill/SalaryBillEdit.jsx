@@ -277,7 +277,6 @@ try{
     SalaryBillNo:SalaryBillNo, 
     date:date,	
     employeeid:employeeid?employeeid:employeeId,
-    date:date,
     departmentid : department?department:departments,
     unitid : unit?unit:unitid,
     basicSalary:basicSalary,

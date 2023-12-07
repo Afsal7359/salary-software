@@ -22,7 +22,7 @@ module.exports={
               });
                 console.log(user);
                 const Employeedata= {
-                _id:user._id,
+                id:user._id,
                 Name:user.name,
                 Email:user.email,
                 Employeeid:user.employeeid,
@@ -110,7 +110,7 @@ module.exports={
                   });
                     console.log(user);
                     const Employeedata= {
-                    _id:user._id,
+                    id:user._id,
                     Name:user.name,
                     Email:user.email,
                     Employeeid:user.employeeid,
