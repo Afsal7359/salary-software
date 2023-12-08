@@ -48,7 +48,7 @@ const updatedData = Data.map((dataItem) => {
               address:address,
               pincode:pincode,
               gst:gst,
-              image: selectedFile,
+              image: selectedFile?selectedFile:item.image,
              
     };
   }

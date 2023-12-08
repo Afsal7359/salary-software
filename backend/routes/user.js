@@ -9,6 +9,6 @@ const router = express.Router();
 router.post('/login',userlogin.LoginUser);
 router.get('/userdata/:id',userAuthMid,userlogin.GetEmployeeData);
 router.post('/profile-update/:id',userAuthMid,userlogin.AddProfilePhoto);
-router.post('/updatepassword/:id',userAuthMid,userlogin.UpdatePassword);
+router.post('/updatepassword/:id',userlogin.UpdatePassword);
 
 module.exports = router;

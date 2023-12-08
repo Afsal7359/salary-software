@@ -23,40 +23,39 @@ module.exports={
               });
                 console.log(user);
                 const employeedata= {
-                Id:user._id,
-                Name:user.name,
-                Email:user.email,
-                Employeeid:user.employeeid,
-                Department:user.PostId.department.name,
-                Designation:user.PostId.designation,
-                Address:user.address1,
-                EmployeeNo:user.employeeno,
-                Bank:user.bank,
-                Phone:user.phone,
-                Branch:user.branch,
-                AccountNumber:user.accountNo,
-                Ifsc:user.ifsc,
-                PanNo:user.panNo,
-                PanName:user.panName,
-                DateOfBirth:user.dateOfBirth,
-                DateOfJoining:user.dateOfJoining,
-                GuardianName:user.guardianName,
-                BasicSalary:user.basicSalary,
-                AllowedLeave:user.allowedleave,
-                Gender:user.gender,
-                UniversalAccountNumber:user.universalAcNo,
-                City:user.city,
-                Country:user.country,
-                 Tablerow : user.tablerow.map(tablerow => ({
-                    SalaryComponent: tablerow.salaryComponent.name,
-                    Percentage: tablerow.percentage,
-                    Value: tablerow.value,
-                    Price: tablerow.price,
-                  })),
-                TotalSalary:user.TotalSalary,
-
-            }
-      
+                  id:user._id,
+                  name:user.name,
+                  email:user.email,
+                  employeeid:user.employeeid,
+                  department:user.PostId.department.name,
+                  designation:user.PostId.designation,
+                  address:user.address1,
+                  employeeNo:user.employeeno,
+                  bank:user.bank,
+                  phone:user.phone,
+                  branch:user.branch,
+                  accountNumber:user.accountNo,
+                  ifsc:user.ifsc,
+                  panNo:user.panNo,
+                  panName:user.panName,
+                  dateOfBirth:user.dateOfBirth,
+                  dateOfJoining:user.dateOfJoining,
+                  guardianName:user.guardianName,
+                  basicSalary:user.basicSalary,
+                  allowedLeave:user.allowedleave,
+                  gender:user.gender,
+                  universalAccountNumber:user.universalAcNo,
+                  city:user.city,
+                  country:user.country,
+                   tablerow : user.tablerow.map(tablerow => ({
+                      salaryComponent: tablerow.salaryComponent.name,
+                      percentage: tablerow.percentage,
+                      value: tablerow.value,
+                      price: tablerow.price,
+                    })),
+                  totalSalary:user.TotalSalary,
+  
+              }
             if (user) {
                 // const validaPassword = await bcrypt.compare(req.body.password, user.password);
                 let validaPassword
@@ -134,14 +133,14 @@ module.exports={
                     gender:user.gender,
                     universalAccountNumber:user.universalAcNo,
                     city:user.city,
-                    Country:user.country,
-                     Tablerow : user.tablerow.map(tablerow => ({
-                        SalaryComponent: tablerow.salaryComponent.name,
-                        Percentage: tablerow.percentage,
-                        Value: tablerow.value,
-                        Price: tablerow.price,
+                    country:user.country,
+                     tablerow : user.tablerow.map(tablerow => ({
+                        salaryComponent: tablerow.salaryComponent.name,
+                        percentage: tablerow.percentage,
+                        value: tablerow.value,
+                        price: tablerow.price,
                       })),
-                    TotalSalary:user.TotalSalary,
+                    totalSalary:user.TotalSalary,
     
                 }
                 res.status(200).json({
