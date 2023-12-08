@@ -4,6 +4,7 @@ const AppError = require("../util/AppError")
 
 const userAuthMid = (req, res, next) => {
     console.log(req.headers,"dddddddddddddddddddd");
+ 
     let token = ''
     if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
         token = req.headers.authorization.split(' ')[1]

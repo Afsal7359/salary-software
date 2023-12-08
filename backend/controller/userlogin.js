@@ -7,6 +7,7 @@ module.exports={
         console.log('loginnnnnnnnnnnnnnnnnnn');
         try {
             const user = await Employee.findOne({ phone: req.body.phone })
+            .populate("EmployeeTypeId")
             .populate({
                 path: "PostId",
                 populate: [
@@ -27,6 +28,7 @@ module.exports={
                   name:user.name,
                   email:user.email,
                   employeeid:user.employeeid,
+                  employeetype:user.EmployeeTypeId.name,
                   department:user.PostId.department.name,
                   designation:user.PostId.designation,
                   address:user.address1,
@@ -94,6 +96,7 @@ module.exports={
             const userId = req.params.id;
             
             const user = await Employee.findById(userId)
+            .populate("EmployeeTypeId")
                 .populate({
                     path: "PostId",
                     populate: [
@@ -114,6 +117,7 @@ module.exports={
                     name:user.name,
                     email:user.email,
                     employeeid:user.employeeid,
+                    employeetype:user.EmployeeTypeId.name,
                     department:user.PostId.department.name,
                     designation:user.PostId.designation,
                     address:user.address1,
@@ -160,12 +164,26 @@ module.exports={
     AddProfilePhoto: async(req,res)=>{
       try {
         const userId = req.params.id;
-        const image = req.body.image;
+        const image = req.file.path;
+        console.log(image,"image");
+        console.log(userId,"userid");
         const result = await cloudinary.uploader.upload(image);
         const imageurl = result.url
+        console.log(imageurl,"imageurlllllll");
+        const user = await Employee.findById(userId);
 
-        const user = await Employee.findByIdAndUpdate({_id:userId,image:imageurl});
+        if(user.image){
+          user.image = imageurl;
+          await user.updateOne(user)
+         
+        }else{
+          user.image = imageurl;
+          await user.save();
+        }
 
+       
+
+       
         res.status(200).json({
           success:true,
           message:'Image Uploaded Successfully',
@@ -176,7 +194,8 @@ module.exports={
         console.log(error);
         res.status(500).json({
           success: false,
-          error: "Error Occured"
+          message: "Error Occured",
+          error:error.message
         })
       }
     },

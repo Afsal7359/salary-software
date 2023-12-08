@@ -1,5 +1,5 @@
 import React from 'react'
-
+import logo from '../../assets/img/logo.jpg'
 function SalaryvoucherPrint() {
   return (
     <>
@@ -7,18 +7,14 @@ function SalaryvoucherPrint() {
   <div className="card-header bg-black" />
   <div className="card-body">
     <div className="container">
-      <div className="row">
-        <div className="col-xl-12">
-          <i className="far fa-building text-danger fa-6x float-start" />
+      <div className="row" style={{border:"solid 2px" ,height:"5 em"}}>
+      <div className="col-xl-2">
+          <img src={logo} alt="" width={155} height={65}/>
         </div>
-      </div>
-      <div className="row">
-        <div className="col-xl-12">
+        <div className="col-xl-9">
           <ul className="list-unstyled float-end">
-            <li style={{ fontSize: 30, color: "red" }}>Company</li>
-            <li>123, Elm Street</li>
-            <li>123-456-789</li>
-            <li>mail@mail.com</li>
+            <li className='text-center' style={{ fontSize: 25, color: "red" }}>THE KERALA STATE CO-OPERATIVE MARKETING FEDERATION LTD</li>
+            <li className='text-center'>P.B.NO. 2024 GANDHI NAGAR, KOCHI- 682020 Kerala, India</li>
           </ul>
         </div>
       </div>
@@ -35,71 +31,123 @@ function SalaryvoucherPrint() {
         <table className="table">
           <thead>
             <tr>      
-              <th scope="col">Description</th>
-              <th scope="col">Amount</th>
+              <th scope="col">Sl NO</th>
+              <th scope="col">Employee No</th>
+              <th scope="col">Employee Name</th>
+              <th scope="col">Gross Salary</th>
+              <th scope="col">Deductions</th>
+              <th scope="col">Emplyr Contr</th>
+              <th scope="col">Net Pay</th>
+
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td>Samsung TV</td>
+              <td>1</td>
               <td>
-                <i className="fas fa-dollar-sign" /> 500,00
+                42243443
               </td>
               <td>
-                <i className="fas fa-dollar-sign" /> 500,00
+                Shahid Vk
               </td>
               <td>
-                <i className="fas fa-dollar-sign" /> 500,00
+                <i className="fas fa-rupee-sign" /> 500,00
               </td>
               <td>
-                <i className="fas fa-dollar-sign" /> 500,00
+                <i className="fas fa-rupee-sign" /> 500,00
               </td>
-            </tr>
-            <tr>
-              <td>JBL Speaker</td>
               <td>
-                <i className="fas fa-dollar-sign" /> 300,00
+                <i className="fas fa-rupee-sign" /> 500,00
               </td>
-            </tr>
-            <tr>
-              <td>Macbook Air</td>
               <td>
-                <i className="fas fa-dollar-sign" /> 1000,00
+                <i className="fas fa-rupee-sign" /> 543543
               </td>
             </tr>
             <tr>
-              <td>Iphone 11 PRO</td>
+              <td>1</td>
               <td>
-                <i className="fas fa-dollar-sign" /> 5000,00
+                42243443
+              </td>
+              <td>
+                Shahid Vk
+              </td>
+              <td>
+                <i className="fas fa-rupee-sign" /> 500,00
+              </td>
+              <td>
+                <i className="fas fa-rupee-sign" /> 500,00
+              </td>
+              <td>
+                <i className="fas fa-rupee-sign" /> 500,00
+              </td>
+              <td>
+                <i className="fas fa-rupee-sign" /> 543543
               </td>
             </tr>
+            <tr>
+              <td>1</td>
+              <td>
+                42243443
+              </td>
+              <td>
+                Shahid Vk
+              </td>
+              <td>
+                <i className="fas fa-rupee-sign" /> 500,00
+              </td>
+              <td>
+                <i className="fas fa-rupee-sign" /> 500,00
+              </td>
+              <td>
+                <i className="fas fa-rupee-sign" /> 500,00
+              </td>
+              <td>
+                <i className="fas fa-rupee-sign" /> 543543
+              </td>
+            </tr>
+            <tr>
+              <td>1</td>
+              <td>
+                42243443
+              </td>
+              <td>
+                Shahid Vk
+              </td>
+              <td>
+                <i className="fas fa-rupee-sign" /> 500,00
+              </td>
+              <td>
+                <i className="fas fa-rupee-sign" /> 500,00
+              </td>
+              <td>
+                <i className="fas fa-rupee-sign" /> 500,00
+              </td>
+              <td>
+                <i className="fas fa-rupee-sign" /> 543543
+              </td>
+            </tr>
+            
           </tbody>
         </table>
       </div>
       <div className="row">
-        <div className="col-xl-8">
-          <ul className="list-unstyled float-end me-0">
+        <div className="col-xl-12">
+          <ul className="list-unstyled float-end me-0  text-end">
             <li>
-              <span className="me-3 float-start">Total Amount:</span>
-              <i className="fas fa-dollar-sign" /> 6850,00
+              <span className="me-0 float-start">Total Earnings:</span>
+              <i className="fas fa-rupee-sign" /> 6850,00
             </li>
             <li>
-              {" "}
-              <span className="me-5">Discount:</span>
-              <i className="fas fa-dollar-sign" /> 500,00
+              <span className="me-0 float-start">Total Deduction:</span>
+              <i className="fas fa-rupee-sign" /> 6850,00
             </li>
-            <li>
-              <span className="float-start" style={{ marginRight: 35 }}>
-                Shippment:{" "}
-              </span>
-              <i className="fas fa-dollar-sign" /> 500,00
-            </li>
+            
           </ul>
         </div>
       </div>
       <hr />
       <div className="row">
-        <div className="col-xl-8" style={{ marginLeft: 60 }}>
+        <div className="col-xl-11" style={{ marginLeft: 60 }}>
           <p
             className="float-end"
             style={{

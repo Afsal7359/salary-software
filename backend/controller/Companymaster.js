@@ -55,8 +55,9 @@ module.exports={
     EditCompany: async (req, res) => {
         try {
             const { id } = req.params;
+            console.log(req.body);
             const { name, email, phone, gst, address, pincode, image } = req.body;
-    
+            
             let imageurl = null;
             if (image) {
                 const result = await cloudinary.uploader.upload(image);
