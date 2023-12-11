@@ -10,4 +10,5 @@ router.post('/editSalarybill/:id',SalaryBill.EditSalaryBill);
 router.get('/getallSalarybillcount',SalaryBill.getSalaryBillCount);
 
 
+
 module.exports = router;

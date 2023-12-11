@@ -49,7 +49,9 @@ module.exports={
                   universalAccountNumber:user.universalAcNo,
                   city:user.city,
                   country:user.country,
+                  image:user.image,
                    tablerow : user.tablerow.map(tablerow => ({
+                       id: tablerow.id,
                       salaryComponent: tablerow.salaryComponent.name,
                       percentage: tablerow.percentage,
                       value: tablerow.value,
@@ -70,7 +72,7 @@ module.exports={
                 if (!validaPassword) {
                     throw new Error("Invalid password !");
                 } else {
-                    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: "2592000" });
+                    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: "2d" });
                     
                     res.json({
                         success: true,
@@ -137,15 +139,17 @@ module.exports={
                     gender:user.gender,
                     universalAccountNumber:user.universalAcNo,
                     city:user.city,
+                    image:user.image,
                     country:user.country,
                      tablerow : user.tablerow.map(tablerow => ({
+                        id:tablerow.id,
                         salaryComponent: tablerow.salaryComponent.name,
                         percentage: tablerow.percentage,
                         value: tablerow.value,
                         price: tablerow.price,
                       })),
                     totalSalary:user.TotalSalary,
-    
+                     
                 }
                 res.status(200).json({
                     success: true,
@@ -181,13 +185,13 @@ module.exports={
           await user.save();
         }
 
-       
+       const imagedata = user.image
 
        
         res.status(200).json({
           success:true,
           message:'Image Uploaded Successfully',
-          data:user
+          data:imagedata
         })
 
       } catch (error) {

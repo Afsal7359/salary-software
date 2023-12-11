@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 import { editemployeemaster, getallemployeemaster } from '../../Apicalls/EmployeeMater';
 import { getallSalary } from '../../Apicalls/salarymaster';
 import { AddSalaryBill, GetSalaryBillCount } from '../../Apicalls/salaryBill';
-import list_salary_bill from './List_salary_bill';
+import list_salary_bill from './list_salary_bill';
 import { useForm } from 'react-hook-form';
 
 import Select from 'react-select';

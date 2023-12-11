@@ -58,6 +58,7 @@ module.exports={
                     });
                 }
             },
+
             DeleteSalaryBill: async (req, res) => {
                 try {
                   const {id } = req.params;

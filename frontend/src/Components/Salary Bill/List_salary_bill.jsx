@@ -95,6 +95,13 @@ const closeEditModal = () => {
   //   setSalarybill(true);
   // }
 
+  
+ const handlePrintvoucher =()=>{
+  setshowPrint(false)
+  setSalaryList(true)
+ }
+  
+
   return (
     <>
     {Salarylist&& 
@@ -115,7 +122,7 @@ const closeEditModal = () => {
                           <div className="top-nav-search table-search-blk">
                             <form>
                               <input type="text" className="form-control" placeholder="Search here" />
-                              <a className="btn">
+                              <a className="btn" >
                                 <img src={searchicon} alt="" />
                               </a>
                             </form>
@@ -131,8 +138,9 @@ const closeEditModal = () => {
                         </div>
                       </div>
                     </div>
+                    
                     <div className="col-auto text-end float-end ms-auto download-grp">
-                      <a href="javascript:;" className=" me-2">
+                      <a type='button' className=" me-2" onClick={handlePrintvoucher}>
                         <img src={pdficon} alt="" />
                       </a>
                       <a href="javascript:;" className=" me-2">

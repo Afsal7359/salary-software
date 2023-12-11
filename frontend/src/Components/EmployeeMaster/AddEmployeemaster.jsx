@@ -12,6 +12,7 @@ const AddEmployeemaster = () => {
 	const [count,setcount]=useState(0)
 	const [name, setName] = useState('');
 	const [email, setEmail]=useState('');
+	const [rowid ,setRowId]=useState('')
 	const [phone,setPhone]=useState('');
 	const [employeeno, setEmployeeno]=useState('');
 	const [address1, setAddress1]=useState('');
@@ -210,7 +211,7 @@ const AddEmployeemaster = () => {
 		settableRows((prevRows) => [
 		  ...prevRows,
 		  {
-			id: Date.now(),
+			id: prevRows.length + 1, // Incrementing ID
 			salaryComponent: '',
 			percentage: '',
 			value: '',
@@ -218,6 +219,7 @@ const AddEmployeemaster = () => {
 		  },
 		]);
 	  };
+	  
 	
 	  const handleRemoveRow = (id) => {
 		settableRows((prevRows) => prevRows.filter((row) => row.id !== id));
@@ -861,7 +863,8 @@ const [tablestate,settablestate]=useState(false)
 															{tableRows.map((row, index) => (
 															<tr key={row.id}>
 																<td>
-																<input type="text" className="form-control" value={index + 1} readOnly />
+																<input type="text" className="form-control" value={index + 1} readOnly 
+																onChange={(e) => setEmail(e.target.value)}/>
 																</td>
 																<td>
 																<select className="form-control"

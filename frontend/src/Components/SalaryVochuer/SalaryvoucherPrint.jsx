@@ -4,10 +4,10 @@ function SalaryvoucherPrint() {
   return (
     <>
         <div className="card">
-  <div className="card-header bg-black" />
+  <div className="card-header" />
   <div className="card-body">
     <div className="container">
-      <div className="row" style={{border:"solid 2px" ,height:"5 em"}}>
+      <div className="row">
       <div className="col-xl-2">
           <img src={logo} alt="" width={155} height={65}/>
         </div>
@@ -19,12 +19,13 @@ function SalaryvoucherPrint() {
         </div>
       </div>
       <div className="row text-center">
-        <h3
+        {/* <h3
           className="text-uppercase text-center mt-3"
-          style={{ fontSize: 40 }}
+          style={{ fontSize: 25 }}
         >
           Invoice
-        </h3>
+        </h3> */}
+        
         <p>123456789</p>
       </div>
       <div className="row mx-3">
