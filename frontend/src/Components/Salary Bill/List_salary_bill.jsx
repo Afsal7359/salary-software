@@ -21,6 +21,12 @@ function List_salary_bill({ formdata, setformdata }) {
   const [isLoading, setIsLoading] = useState(true);
   
   const [Salarylist,setSalaryList]=useState(true)
+
+  const [fromMonth, setFromMonth] = useState('');
+  const [toMonth, setToMonth] = useState(''); 
+
+  console.log(fromMonth);
+  console.log(toMonth);
   
 console.log('ffffrooooooom',formdata);
 
@@ -97,9 +103,12 @@ const closeEditModal = () => {
 
   
  const handlePrintvoucher =()=>{
-  setshowPrint(false)
-  setSalaryList(true)
+
+
+
  }
+
+
   
 
   return (
@@ -126,9 +135,11 @@ const closeEditModal = () => {
                                 <img src={searchicon} alt="" />
                               </a>
                             </form>
+                          
                           </div>
                           <div className="add-group">
                             <a href="add-doctor.html" className="btn btn-primary add-pluss ms-2">
+                           
                               <img src={addicon} alt="" />
                             </a>
                             <a href="javascript:;" className="btn btn-primary doctor-refresh ms-2">
@@ -139,19 +150,35 @@ const closeEditModal = () => {
                       </div>
                     </div>
                     
-                    <div className="col-auto text-end float-end ms-auto download-grp">
-                      <a type='button' className=" me-2" onClick={handlePrintvoucher}>
-                        <img src={pdficon} alt="" />
+                    <div className="col-auto  ms-auto">
+                      <form >
+                      <a type='button' className=" me-2" >
+                        {/* <img src={pdficon} alt="" /> */}
+                        <input
+                        className='form-control'
+                          type="date"
+                          value={fromMonth}
+                          onChange={(e) => setFromMonth(e.target.value)}
+                          required
+                        />
                       </a>
-                      <a href="javascript:;" className=" me-2">
-                        <img src={TXticon} alt="" />
+                      <a type='button'  className=" me-2">
+                        {/* <img src={TXticon} alt="" /> */}
+                        <input
+                        className='form-control'
+                          type="date"
+                          value={toMonth}
+                          onChange={(e) => setToMonth(e.target.value)}
+                          required
+                        />
+                                      </a>
+
+                      <a className=" btn btn-primary submit-form m-2"
+                      onClick={handlePrintvoucher}>
+                        Print Voucher
                       </a>
-                      <a href="javascript:;" className=" me-2">
-                        <img src={csvicon} alt="" />
-                      </a>
-                      <a href="javascript:;">
-                        <img src={Excelicon} alt="" />
-                      </a>
+                      
+                      </form>
                     </div>
                   </div>
                 </div>
