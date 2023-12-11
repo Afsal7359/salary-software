@@ -29,6 +29,10 @@ const SalarybillSchema = new mongoose.Schema({
         type:String,
         require:true,
     },
+    totalcontribution:{
+        type:String,
+        require:true,
+    },
     month:{
         type:String,
         require:true,

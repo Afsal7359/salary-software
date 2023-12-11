@@ -2,15 +2,14 @@ import React, { useEffect, useState,useMemo,useCallback  } from 'react';
 import searchicon from '../../assets/img/icons/search-normal.svg';
 import addicon from '../../assets/img/icons/plus.svg';
 import refreshicon from '../../assets/img/icons/re-fresh.svg';
-import pdficon from '../../assets/img/icons/pdf-icon-01.svg';
-import TXticon from '../../assets/img/icons/pdf-icon-02.svg';
-import csvicon from '../../assets/img/icons/pdf-icon-03.svg';
-import Excelicon from '../../assets/img/icons/pdf-icon-04.svg';
-
-import { getallSalarybill } from '../../Apicalls/salaryBill';
+import Pagination from 'react-bootstrap/Pagination'; 
+import { useReactToPrint } from 'react-to-print';
+import { GetSalaryByMonth, getallSalarybill } from '../../Apicalls/salaryBill';
 import SalaryBill from '../Modal/SalaryBill';
 import SalaryBillEdit from './SalaryBillEdit';
 import Salaryview from './Salaryview';
+import { useForm } from 'react-hook-form';
+import { toast } from 'react-toastify';
 
 function List_salary_bill({ formdata, setformdata }) {
   const [Data, setData] = useState([]);
@@ -102,14 +101,43 @@ const closeEditModal = () => {
   // }
 
   
- const handlePrintvoucher =()=>{
-
-
+ const handleFilterClick =async(event)=>{
+  event.preventDefault();
+try {
+  const formdata = {
+    fromMonth : fromMonth,
+    toMonth : toMonth,
+  }
+const response = await GetSalaryByMonth(formdata)
+if (response.success){
+  setData(response.data);
+  console.log();
+  toast.success(response.message)
+  }else{
+    toast.error(response.message)
+  }
+} catch (error) {
+  console.log(error);
+  toast.error(error.message);
+}
 
  }
 
-
-  
+ const handlePrintVoucher = ()=>{
+        Data.map((data)=>{
+          const printData = {
+            name : data.name,
+            month : data.month,
+            salary : data.salary,
+            date : data.date,
+            }
+            return printData
+        })
+       
+ }
+    <useReactToPrint 
+        content={() =>printData } // Function to reference the printable component
+      />
 
   return (
     <>
@@ -142,8 +170,8 @@ const closeEditModal = () => {
                            
                               <img src={addicon} alt="" />
                             </a>
-                            <a href="javascript:;" className="btn btn-primary doctor-refresh ms-2">
-                              <img src={refreshicon} alt="" />
+                            <a href="javascript:;" className="btn btn-primary doctor-refresh ms-2" onClick={handlePrintVoucher}>
+                              print
                             </a>
                           </div>
                         </div>
@@ -165,18 +193,20 @@ const closeEditModal = () => {
                       <a type='button'  className=" me-2">
                         {/* <img src={TXticon} alt="" /> */}
                         <input
+                          // {...register('toMonth', { required: 'Please select a month' })}
                         className='form-control'
                           type="date"
                           value={toMonth}
                           onChange={(e) => setToMonth(e.target.value)}
                           required
                         />
+                         {/* {errors.month && <p className="text-danger">{errors.toMonth.message}</p>} */}
                                       </a>
 
-                      <a className=" btn btn-primary submit-form m-2"
-                      onClick={handlePrintvoucher}>
-                        Print Voucher
-                      </a>
+                      <button className=" btn btn-primary submit-form m-2"
+                      onClick={handleFilterClick}>
+                        Filter
+                      </button>
                       
                       </form>
                     </div>
@@ -187,23 +217,27 @@ const closeEditModal = () => {
                   <table className="table border-0 custom-table comman-table datatable mb-0">
                     <thead>
                       <tr>
-                        <th>Bill No</th>
-                        <th>Date</th>
-                        <th>Name</th>
-                        <th>Department</th>
-                        <th>unit</th>
-                        <th>Total Salary</th>
+                        <th>Sl No</th>
+                        <th>Employee No</th>
+                        <th>Employee Name</th>
+                        <th>Gross Salary</th>
+                        <th>Deduction</th>
+                        <th>Emplyee Contributions</th>
+                        <th>Net Pay</th>
+                        <th></th>
                       </tr>
                     </thead>
                     <tbody>
                       {memoizedData.map((item, index) => (
                         <tr key={item._id}>
-                          <td>{item.SalaryBillNo}</td>
-                          <td>{item.date}</td>
+                          <td>{index + 1}</td>
+                          <td>{item.employeeid.employeeno}</td>
                           <td>{item.employeeid.name}</td>
-                          <td>{item.departmentid.name}</td>
-                          <td>{item.unitid.name}</td>
+                          <td>{item.totalincrement}</td>
+                          <td>{item.totaldeduction}</td>
+                          <td>{item.totalcontribution}</td>
                           <td>{item.totalAmount}</td>
+                          
                           <td className="text-end">
                             <div className="dropdown dropdown-action">
                               <a href="#" className="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
@@ -239,6 +273,19 @@ const closeEditModal = () => {
                       ))}
                     </tbody>
                   </table>
+                  <div style={{ display: 'block', width: 700, padding: 30 }}> 
+      <Pagination> 
+        <Pagination.Prev /> 
+        <Pagination.Ellipsis />
+        <Pagination.Item>{1}</Pagination.Item> 
+        <Pagination.Item>{2}</Pagination.Item> 
+        <Pagination.Item>{3}</Pagination.Item> 
+        <Pagination.Item>{4}</Pagination.Item> 
+        <Pagination.Item>{5}</Pagination.Item> 
+        <Pagination.Ellipsis />
+        <Pagination.Next /> 
+      </Pagination> 
+    </div>
                 </div>
               </div>
             </div>

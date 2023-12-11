@@ -144,6 +144,49 @@ module.exports={
                 }
               },
             
-
+           GetSalaryMonthData : async (req, res) => {
+            try {
+              const { fromMonth, toMonth } = req.body;
+          
+              // Assuming 'EmployeeSalary' is the model to fetch salary data
+              const salaryData = await SalaryBill.find({
+                date: {
+                  $gte:  (fromMonth),
+                  $lte:  (toMonth),
+                },
+              })
+               .populate({
+                      path: "employeeid",
+                      populate: [
+                       
+                        { path: "PostId" }
+                      ],
+                    })
+                    .populate('departmentid')
+                    .populate('unitid')
+                    .populate({ path: 'tablerow.salaryComponent' })
+          
+              if (salaryData.length === 0) {
+                return res.status(404).json({
+                  success: false,
+                  message: 'No salary data found within the specified date range',
+                });
+              }
+          
+              res.status(200).json({
+                success: true,
+                message:` Salary data fetched successfully from ${fromMonth} to ${toMonth}`,
+                data: salaryData,
+              });
+            } catch (error) {
+              console.log(error);
+              res.status(500).json({
+                success: false,
+                message: 'Error Occurred',
+                error: error.message,
+              });
+            }
+          },
+              
               
 }

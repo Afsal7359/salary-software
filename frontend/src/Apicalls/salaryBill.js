@@ -44,3 +44,12 @@ export const GetSalaryBillCount = async () => {
         return err.response.data;
     }
 }
+
+export const GetSalaryByMonth = async (payload) => {
+    try {
+        const response = await instance.post('salarybill//getSalarybydate',payload);
+        return response.data
+    } catch (err) {
+        return err.response.data;
+    }
+}

@@ -211,11 +211,13 @@ console.log('totalrssow',totalrowprice);
     const [leaveDifference,setLeaveDifference]=useState('');
  	const [totalincrement,setTotalIncrement]=useState(0);
 	const [totaldeduction,setTotalDeduction]=useState(0)
+	const [totalcontribution,setTotalContributions]=useState(0)
 	useEffect(() => {
 		try {
 		  let totalAmount = basicSalary;
 		  let totalDeduction = 0;
 		  let totalIncrement = 0;
+		  let totalcontribution =0;
 	  
 		  // Your existing logic for calculating totalAmount
 	  
@@ -230,9 +232,12 @@ console.log('totalrssow',totalrowprice);
 				totalIncrement += parseFloat(row.price) || 0;
 			  } else if (salaryType.type === 'Decrement') {
 				totalDeduction += parseFloat(row.price) || 0;
+			  } else if (salaryType.type === 'nill') {
+				setTotalContributions(totalcontribution += parseFloat(row.price) || 0)
 			  }
 			}
 		  });
+		  console.log("total contribution",totalcontribution);
 	  
 		  // Calculate the total after deducting deductions and adding increments
 		  totalAmount = totalAmount - totalDeduction + totalIncrement;
@@ -320,6 +325,7 @@ const handleformsubmit = async(event)=>{
 			basicSalary:basicSalary,
 			totaldeduction:totaldeduction,
 			totalincrement:totalincrement,
+			totalcontribution:totalcontribution,
 			tablerow: tablerow.map(row => {
 				return {
 					...row,
@@ -341,6 +347,7 @@ const handleformsubmit = async(event)=>{
 			setEmployeeId([])
 			setBasicSalary([])
 			setSalaryTotal([])
+			setTotalContributions([])
 			const response = await AddSalaryBill(formdata);
 
 			 if (response.success){
