@@ -11,6 +11,8 @@ import { getallDepartment } from '../../Apicalls/Department';
 import Departmentedit from '../Modal/Departmentedit';
 import DepartmentDelete from '../Modal/DepartmentDelete';
 
+
+
 function Departmentlist({DepartmentData,setDepartmentData}) {
     const [Data, setData] = useState([]);
     const [showEditModal, setShowEditModal] = useState(false);
@@ -25,6 +27,10 @@ function Departmentlist({DepartmentData,setDepartmentData}) {
         }
     }
 
+    dsfjhgsaduhjsgahjdsgfhjsf
+    sfbfkjkjdshfdskjf
+    lkhdselkjhdskjhfds
+    akndbsakjfdskjfdshf
     
 
   const [isLoading, setIsLoading] = useState(true);

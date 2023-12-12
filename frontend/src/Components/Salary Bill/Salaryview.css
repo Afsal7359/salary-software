@@ -1,58 +1,59 @@
 table{
-width: 100%;
-
-}
-table td{padding-left:15px;}
-
-.main{
-    background-color: #fff;
-    height: min-content;
-   
-    margin: 1em;
-    margin-top: 1em;
-}
-.head{
-    background-color:#fae3bd; color:#ffff;
-}
-.headnone{
-    background-color:#fae3bd; color:#000000;
-    padding-left:2em ;
-}
-.amount{
-    background-color:#fae3bd; color:#000000;
-}
-.text{
-    padding-left:2em ;
-}
-.tabledata{
-    padding-left:2em ;
-    width: 20em;
-}
-.earnings {
-    text-align: right;
-    padding-right: 27em; 
-}
-
-
-
-.deduction{
-    text-align: right;
-    padding-right: 20em; 
-}
-.contributions{
-    text-align: right;
-    padding-right: 11em; 
-}
-.total{
-    text-align: end;
-    background-color: #fae3bd;
-    margin-top: 2em;
-}
-
-.h4total{
-    font-weight: bold;
-    color: #000000;
-}
-.span{
-    font-weight: 100;
-}
+    width: 100%;
+    
+    }
+    table td{padding-left:15px;}
+    
+    .main{
+        background-color: #fff;
+        height: min-content;
+       
+        margin: 1em;
+        margin-top: 1em;
+    }
+    .head{
+        background-color:#fae3bd; color:#ffff;
+    }
+    .headnone{
+        background-color:#fae3bd; color:#000000;
+        padding-left:2em ;
+    }
+    .amount{
+        background-color:#fae3bd; color:#000000;
+    }
+    .text{
+        padding-left:2em ;
+    }
+    .tabledata{
+        padding-left:2em ;
+        width: 20em;
+    }
+    .earnings {
+        text-align: right;
+        padding-right: 27em; 
+    }
+    
+    
+    
+    .deduction{
+        text-align: right;
+        padding-right: 20em; 
+    }
+    .contributions{
+        text-align: right;
+        padding-right: 11em; 
+    }
+    .total{
+        text-align: end;
+        background-color: #fae3bd;
+        margin-top: 2em;
+    }
+    
+    .h4total{
+        font-weight: bold;
+        color: #000000;
+    }
+    .span{
+        font-weight: 100;
+    }
+    

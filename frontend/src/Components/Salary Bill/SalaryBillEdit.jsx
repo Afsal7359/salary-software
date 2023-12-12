@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 import { getallSalary } from "../../Apicalls/salarymaster";
 import { getallemployeemaster } from "../../Apicalls/EmployeeMater";
 import { EditSalaryBill } from "../../Apicalls/salaryBill";
-import List_salary_bill from "./list_salary_bill";
+import List_salary_bill from "./List_salary_bill";
 
 import Select from 'react-select';
 
