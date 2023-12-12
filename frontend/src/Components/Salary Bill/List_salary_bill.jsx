@@ -1,8 +1,4 @@
 import React, { useEffect, useState,useMemo,useCallback ,useRef } from 'react';
-import searchicon from '../../assets/img/icons/search-normal.svg';
-import addicon from '../../assets/img/icons/plus.svg';
-import refreshicon from '../../assets/img/icons/re-fresh.svg';
-import Pagination from 'react-bootstrap/Pagination'; 
 import { useReactToPrint } from 'react-to-print';
 import { GetSalaryByMonth, getallSalarybill } from '../../Apicalls/salaryBill';
 import SalaryBill from '../Modal/SalaryBill';
@@ -21,13 +17,13 @@ function List_salary_bill({ formdata, setformdata }) {
    content: () => componentRefs.current,
  });
 
-  const [Data, setData] = useState([]);
-  const [showEditModal, setShowEditModal] = useState(false);
-  const [showDeleteModal, setshowDeleteModal] = useState(false);
-  const [showPrint, setshowPrint ] = useState(false);
-  const [selectedItem, setSelectedItem] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
-  
+
+ const [Data, setData] = useState([]);
+ const [showEditModal, setShowEditModal] = useState(false);
+ const [showDeleteModal, setshowDeleteModal] = useState(false);
+ const [showPrint, setshowPrint ] = useState(false);
+ const [selectedItem, setSelectedItem] = useState(null);
+ const [isLoading, setIsLoading] = useState(true);  
   const [Salarylist,setSalaryList]=useState(true)
 
   const [fromMonth, setFromMonth] = useState('');
@@ -299,19 +295,7 @@ console.log(grandNetPay,":Grandnetpay");
                       ))}
                     </tbody>
                   </table>
-                  <div style={{ display: 'block', width: 700, padding: 30 }}> 
-      <Pagination> 
-        <Pagination.Prev /> 
-        <Pagination.Ellipsis />
-        <Pagination.Item>{1}</Pagination.Item> 
-        <Pagination.Item>{2}</Pagination.Item> 
-        <Pagination.Item>{3}</Pagination.Item> 
-        <Pagination.Item>{4}</Pagination.Item> 
-        <Pagination.Item>{5}</Pagination.Item> 
-        <Pagination.Ellipsis />
-        <Pagination.Next /> 
-      </Pagination> 
-    </div>
+                
                 </div>
               </div>
             </div>
