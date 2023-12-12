@@ -1,4 +1,4 @@
-import React, { useEffect, useState,useMemo,useCallback  } from 'react';
+import React, { useEffect, useState,useMemo,useCallback ,useRef } from 'react';
 import searchicon from '../../assets/img/icons/search-normal.svg';
 import addicon from '../../assets/img/icons/plus.svg';
 import refreshicon from '../../assets/img/icons/re-fresh.svg';
@@ -8,10 +8,19 @@ import { GetSalaryByMonth, getallSalarybill } from '../../Apicalls/salaryBill';
 import SalaryBill from '../Modal/SalaryBill';
 import SalaryBillEdit from './SalaryBillEdit';
 import Salaryview from './Salaryview';
-import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
+import { GetAllCompany } from '../../Apicalls/Company';
+import './Salaryvoucher.css'
 
 function List_salary_bill({ formdata, setformdata }) {
+
+  
+ const componentRefs = useRef(null);
+
+ const handlePrintVoucher = useReactToPrint({
+   content: () => componentRefs.current,
+ });
+
   const [Data, setData] = useState([]);
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteModal, setshowDeleteModal] = useState(false);
@@ -36,8 +45,21 @@ console.log('ffffrooooooom',formdata);
 	}
 }, [formdata]);
 
-
+const [company,setCompany]=useState([]);
+const CompanyDataFetch = async()=>{
+  try {
+  const response =  await GetAllCompany();
+  if(response.success){
+    setCompany(response.data)
+  }else{
+    setCompany([]);
+  }
+  } catch (error) {
+    console.log(error);
+  }
+}
   useEffect(() => {
+    CompanyDataFetch()
     async function fetchData() {
       try {
         const result = await getallSalarybill();
@@ -94,11 +116,7 @@ const closeEditModal = () => {
   if (isLoading) {
     return <div>Loading...</div>; // You can render a loading indicator here
   }
-  // const handleAddButton = ()=>{
-    
-  //   setSalaryList(false)
-  //   setSalarybill(true);
-  // }
+
 
   
  const handleFilterClick =async(event)=>{
@@ -122,22 +140,27 @@ if (response.success){
 }
 
  }
+ const currentDate = new Date(Date.now());
+ const formattedDate = `${currentDate.getDate()}/${currentDate.getMonth() + 1}/${currentDate.getFullYear()}`;
 
- const handlePrintVoucher = ()=>{
-        Data.map((data)=>{
-          const printData = {
-            name : data.name,
-            month : data.month,
-            salary : data.salary,
-            date : data.date,
-            }
-            return printData
-        })
-       
- }
-    <useReactToPrint 
-        content={() =>printData } // Function to reference the printable component
-      />
+//  const grandTotalIncrement = memoizedData.reduce((total, data) => total + data.totalincrement, 0);
+let grandTotalIncrement = 0;
+let grandDeduction = 0;
+let grandNetPay =0;
+
+memoizedData.forEach((item) => {
+  grandTotalIncrement += parseFloat(item.totalincrement || 0);
+  grandDeduction += parseFloat(item.totaldeduction || 0);
+  grandNetPay += parseFloat(item.totalAmount || 0);
+});
+
+
+ 
+console.log(grandTotalIncrement,"grandotal");
+console.log(grandDeduction,":grnddeduction");
+console.log(grandNetPay,":Grandnetpay");
+
+   
 
   return (
     <>
@@ -156,7 +179,7 @@ if (response.success){
                       <div className="doctor-table-blk">
                         <h3>Post List</h3>
                         <div className="doctor-search-blk">
-                          <div className="top-nav-search table-search-blk">
+                          {/* <div className="top-nav-search table-search-blk">
                             <form>
                               <input type="text" className="form-control" placeholder="Search here" />
                               <a className="btn" >
@@ -164,22 +187,23 @@ if (response.success){
                               </a>
                             </form>
                           
-                          </div>
-                          <div className="add-group">
-                            <a href="add-doctor.html" className="btn btn-primary add-pluss ms-2">
+                          </div> */}
+                          <div className="add-groups">
+                            {/* <a href="add-doctor.html" className="btn btn-primary add-pluss ms-2">
                            
                               <img src={addicon} alt="" />
-                            </a>
-                            <a href="javascript:;" className="btn btn-primary doctor-refresh ms-2" onClick={handlePrintVoucher}>
-                              print
-                            </a>
+                            </a> */}
+                            
                           </div>
                         </div>
                       </div>
                     </div>
                     
                     <div className="col-auto  ms-auto">
-                      <form >
+                      
+                    <form >
+                      
+                          
                       <a type='button' className=" me-2" >
                         {/* <img src={pdficon} alt="" /> */}
                         <input
@@ -207,7 +231,9 @@ if (response.success){
                       onClick={handleFilterClick}>
                         Filter
                       </button>
-                      
+                      <a  className=" btn btn-primary submit-form m-2"  onClick={handlePrintVoucher}>
+                              print Voucher
+                            </a>
                       </form>
                     </div>
                   </div>
@@ -291,10 +317,11 @@ if (response.success){
             </div>
           )}
         </div>
-
+<div className="maindiv1">
+<div className='maindiv'  ref={componentRefs} id="content-to-print">
         <table>
     <tbody>
-      {/* <tr
+      <tr
         height="170px"
        
         style={{
@@ -308,7 +335,14 @@ if (response.success){
         <img src={company[0]?company[0].image:""} alt="" height={55} width={155}/>
         </td>
         <td colSpan={4}> <h3>{company[0]?company[0].name:""}</h3><h5>{company[0]?company[0]. address:""}</h5></td>
-      </tr> */}
+      </tr>
+      <tr>
+     <td className='date' colSpan={5}>
+     <h4 className='h4d'>{formattedDate}</h4>
+     
+
+     </td>
+       </tr> 
       <tr 
         height="55px"
         style={{
@@ -316,113 +350,60 @@ if (response.success){
           color: "#000",
           textAlign: "center",
           fontSize: 24,
-          fontWeight: 600
+          fontWeight: 600,
         }}>
      <td colSpan={4}><h1> SALARY BILL </h1></td>
       </tr>
-     
-      {/*---1 row-*/}
-      <tr>
-        <th  className='text'>Name</th>
-        <td>chfhfgh</td>
       
-      </tr>
-      {/*----2 row--*/}
-     
-      {/*----3row--*/}
-      <tr>
-        <th className='text'>Designation</th>
-        <td>dadfswdf</td>
       
-      </tr>
    
     </tbody>
   </table>
 
-  <table>
+  <table style={{marginTop:10}}>
     <tbody>
-        <tr>
-            <th className="headnone">Earnings</th>
-            <th className="amount earnings">Amount</th>
-        </tr>
-        <tr>
-            <td className='tabledata'>Basic Salary </td>
-            <td className='earnings'>20000.00</td>
-        </tr>
-        {/* {increment.map((data, index) => (
-      <tr key={index}>
-        <td className='tabledata'>{data.salaryComponent.name}</td>
-        <td className='earnings'>{data.price}.00</td>
-      </tr>
-    ))} */}
-       
-      
-    </tbody>
-</table>
-
-  <table>
-    <tbody>
-      <tr>
-       
-        <th className='headnone'>Deductions</th>
-        <th className='amount deduction'>Amount</th>
-      
+    <tr>
+        <th className="headnones">SL NO</th>
+        <th className="headnones">EMPLOYEE NO</th>
+        <th className="headnones">Employee Name</th>
+        <th className="headnones">Gross Salary</th>
+        <th className="headnones">Deduction</th>
+        <th className="headnones">Emplyr Contr</th>
+        <th className="headnones">Net Pay</th>
       </tr>
 
-        
-{/*        
-        {decrement[0]?decrement.map((data,index)=>(
-          <tr key={index}>
-          <td className='tabledata'>{data.salaryComponent.name}</td>
-          <td className='deduction'>{data.price}.00</td>
-        </tr>
-        )): <tr>
-        <td className='tabledata'>no deduction</td>
-        <td className='deduction'>000.00</td>
-      </tr>} */}
-        
-      
+      {console.log(memoizedData,"memoiszzzzzzzeddaataa") }
+     {memoizedData.map((data, index) => (
      
-    </tbody>
-  </table>
-  <table>
-    <tbody>
-      <tr>
-     
-        <th className="headnone">Employer Contribution</th>
-        <th className="amount contributions">Amount</th>
-      </tr>
-      <tr>
-        
-        <td className='tabledata'>EPF Empr Con </td>
-        <td className='contributions'>454545.00</td>
-      </tr>
-      <tr>
-        
-        <td className='tabledata'>PF Empr Con</td>
-        <td className='contributions'>5000.00</td>
-      </tr>
-      <tr>
-        <td className='tabledata'>special Allowance</td>
-        <td className='contributions'>400.00</td>
-    
-      </tr>
-     
+  <tr key={data._id}>
+    <td>{index + 1}</td>
+    <td>{data.employeeid.employeeno}</td>
+    <td>{data.employeeid.name}</td>
+    <td>{data.totalincrement}</td>
+    <td>{data.totaldeduction}</td>
+    <td>{data.totalcontribution}</td>
+    <td>{data.totalAmount}</td>
+  </tr>
+))}
+
+ 
    
     </tbody>
   </table>
 
         <div className='total totals'>
-          <h4 className='h4total'>Total Earnings : <span className='span'>550.00</span></h4>
+          <h4 className='h4total'>Total Earnings : <span className='span'>{grandTotalIncrement}</span></h4>
         </div>
         
         <div className='total'>
-          <h4 className='h4total'>Total Deductions : <span className='span'>250.00</span></h4>
+          <h4 className='h4total'>Total Deductions : <span className='span'>{grandDeduction}</span></h4>
         </div>
         
         <div className='total'>
-          <h4 className='h4total'>Total Net Pay : <span className='span'>550.00</span></h4>
+          <h4 className='h4total'>Total Net Pay : <span className='span'>{grandNetPay}</span></h4>
         </div>
+        </div>
+</div>
       </div>
       
     }

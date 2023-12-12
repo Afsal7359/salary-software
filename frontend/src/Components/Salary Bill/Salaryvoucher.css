@@ -1,0 +1,23 @@
+.headnones{
+    background-color:#fae3bd; color:#000000;
+     
+}
+.maindiv1{
+    display: none;
+}
+.maindiv{
+    background-color: #fff;
+    height: min-content;    
+    margin: 1em;
+    margin-top: 1em;
+}
+.date{
+    width: 100%;
+}
+.h4d{
+    text-align: end;
+}
+table{
+    width: 100%;
+    
+    }

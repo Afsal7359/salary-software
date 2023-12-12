@@ -33,10 +33,7 @@ const SalarybillSchema = new mongoose.Schema({
         type:String,
         require:true,
     },
-    month:{
-        type:String,
-        require:true,
-    },
+    
     departmentid:{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Department',

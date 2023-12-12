@@ -26,6 +26,8 @@ const AddEmployeemaster = () => {
 	const [panName, setPanName]=useState('');
 	const [dateOfJoining, setDateOfJoining]=useState('');
 	const [dateOfBirth,setDateOfBirth]=useState('');
+	const [dateOfRetierment,setDateOfRetierment]=useState('');
+	const [ageOfRetierment,setAgeOfRetierment]=useState('');
 	const [guardianname, setGuardianName]=useState('');
 	const [basicsalary, setBasicSalary]=useState('');
 	const [allowedLeave, setAllowedLeave]=useState('');
@@ -63,8 +65,22 @@ const AddEmployeemaster = () => {
 	
 	  fetchUniqueSixCharacterID();
 	}, []);
-  
 
+  
+	const calculateRetirementDate = () => {
+		if (dateOfBirth && ageOfRetierment) {
+		  const dob = new Date(dateOfBirth);
+		  const retirementYear = dob.getFullYear() + parseInt(ageOfRetierment, 10);
+		  const retirementDateCalc = new Date(retirementYear, dob.getMonth(), dob.getDate());
+		  setDateOfRetierment(retirementDateCalc.toISOString().split('T')[0]); // Format as YYYY-MM-DD
+		} else {
+		  setDateOfRetierment('');
+		}
+	  };
+	
+	  useEffect(() => {
+		calculateRetirementDate();
+	  }, [dateOfBirth, ageOfRetierment]);
 	
 	  
 
@@ -681,7 +697,7 @@ const [tablestate,settablestate]=useState(false)
 												</div>
 										</div>
 
-                                        <div className="col-12 col-md-6 col-xl-6">
+                                        <div className="col-12 col-md-6 col-xl-4">
 											<div className="form-group local-forms">
 												<label>Date Of Birth<span className="login-danger">*</span></label>
 												<input
@@ -693,6 +709,38 @@ const [tablestate,settablestate]=useState(false)
 												onChange={(e) => setDateOfBirth(e.target.value)}
 												/>
 												{errors.dateOfBirth && errors.dateOfBirth.type === 'required' && (
+												<span className="text-danger">Date Of Birth is required</span>
+												)}
+											</div>
+										</div>
+										<div className="col-12 col-md-6 col-xl-4">
+											<div className="form-group local-forms">
+												<label>Age Of Retierment<span className="login-danger">*</span></label>
+												<input
+												{...register('ageOfRetierment', { required: true })}
+												type="text"
+												className={`form-control ${errors.ageOfRetierment ? 'is-invalid' : ''}`}
+												placeholder=""
+												value={ageOfRetierment}
+												onChange={(e) => setAgeOfRetierment(e.target.value)}
+												/>
+												{errors.ageOfRetierment && errors.ageOfRetierment.type === 'required' && (
+												<span className="text-danger">Date Of Birth is required</span>
+												)}
+											</div>
+										</div>
+										<div className="col-12 col-md-6 col-xl-4">
+											<div className="form-group local-forms">
+												<label>Date Of Retierment<span className="login-danger">*</span></label>
+												<input
+												{...register('dateOfRetierment', { required: true })}
+												type="text"
+												className={`form-control ${errors.dateOfRetierment ? 'is-invalid' : ''}`}
+												placeholder=""
+												value={dateOfRetierment}
+												onChange={(e) => setDateOfRetierment(e.target.value)}
+												/>
+												{errors.dateOfRetierment && errors.dateOfRetierment.type === 'required' && (
 												<span className="text-danger">Date Of Birth is required</span>
 												)}
 											</div>

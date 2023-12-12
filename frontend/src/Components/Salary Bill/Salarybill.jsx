@@ -210,6 +210,7 @@ console.log('totalrssow',totalrowprice);
 	const [salaryTotal, setSalaryTotal] = useState('');
     const [leaveDifference,setLeaveDifference]=useState('');
  	const [totalincrement,setTotalIncrement]=useState(0);
+
 	const [totaldeduction,setTotalDeduction]=useState(0)
 	const [totalcontribution,setTotalContributions]=useState(0)
 	useEffect(() => {
@@ -219,6 +220,7 @@ console.log('totalrssow',totalrowprice);
 		  let totalIncrement = 0;
 		  let totalcontribution =0;
 	  
+
 		  // Your existing logic for calculating totalAmount
 	  
 		  tablerow.forEach((row) => {
@@ -255,12 +257,13 @@ console.log('totalrssow',totalrowprice);
 	  
 		  const balanceleave = allowedleave - absentDays;
 		  setLeaveDifference(balanceleave < 0 ? 0 : balanceleave);
-	  
 		  setTotalDeduction(totalDeduction.toFixed(2));
-		  setTotalIncrement(totalIncrement.toFixed(2));
+		  console.log(basicSalary,":basicsalary");
+		//   const TotalIncrements=(basicSalary)+parseFloat(totalIncrement);
+		  setTotalIncrement(parseFloat(basicSalary) + parseFloat(totalIncrement));
 		  setTotalAmount(totalAmount.toFixed(2)); // Set the total amount
 		  console.log('total deduction:',totalDeduction);
-		  console.log('total increment:',totalIncrement);
+		  console.log('total increment:',totalincrement);
 		  console.log('total :',totalAmount);
 		} catch (error) {
 		  console.error('Error in useEffect:', error);
@@ -268,10 +271,7 @@ console.log('totalrssow',totalrowprice);
 	  }, [tablerow, basicSalary, salarymasterData, allowedleave, absentDays, perDaySalary]);
 	  
 	  
-	  const handlemonthclick =(event)=>{
-            setmonth(event.target.value)
-	  }
-	  console.log("monthhhhhhh",month);
+
 
   const handleSecondInputChange = (index, value) => {
     const updatedTableRows = [...tablerow];
@@ -318,14 +318,13 @@ const handleformsubmit = async(event)=>{
 			const formdata = {
 			SalaryBillNo:`ME${count.toString().padStart(3, '0')}`, 
 			date:date,	
-			month:month,
 			employeeid:employeeid,
 			departmentid : department,
 			unitid : unit,
 			basicSalary:basicSalary,
 			totaldeduction:totaldeduction,
-			totalincrement:totalincrement,
 			totalcontribution:totalcontribution,
+			totalincrement:totalincrement,
 			tablerow: tablerow.map(row => {
 				return {
 					...row,
@@ -425,7 +424,7 @@ return (
 													)}
 										</div>
 									</div>
-									<div class="col-sm-4">
+									{/* <div class="col-sm-4">
 									   <div className="form-group local-forms">
 											<label>Month <span className="login-danger">*</span></label>
 											  
@@ -452,7 +451,7 @@ return (
                                                        {errors.month && <p className="text-danger">{errors.month.message}</p>}
 											
 										</div>
-									</div>
+									</div> */}
 								
 
 								<div class="col-sm-4">

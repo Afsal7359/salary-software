@@ -179,10 +179,10 @@ console.log('frfrrrrffrfrffrffrffr',filterEmployeeData);
 		  setLeaveDifference(balanceleave < 0 ? 0 : balanceleave);
 	  
 		  setTotalDeduction(totalDeduction.toFixed(2));
-		  setTotalIncrement(totalIncrement.toFixed(2));
+		  setTotalIncrement(parseFloat(basicSalary) + parseFloat(totalIncrement));
 		  setTotalAmount(totalAmount.toFixed(2)); // Set the total amount
 		  console.log('total deduction:',totalDeduction);
-		  console.log('total increment:',totalIncrement);
+		  console.log('total increment:',totalincrement);
 		  console.log('total :',totalAmount);
 		} catch (error) {
 		  console.error('Error in useEffect:', error);
@@ -351,35 +351,7 @@ try{
 												
 										</div>
 									</div>
-									<div class="col-sm-4">
-									   <div className="form-group local-forms">
-											<label>Month <span className="login-danger">*</span></label>
-											  
-												  <select
-                                                   className="form-control select"
-                                                  
-												   value={month}
-												   onChange={(e) => setmonth(e.target.value)}
-                                                      >
-                                                         <option value="">Select Type</option>
-														 <option value="january">January</option>
-                                                      	 <option value="february">Feburary</option>
-														<option value="march">March</option>
-														<option value="april">April</option>
-														<option value="may">May</option>
-														<option value="june">June</option>
-														<option value="july">July</option>
-														<option value="august">August</option>
-														<option value="september">September</option>
-														<option value="october">October</option>
-														<option value="november">November</option>
-														<option value="december">December</option>
-                                                     </select>
-                                                       
-											
-										</div>
-									</div>
-								
+									
 
 								<div class="col-sm-4">
 									<div className="form-group local-forms">
