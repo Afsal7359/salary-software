@@ -291,7 +291,140 @@ if (response.success){
             </div>
           )}
         </div>
+
+        <table>
+    <tbody>
+      {/* <tr
+        height="170px"
+       
+        style={{
+          color: "#000",
+          textAlign: "center",
+          fontSize: 24,
+          fontWeight: 600
+        }}
+      >
+        <td>
+        <img src={company[0]?company[0].image:""} alt="" height={55} width={155}/>
+        </td>
+        <td colSpan={4}> <h3>{company[0]?company[0].name:""}</h3><h5>{company[0]?company[0]. address:""}</h5></td>
+      </tr> */}
+      <tr 
+        height="55px"
+        style={{
+          backgroundColor: "#fae3bd",
+          color: "#000",
+          textAlign: "center",
+          fontSize: 24,
+          fontWeight: 600
+        }}>
+     <td colSpan={4}><h1> SALARY BILL </h1></td>
+      </tr>
+     
+      {/*---1 row-*/}
+      <tr>
+        <th  className='text'>Name</th>
+        <td>chfhfgh</td>
+      
+      </tr>
+      {/*----2 row--*/}
+     
+      {/*----3row--*/}
+      <tr>
+        <th className='text'>Designation</th>
+        <td>dadfswdf</td>
+      
+      </tr>
+   
+    </tbody>
+  </table>
+
+  <table>
+    <tbody>
+        <tr>
+            <th className="headnone">Earnings</th>
+            <th className="amount earnings">Amount</th>
+        </tr>
+        <tr>
+            <td className='tabledata'>Basic Salary </td>
+            <td className='earnings'>20000.00</td>
+        </tr>
+        {/* {increment.map((data, index) => (
+      <tr key={index}>
+        <td className='tabledata'>{data.salaryComponent.name}</td>
+        <td className='earnings'>{data.price}.00</td>
+      </tr>
+    ))} */}
+       
+      
+    </tbody>
+</table>
+
+  <table>
+    <tbody>
+      <tr>
+       
+        <th className='headnone'>Deductions</th>
+        <th className='amount deduction'>Amount</th>
+      
+      </tr>
+
+        
+{/*        
+        {decrement[0]?decrement.map((data,index)=>(
+          <tr key={index}>
+          <td className='tabledata'>{data.salaryComponent.name}</td>
+          <td className='deduction'>{data.price}.00</td>
+        </tr>
+        )): <tr>
+        <td className='tabledata'>no deduction</td>
+        <td className='deduction'>000.00</td>
+      </tr>} */}
+        
+      
+     
+    </tbody>
+  </table>
+  <table>
+    <tbody>
+      <tr>
+     
+        <th className="headnone">Employer Contribution</th>
+        <th className="amount contributions">Amount</th>
+      </tr>
+      <tr>
+        
+        <td className='tabledata'>EPF Empr Con </td>
+        <td className='contributions'>454545.00</td>
+      </tr>
+      <tr>
+        
+        <td className='tabledata'>PF Empr Con</td>
+        <td className='contributions'>5000.00</td>
+      </tr>
+      <tr>
+        <td className='tabledata'>special Allowance</td>
+        <td className='contributions'>400.00</td>
+    
+      </tr>
+     
+   
+    </tbody>
+  </table>
+
+        <div className='total totals'>
+          <h4 className='h4total'>Total Earnings : <span className='span'>550.00</span></h4>
+        </div>
+        
+        <div className='total'>
+          <h4 className='h4total'>Total Deductions : <span className='span'>250.00</span></h4>
+        </div>
+        
+        <div className='total'>
+          <h4 className='h4total'>Total Net Pay : <span className='span'>550.00</span></h4>
+        </div>
       </div>
+      
     }
 	  
       {showEditModal && selectedItem && (

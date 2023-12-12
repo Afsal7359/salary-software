@@ -296,8 +296,7 @@ module.exports={
        await otp.create({ otp: otps, email: email });
         res.status(200).json({
           success: true,
-          message: "Password reset initiated. Check your email for instructions.",
-          otp: otps // Sending the OTP in the response
+          message: "Password reset initiated. Check your email for instructions."
         });
     
       } catch (error) {
