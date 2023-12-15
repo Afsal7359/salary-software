@@ -80,6 +80,14 @@ console.log('memoizedData',memoizedData);
   setSalaryList(false)
  
   }, []);
+// Inside your DepartmentList component
+const [currentPage, setCurrentPage] = useState(1);
+const itemsPerPage = 10;
+
+// Calculate indexes for pagination
+const indexOfLastItem = currentPage * itemsPerPage;
+const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+const currentItems = memoizedData.slice(indexOfFirstItem, indexOfLastItem);
 
   // Function to close the modal
 const closeEditModal = () => {
@@ -155,6 +163,7 @@ memoizedData.forEach((item) => {
 console.log(grandTotalIncrement,"grandotal");
 console.log(grandDeduction,":grnddeduction");
 console.log(grandNetPay,":Grandnetpay");
+
 
    
 
@@ -250,9 +259,9 @@ console.log(grandNetPay,":Grandnetpay");
                       </tr>
                     </thead>
                     <tbody>
-                      {memoizedData.map((item, index) => (
+                      {currentItems.map((item, index) => (
                         <tr key={item._id}>
-                          <td>{index + 1}</td>
+                          <td>{indexOfFirstItem + index + 1}</td>
                           <td>{item.employeeid.employeeno}</td>
                           <td>{item.employeeid.name}</td>
                           <td>{item.totalincrement}</td>
@@ -298,6 +307,23 @@ console.log(grandNetPay,":Grandnetpay");
                 
                 </div>
               </div>
+              <nav aria-label="Page navigation example">
+           
+           {memoizedData.length > itemsPerPage && (
+             <ul className="pagination">
+               {Array(Math.ceil(memoizedData.length / itemsPerPage))
+                 .fill()
+                 .map((_, index) => (
+                         <li className="page-item" key={index}>
+                           <a className="page-link"  onClick={() => setCurrentPage(index + 1)}>{index + 1}</a>
+                           </li>
+                     
+                  
+                 ))}
+             </ul>
+           )}
+        
+           </nav>
             </div>
           )}
         </div>
@@ -360,13 +386,13 @@ console.log(grandNetPay,":Grandnetpay");
      {memoizedData.map((data, index) => (
      
   <tr key={data._id}>
-    <td>{index + 1}</td>
-    <td>{data.employeeid.employeeno}</td>
-    <td>{data.employeeid.name}</td>
-    <td>{data.totalincrement}</td>
-    <td>{data.totaldeduction}</td>
-    <td>{data.totalcontribution}</td>
-    <td>{data.totalAmount}</td>
+    <td className='text-center'>{index + 1}</td>
+    <td className='text-center'>{data.employeeid.employeeno}</td>
+    <td className='text-center'>{data.employeeid.name}</td>
+    <td className='text-end'>{data.totalincrement}</td>
+    <td className='text-end'>{data.totaldeduction}</td>
+    <td className='text-end'>{data.totalcontribution}</td>
+    <td className='text-end'>{data.totalAmount}</td>
   </tr>
 ))}
 
@@ -376,15 +402,15 @@ console.log(grandNetPay,":Grandnetpay");
   </table>
 
         <div className='total totals'>
-          <h4 className='h4total'>Total Earnings : <span className='span'>{grandTotalIncrement}</span></h4>
+          <h4 className='h4total'>Total Earnings : <span className='span'>{grandTotalIncrement}.00</span></h4>
         </div>
         
         <div className='total'>
-          <h4 className='h4total'>Total Deductions : <span className='span'>{grandDeduction}</span></h4>
+          <h4 className='h4total'>Total Deductions : <span className='span'>{grandDeduction}.00</span></h4>
         </div>
         
         <div className='total'>
-          <h4 className='h4total'>Total Net Pay : <span className='span'>{grandNetPay}</span></h4>
+          <h4 className='h4total'>Total Net Pay : <span className='span'>{grandNetPay}.00</span></h4>
         </div>
         </div>
 </div>

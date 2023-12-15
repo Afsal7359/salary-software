@@ -13,6 +13,7 @@ console.log(item.item ,'DDDDDDDDDDDDDDDDDDDDDDDDDDDDDD');
   const [component, setComponent] = useState(item.item.tablerow);
   const [increment, setIncrement] = useState([]);
   const [decrement, setDecrement] = useState([]);
+  const [contributions, setContributions] = useState([]);
   const [basicSalary,setBasicSalary]=useState(item.item?item.item.basicSalary:"")
   const [employeedata,setEmployeedata]=useState(item?item.item:"")
   const CompanyDataFetch = async()=>{
@@ -32,17 +33,21 @@ console.log(item.item ,'DDDDDDDDDDDDDDDDDDDDDDDDDDDDDD');
     CompanyDataFetch()
     let newIncrement = [];
     let newDecrement = [];
+    let newContributions =[]
   
     component.forEach((item) => {
       if (item.salaryComponent.type === 'Increment') {
         newIncrement.push(item);
-      } else {
+      } else if(item.salaryComponent.type === 'Decrement') {
         newDecrement.push(item);
+      }else if(item.salaryComponent.type === 'nill'){
+        newContributions.push(item);
       }
     });
   
     setIncrement(newIncrement);
     setDecrement(newDecrement);
+    setContributions(newContributions);
   }, [component]);
   console.log('Increment',increment);
   console.log('decrement',decrement);
@@ -159,22 +164,15 @@ console.log('CompanyData',company);
         <th className="headnone">Employer Contribution</th>
         <th className="amount contributions">Amount</th>
       </tr>
-      <tr>
-        
-        <td className='tabledata'>EPF Empr Con </td>
-        <td className='contributions'>454545.00</td>
-      </tr>
-      <tr>
-        
-        <td className='tabledata'>PF Empr Con</td>
-        <td className='contributions'>5000.00</td>
-      </tr>
-      <tr>
-        <td className='tabledata'>special Allowance</td>
-        <td className='contributions'>400.00</td>
-    
-      </tr>
-     
+
+      {contributions[0]?contributions.map((data,index)=>(
+        <tr key={index}>
+           <td className='tabledata'>{data.salaryComponent.name} </td>
+           <td className='contributions'>{data.price}.00</td>
+        </tr>
+      )):""}
+   
+      
    
     </tbody>
   </table>

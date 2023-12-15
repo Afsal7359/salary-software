@@ -39,6 +39,10 @@ const EmployeeSchema= new mongoose.Schema({
         type: String,
         trim:true
     },
+    pincode:{
+        type:Number,
+        trim:true
+    },
     email:{
         type: String,
      
@@ -87,6 +91,14 @@ const EmployeeSchema= new mongoose.Schema({
     dateOfJoining:{
         type: String,
         
+        trim:true
+    },
+    ageOfRetirement:{
+        type:String,
+        trim:true
+    },
+    dateOfRetirement:{
+        type:String,
         trim:true
     },
     guardianName :{
@@ -144,11 +156,11 @@ const EmployeeSchema= new mongoose.Schema({
         type: [{
             id: {
                 type: mongoose.Schema.Types.Mixed,
+                default:null
             },
             salaryComponent: {
                 type: mongoose.Schema.Types.ObjectId,
                 ref: 'Salarymaster',
-                default: null,
             },
             percentage: {
                 type: Number,
@@ -159,7 +171,7 @@ const EmployeeSchema= new mongoose.Schema({
             price: {
                 type: Number,
             }
-        }],
+        }],  
         default: [] 
     },
     

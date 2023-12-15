@@ -27,11 +27,8 @@ function Departmentlist({DepartmentData,setDepartmentData}) {
         }
     }
 
-    dsfjhgsaduhjsgahjdsgfhjsf
-    sfbfkjkjdshfdskjf
-    lkhdselkjhdskjhfds
-    akndbsakjfdskjfdshf
-    
+
+
 
   const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
@@ -56,6 +53,14 @@ function Departmentlist({DepartmentData,setDepartmentData}) {
     setShowEditModal(true);
     setSelectedItem(item);
   };
+// Inside your DepartmentList component
+const [currentPage, setCurrentPage] = useState(1);
+const itemsPerPage = 10;
+
+// Calculate indexes for pagination
+const indexOfLastItem = currentPage * itemsPerPage;
+const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+const currentItems = Data.slice(indexOfFirstItem, indexOfLastItem);
 
 
   
@@ -140,9 +145,9 @@ const closeEditModal = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {Data.map((item, index) => (
+                    {currentItems.map((item, index) => (
                       <tr  key={`${item._id}-${index}`}>
-                        <td>{index + 1}</td>
+                        <td>{indexOfFirstItem + index + 1}</td>
                         <td>{item.Departmentid}</td>
                         <td>{item.name}</td>
                         <td className="text-end">
@@ -187,7 +192,26 @@ const closeEditModal = () => {
                   </tbody>
                 </table>
               </div>
+              <nav aria-label="Page navigation example">
+           
+              {Data.length > itemsPerPage && (
+                <ul className="pagination">
+                  {Array(Math.ceil(Data.length / itemsPerPage))
+                    .fill()
+                    .map((_, index) => (
+                            <li className="page-item" key={index}>
+                              <a className="page-link"  onClick={() => setCurrentPage(index + 1)}>{index + 1}</a>
+                              </li>
+                        
+                     
+                    ))}
+                </ul>
+              )}
+           
+              </nav>
             </div>
+           
+            
           )}
         </div>
       </div>

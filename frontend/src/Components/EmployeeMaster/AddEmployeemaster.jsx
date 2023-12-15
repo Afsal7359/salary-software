@@ -18,6 +18,7 @@ const AddEmployeemaster = () => {
 	const [address1, setAddress1]=useState('');
 	const [address2, setAddress2]=useState('');
 	const [address3, setAddress3]=useState('');
+	const [pincode,setPincode]=useState('');
 	const [bank, setBank]=useState('');
 	const [accountno, setAccountno]=useState('');
 	const [branch, setBranch]=useState('');
@@ -71,12 +72,20 @@ const AddEmployeemaster = () => {
 		if (dateOfBirth && ageOfRetierment) {
 		  const dob = new Date(dateOfBirth);
 		  const retirementYear = dob.getFullYear() + parseInt(ageOfRetierment, 10);
-		  const retirementDateCalc = new Date(retirementYear, dob.getMonth(), dob.getDate());
-		  setDateOfRetierment(retirementDateCalc.toISOString().split('T')[0]); // Format as YYYY-MM-DD
+	  
+		  // Set the retirementDateCalc to the last day of the retirement month
+		  const retirementDateCalc = new Date(retirementYear, dob.getMonth() + 1, 0);
+	  
+		  // Get the local date components and format as YYYY-MM-DD
+		  const formattedRetirementDate = `${retirementDateCalc.getFullYear()}-${('0' + (retirementDateCalc.getMonth() + 1)).slice(-2)}-${('0' + retirementDateCalc.getDate()).slice(-2)}`;
+	  
+		  setDateOfRetierment(formattedRetirementDate);
 		} else {
 		  setDateOfRetierment('');
 		}
 	  };
+	  
+	  
 	
 	  useEffect(() => {
 		calculateRetirementDate();
@@ -165,13 +174,13 @@ const AddEmployeemaster = () => {
 	     data.EmployeeTypeId=employeeTypeId
 		 data.PostId=postId
 		 data.previousAllowedleave=allowedLeave
-		//  data.tablerow=tableRows
-		data.tablerow = (tableRows && Array.isArray(tableRows) && tableRows.length === 1 &&
-  tableRows[0].value === '' &&
-  tableRows[0].percentage === '' &&
-  tableRows[0].price === '')
-  ? []
-  : (tableRows || []);
+		 data.tablerow=tableRows
+// 		data.tablerow = (tableRows && Array.isArray(tableRows) && tableRows.length === 1 &&
+//   tableRows[0].value === '0' &&
+//   tableRows[0].percentage === 0 &&
+//   tableRows[0].price === 0)
+//   ? []
+//   : (tableRows || []);
 		
 		 data.TotalSalary=totalAmount?totalAmount:basicsalary
 		try {
@@ -182,8 +191,6 @@ const AddEmployeemaster = () => {
 			setcount((prevCount) => prevCount + 1);
 			setFormdata(response.data);
 			toast.success(response.message);
-			setstate(false)
-			setemployeelist(true)
 			setName('');
 			setEmployeeTypeId('');
 			setPostId('');
@@ -209,7 +216,12 @@ const AddEmployeemaster = () => {
 			setPercentage('');
 			setPassword('')
 			setSecondInputValue('');
-
+			setPincode('')
+			setAgeOfRetierment('')
+			setDateOfRetierment('')
+			setAllowedLeave('');
+			setstate(false)
+			setemployeelist(true)
 		  } else {
 			toast.error(response.message);
 			
@@ -380,7 +392,7 @@ const [tablestate,settablestate]=useState(false)
 											<div className="form-group local-forms">
 												<label >Employee Type<span className="login-danger">*</span></label>
 												<select className="form-control select"
-													
+													onKeyDown={handlemployeetypeclick}
 												onMouseEnter={handlemployeetypeclick}
 												onChange={handleemployeetypechange}
 												>
@@ -396,7 +408,9 @@ const [tablestate,settablestate]=useState(false)
 										<div className="col-12 col-md-6 col-xl-6">
 											<div className="form-group local-forms">
 												<label >Post<span className="login-danger">*</span></label>
-												<select className="form-control select"
+												<select className="form-control select "
+												id="inputGroupSelect01"
+												onKeyDown={handlePostClick}
 													onMouseEnter={handlePostClick}
 													onChange={handlePostChange}
 												>
@@ -474,7 +488,24 @@ const [tablestate,settablestate]=useState(false)
 												/>
 											</div>
 										</div>
-
+										<div className="col-12 col-md-6 col-xl-6">
+											<div className="form-group local-forms">
+												<label >Pincode <span className="login-danger">*</span></label>
+												<input
+													{ ...register('pincode', {
+													required: 'Pincode is required',
+													pattern: {
+														value: /^\d{6}$/,
+														message: 'Enter a valid pincode'
+													}
+													})}
+													type='number'
+													className={`form-control ${errors.pincode ? 'is-invalid' : ''}`}
+													placeholder=''
+												/>
+												{errors.pincode && <span className="error-message">{errors.pincode.message}</span>}	
+											</div>
+										</div>
 										<div className="col-12 col-md-6 col-xl-6">
 											<div className="form-group select-gender">
 											<label className="gen-label">Gender<span className="login-danger">*</span></label>
@@ -679,7 +710,25 @@ const [tablestate,settablestate]=useState(false)
 												)}
 											</div>
 										</div>
-
+										<div className="col-12 col-md-6 col-xl-6">
+												<div className="form-group local-forms">
+													<label>Guardian Name<span className="login-danger">*</span></label>
+													<input
+													{...register('guardianName', { required: true, minLength: 2 })}
+													type="text"
+													className={`form-control ${errors.guardianName ? 'is-invalid' : ''}`}
+													placeholder=""
+													value={guardianname}
+													onChange={(e) => setGuardianName(e.target.value)}
+													/>
+													{errors.guardianName && errors.guardianName.type === 'required' && (
+													<span className="text-danger">Guardian Name is required</span>
+													)}
+													{errors.guardianName && errors.guardianName.type === 'minLength' && (
+													<span className="text-danger">Guardian Name must be at least 2 characters</span>
+													)}
+												</div>
+										</div>
 										<div className="col-12 col-md-6 col-xl-6">
 												<div className="form-group local-forms">
 													<label>Date Of Joining<span className="login-danger">*</span></label>
@@ -715,7 +764,7 @@ const [tablestate,settablestate]=useState(false)
 										</div>
 										<div className="col-12 col-md-6 col-xl-4">
 											<div className="form-group local-forms">
-												<label>Age Of Retierment<span className="login-danger">*</span></label>
+												<label>Age Of Retirement<span className="login-danger">*</span></label>
 												<input
 												{...register('ageOfRetierment', { required: true })}
 												type="text"
@@ -725,45 +774,27 @@ const [tablestate,settablestate]=useState(false)
 												onChange={(e) => setAgeOfRetierment(e.target.value)}
 												/>
 												{errors.ageOfRetierment && errors.ageOfRetierment.type === 'required' && (
-												<span className="text-danger">Date Of Birth is required</span>
+												<span className="text-danger">Age of Retirement is required</span>
 												)}
 											</div>
 										</div>
 										<div className="col-12 col-md-6 col-xl-4">
 											<div className="form-group local-forms">
-												<label>Date Of Retierment<span className="login-danger">*</span></label>
+												<label>Date Of Retirement<span className="login-danger">*</span></label>
 												<input
 												{...register('dateOfRetierment', { required: true })}
-												type="text"
+												type="date"
 												className={`form-control ${errors.dateOfRetierment ? 'is-invalid' : ''}`}
 												placeholder=""
 												value={dateOfRetierment}
 												onChange={(e) => setDateOfRetierment(e.target.value)}
 												/>
 												{errors.dateOfRetierment && errors.dateOfRetierment.type === 'required' && (
-												<span className="text-danger">Date Of Birth is required</span>
+												<span className="text-danger">Date Of Retirement is required</span>
 												)}
 											</div>
 										</div>
-										<div className="col-12 col-md-6 col-xl-6">
-												<div className="form-group local-forms">
-													<label>Guardian Name<span className="login-danger">*</span></label>
-													<input
-													{...register('guardianName', { required: true, minLength: 2 })}
-													type="text"
-													className={`form-control ${errors.guardianName ? 'is-invalid' : ''}`}
-													placeholder=""
-													value={guardianname}
-													onChange={(e) => setGuardianName(e.target.value)}
-													/>
-													{errors.guardianName && errors.guardianName.type === 'required' && (
-													<span className="text-danger">Guardian Name is required</span>
-													)}
-													{errors.guardianName && errors.guardianName.type === 'minLength' && (
-													<span className="text-danger">Guardian Name must be at least 2 characters</span>
-													)}
-												</div>
-										</div>
+										
 
 
 
@@ -916,6 +947,7 @@ const [tablestate,settablestate]=useState(false)
 																</td>
 																<td>
 																<select className="form-control"
+																onKeyDown={handlesalarymasterclick}
 																onMouseEnter={handlesalarymasterclick}
 																onChange={(event) => handlesalarymasterchange(event, index)}
 																>

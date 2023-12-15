@@ -41,6 +41,10 @@ function EmployeeView({item}){
                                                                 <td>{item?.address3}</td>
                                                             </tr>
                                                             <tr>
+                                                                <th>Pincode </th>
+                                                                <td>{item?.pincode}</td>
+                                                            </tr>
+                                                            <tr>
                                                                 <th> Gender </th>
                                                                 <td>{item?.gender}</td>
                                                             </tr>
@@ -83,6 +87,14 @@ function EmployeeView({item}){
                                                             <tr>
                                                                 <th>  Date Of Birth </th>
                                                                 <td>{item?.dateOfBirth}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th> Age Of Retierment </th>
+                                                                <td>{item?.ageOfRetierment}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>  Date Of Retierment </th>
+                                                                <td>{item?.dateOfRetierment}</td>
                                                             </tr>
                                                             <tr>
                                                                 <th>  Guardian Name </th>

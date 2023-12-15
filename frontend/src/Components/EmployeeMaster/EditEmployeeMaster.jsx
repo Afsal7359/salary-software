@@ -24,6 +24,9 @@ function EditEmployeeMaster({ closeEdit, item, setData, Data, show, setshow }) {
    const [address1, setAddress1] = useState(item?.address1);
    const [address2, setAddress2] = useState(item?.address2);
    const [address3, setAddress3] = useState(item?.address3);
+   const [pincode,setPincode]=useState(item?.pincode);
+   const [dateOfRetierment,setDateOfRetierment]=useState(item?.dateOfRetierment);
+	const [ageOfRetierment,setAgeOfRetierment]=useState(item?.ageOfRetierment);
    const [bank, setBank] = useState(item?.bank);
    const [accountNo, setAccountno] = useState(item?.accountNo);
    const [branch, setBranch] = useState(item?.branch);
@@ -171,6 +174,28 @@ function EditEmployeeMaster({ closeEdit, item, setData, Data, show, setshow }) {
       setTablerow(updatedTablerow);
     };
 
+    const calculateRetirementDate = () => {
+      if (dateOfBirth && ageOfRetierment) {
+        const dob = new Date(dateOfBirth);
+        const retirementYear = dob.getFullYear() + parseInt(ageOfRetierment, 10);
+      
+        // Set the retirementDateCalc to the last day of the retirement month
+        const retirementDateCalc = new Date(retirementYear, dob.getMonth() + 1, 0);
+      
+        // Get the local date components and format as YYYY-MM-DD
+        const formattedRetirementDate = `${retirementDateCalc.getFullYear()}-${('0' + (retirementDateCalc.getMonth() + 1)).slice(-2)}-${('0' + retirementDateCalc.getDate()).slice(-2)}`;
+      
+        setDateOfRetierment(formattedRetirementDate);
+      } else {
+        setDateOfRetierment('');
+      }
+      };
+    
+      useEffect(() => {
+      calculateRetirementDate();
+      }, [dateOfBirth, ageOfRetierment]);
+
+
 useEffect(() => {
 try {
   const totalAmount = tablerow.reduce((acc, row) => {
@@ -252,6 +277,7 @@ try {
       address1,
       address2,
       address3,
+      pincode,
       bank,
       accountNo,
       ifsc,
@@ -260,6 +286,8 @@ try {
       panName,
       dateOfJoining,
       dateOfBirth,
+      ageOfRetirement:ageOfRetierment,
+      dateOfRetirement: dateOfRetierment,
       guardianname,
       basicSalary,
 	  allowedleave,
@@ -371,6 +399,7 @@ try {
 
                           <select
                             className="form-control select"
+                            onKeyDown={handlemployeetypeclick}
                             onMouseEnter={handlemployeetypeclick}
                             onChange={handleemployeetypechange}
                           >
@@ -392,7 +421,8 @@ try {
                           </label>
 
                           <select
-                            className="form-control select"
+                            className="form-control select  "
+                            onKeyDown={handlePostClick}
                             onMouseEnter={handlePostClick}
                             onChange={handlePostChange}
                           >
@@ -465,6 +495,21 @@ try {
                             type="text"
                             placeholder=""
                             onChange={(e) => setAddress3(e.target.value)}
+                          />
+                        </div>
+                      </div>
+                      <div className="col-12 col-md-6 col-xl-6">
+                        <div className="form-group local-forms">
+                          <label>
+                            Pincode <span className="login-danger">*</span>
+                          </label>
+
+                          <input
+                            value={pincode}
+                            className={`form-control`}
+                            type="number"
+                            placeholder=""
+                            onChange={(e) => setPincode(e.target.value)}
                           />
                         </div>
                       </div>
@@ -542,7 +587,12 @@ try {
                             className={`form-control`}
                             type="number"
                             placeholder=""
-                            onChange={(e) => setPhone(e.target.value)}
+                            onChange={(e) => {
+                              const onlyNumbers = e.target.value.replace(/[^0-9]/g, ''); // Remove non-numeric characters
+                              if (onlyNumbers.length <= 10) {
+                              setPhone(onlyNumbers);
+                              }
+                            }}
                           />
                         </div>
                       </div>
@@ -640,39 +690,6 @@ try {
                           />
                         </div>
                       </div>
-
-                      <div className="col-12 col-md-6 col-xl-6">
-                        <div className="form-group local-forms">
-                          <label>
-                            Date Of Joining
-                            <span className="login-danger">*</span>
-                          </label>
-
-                          <input
-                            onChange={(e) => setDateOfJoining(e.target.value)}
-                            className={`form-control `}
-                            type="date"
-                            placeholder=""
-                            value={dateOfJoining}
-                          />
-                        </div>
-                      </div>
-
-                      <div className="col-12 col-md-6 col-xl-6">
-                        <div className="form-group local-forms">
-                          <label>
-                            Date Of Birth<span className="login-danger">*</span>
-                          </label>
-
-                          <input
-                            className={`form-control`}
-                            type="date"
-                            placeholder=""
-                            value={dateOfBirth}
-                            onChange={(e) => setDateOfBirth(e.target.value)}
-                          />
-                        </div>
-                      </div>
                       <div className="col-12 col-md-6 col-xl-6">
                         <div className="form-group local-forms">
                           <label>
@@ -692,6 +709,69 @@ try {
                       <div className="col-12 col-md-6 col-xl-6">
                         <div className="form-group local-forms">
                           <label>
+                            Date Of Joining
+                            <span className="login-danger">*</span>
+                          </label>
+
+                          <input
+                            onChange={(e) => setDateOfJoining(e.target.value)}
+                            className={`form-control `}
+                            type="date"
+                            placeholder=""
+                            value={dateOfJoining}
+                          />
+                        </div>
+                      </div>
+
+                      <div className="col-12 col-md-6 col-xl-4">
+                        <div className="form-group local-forms">
+                          <label>
+                            Date Of Birth<span className="login-danger">*</span>
+                          </label>
+
+                          <input
+                            className={`form-control`}
+                            type="date"
+                            placeholder=""
+                            value={dateOfBirth}
+                            onChange={(e) => setDateOfBirth(e.target.value)}
+                          />
+                        </div>
+                      </div>
+                      
+                      <div className="col-12 col-md-6 col-xl-4">
+                        <div className="form-group local-forms">
+                          <label>
+                            Age Of Retirement<span className="login-danger">*</span>
+                          </label>
+
+                          <input
+                            className={`form-control`}
+                            type="text"
+                            placeholder=""
+                            value={ageOfRetierment}
+                            onChange={(e) => setAgeOfRetierment(e.target.value)}
+                          />
+                        </div>
+                      </div>
+                      <div className="col-12 col-md-6 col-xl-4">
+                        <div className="form-group local-forms">
+                          <label>
+                            Date Of Retirement<span className="login-danger">*</span>
+                          </label>
+
+                          <input
+                            className={`form-control`}
+                            type="date"
+                            placeholder=""
+                            value={dateOfRetierment}
+                            onChange={(e) => setDateOfRetierment(e.target.value)}
+                          />
+                        </div>
+                      </div>
+                      <div className="col-12 col-md-6 col-xl-6">
+                        <div className="form-group local-forms">
+                          <label>
                             Basic Salary<span className="login-danger">*</span>
                           </label>
                           <input
@@ -704,7 +784,7 @@ try {
                         </div>
                       </div>
 
-					  <div className="col-12 col-md-6 col-xl-6">
+					            <div className="col-12 col-md-6 col-xl-6">
                         <div className="form-group local-forms">
                           <label>
                            Allowed Leave<span className="login-danger">*</span>

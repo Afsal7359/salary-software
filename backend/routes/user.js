@@ -13,5 +13,7 @@ router.post('/profile-update/:id',userAuthMid,upload.single('image'),userlogin.A
 router.post('/updatepassword/:id',userlogin.UpdatePassword);
 router.post('/forgotpassword',userlogin.ForgotPassword);
 router.post('/changepassword',userlogin.ChangePassword);
+router.post('/payslip/:id',userlogin.SalaryPaySlip);
+
 
 module.exports = router;

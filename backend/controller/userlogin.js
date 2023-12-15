@@ -3,7 +3,8 @@ const Employee = require('../models/Employeemaster');
 const  cloudinary= require("../util/cloudinary");
 const otpGenerator = require('otp-generator');
 const otp = require('../models/otp');
-const nodemailer = require('nodemailer')
+const nodemailer = require('nodemailer');
+const SalaryBill = require('../models/SalaryBill');
 
 module.exports={
      LoginUser : async(req,res)=>{
@@ -303,8 +304,7 @@ module.exports={
         console.log(error);
         res.status(500).json({
           success: false,
-          message: "Error occurred",
-          error: error.message,
+          message: error,
         });
       }
     },
@@ -344,6 +344,48 @@ module.exports={
           success: true,
           message: "Password changed successfully",
         });
+      } catch (error) {
+        console.log(error);
+        res.status(500).json({
+          success: false,
+          message: "Error occurred",
+          error: error.message,
+        });
+      }
+    },
+
+    SalaryPaySlip: async (req, res) => {
+      try {
+        console.log(req.body,"body");
+        console.log(req.params);
+       
+        const { month, year } = req.body;
+        const { id } = req.params;
+        console.log(id);
+     
+      
+    const startDate =`01/${month}/${year}`
+
+
+        const endDate = `30/${month}/${year}`
+    
+        console.log(startDate, "Start Date");
+        console.log(endDate, "End Date");
+    
+        // Query SalaryBill collection based on EmployeeId and date range
+        const data = await SalaryBill.find({
+          employeeid: id,
+          date: {
+            $gte: startDate,
+            $lte: endDate,
+          },
+        });
+    
+        res.status(200).json({
+          success: true,
+          message: "Employee Pay Slip Fetched Successfully",
+          data:data
+        }); 
       } catch (error) {
         console.log(error);
         res.status(500).json({

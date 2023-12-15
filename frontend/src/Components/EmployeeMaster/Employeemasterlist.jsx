@@ -45,6 +45,16 @@ const Employeemasterlist = React.memo(({ formdata, setformdata }) =>{
     
   const memoizedData = useMemo(() => Data, [Data]);
   
+
+  // Inside your DepartmentList component
+const [currentPage, setCurrentPage] = useState(1);
+const itemsPerPage = 10;
+
+// Calculate indexes for pagination
+const indexOfLastItem = currentPage * itemsPerPage;
+const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+const currentItems = memoizedData.slice(indexOfFirstItem, indexOfLastItem);
+
    // Function to handle the click event
   const handleEditClick = (item) => {
     // Set showEditModal to true when the "Edit" button is clicked
@@ -217,6 +227,7 @@ const Employeemasterlist = React.memo(({ formdata, setformdata }) =>{
                   </tbody>
                 </table>
               </div>
+          
             </div>
           )}
         </div>

@@ -171,7 +171,7 @@ function Salarycreation() {
 													<option value="">Select Type</option>
 													<option value="Increment">Increment</option>
 													<option value="Decrement">Decrement</option>
-													<option value="nill">Nill</option>
+													<option value="nil">NIL</option>
 												</select>
 											</div>
 										</div>

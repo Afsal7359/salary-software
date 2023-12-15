@@ -5,6 +5,7 @@ const dotenv = require('dotenv')
 const morgan = require('morgan')
 const mongoose = require('mongoose');
 
+
 const  UserRouters = require('./routes/userRouter');
 const  EmployeeTypeRouter = require('./routes/EmployeetypeRouter');
 const  DepartmentRouter = require('./routes/DepartmentRouter');
@@ -40,11 +41,13 @@ const corsOptions = {
 app.use(cors());
 
 app.use(morgan('dev'))
-app.use(express.urlencoded({ extended: true }))
+
 
 app.use(express.json({
   limit: '50mb'
 }));
+app.use(express.urlencoded({ extended: true }))
+
 
 app.use('/api/users', UserRouters)
 app.use('/api/employeetype',EmployeeTypeRouter)

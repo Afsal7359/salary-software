@@ -3,6 +3,7 @@ const Employee = require("../models/Employeemaster");
 module.exports = {
   AddEmployee: async (req, res) => {
     try {
+      console.log(req.body);
       const data = req.body;
       const existingEmployee = await  Employee.findOne({
         employeeno: data.employeeno,
@@ -125,7 +126,7 @@ module.exports = {
             { path: "designation" }
           ],
         })
-        .populate({
+      .populate({
           path: "tablerow",
           populate: [
             { path: "salaryComponent" },

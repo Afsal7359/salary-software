@@ -180,6 +180,7 @@ function SalaryMasteredit({ closeEditModal, item,setData,Data}) {
                                      
                                         <option value="Increment">Increment</option>
                                         <option value="Decrement">Decrement</option>
+                                        <option value="NIL">NIL</option>
                                     </select>
                                 )}
                             />
