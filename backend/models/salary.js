@@ -19,10 +19,10 @@ const SalarySchema = new mongoose.Schema({
         require: true,
     },
     type: {
-        type: String,
+        type: Number,
         require: true,
     },
- 
+   
    
     isdeleted:{
         type:Boolean,

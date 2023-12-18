@@ -179,6 +179,15 @@ const EmployeeSchema= new mongoose.Schema({
     TotalSalary:{
         type:Number
     },
+    EPFWage:{
+        type:Number,
+    },
+    EPSWage:{
+        type:Number,
+    },
+    EDLIWage:{
+        type:Number,
+    },
 
     isdeleted:{
         type:Boolean,

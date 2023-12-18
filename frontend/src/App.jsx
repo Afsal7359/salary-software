@@ -24,6 +24,7 @@ import Salarybill from './Components/Salary Bill/Salarybill';
 import AddCompany from './Components/CompanyMaster/AddCompany';
 import Salaryview from './Components/Salary Bill/Salaryview';
 import SalaryvoucherPrint from './Components/SalaryVochuer/SalaryvoucherPrint';
+import Pf from './Components/Report/Pf';
 const App = () => {
   return (
         <Router>
@@ -53,6 +54,7 @@ const App = () => {
        <Route path="/salary-bill" element={<Salarybill/>}/>
        <Route path="/salary" element={<Salaryview/>}/>
        <Route path="/salary-voucher" element={<SalaryvoucherPrint/>}/>
+       <Route path="/report-pf" element={<Pf/>}/>
        </Routes>
        </Suspense>
        </div>

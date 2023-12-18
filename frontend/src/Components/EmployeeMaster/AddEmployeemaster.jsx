@@ -13,6 +13,8 @@ const AddEmployeemaster = () => {
 	const [name, setName] = useState('');
 	const [email, setEmail]=useState('');
 	const [rowid ,setRowId]=useState('')
+	const [rowid1,setRowId1]=useState('')
+	const [rowid2 ,setRowId2]=useState('')
 	const [phone,setPhone]=useState('');
 	const [employeeno, setEmployeeno]=useState('');
 	const [address1, setAddress1]=useState('');
@@ -50,8 +52,9 @@ const AddEmployeemaster = () => {
 	const [issalarymasterDataFetched, setIsSalarymasterDataFetched]=useState(false);
 	const [salarymasterData,setSalarymasterData]=useState([]);
 	const [salarymasterId, setSalarymasterId]=useState('');
-	const [formdata , setFormdata]=useState([])
+	const [data , setData]=useState([])
 
+	const [salarycomponent,setSalarycomponent]=useState(false)
 
 	// Usage in useEffect
 	useEffect(() => {
@@ -90,7 +93,68 @@ const AddEmployeemaster = () => {
 	  useEffect(() => {
 		calculateRetirementDate();
 	  }, [dateOfBirth, ageOfRetierment]);
-	
+	  const [totalAmount, setTotalAmount] = useState(0);
+	  const [DAPercentage,setDAPercentage]=useState('');
+	  const [DAValue,setDAValue]=useState('');
+	  const [DAPrice,setDAPrice]=useState('');
+	  const [IRPercentage,setIRPercentage]=useState('');
+	  const [IRValue,setIRValue]=useState('');
+	  const [IRPrice,setIRPrice]=useState('');
+	  const [EPFWage,setEPFWage]=useState('');
+	  const [EPSWage,setEPSWage]=useState('');
+	  const [EDLIWage,setEDLIWage]=useState('');
+ 
+	  const handleDAPercentage = (event)=>{
+		 const value= event.target.value;
+		 setDAPercentage(value)
+		 setDAValue('')
+	   }
+	   const handleDAValue = (event)=>{
+		 const value= event.target.value;
+		 setDAValue(value)
+		 setDAPercentage('')
+	   }
+	   const handleIRPercentage = (event)=>{
+		 const value= event.target.value;
+		 setIRPercentage(value)
+		 setIRValue('')
+	   }
+	   const handleIRValue = (event)=>{
+		 const value= event.target.value;
+		 setIRValue(value)
+		 setIRPercentage('')
+	   }
+ 
+	  useEffect(() => {
+ 
+		 // DA row
+		 
+		 if (DAPercentage !== 0 && !DAValue) {
+		   const price = (basicsalary * DAPercentage) / 100;
+		   setDAPrice(price);
+		 }
+	   
+		 else if (DAValue !== 0 && !DAPercentage) {
+		   const prices = DAValue;
+		   console.log("Priceeeeeeeeeee",prices);
+		   setDAPrice(prices);
+		 }
+ 
+		 // IR row
+		 
+		 if (IRPercentage !== 0 && !IRValue) {
+		   const price = (basicsalary * IRPercentage) / 100;
+		   setIRPrice(price);
+		 }
+	   
+		 else if (IRValue !== 0 && !IRPercentage) {
+		   const prices = IRValue;
+		   console.log("Priceeeeeeeeeee",prices);
+		   setIRPrice(prices);
+		 }
+	   }, [DAPercentage, DAValue, basicsalary,IRPercentage,IRValue]);
+	  
+ 
 	  
 
 	const handlemployeetypeclick = async()=>{
@@ -109,6 +173,12 @@ const AddEmployeemaster = () => {
 	}
 	const handleemployeetypechange = (event)=>{
 		setEmployeeTypeId(event.target.value);
+		console.log("typeid",employeeTypeId);
+		if (employeeTypeId == "6566be7b0085f19cfbfd00c1"){
+			setSalarycomponent(true)
+		}else{
+			setSalarycomponent(false)
+		}
 	};
 
 
@@ -131,22 +201,59 @@ const AddEmployeemaster = () => {
 	}
 
 
-
-	const handlesalarymasterclick =async()=>{
-		try{
-			if(!issalarymasterDataFetched){
-				const response = await getallSalary();
-				if(response.success){
-					
-					setSalarymasterData(response.data);
-				}else{
-					setSalarymasterData([]);
-				}
-			}setIsSalarymasterDataFetched(true)
-		}catch(error){
-			toast.error(error.message)
+	const handlesalarymasterclick = async () => {
+		try {
+		  if (!issalarymasterDataFetched) {
+			const response = await getallSalary();
+			if (response.success) {
+			  setSalarymasterData(response.data);
+			} else {
+			  setSalarymasterData([]);
+			}
+		  }
+		  setIsSalarymasterDataFetched(true);
+		} catch (error) {
+		  toast.error(error.message);
 		}
-	}
+	  };
+	
+	  useEffect(()=>{
+		handlesalarymasterclick()
+	  },[tableRows])
+	
+
+	// const handlesalarymasterclick =async()=>{
+	// 	try{
+	// 		if(!issalarymasterDataFetched){
+	// 			const response = await getallSalary();
+	// 			if(response.success){
+					
+	// 				setSalarymasterData(response.data);
+	// 			}else{
+	// 				setSalarymasterData([]);
+	// 			}
+	// 		}setIsSalarymasterDataFetched(true)
+	// 	}catch(error){
+	// 		toast.error(error.message)
+	// 	}
+	// }
+	const firstrow =[
+		{
+			id:rowid1,
+			salaryComponent:"657b623475899f831e6a5188",
+			percentage:DAPercentage?DAPercentage:"",
+			value:DAValue?DAValue:"",
+			price:DAPrice
+		},
+		{
+			id:rowid2,
+			salaryComponent:"657a7f1e9695672fc76d12af",
+			percentage:IRPercentage?IRPercentage:"",
+			value:IRValue?IRValue:"",
+			price:IRPrice
+		}
+	  ]
+	  
 	const handlesalarymasterchange = (event, index) => {
 		const updatedTableRows = [...tableRows];
 		updatedTableRows[index] = {
@@ -154,9 +261,17 @@ const AddEmployeemaster = () => {
 		  salaryComponent: event.target.value // Update salaryComponent based on the event value
 		  
 		};
+		if (salarycomponent == false){
+			settableRows([])
+		}else{
+			const updatedTableRows = [...firstrow, ...tableRows];
+			settableRows(updatedTableRows);
+		}
 	  console.log(updatedTableRows,"ii");
 		settableRows(updatedTableRows);
 	  }
+	
+
 
 
 
@@ -169,70 +284,7 @@ const AddEmployeemaster = () => {
 		criteriaMode: 'all',
 		
 	  });
-	  const onSubmit = async (data) => {
-		data.employeeid=`ME${count.toString().padStart(3, '0')}`
-	     data.EmployeeTypeId=employeeTypeId
-		 data.PostId=postId
-		 data.previousAllowedleave=allowedLeave
-		 data.tablerow=tableRows
-// 		data.tablerow = (tableRows && Array.isArray(tableRows) && tableRows.length === 1 &&
-//   tableRows[0].value === '0' &&
-//   tableRows[0].percentage === 0 &&
-//   tableRows[0].price === 0)
-//   ? []
-//   : (tableRows || []);
-		
-		 data.TotalSalary=totalAmount?totalAmount:basicsalary
-		try {
-			console.log('Afsal :' , data);
-		  const response = await Addemployee(data);
-		  console.log(response,"ii");
-		  if (response.success) {
-			setcount((prevCount) => prevCount + 1);
-			setFormdata(response.data);
-			toast.success(response.message);
-			setName('');
-			setEmployeeTypeId('');
-			setPostId('');
-			setEmail('');
-			setPhone('');
-			setEmployeeno('');
-			setAddress1('');
-			setAddress2('');
-			setAddress3('');
-			setBank('');
-			setAccountno('');
-			setBranch('');
-			setIfsc('');
-			setPanNo('');
-			setPanName('');
-			setDateOfJoining('');
-			setDateOfBirth('');
-			setGuardianName('');
-			setBasicSalary('');
-			setUniversalAcNo('')
-			setCity('');
-			setCountry('');
-			setPercentage('');
-			setPassword('')
-			setSecondInputValue('');
-			setPincode('')
-			setAgeOfRetierment('')
-			setDateOfRetierment('')
-			setAllowedLeave('');
-			setstate(false)
-			setemployeelist(true)
-		  } else {
-			toast.error(response.message);
-			
-		  }
-		} catch (err) {
-		  toast.error(err.message);
-		}
-	  };
-	  
-
-
+	 
 	 
 	
 	  const handleAddRow = () => {
@@ -253,11 +305,7 @@ const AddEmployeemaster = () => {
 		settableRows((prevRows) => prevRows.filter((row) => row.id !== id));
 	  };
 
-	  const [totalAmount, setTotalAmount] = useState(0);
 	 
-	  
-	
-
 	  useEffect(() => {
 		try {
 		  const totalAmount = tableRows.reduce((acc, row) => {
@@ -275,19 +323,67 @@ const AddEmployeemaster = () => {
 			}
 	  
 			return acc;
-		  }, parseFloat(basicsalary));
+		  }, parseFloat(basicsalary) + parseFloat(DAPrice) + parseFloat(IRPrice) );
 	  
 		  if (!isNaN(totalAmount)) {
 			// Check if the calculated totalAmount is a valid number
-			setTotalAmount(totalAmount);
+			setTotalAmount(totalAmount );
 		  } else {
 			console.error('Invalid totalAmount:', totalAmount);
 		  }
 		} catch (error) {
 		  console.error('Error in useEffect:', error);
 		}
-	  }, [tableRows, basicsalary, salarymasterData]);
+
+	
+		
+	  }, [tableRows, basicsalary, salarymasterData,DAPrice,IRPrice]);
 	  
+	 
+		
+
+		useEffect(() => {
+
+			if(employeeTypeId === "6566be7b0085f19cfbfd00c1" && basicsalary ){
+				const EPF = parseFloat(basicsalary) + parseFloat(DAPrice) + parseFloat(IRPrice)
+				setEPFWage(EPF)
+			}else{
+				setEPFWage('')
+			};
+		
+
+
+		const joiningDate = new Date(dateOfJoining);
+        const comparisonDate = new Date('2014-01-01');
+
+			if (employeeTypeId === "6566be7b0085f19cfbfd00c1" && (joiningDate >= comparisonDate)) {
+			  setEPSWage(0);
+			} else if (employeeTypeId === "6566be7b0085f19cfbfd00c1" && (totalAmount >= 15000)) {
+			  setEPSWage(15000);
+			} else if(employeeTypeId === "6566be7b0085f19cfbfd00c1" && (totalAmount < 15000)) {
+			  setEPSWage(totalAmount);
+			}else{
+				setEPSWage('')
+			};
+		
+
+			if(employeeTypeId === "6566be7b0085f19cfbfd00c1" &&(totalAmount >= 15000)){
+				setEDLIWage(15000)
+			}else if(employeeTypeId === "6566be7b0085f19cfbfd00c1" &&(totalAmount < 15000)){
+				setEDLIWage(totalAmount)
+			}else{
+				setEDLIWage('')
+			}
+
+			console.log(EPFWage,":EPF WAGE");
+			console.log(EPSWage,":Eps WAGE");
+			console.log(dateOfJoining);
+			console.log(EDLIWage,":EDLI WAGE");
+
+		  }, [totalAmount, dateOfJoining,EPSWage,EPFWage,EDLIWage]);
+		  
+	
+	 
 	  
 
 
@@ -341,6 +437,109 @@ const [tablestate,settablestate]=useState(false)
 	  
 		settableRows(updatedTablerow);
 	  };
+
+	  const resetstate =()=>{
+		setName('');
+		setEmployeeTypeId('');
+		setPostId('');
+		setEmail('');
+		setPhone('');
+		setEmployeeno('');
+		setAddress1('');
+		setAddress2('');
+		setAddress3('');
+		setBank('');
+		setAccountno('');
+		setBranch('');
+		setIfsc('');
+		setPanNo('');
+		setPanName('');
+		setDateOfJoining('');
+		setDateOfBirth('');
+		setGuardianName('');
+		setBasicSalary('');
+		setUniversalAcNo('')
+		setCity('');
+		setCountry('');
+		setPercentage('');
+		setPassword('')
+		setSecondInputValue('');
+		setPincode('')
+		setAgeOfRetierment('')
+		setDateOfRetierment('')
+		setAllowedLeave('');
+		setIRPercentage('');
+		setDAPercentage('');
+		setIRValue('');
+		setDAValue('');
+		setIRPrice('')
+		setDAPrice('')
+	  }
+	  console.log(resetstate);
+
+
+	 	 const updatedFirstRow = [...firstrow];
+     	 const insertionIndex = 2; 
+		 console.log(updatedFirstRow,":::::::::::::::fffff");
+		
+		 if (tableRows[0]?tableRows[0].salaryComponent:" "===''){
+			console.log('hai');
+		 }else{
+			updatedFirstRow.splice(insertionIndex, 0, ...tableRows);
+		 };
+
+		 if ( updatedFirstRow[2]?updatedFirstRow[2].price:"" < 0) {
+			 updatedFirstRow.pop();
+		  }else{
+			updatedFirstRow , console.log(updatedFirstRow,"ddddddddd");
+		  }
+		  
+		  console.log(updatedFirstRow[2]);
+		console.log(updatedFirstRow,"rrrrrrrrrrrrrrrr");
+	
+
+	  const onSubmit = async (data) => {
+	
+		
+		console.log(tableRows);
+		data.employeeid=`ME${count.toString().padStart(3, '0')}`
+	     data.EmployeeTypeId=employeeTypeId
+		 data.PostId=postId
+		 data.previousAllowedleave=allowedLeave
+		 data.tablerow=employeeTypeId==="6566be7b0085f19cfbfd00c1"? updatedFirstRow:[]
+		 data.EPFWage=EPFWage
+		 data.EPSWage=EPSWage
+		 data.EDLIWage=EDLIWage
+// 		data.tablerow = (tableRows && Array.isArray(tableRows) && tableRows.length === 1 &&
+//   tableRows[0].value === '0' &&
+//   tableRows[0].percentage === 0 &&
+//   tableRows[0].price === 0)
+//   ? []
+//   : (tableRows || []);
+		
+		 data.TotalSalary=totalAmount?totalAmount:basicsalary
+		try {
+			console.log('Afsal :' , data);
+		  const response = await Addemployee(data);
+		  console.log(response,"ii");
+		  if (response.success) {
+			setcount((prevCount) => prevCount + 1);
+			setData(response.data);
+			toast.success(response.message);
+			resetstate();
+			setstate(false)
+			setemployeelist(true)
+		  } else {
+			toast.error(response.message);
+			
+		  }
+		} catch (err) {
+		  toast.error(err.message);
+		}
+	  };
+	  
+
+
   
 
   return (
@@ -395,6 +594,7 @@ const [tablestate,settablestate]=useState(false)
 													onKeyDown={handlemployeetypeclick}
 												onMouseEnter={handlemployeetypeclick}
 												onChange={handleemployeetypechange}
+												onClick={handleemployeetypechange}
 												>
 													<option>Select Type</option>
 													{employeeTypeData.map((option)=>(
@@ -408,7 +608,7 @@ const [tablestate,settablestate]=useState(false)
 										<div className="col-12 col-md-6 col-xl-6">
 											<div className="form-group local-forms">
 												<label >Post<span className="login-danger">*</span></label>
-												<select className="form-control select "
+												<select className="form-control  select "
 												id="inputGroupSelect01"
 												onKeyDown={handlePostClick}
 													onMouseEnter={handlePostClick}
@@ -921,6 +1121,7 @@ const [tablestate,settablestate]=useState(false)
 										</div>
 										
 										<div className="row">
+											{salarycomponent&&
 											<div className="col-md-12">
 											<div className="card invoices-add-card">
 												<div className="card-body">
@@ -939,11 +1140,137 @@ const [tablestate,settablestate]=useState(false)
 															</tr>
 														</thead>
 														<tbody>
-															{tableRows.map((row, index) => (
-															<tr key={row.id}>
+													
+															<tr key={1454}>
 																<td>
-																<input type="text" className="form-control" value={index + 1} readOnly 
-																onChange={(e) => setEmail(e.target.value)}/>
+																<input type="text" className="form-control" value={ 1} readOnly 
+																onChange={(e) => setRowId1(e.target.value)}/>
+																</td>
+																<td>
+																<select className="form-control"
+																// onKeyDown={handlesalarymasterclick}
+																// onMouseEnter={handlesalarymasterclick}
+																onChange={(event) => handlesalarymasterchange(event, index)}
+																>
+																
+																	
+																		<option value={salarymasterData[0]._id} key={salarymasterData[0]._id}>
+																			{salarymasterData[0].name}
+																		</option>
+																	
+																	
+																</select>
+																</td>
+																
+																<td>
+																<input
+																		
+																		type="number"
+																		className={`form-control ${errors.percentage ? 'is-invalid' : ''}`}
+																		placeholder="%"
+																		// onChange={handleChange}
+																		value={DAPercentage}
+																		// value={row.percentage ? row.percentage : ''}
+                                                                        onChange={(e)=>handleDAPercentage(e)}
+																		/>
+																	{console.log("per",DAPercentage)}
+																		{errors.percentage && errors.percentage.type === 'pattern' && (
+																		<span className="text-danger">Please enter a valid percentage</span>
+																		)}
+															</td>
+																<td>
+																<input
+																	type="text"
+																	className="form-control"
+																	value={DAValue ? DAValue : ''}
+																	onChange={(e) => handleDAValue( e)}
+																	
+																/>
+																</td>
+																<td>
+																<input type="text" className="form-control" 
+																 value={DAPrice?DAPrice:''}
+																 readOnly/>
+																</td>
+																<td className="add-remove text-end">
+																
+																
+																
+																</td>
+															</tr>
+														
+
+														
+														</tbody>
+														<tbody>
+															
+															<tr key={235435}>
+																<td>
+																<input type="text" className="form-control" value={ 2 } readOnly 
+																onChange={(e) => setRowId2(e.target.value)}/>
+																</td>
+																<td>
+																<select className="form-control"
+																// onKeyDown={handlesalarymasterclick}
+																// onMouseEnter={handlesalarymasterclick}
+																onChange={(event) => handlesalarymasterchange(event, index)}
+																>
+																
+																	
+																		<option value={salarymasterData[1]._id} key={salarymasterData[0]._id}>
+																			{salarymasterData[1].name}
+																		</option>
+																	
+																	
+																</select>
+																</td>
+																
+																<td>
+																<input
+																		
+																		type="number"
+																		className={`form-control ${errors.percentage ? 'is-invalid' : ''}`}
+																		placeholder="%"
+																		// onChange={handleChange}
+																		value={IRPercentage}
+																		// value={row.percentage ? row.percentage : ''}
+                                                                        onChange={(e) => handleIRPercentage(e)}
+																		/>
+																	
+																		{errors.percentage && errors.percentage.type === 'pattern' && (
+																		<span className="text-danger">Please enter a valid percentage</span>
+																		)}
+															</td>
+																<td>
+																<input
+																	type="text"
+																	className="form-control"
+																	value={IRValue}
+																	onChange={(e) => handleIRValue(e)}
+																	
+																/>
+																</td>
+																<td>
+																<input type="text" className="form-control" 
+																 value={IRPrice?IRPrice:''}
+																 readOnly/>
+																</td>
+																<td className="add-remove text-end">
+																
+																
+																
+																</td>
+															</tr>
+													
+
+														
+														</tbody>
+														<tbody>
+															{tableRows.map((row, index) => (
+															<tr key={row.id+1}>
+																<td>
+																<input type="text" className="form-control" value={index+2 + 1} readOnly 
+																onChange={(e) => setRowId(e.target.value)}/>
 																</td>
 																<td>
 																<select className="form-control"
@@ -1008,7 +1335,7 @@ const [tablestate,settablestate]=useState(false)
 
 															{tableRows.length === 0 && (
 															settableRows(prevRows => [...prevRows, {
-																id: 1,
+																id: rowid,
 																salaryComponent: '',
 																percentage: '',
 																value: '',
@@ -1032,7 +1359,7 @@ const [tablestate,settablestate]=useState(false)
 													</div>
 												</div>
 											</div>
-											</div>
+											</div> }
 										</div>
 
 										<div className="col-12">
@@ -1048,7 +1375,7 @@ const [tablestate,settablestate]=useState(false)
 					</div>					
 				</div></>}
 
-				{employeelist&&<Employeemasterlist   formdata={formdata} setformdata={setFormdata} />}
+				{employeelist&&<Employeemasterlist   formdata={data} setformdata={setData} />}
    </>
   )
 }

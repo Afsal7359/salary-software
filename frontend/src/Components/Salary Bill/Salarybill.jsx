@@ -29,6 +29,13 @@ function Salarybill() {
 	const [employeeid,setEmployeeid]=useState('');
 	const [formdata,setformData]=useState([]);
 	
+	const [EPFWage,setEPFWage]=useState('');
+	const [EPSWage,setEPSWage]=useState('');
+	const [EPSContri,setEPSContri]=useState('');
+	const[EPFContri,setEPFContri]=useState('');
+	const[EPSEPFDiff,setEPSEPFDiff]=useState('');
+	const [EDLIWage, setEDLIWage]=useState('');
+
 	const[count,setcount]=useState('');
 	const[salarybill,setSalarybill]=useState(false);
 	const [salaryList,setSalaryList]=useState(true)
@@ -121,7 +128,10 @@ console.log("employeeid",EmployeeId);
 		setUnit(filteredEmployees[0]?filteredEmployees[0].PostId.unit._id : ""	)
 		setBasicSalary(filteredEmployees[0]?filteredEmployees[0].basicSalary :"")
 		setTotalSalary(filteredEmployees[0]?filteredEmployees[0].TotalSalary:"")
-		
+		setEPSWage(filteredEmployees[0]?filteredEmployees[0].EPSWage:"")
+		setEPFWage(filteredEmployees[0]?filteredEmployees[0].EPFWage:"")
+		setEDLIWage(filteredEmployees[0]?filteredEmployees[0].EDLIWage:"")
+
         setFilterEmployeeData(filteredEmployees);
 
 		  console.log('tablerow',tablerow);
@@ -298,7 +308,55 @@ console.log('totalrssow',totalrowprice);
     setTablerow(updatedTableRows);
   };
 
+useEffect(()=>{
+try{
+	if(EPSWage === 15000){
+		setEPSContri(1250)
+	}else if(EPSWage === 0){
+		setEPSContri(0)
+	}else{
+		 const EPS = (EPFWage * 8.33)/100
+		 console.log(EPS,"eps");
+		 setEPSContri(EPS)
+	}
 
+	const targetId = '6572ef07fb305bd8c621bcee';
+	let foundData = null;
+	
+	for (let i = 0; i < tablerow.length; i++) {
+	  if (tablerow[i].salaryComponent._id === targetId) {
+		foundData = tablerow[i];
+		break;
+	  }
+	}
+
+	const EPFs = (EPFWage * 12) / 100;
+
+	if (!foundData) {
+	 setEPFContri(EPFs)
+	 console.log('ffffffffffffffffffuuuuuuuuuuu');
+	} else {
+		console.log('ddddddddddddddddddddddddd');
+	  const EPFS =( EPFs + foundData.price)
+	  setEPFContri(EPFS)
+	}
+
+	if(EPFs && EPFContri){
+		const EPFEPSDIFF = EPFs -EPSContri
+		setEPSEPFDiff(EPFEPSDIFF)
+	}
+	
+
+	
+
+}catch(error){
+	console.log(error);
+}
+
+	console.log(EPSContri,";;;;;;;;;;;;;;");
+	console.log(EPFContri,".................................................");
+	console.log(EPSEPFDiff,":EPSEPFDiff:");
+},[employeeid,options ])
 
 
 
@@ -325,6 +383,12 @@ const handleformsubmit = async(event)=>{
 			totaldeduction:totaldeduction,
 			totalcontribution:totalcontribution,
 			totalincrement:totalincrement,
+			EPFWage,
+			EPFContri,
+			EPSWage,
+			EPSContri,
+			EPSEPFDiff,
+			EDLIWage,
 			tablerow: tablerow.map(row => {
 				return {
 					...row,

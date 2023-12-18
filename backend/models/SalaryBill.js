@@ -75,6 +75,24 @@ const SalarybillSchema = new mongoose.Schema({
         type:Number,
         require:true
     },
+    EPFWage:{
+        type: Number,
+    },
+    EPFContri:{
+        type:Number,
+    },
+    EPSWage:{
+        type:Number,
+    },
+    EPSContri:{
+        type:Number
+    },
+    EPSEPFDiff:{
+        type:Number
+    },
+    EDLIWage:{
+        type:Number
+    },
     isdeleted:{
         type:Boolean,
         require:true,
