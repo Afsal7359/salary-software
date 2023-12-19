@@ -20,11 +20,12 @@ const Typepage = lazy(() => import('./Pages/Typepage'));
 const Operationalpage = lazy(() => import('./Pages/Operationalpage'));
 const Accounttypepage = lazy(() => import('./Pages/Accounttypepage'));
 import { BrowserRouter as Router, Routes, Route} from 'react-router-dom'
-import Salarybill from './Components/Salary Bill/Salarybill';
-import AddCompany from './Components/CompanyMaster/AddCompany';
-import Salaryview from './Components/Salary Bill/Salaryview';
-import SalaryvoucherPrint from './Components/SalaryVochuer/SalaryvoucherPrint';
-import Pf from './Components/Report/Pf';
+const Salarybill = lazy(()=> import('./Components/Salary Bill/Salarybill')) ;
+const AddCompany = lazy(()=> import('./Components/CompanyMaster/AddCompany')) ;
+const Salaryview = lazy(()=> import('./Components/Salary Bill/Salaryview')) ;
+const SalaryvoucherPrint = lazy(()=> import('./Components/Salary Bill/Salaryview')) ;
+const Pf = lazy(()=> import('./Components/Report/Pf')) ;
+
 const App = () => {
   return (
         <Router>
