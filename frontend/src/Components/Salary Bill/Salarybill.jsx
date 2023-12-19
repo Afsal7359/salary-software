@@ -597,9 +597,7 @@ return (
 															  onChange= {handlesalarymasterclick}
 															
 															>
-															<option
-																value={row._id}
-																key={row._id}
+															<option value={row._id} key={row._id}
 															>
 																{row.salaryComponent.name}
 															</option>

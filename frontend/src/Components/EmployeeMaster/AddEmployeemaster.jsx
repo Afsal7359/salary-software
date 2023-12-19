@@ -93,7 +93,7 @@ const AddEmployeemaster = () => {
 	  useEffect(() => {
 		calculateRetirementDate();
 	  }, [dateOfBirth, ageOfRetierment]);
-	  
+
 	  const [totalAmount, setTotalAmount] = useState(0);
 	  const [DAPercentage,setDAPercentage]=useState('');
 	  const [DAValue,setDAValue]=useState('');
@@ -241,14 +241,14 @@ const AddEmployeemaster = () => {
 	const firstrow =[
 		{
 			id:rowid1,
-			salaryComponent:"657b623475899f831e6a5188",
+			salaryComponent:"6581128dc32bc7fefb3b2e30",
 			percentage:DAPercentage?DAPercentage:"",
 			value:DAValue?DAValue:"",
 			price:DAPrice
 		},
 		{
 			id:rowid2,
-			salaryComponent:"657a7f1e9695672fc76d12af",
+			salaryComponent:"658112c9c32bc7fefb3b2e3b",
 			percentage:IRPercentage?IRPercentage:"",
 			value:IRValue?IRValue:"",
 			price:IRPrice
