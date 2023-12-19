@@ -93,6 +93,7 @@ const AddEmployeemaster = () => {
 	  useEffect(() => {
 		calculateRetirementDate();
 	  }, [dateOfBirth, ageOfRetierment]);
+	  
 	  const [totalAmount, setTotalAmount] = useState(0);
 	  const [DAPercentage,setDAPercentage]=useState('');
 	  const [DAValue,setDAValue]=useState('');

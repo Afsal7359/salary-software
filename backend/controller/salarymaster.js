@@ -4,7 +4,7 @@ const Salarymaster = require("../models/salary");
 module.exports={
     GetSalarymaster:async(req,res)=>{
         try{
-            const response = await Salarymaster.find({ isdeleted: { $ne: true } }).sort({ _id: -1 })
+            const response = await Salarymaster.find({ isdeleted: { $ne: true } })
             .populate('purpose')
             res.status(200).json({
               success: true,

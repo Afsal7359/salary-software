@@ -20,7 +20,7 @@ function Salarylist({ formdata, setformdata }) {
   
 useEffect(() => {
 	if (formdata.length !== 0) {
-	  setData((prevData) => [formdata,...prevData]);
+	  setData((prevData) => [...prevData,formdata]);
 	  setformdata([]);
 	}
   }, [formdata]);
@@ -135,38 +135,58 @@ const closeEditModal = () => {
                       </tr>
                     </thead>
                     <tbody>
+                      <tr>
+                        <td></td>
+                      </tr>
+                    </tbody>
+                    <tbody>
                       {memoizedData.map((item, index) => (
                         <tr key={item._id}>
                           <td>{index + 1}</td>
                           <td>{item.name}</td>
                           <td>{item.purpose.name}</td>
                           <td>{item.type}</td>
-                          <td className="text-end">
-                            <div className="dropdown dropdown-action">
-                              <a href="#" className="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i className="fa fa-ellipsis-v"></i>
-                              </a>
-                              <div className="dropdown-menu dropdown-menu-end">
-                              <a
-                              onMouseEnter={() => {
-                                setSelectedItem(item);
-                                setShowEditModal(true);
-                              }}
-                               onClick={() => handleEditClick(item)} className="dropdown-item" data-bs-toggle="modal"
-                                data-bs-target="#delete_patients"
-                                >
-                                <i className="fa-solid fa-pen-to-square m-r-5"></i> Edit
-                              </a>
-                                <a className="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#delete_patient"   onMouseEnter={() => {
-                                setshowDeleteModal(true);
-                                setSelectedItem(item);
-                              }}
-                              onClick={() => handleDeleteClick(item)}>
-                                  <i className="fa fa-trash-alt m-r-5"></i> Delete
-                                </a>
-                              </div>
-                            </div>
-                          </td>
+                          {index < 3 ? (
+
+   <td></td> 
+) : (
+ // You can render something else or leave it empty for items beyond the first three
+ <td className="text-end">
+ <div className="dropdown dropdown-action">
+   <a href="#" className="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+     <i className="fa fa-ellipsis-v"></i>
+   </a>
+   <div className="dropdown-menu dropdown-menu-end">
+     <a
+       onMouseEnter={() => {
+         setSelectedItem(item);
+         setShowEditModal(true);
+       }}
+       onClick={() => handleEditClick(item)}
+       className="dropdown-item"
+       data-bs-toggle="modal"
+       data-bs-target="#delete_patients"
+     >
+       <i className="fa-solid fa-pen-to-square m-r-5"></i> Edit
+     </a>
+     <a
+       className="dropdown-item"
+       href="#"
+       data-bs-toggle="modal"
+       data-bs-target="#delete_patient"
+       onMouseEnter={() => {
+         setshowDeleteModal(true);
+         setSelectedItem(item);
+       }}
+       onClick={() => handleDeleteClick(item)}
+     >
+       <i className="fa fa-trash-alt m-r-5"></i> Delete
+     </a>
+   </div>
+ </div>
+</td>
+)}
+
                         </tr>
                       ))}
                     </tbody>

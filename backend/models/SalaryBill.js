@@ -23,15 +23,13 @@ const SalarybillSchema = new mongoose.Schema({
     },
     totaldeduction:{
         type:String,
-        require:true
     },
     totalincrement:{
         type:String,
-        require:true,
     },
     totalcontribution:{
-        type:String,
-        require:true,
+        type:Array,
+        
     },
     
     departmentid:{

@@ -381,7 +381,7 @@ const handleformsubmit = async(event)=>{
 			unitid : unit,
 			basicSalary:basicSalary,
 			totaldeduction:totaldeduction,
-			totalcontribution:totalcontribution,
+			totalcontribution:totalcontribution?totalcontribution:"",
 			totalincrement:totalincrement,
 			EPFWage,
 			EPFContri,
@@ -389,12 +389,12 @@ const handleformsubmit = async(event)=>{
 			EPSContri,
 			EPSEPFDiff,
 			EDLIWage,
-			tablerow: tablerow.map(row => {
+			tablerow: tablerow[0].salaryComponent !== '' ?tablerow.map(row => {
 				return {
 					...row,
 					salaryComponent: row.salaryComponent._id ? row.salaryComponent._id : row.salaryComponent // or provide a default value if _id doesn't exist
 				};
-			}),
+			}):[],
 			allowedleave:allowedleave,
 			absentDays : absentDays,
 			totalAmount: salaryTotal?.TotalSalary?salaryTotal.TotalSalary :salaryTotal

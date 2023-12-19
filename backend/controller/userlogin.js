@@ -8,7 +8,7 @@ const SalaryBill = require('../models/SalaryBill');
 
 module.exports={
      LoginUser : async(req,res)=>{
-        console.log('loginnnnnnnnnnnnnnnnnnn');
+        console.log('loginnnnnnnnnnnnnnnnnnn',req.body);
         try {
             const user = await Employee.findOne({ phone: req.body.phone })
             .populate("EmployeeTypeId")
@@ -364,27 +364,50 @@ module.exports={
         console.log(id);
      
       
-    const startDate =`01/${month}/${year}`
+    const startDate =`${year}-${month}-01`
 
 
-        const endDate = `30/${month}/${year}`
+        const endDate = `${year}-${month}-30`
     
         console.log(startDate, "Start Date");
         console.log(endDate, "End Date");
     
         // Query SalaryBill collection based on EmployeeId and date range
         const data = await SalaryBill.find({
-          employeeid: id,
+           employeeid:{
+            _id: id,
+           },
           date: {
             $gte: startDate,
             $lte: endDate,
           },
+     
+        }).populate({ path: 'tablerow.salaryComponent' }).populate('departmentid')
+        .populate({
+          path: "employeeid",
+          populate: [
+           
+            { path: "PostId" }
+          ],
         });
+        console.log(data);
+       
+        const Datas ={
+          name:data[0].employeeid.name,
+          designation:data[0].employeeid.PostId.designation,
+          earnings:data[0].totalincrement,
+          deductions:data[0].totaldeduction,
+          basicpay:data[0].basicSalary,
+          netpay:data[0].totalAmount,
+          tablerow:data[0].tablerow
+          
+        }
+        console.log(Datas);
     
         res.status(200).json({
           success: true,
           message: "Employee Pay Slip Fetched Successfully",
-          data:data
+          data:Datas
         }); 
       } catch (error) {
         console.log(error);

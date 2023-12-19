@@ -54,6 +54,17 @@ function EditEmployeeMaster({ closeEdit, item, setData, Data, show, setshow }) {
    const [tablerow, setTablerow] = useState(item?.tablerow);
    const [password, setPassword] = useState(item?.password);
 
+   const [totalAmount, setTotalAmount] = useState(0);
+   const [DAPercentage,setDAPercentage]=useState();
+   const [DAValue,setDAValue]=useState('');
+   const [DAPrice,setDAPrice]=useState(tablerow[0]?tablerow[0].price:"");
+   const [IRPercentage,setIRPercentage]=useState('');
+   const [IRValue,setIRValue]=useState('');
+   const [IRPrice,setIRPrice]=useState('');
+   const [EPFWage,setEPFWage]=useState('');
+   const [EPSWage,setEPSWage]=useState('');
+   const [EDLIWage,setEDLIWage]=useState(''); 
+
 
 
   const handlemployeetypeclick = async () => {
@@ -121,6 +132,9 @@ function EditEmployeeMaster({ closeEdit, item, setData, Data, show, setshow }) {
 
   const handlesalarymasterchange = (event, index) => {
     const updatedTableRows = [...tablerow];
+    console.log(updatedTableRows,"tablerow updated");
+    setDAPrice(updatedTableRows[0].price)
+    setIRPrice(updatedTableRows[1].price)
     updatedTableRows[index] = {
       ...updatedTableRows[index],
       salaryComponent: event.target.value,
@@ -147,17 +161,7 @@ function EditEmployeeMaster({ closeEdit, item, setData, Data, show, setshow }) {
     setTablerow((prevRows) => prevRows.filter((row) => row.id !== id));
   };
 
-    // // Function to handle changes in basic salary
-    // const handleBasicSalaryChange = (newBasicSalary) => {
-    //   setBasicSalary(newBasicSalary);
-    //   // Recalculate prices for all rows based on the new basicSalary
-    //   const updatedTablerow = tablerow.map((row) => {
-    //     const newPrice = (Number(newBasicSalary) * Number(row.percentage)) / 100;
-    //     return { ...row, price: newPrice };
-    //   });
-  
-    //   setTablerow(updatedTablerow);
-    // };
+   
 
 
     const handleBasicSalaryChange = (newBasicSalary) => {
@@ -232,6 +236,50 @@ try {
   }, [tablerow, basicSalary, salarymasterData]);
 
 
+
+  useEffect(() => {
+
+    if(employeeTypeId === "6566be7b0085f19cfbfd00c1" && basicSalary ){
+      const EPF = parseFloat(basicSalary) + parseFloat(DAPrice) + parseFloat(IRPrice)
+      setEPFWage(EPF)
+    }else{
+      setEPFWage('')
+    };
+  
+
+
+  const joiningDate = new Date(dateOfJoining);
+      const comparisonDate = new Date('2014-01-01');
+
+    if (employeeTypeId === "6566be7b0085f19cfbfd00c1" && (joiningDate >= comparisonDate)) {
+      setEPSWage(0);
+    } else if (employeeTypeId === "6566be7b0085f19cfbfd00c1" && (totalAmount >= 15000)) {
+      setEPSWage(15000);
+    } else if(employeeTypeId === "6566be7b0085f19cfbfd00c1" && (totalAmount < 15000)) {
+      setEPSWage(totalAmount);
+    }else{
+      setEPSWage('')
+    };
+  
+
+    if(employeeTypeId === "6566be7b0085f19cfbfd00c1" &&(totalAmount >= 15000)){
+      setEDLIWage(15000)
+    }else if(employeeTypeId === "6566be7b0085f19cfbfd00c1" &&(totalAmount < 15000)){
+      setEDLIWage(totalAmount)
+    }else{
+      setEDLIWage('')
+    }
+
+    console.log(EPFWage,":EPF WAGE");
+    console.log(EPSWage,":Eps WAGE");
+    console.log(dateOfJoining);
+    console.log(EDLIWage,":EDLI WAGE");
+
+    }, [totalAmount, dateOfJoining,EPSWage,EPFWage,EDLIWage]);
+    
+
+ 
+
   const handleSecondInputChange = (index, value) => {
     const updatedTableRows = [...tablerow];
     updatedTableRows[index].percentage = "";
@@ -239,6 +287,8 @@ try {
     const newPrice = value.trim() !== "" ? value : "";
     updatedTableRows[index].price = newPrice;
     setTablerow(updatedTableRows);
+    setIRPrice(updatedTableRows[1].price)
+    setDAPrice(updatedTableRows[0].price)
   };
 
   const   handleChange = (index, percentage) => {
@@ -255,6 +305,8 @@ try {
     updatedTableRows[index].price = newPrice || "";
 
     setTablerow(updatedTableRows);
+    setIRPrice(updatedTableRows[1].price)
+    setDAPrice(updatedTableRows[0].price)
   };
 
  
@@ -337,7 +389,8 @@ try {
       toast.error(err.message);
     }
   };
-
+console.log(DAPrice,"DAPRICEEE");
+console.log(IRPrice,"IRPRICE");
 
 
 
