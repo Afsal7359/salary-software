@@ -402,7 +402,7 @@ module.exports={
           tablerow:data[0].tablerow
           
         }
-        console.log(Datas);
+        console.log(Datas,"dataaaaas");
     
         res.status(200).json({
           success: true,

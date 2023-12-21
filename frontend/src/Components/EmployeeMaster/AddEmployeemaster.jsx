@@ -143,7 +143,7 @@ const AddEmployeemaster = () => {
  
 		 // IR row
 		 
-		 if (IRPercentage !== 0 && !IRValue) {
+		 if (IRPercentage !== 0 && !IRValue  ) {
 		   const price = (basicsalary * IRPercentage) / 100;
 		   setIRPrice(price);
 		 }
@@ -223,31 +223,16 @@ const AddEmployeemaster = () => {
 	  },[tableRows])
 	
 
-	// const handlesalarymasterclick =async()=>{
-	// 	try{
-	// 		if(!issalarymasterDataFetched){
-	// 			const response = await getallSalary();
-	// 			if(response.success){
-					
-	// 				setSalarymasterData(response.data);
-	// 			}else{
-	// 				setSalarymasterData([]);
-	// 			}
-	// 		}setIsSalarymasterDataFetched(true)
-	// 	}catch(error){
-	// 		toast.error(error.message)
-	// 	}
-	// }
 	const firstrow =[
 		{
-			id:rowid1,
+			id:1,
 			salaryComponent:"6581128dc32bc7fefb3b2e30",
 			percentage:DAPercentage?DAPercentage:"",
 			value:DAValue?DAValue:"",
 			price:DAPrice
 		},
 		{
-			id:rowid2,
+			id:2,
 			salaryComponent:"658112c9c32bc7fefb3b2e3b",
 			percentage:IRPercentage?IRPercentage:"",
 			value:IRValue?IRValue:"",
@@ -259,20 +244,22 @@ const AddEmployeemaster = () => {
 		const updatedTableRows = [...tableRows];
 		updatedTableRows[index] = {
 		  ...updatedTableRows[index],
-		  salaryComponent: event.target.value // Update salaryComponent based on the event value
-		  
+		  salaryComponent: event.target.value, // Update salaryComponent based on the event value
+		  id : Number(index + 2 + 1)
 		};
-		if (salarycomponent == false){
-			settableRows([])
-		}else{
-			const updatedTableRows = [...firstrow, ...tableRows];
-			settableRows(updatedTableRows);
-		}
+	
 	  console.log(updatedTableRows,"ii");
 		settableRows(updatedTableRows);
 	  }
-	
 
+	//   const handleRowIdChange = (index) => {
+	// 	console.log('hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhi');
+	// 	const updatedTableRowss = [...tableRows];
+	// 	updatedTableRowss[index].id = Number(index + 2 + 1); 
+	// 	console.log("updatedRoeee",updatedTableRowss);
+	// 	console.log(tableRows,":taableerow");
+		
+	//   };
 
 
 
@@ -281,6 +268,7 @@ const AddEmployeemaster = () => {
 		register,
 		handleSubmit,
 		formState: { errors },
+		reset,
 	  } = useForm({
 		criteriaMode: 'all',
 		
@@ -343,45 +331,45 @@ const AddEmployeemaster = () => {
 	 
 		
 
-		useEffect(() => {
+		// useEffect(() => {
 
-			if(employeeTypeId === "6566be7b0085f19cfbfd00c1" && basicsalary ){
-				const EPF = parseFloat(basicsalary) + parseFloat(DAPrice) + parseFloat(IRPrice)
-				setEPFWage(EPF)
-			}else{
-				setEPFWage('')
-			};
+		// 	if(employeeTypeId === "6566be7b0085f19cfbfd00c1" && basicsalary ){
+		// 		const EPF = parseFloat(basicsalary) + parseFloat(DAPrice) + parseFloat(IRPrice)
+		// 		setEPFWage(EPF)
+		// 	}else{
+		// 		setEPFWage('')
+		// 	};
 		
 
 
-		const joiningDate = new Date(dateOfJoining);
-        const comparisonDate = new Date('2014-01-01');
+		// const joiningDate = new Date(dateOfJoining);
+        // const comparisonDate = new Date('2014-01-01');
 
-			if (employeeTypeId === "6566be7b0085f19cfbfd00c1" && (joiningDate >= comparisonDate)) {
-			  setEPSWage(0);
-			} else if (employeeTypeId === "6566be7b0085f19cfbfd00c1" && (totalAmount >= 15000)) {
-			  setEPSWage(15000);
-			} else if(employeeTypeId === "6566be7b0085f19cfbfd00c1" && (totalAmount < 15000)) {
-			  setEPSWage(totalAmount);
-			}else{
-				setEPSWage('')
-			};
+		// 	if (employeeTypeId === "6566be7b0085f19cfbfd00c1" && (joiningDate >= comparisonDate)) {
+		// 	  setEPSWage(0);
+		// 	} else if (employeeTypeId === "6566be7b0085f19cfbfd00c1" && (totalAmount >= 15000)) {
+		// 	  setEPSWage(15000);
+		// 	} else if(employeeTypeId === "6566be7b0085f19cfbfd00c1" && (totalAmount < 15000)) {
+		// 	  setEPSWage(totalAmount);
+		// 	}else{
+		// 		setEPSWage('')
+		// 	};
 		
 
-			if(employeeTypeId === "6566be7b0085f19cfbfd00c1" &&(totalAmount >= 15000)){
-				setEDLIWage(15000)
-			}else if(employeeTypeId === "6566be7b0085f19cfbfd00c1" &&(totalAmount < 15000)){
-				setEDLIWage(totalAmount)
-			}else{
-				setEDLIWage('')
-			}
+		// 	if(employeeTypeId === "6566be7b0085f19cfbfd00c1" &&(totalAmount >= 15000)){
+		// 		setEDLIWage(15000)
+		// 	}else if(employeeTypeId === "6566be7b0085f19cfbfd00c1" &&(totalAmount < 15000)){
+		// 		setEDLIWage(totalAmount)
+		// 	}else{
+		// 		setEDLIWage('')
+		// 	}
 
-			console.log(EPFWage,":EPF WAGE");
-			console.log(EPSWage,":Eps WAGE");
-			console.log(dateOfJoining);
-			console.log(EDLIWage,":EDLI WAGE");
+		// 	console.log(EPFWage,":EPF WAGE");
+		// 	console.log(EPSWage,":Eps WAGE");
+		// 	console.log(dateOfJoining);
+		// 	console.log(EDLIWage,":EDLI WAGE");
 
-		  }, [totalAmount, dateOfJoining,EPSWage,EPFWage,EDLIWage]);
+		//   }, [totalAmount, dateOfJoining,EPSWage,EPFWage,EDLIWage]);
 		  
 	
 	 
@@ -478,39 +466,35 @@ const [tablestate,settablestate]=useState(false)
 	  }
 	  console.log(resetstate);
 
+	  const[updatedRow,setUpdatedRow]=useState('');
 
-	 	 const updatedFirstRow = [...firstrow];
-     	 const insertionIndex = 2; 
-		 console.log(updatedFirstRow,":::::::::::::::fffff");
-		
-		 if (tableRows[0]?tableRows[0].salaryComponent:" "===''){
-			console.log('hai');
-		 }else{
-			updatedFirstRow.splice(insertionIndex, 0, ...tableRows);
-		 };
+	  useEffect(()=>{
+		let updatedFirstRow = [...firstrow];
+		console.log(updatedFirstRow,"updatedroww");
+		console.log(tableRows);
 
-		 if ( updatedFirstRow[2]?updatedFirstRow[2].price:"" < 0) {
-			 updatedFirstRow.pop();
-		  }else{
-			updatedFirstRow , console.log(updatedFirstRow,"ddddddddd");
-		  }
-		  
-		  console.log(updatedFirstRow[2]);
-		console.log(updatedFirstRow,"rrrrrrrrrrrrrrrr");
+		if (tableRows && tableRows.length > 0 && tableRows[0].price === '') {
+		  updatedFirstRow = [...updatedFirstRow];
+		  setUpdatedRow(updatedFirstRow)
+		}else if( tableRows && tableRows.length > 0 && tableRows[0].price > 0){
+		  updatedFirstRow=[...updatedFirstRow, ...tableRows]
+		  setUpdatedRow(updatedFirstRow)
+		}
+		console.log(updatedFirstRow,":::::::::::::::fffff");
+
+	  },[tableRows]) 
 	
 
 	  const onSubmit = async (data) => {
 	
-		
+
 		console.log(tableRows);
 		data.employeeid=`ME${count.toString().padStart(3, '0')}`
 	     data.EmployeeTypeId=employeeTypeId
 		 data.PostId=postId
 		 data.previousAllowedleave=allowedLeave
-		 data.tablerow=employeeTypeId==="6566be7b0085f19cfbfd00c1"? updatedFirstRow:[]
-		 data.EPFWage=EPFWage
-		 data.EPSWage=EPSWage
-		 data.EDLIWage=EDLIWage
+		 data.tablerow=employeeTypeId==="6566be7b0085f19cfbfd00c1"? updatedRow:[]
+		
 // 		data.tablerow = (tableRows && Array.isArray(tableRows) && tableRows.length === 1 &&
 //   tableRows[0].value === '0' &&
 //   tableRows[0].percentage === 0 &&
@@ -519,6 +503,7 @@ const [tablestate,settablestate]=useState(false)
 //   : (tableRows || []);
 		
 		 data.TotalSalary=totalAmount?totalAmount:basicsalary
+		 console.log(data,":dataaaa");
 		try {
 			console.log('Afsal :' , data);
 		  const response = await Addemployee(data);
@@ -530,6 +515,7 @@ const [tablestate,settablestate]=useState(false)
 			resetstate();
 			setstate(false)
 			setemployeelist(true)
+			reset();
 		  } else {
 			toast.error(response.message);
 			
@@ -538,7 +524,7 @@ const [tablestate,settablestate]=useState(false)
 		  toast.error(err.message);
 		}
 	  };
-	  
+	  console.log(rowid,"::rowiddd:");
 
 
   
@@ -1140,7 +1126,7 @@ const [tablestate,settablestate]=useState(false)
 															<th></th>
 															</tr>
 														</thead>
-														<tbody>
+														<tbody> 
 													
 															<tr key={1454}>
 																<td>
@@ -1270,8 +1256,13 @@ const [tablestate,settablestate]=useState(false)
 															{tableRows.map((row, index) => (
 															<tr key={row.id+1}>
 																<td>
-																<input type="text" className="form-control" value={index+2 + 1} readOnly 
-																onChange={(e) => setRowId(e.target.value)}/>
+																<input
+																type="text"
+																className="form-control"
+																value={row.id || index + 2 + 1} // If row.id exists, use it; otherwise, use index + 2 + 1
+																readOnly
+																// onChange={(e) => setRowId(index, e.target.value)}
+																/>
 																</td>
 																<td>
 																<select className="form-control"
@@ -1317,6 +1308,7 @@ const [tablestate,settablestate]=useState(false)
 																<td>
 																<input type="text" className="form-control" 
 																 value={row.price?row .price:''}
+															
 																 readOnly/>
 																</td>
 																<td className="add-remove text-end">

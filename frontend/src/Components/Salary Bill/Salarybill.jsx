@@ -19,12 +19,12 @@ function Salarybill() {
 	const [EmployeeId, setEmployeeId] = useState('');
 	const [isEmployeeDataFetched, setIsEmployeeDataFetched] = useState(false);
 	const [absentvalue,setAbsentValue]=useState('')
-	const [allowedleave,setAllowedLeave]=useState('')
+	const [allowedleave,setAllowedLeave]=useState(0)
 	const [tablerow, setTablerow] = useState([]);
 	const [basicSalary,setBasicSalary]=useState('')
 	const [filterEmployeeData,setFilterEmployeeData]=useState([]);
 	const [TotalSalary, setTotalSalary] = useState('');
-	const [Totalamount, setTotalAmount] = useState('');
+	const [totalAmount, setTotalAmount] = useState('');
 	const [totalrowprice,setTotalRowPrice]=useState([]);
 	const [employeeid,setEmployeeid]=useState('');
 	const [formdata,setformData]=useState([]);
@@ -41,14 +41,25 @@ function Salarybill() {
 	const [salaryList,setSalaryList]=useState(true)
 
 
+	const [DAPercentage,setDAPercentage]=useState('');
+	const [DAValue,setDAValue]=useState('');
+	const [DAPrice,setDAPrice]=useState('');
+	const [IRPercentage,setIRPercentage]=useState('');
+	const [IRValue,setIRValue]=useState('');
+	const [IRPrice,setIRPrice]=useState('');
+	const [dateOfJoining,setDateOfJoining]=useState(''); 
+	const [employeeTypeId,setEmployeeTypeId]=useState('');
+	const [tabledisplay,setTableDisplay]=useState(false);
+
 	const {
 		
 		register,
 		handleSubmit,
 		formState: { errors },
+		reset,
 	  } = useForm({
 		criteriaMode: 'all',
-		
+	
 	  });
 
 
@@ -91,7 +102,7 @@ function Salarybill() {
    const [selectedOption, setSelectedOption] = useState(null);
    const [options, setOptions] = useState(EmployeeData.map((data) => ({ value: data.name, label: data.name })));
   
-	const handleInputChange = (newValue) => {
+	const  handleInputChange = (newValue) => {
 	  // Implement your search/filter logic here
 	  // For example, filter options based on user input
 	  console.log("newwwvaluees",newValue);
@@ -112,31 +123,73 @@ console.log("employeeid",EmployeeId);
 	// console.log('opyions',selectedOption.value);
 	const select = selected.value
 	console.log(select,"fffffffffffffffffffffdddddddddddddddddddd");
+
+	
     if (select) {
 		
         const filteredEmployees = EmployeeData.filter(data => data.name === select);
-		setAllowedLeave(filteredEmployees[0]?filteredEmployees[0].allowedleave :"")
-		const tablerowData = filteredEmployees[0]?.tablerow;
-
-			if (Array.isArray(tablerowData)) {
-			setTablerow(tablerowData);
-			} else {
-			setTablerow([]);
-			}
+       console.log(filteredEmployees,":FilterEmployeeees");
+	
+		setEmployeeTypeId(filteredEmployees[0]?filteredEmployees[0].EmployeeTypeId._id:"");
 		setEmployeeid(filteredEmployees[0]?filteredEmployees[0]._id :"")
 		setDepartment(filteredEmployees[0]?filteredEmployees[0].PostId.department._id : '')
 		setUnit(filteredEmployees[0]?filteredEmployees[0].PostId.unit._id : ""	)
 		setBasicSalary(filteredEmployees[0]?filteredEmployees[0].basicSalary :"")
 		setTotalSalary(filteredEmployees[0]?filteredEmployees[0].TotalSalary:"")
-		setEPSWage(filteredEmployees[0]?filteredEmployees[0].EPSWage:"")
-		setEPFWage(filteredEmployees[0]?filteredEmployees[0].EPFWage:"")
-		setEDLIWage(filteredEmployees[0]?filteredEmployees[0].EDLIWage:"")
-
+// Check if tablerow exists and has elements before accessing properties
+if (
+	filteredEmployees[0].tablerow &&
+	filteredEmployees[0].tablerow.length > 0 &&
+	filteredEmployees[0].tablerow[0]
+  ) {
+	setDAPrice(
+	  filteredEmployees[0].tablerow[0].price
+		? filteredEmployees[0].tablerow[0].price
+		: ""
+	);
+	setDAValue(
+	  filteredEmployees[0].tablerow[0].value
+		? filteredEmployees[0].tablerow[0].value
+		: ""
+	);
+	setDAPercentage(
+	  filteredEmployees[0].tablerow[0].percentage
+		? filteredEmployees[0].tablerow[0].percentage
+		: ""
+	);
+  }
+  
+  if (
+	filteredEmployees[0].tablerow &&
+	filteredEmployees[0].tablerow.length > 1 &&
+	filteredEmployees[0].tablerow[1]
+  ) {
+	setIRPrice(
+	  filteredEmployees[0].tablerow[1].price
+		? filteredEmployees[0].tablerow[1].price
+		: ""
+	);
+	setIRValue(
+	  filteredEmployees[0].tablerow[1].value
+		? filteredEmployees[0].tablerow[1].value
+		: ""
+	);
+	setIRPercentage(
+	  filteredEmployees[0].tablerow[1].percentage
+		? filteredEmployees[0].tablerow[1].percentage
+		: ""
+	);
+  }
+  
+		setDateOfJoining(filteredEmployees[0].dateOfJoining?filteredEmployees[0].dateOfJoining:"");
         setFilterEmployeeData(filteredEmployees);
-
+		const tablerowData = filteredEmployees[0]?.tablerow;
+		if (Array.isArray(tablerowData)) {
+		setTablerow(tablerowData.slice(2));
+		} else {
+		setTablerow([]);
+		}
 		  console.log('tablerow',tablerow);
-    } else {
-        setFilterEmployeeData([]);
     }
 };	const [itemdata,setitemdata]=useState(filterEmployeeData[0])
 
@@ -176,6 +229,8 @@ const headerdata = useMemo(() => {
   const [salarymasterData, setSalarymasterData] = useState([]);
   const [salarymasterId, setSalarymasterId] = useState("");
 
+  const data = tablerow.slice(2)
+  console.log(data,"::data::");
   
  
   const handlesalarymasterclick = async () => {
@@ -225,7 +280,7 @@ console.log('totalrssow',totalrowprice);
 	const [totalcontribution,setTotalContributions]=useState(0)
 	useEffect(() => {
 		try {
-		  let totalAmount = basicSalary;
+		  let 	totalAmount = basicSalary;
 		  let totalDeduction = 0;
 		  let totalIncrement = 0;
 		  let totalcontribution =0;
@@ -308,6 +363,106 @@ console.log('totalrssow',totalrowprice);
     setTablerow(updatedTableRows);
   };
 
+
+
+
+  const handleDAPercentage = (event)=>{
+	 const value= event.target.value;
+	 setDAPercentage(value)
+	 setDAValue('')
+   }
+   const handleDAValue = (event)=>{
+	 const value= event.target.value;
+	 setDAValue(value)
+	 setDAPercentage('')
+   }
+   const handleIRPercentage = (event)=>{
+	 const value= event.target.value;
+	 setIRPercentage(value)
+	 setIRValue('')
+   }
+   const handleIRValue = (event)=>{
+	 const value= event.target.value;
+	 setIRValue(value)
+	 setIRPercentage('')
+   }
+useEffect(() => {
+
+			if(employeeTypeId === "6566be7b0085f19cfbfd00c1"){
+				setTableDisplay(true)
+			}else{
+				setTableDisplay(false)
+			}
+
+			if(employeeTypeId === "6566be7b0085f19cfbfd00c1" && basicSalary ){
+				const EPF = parseFloat(basicSalary) + parseFloat(DAPrice) + parseFloat(IRPrice)
+				setEPFWage(EPF)
+			}else{
+				setEPFWage('')
+			};
+	
+
+
+		const joiningDate = new Date(dateOfJoining);
+        const comparisonDate = new Date('2014-01-01');
+
+			if (employeeTypeId === "6566be7b0085f19cfbfd00c1" && (joiningDate >= comparisonDate)) {
+			  setEPSWage(0);
+			} else if (employeeTypeId === "6566be7b0085f19cfbfd00c1" && (totalAmount >= 15000)) {
+			  setEPSWage(15000);
+			} else if(employeeTypeId === "6566be7b0085f19cfbfd00c1" && (totalAmount < 15000)) {
+			  setEPSWage(totalAmount);
+			}else{
+				setEPSWage('')
+			};
+		
+
+			if(employeeTypeId === "6566be7b0085f19cfbfd00c1" &&(totalAmount >= 15000)){
+				setEDLIWage(15000)
+			}else if(employeeTypeId === "6566be7b0085f19cfbfd00c1" &&(totalAmount < 15000)){
+				setEDLIWage(totalAmount)
+			}else{
+				setEDLIWage('')
+			}
+
+			console.log(EPFWage,":EPF WAGE");
+			console.log(EPSWage,":Eps WAGE");
+			console.log(dateOfJoining);
+			console.log(EDLIWage,":EDLI WAGE");
+			console.log(EDLIWage,"EdliWage");
+
+		  }, [totalAmount, dateOfJoining,EPSWage,EPFWage,EDLIWage,filterEmployeeData,employeeTypeId]);
+		  
+  useEffect(() => {
+
+	 // DA row
+	 
+	 if (DAPercentage !== 0 && !DAValue) {
+	   const price = (basicSalary * DAPercentage) / 100;
+	   setDAPrice(price);
+	 }
+   
+	 else if (DAValue !== 0 && !DAPercentage) {
+	   const prices = DAValue;
+	   console.log("Priceeeeeeeeeee",prices);
+	   setDAPrice(prices);
+	 }
+
+	 // IR row
+	 
+	 if (IRPercentage !== 0 && !IRValue) {
+	   const price = (basicSalary * IRPercentage) / 100;
+	   setIRPrice(price);
+	 }
+   
+	 else if (IRValue !== 0 && !IRPercentage) {
+	   const prices = IRValue;
+	   console.log("Priceeeeeeeeeee",prices);
+	   setIRPrice(prices);
+	 }
+   }, [DAPercentage, DAValue, basicSalary,IRPercentage,IRValue]);
+  
+
 useEffect(()=>{
 try{
 	if(EPSWage === 15000){
@@ -340,8 +495,10 @@ try{
 	  const EPFS =( EPFs + foundData.price)
 	  setEPFContri(EPFS)
 	}
+    
+	const EPFSS = (EPFWage * 12) / 100;
 
-	if(EPFs && EPFContri){
+	if(EPFSS && EPFContri){
 		const EPFEPSDIFF = EPFs -EPSContri
 		setEPSEPFDiff(EPFEPSDIFF)
 	}
@@ -353,26 +510,62 @@ try{
 	console.log(error);
 }
 
-	console.log(EPSContri,";;;;;;;;;;;;;;");
-	console.log(EPFContri,".................................................");
+	console.log(EPSContri,";;;;;;;EPSContri;;;;;;;");
+	console.log(EPFContri,"....................EPFContri.............................");
 	console.log(EPSEPFDiff,":EPSEPFDiff:");
 },[employeeid,options ])
 
 
+const firstrow =[
+	{
+		id:1,
+		salaryComponent:"6581128dc32bc7fefb3b2e30",
+		percentage:DAPercentage?DAPercentage:"",
+		value:DAValue?DAValue:"",
+		price:DAPrice
+	},
+	{
+		id:2,
+		salaryComponent:"658112c9c32bc7fefb3b2e3b",
+		percentage:IRPercentage?IRPercentage:"",
+		value:IRValue?IRValue:"",
+		price:IRPrice
+	}
+  ]
+  const[updatedRow,setUpdatedRow]=useState('');
 
+  useEffect(()=>{
+	let updatedFirstRow = [...firstrow];
+	console.log(updatedFirstRow,"updatedroww");
+	console.log(tablerow);
+
+	if (tablerow && tablerow.length > 0 && tablerow[0].price === '') {
+	  updatedFirstRow = [...updatedFirstRow];
+	  setUpdatedRow(updatedFirstRow)
+	}else if( tablerow && tablerow.length > 0 && tablerow[0].price > 0){
+	  updatedFirstRow=[...updatedFirstRow, ...tablerow]
+	  setUpdatedRow(updatedFirstRow)
+	}
+	console.log(updatedFirstRow,":::::::::::::::fffff");
+
+  },[tablerow]) 
+
+console.log(tablerow,"::tableroqw");
 
 const handleformsubmit = async(event)=>{
 	// event.preventDefault();
+	console.log(tablerow,":tablerow:");
+	reset
 		try {
-			const LeaveBalance = {
-				_id: filterEmployeeData[0]._id,
-				allowedleave: Number(leaveDifference)
-			};
-			console.log('formdaaats:', LeaveBalance);
-			const responses = await editemployeemaster(LeaveBalance);
-			if (responses.success){
-				console.log("sucessfully updated");
-			}
+			// const LeaveBalance = {
+			// 	_id: filterEmployeeData[0]._id,
+			// 	allowedleave: Number(leaveDifference)
+			// };
+			// console.log('formdaaats:', LeaveBalance);
+			// const responses = await editemployeemaster(LeaveBalance);
+			// if (responses.success){
+			// 	console.log("sucessfully updated");
+			// }
 			const formdata = {
 			SalaryBillNo:`ME${count.toString().padStart(3, '0')}`, 
 			date:date,	
@@ -384,12 +577,12 @@ const handleformsubmit = async(event)=>{
 			totalcontribution:totalcontribution?totalcontribution:"",
 			totalincrement:totalincrement,
 			EPFWage,
-			EPFContri,
 			EPSWage,
+			EDLIWage,
+			EPFContri,
 			EPSContri,
 			EPSEPFDiff,
-			EDLIWage,
-			tablerow: tablerow[0].salaryComponent !== '' ?tablerow.map(row => {
+			tablerow: tablerow[0]&&tablerow[1] ?updatedRow.map(row => {
 				return {
 					...row,
 					salaryComponent: row.salaryComponent._id ? row.salaryComponent._id : row.salaryComponent // or provide a default value if _id doesn't exist
@@ -402,7 +595,6 @@ const handleformsubmit = async(event)=>{
 			console.log(formdata,"foooooooooooooooorm datasssssssssssssssssssssss");
 			setcount((prevCount) => prevCount + 1);
 			setFilterEmployeeData([])
-			setDate('')
 			setTablerow([])
 			setSalaryTotal([])
 			setAbsentDays(0)
@@ -410,6 +602,13 @@ const handleformsubmit = async(event)=>{
 			setEmployeeId([])
 			setBasicSalary([])
 			setSalaryTotal([])
+			setUpdatedRow([])
+			setDAPercentage('')
+			setDAPrice('');
+			setIRPercentage('');
+			setIRPrice('');
+			setDAValue('');
+			setIRValue('');
 			setTotalContributions([])
 			const response = await AddSalaryBill(formdata);
 
@@ -418,6 +617,7 @@ const handleformsubmit = async(event)=>{
 			toast.success(response.message);
 			setSalarybill(false);
 			setSalaryList(true)
+			reset
 			}
 			else {
 				toast.error(response.message);
@@ -566,11 +766,12 @@ return (
 
 				
 								<div className="row">
+									
 											<div className="col-md-12">
 											<div className="card invoices-add-card">
 												<div className="card-body">
 													<div className="invoice-add-table">
-													
+													{tabledisplay &&
 													<div className="table-responsive">
 														<table className="table table-striped table-nowrap  mb-0 no-footer add-table-items">
 														<thead>
@@ -584,10 +785,136 @@ return (
 															</tr>
 														</thead>
 														<tbody>
+													
+															<tr key={1454}>
+																<td>
+																<input type="text" className="form-control" value={ 1} readOnly 
+																onChange={(e) => setRowId1(e.target.value)}/>
+																</td>
+																<td>
+																<select className="form-control"
+																// onKeyDown={handlesalarymasterclick}
+																// onMouseEnter={handlesalarymasterclick}
+																onChange={(event) => handlesalarymasterchange(event, index)}
+																>
+																
+																	
+																		<option value={salarymasterData[0]._id} key={salarymasterData[0]._id}>
+																			{salarymasterData[0].name}
+																		</option>
+																	
+																	
+																</select>
+																</td>
+																
+																<td>
+																<input
+																		
+																		type="number"
+																		className={`form-control ${errors.percentage ? 'is-invalid' : ''}`}
+																		placeholder="%"
+																		// onChange={handleChange}
+																		value={DAPercentage}
+																		// value={row.percentage ? row.percentage : ''}
+                                                                        onChange={(e)=>handleDAPercentage(e)}
+																		/>
+																	{console.log("per",DAPercentage)}
+																		{errors.percentage && errors.percentage.type === 'pattern' && (
+																		<span className="text-danger">Please enter a valid percentage</span>
+																		)}
+															</td>
+																<td>
+																<input
+																	type="text"
+																	className="form-control"
+																	value={DAValue ? DAValue : ''}
+																	onChange={(e) => handleDAValue( e)}
+																	
+																/>
+																</td>
+																<td>
+																<input type="text" className="form-control" 
+																 value={DAPrice?DAPrice:''}
+																 readOnly/>
+																</td>
+																<td className="add-remove text-end">
+																
+																
+																
+																</td>
+															</tr>
+														
+
+														
+														</tbody>
+														<tbody>
+															
+															<tr key={235435}>
+																<td>
+																<input type="text" className="form-control" value={ 2 } readOnly 
+																onChange={(e) => setRowId2(e.target.value)}/>
+																</td>
+																<td>
+																<select className="form-control"
+																// onKeyDown={handlesalarymasterclick}
+																// onMouseEnter={handlesalarymasterclick}
+																onChange={(event) => handlesalarymasterchange(event, index)}
+																>
+																
+																	
+																		<option value={salarymasterData[1]._id} key={salarymasterData[0]._id}>
+																			{salarymasterData[1].name}
+																		</option>
+																	
+																	
+																</select>
+																</td>
+																
+																<td>
+																<input
+																		
+																		type="number"
+																		className={`form-control ${errors.percentage ? 'is-invalid' : ''}`}
+																		placeholder="%"
+																		// onChange={handleChange}
+																		value={IRPercentage}
+																		// value={row.percentage ? row.percentage : ''}
+                                                                        onChange={(e) => handleIRPercentage(e)}
+																		/>
+																	
+																		{errors.percentage && errors.percentage.type === 'pattern' && (
+																		<span className="text-danger">Please enter a valid percentage</span>
+																		)}
+															</td>
+																<td>
+																<input
+																	type="text"
+																	className="form-control"
+																	value={IRValue}
+																	onChange={(e) => handleIRValue(e)}
+																	
+																/>
+																</td>
+																<td>
+																<input type="text" className="form-control" 
+																 value={IRPrice?IRPrice:''}
+																 readOnly/>
+																</td>
+																<td className="add-remove text-end">
+																
+																
+																
+																</td>
+															</tr>
+													
+
+														
+														</tbody>
+														<tbody>
 															
 													{tablerow.map((row,index)=>(
 														<tr key={row.id}>
-														<td><input type="text" className="form-control"  value={index+1}  readOnly/></td>
+														<td><input type="text" className="form-control"  value={index+2+1}  readOnly/></td>
 														<td>
 														<select
 															className="form-control "
@@ -660,9 +987,9 @@ return (
 															])}	
 														</tbody>
 														<tfoot>
-															<tr>
-																<td colSpan="4" className='text-end'>Allowed Leaves</td>
-																<td><input
+															{/* <tr>
+																 <td colSpan="4" className='text-end'>Allowed Leaves</td>
+																 <td><input
 																className="form-control"
 																type="number"
 																value={allowedleave ? allowedleave : ''}
@@ -670,9 +997,9 @@ return (
 																readOnly
 																/>
 																</td>
-															</tr>
+															</tr> */}
 															<tr>
-																<td colSpan="4" className='text-end'>Absent</td>
+																<td colSpan="4" className='text-end mt-4'>Absent</td>
 																<input
 																className="form-control"
 																type="number"
@@ -696,7 +1023,7 @@ return (
 														</tfoot>
 														</table>
 														
-													</div>
+													</div>}
 													<div className="col-12">
 											<div className="doctor-submit text-end m-3">
 												<button type="submit" className="btn btn-primary submit-form me-2">Submit</button>
@@ -706,7 +1033,7 @@ return (
 													</div>
 												</div>
 											</div>
-											</div>
+											</div> 
 										</div>
 										
 										</form></div>	}
