@@ -3,35 +3,42 @@ const SalaryBill = require("../models/SalaryBill");
 
 module.exports={
 
-    AddSalaryBill:async(req,res)=>{
-        try {
-            const data = req.body;
-            console.log('dataa:',data);
-            const newPost = new SalaryBill(data);
-            await newPost.save();
-             // Populate the fields and return the populated post
-            const Salarybill = await SalaryBill.populate(newPost, [
-                { path: 'employeeid' },
-                { path: 'departmentid' },
-                { path: 'unitid' },
-                { path: 'salaryComponent'},
-              ]);
-            console.log('salar bill',Salarybill);
-                    res.status(200).json({
-                        success: true,
-                        message: "Salary Billed Added successfully.",
-                        data: Salarybill,
-                    });
-                    console.log('Added Sucessfully');
-                } catch (err) {
-                  console.log(err);
-                    res.status(500).json({
-                        success: false,
-                        message: "Failed to add Salary Master.",
-                        error: err.message,
-                    });
-                }
-            },
+  AddSalaryBill: async (req, res) => {
+    try {
+        const data = req.body;
+        console.log('data:', data);
+        const newPost = new SalaryBill(data);
+        await newPost.save();
+
+        // Populate the fields and return the populated post
+        const populatedSalaryBill = await SalaryBill.findById(newPost._id)
+            .populate('departmentid')
+            .populate('unitid')
+            .populate('tablerow.salaryComponent')
+            .populate({
+                path: 'employeeid',
+                populate: { path: 'EmployeeTypeId' }
+            });
+
+        console.log('populatedSalaryBill:', populatedSalaryBill);
+
+        res.status(200).json({
+            success: true,
+            message: "Salary Billed Added successfully.",
+            data: populatedSalaryBill,
+        });
+
+        console.log('Added Successfully');
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({
+            success: false,
+            message: "Failed to add Salary Master.",
+            error: err.message,
+        });
+    }
+},
+
          GetSalaryBill:async(req,res)=>{
                 try{
                     const response = await SalaryBill.find({ isdeleted: { $ne: true } }).sort({ _id: -1 })
@@ -39,7 +46,8 @@ module.exports={
                       path: "employeeid",
                       populate: [
                        
-                        { path: "PostId" }
+                        { path: "PostId" },
+                        { path: "EmployeeTypeId" }
                       ],
                     })
                     .populate('departmentid')

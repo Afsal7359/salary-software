@@ -17,7 +17,6 @@ function SalaryBillEdit({  item, setData, Data, }) {
  
 	const [Editsalary,setEditSalary]=useState(true)
    
-	const [salaryList,setSalaryList]=useState(false)
 	const [unit,setUnit]=useState('');
   const [unitid,setUnitid]=useState(item.unitid._id);
   const [units,setUnits]=useState(item.unitid.name);
@@ -25,7 +24,7 @@ function SalaryBillEdit({  item, setData, Data, }) {
 	const [departmentid,setDepartmentid]=useState(item.departmentid.name);
   const [departments,setDepartments]=useState(item.departmentid._id);
 	const [EmployeeData, setEmployeeData] = useState([]);
-	const [EmployeeId, setEmployeeId] = useState(item.employeeid.name);
+	const [Employeename, setEmployeeName] = useState(item.employeeid.name);
 	const [isEmployeeDataFetched, setIsEmployeeDataFetched] = useState(false);
 	const [absentvalue,setAbsentValue]=useState('')
 	const [allowedleave,setAllowedLeave]=useState(item.allowedleave)
@@ -34,7 +33,7 @@ function SalaryBillEdit({  item, setData, Data, }) {
 	const [filterEmployeeData,setFilterEmployeeData]=useState([]);
   const [SalaryBillNo,setSalaryBillNo]=useState(item.SalaryBillNo)
 	const [TotalSalary, setTotalSalary] = useState('');
-	const [Totalamount, setTotalAmount] = useState('');
+	const [totalAmount, setTotalAmount] = useState(item.totalAmount);
 	const [totalrowprice,setTotalRowPrice]=useState([]);
 	const [employeeid,setEmployeeid]=useState('');
   const [employeeId,setemployeeId]=useState(item.employeeid._id);
@@ -52,27 +51,52 @@ function SalaryBillEdit({  item, setData, Data, }) {
 
 
   
-	const [DAPercentage,setDAPercentage]=useState('');
-	const [DAValue,setDAValue]=useState('');
-	const [DAPrice,setDAPrice]=useState('');
-	const [IRPercentage,setIRPercentage]=useState('');
-	const [IRValue,setIRValue]=useState('');
-	const [IRPrice,setIRPrice]=useState('');
-	const [dateOfJoining,setDateOfJoining]=useState(item.employeeid.dateOfJoining); 
-	const [employeeTypeId,setEmployeeTypeId]=useState(item.employeeid.EmployeeTypeId._id);
-	const [tabledisplay,setTableDisplay]=useState(false);
+	  
+  const [DAPercentage,setDAPercentage]=useState(item.tablerow[0]?item.tablerow[0].percentage:"");
+  const [DAValue,setDAValue]=useState(item.tablerow[0]?item.tablerow[0].value:"");
+  const [DAPrice,setDAPrice]=useState(item.tablerow[0]?item.tablerow[0].price:"");
+  const [IRPercentage,setIRPercentage]=useState(item.tablerow[1]?item.tablerow[1].percentage:"");
+  const [IRValue,setIRValue]=useState(item.tablerow[1]?item.tablerow[1].value:"");
+  const [IRPrice,setIRPrice]=useState(item.tablerow[1]?item.tablerow[1].price:"");
+  const [dateOfJoining,setDateOfJoining]=useState(item.employeeid.dateOfJoining); 
+  const [employeeTypeIds,setEmployeeTypeIds]=useState(item.employeeid.EmployeeTypeId._id);
+  const [employeeTypeId,setEmployeeTypeId]=useState(item.employeeid.EmployeeTypeId._id);
+  const [tabledisplay,setTableDisplay]=useState(false);
 
-	const [EPFWage,setEPFWage]=useState('');
-	const [EPSWage,setEPSWage]=useState('');
-	const [EPSContri,setEPSContri]=useState('');
-	const[EPFContri,setEPFContri]=useState('');
-	const[EPSEPFDiff,setEPSEPFDiff]=useState('');
-	const [EDLIWage, setEDLIWage]=useState('');
+	const [salaryList,setSalaryList]=useState(false)
+
+	const [EPFWage,setEPFWage]=useState("");
+	const [EPSWage,setEPSWage]=useState("");
+	const [EPSContri,setEPSContri]=useState("");
+	const[EPFContri,setEPFContri]=useState("");
+	const[EPSEPFDiff,setEPSEPFDiff]=useState("");
+	const [EDLIWage, setEDLIWage]=useState("");
+
+	const handlesalarymasterclick = async () => {
+		try {
+		  
+			const response = await getallSalary();
+			if (response.success) {
+				console.log(response.data,"iiiiiiiiiiiiiiiiiiiii");
+			  setSalarymasterData(response.data);
+			} else {
+			  setSalarymasterData([]);
+			}
+		  
+		  console.log("hhhhhhhhhhhhhhhhhhhhhhh");
+		  setIsSalarymasterDataFetched(true);
+		} catch (error) {
+		  toast.error(error.message);
+		}
+	  };
+	  useEffect(()=>{
+		handlesalarymasterclick()
+	  },[])
 
 useEffect(()=>{
-	if(employeeTypeId === "6566be7b0085f19cfbfd00c1"){
+	if(employeeTypeIds||employeeTypeId === "6566be7b0085f19cfbfd00c1"){
 		setTableDisplay(true)
-	}else{
+	}else if(employeeTypeIds||employeeTypeId !== "6566be7b0085f19cfbfd00c1" || ""){
 		setTableDisplay(false)
 	}
 },[employeeTypeId])
@@ -134,30 +158,28 @@ console.log('frfrrrrffrfrffrffrffr',filterEmployeeData);
     setTablerow((prevRows) => prevRows.filter((row) => row.id !== id));
   };
 
-  const handlesalarymasterclick = async () => {
-    try {
-      if (!issalarymasterDataFetched) {
-        const response = await getallSalary();
-        if (response.success) {
-          setSalarymasterData(response.data);
-        } else {
-          setSalarymasterData([]);
-        }
-      }
-      setIsSalarymasterDataFetched(true);
-    } catch (error) {
-      toast.error(error.message);
-    }
-  };
-  useEffect(()=>{
-	handlesalarymasterclick()
-  },[])
+  
 
-
+  const firstrow =[
+	{
+		id:1,
+		salaryComponent:"6581128dc32bc7fefb3b2e30",
+		percentage:DAPercentage?DAPercentage:"",
+		value:DAValue?DAValue:"",
+		price:DAPrice
+	},
+	{
+		id:2,
+		salaryComponent:"658112c9c32bc7fefb3b2e3b",
+		percentage:IRPercentage?IRPercentage:"",
+		value:IRValue?IRValue:"",
+		price:IRPrice
+	}
+  ]
 
   
      
- 
+  const [selectedOption, setSelectedOption] = useState([]);
  	const [totalincrement,setTotalIncrement]=useState(0);
 	const [totaldeduction,setTotalDeduction]=useState(0)
 	useEffect(() => {
@@ -184,8 +206,8 @@ console.log('frfrrrrffrfrffrffrffr',filterEmployeeData);
 		  });
 	  
 		  // Calculate the total after deducting deductions and adding increments
-		  totalAmount = totalAmount - totalDeduction + totalIncrement;
-	  
+		  totalAmount = (totalAmount - totalDeduction )+ (totalIncrement)+ parseFloat(DAPrice) + parseFloat(IRPrice)
+	  console.log(totalAmount,":totalammount");
 		  const calculatedPerDaySalary = basicSalary / 30;
 		  setPerDaySalary(calculatedPerDaySalary);
 	  
@@ -207,7 +229,7 @@ console.log('frfrrrrffrfrffrffrffr',filterEmployeeData);
 		  setLeaveDifference(balanceleave < 0 ? 0 : balanceleave);
 	  
 		  setTotalDeduction(totalDeduction.toFixed(2));
-		  setTotalIncrement(parseFloat(basicSalary) + parseFloat(totalIncrement));
+		  setTotalIncrement(parseFloat(basicSalary) + parseFloat(totalIncrement) );
 		  setTotalAmount(totalAmount.toFixed(2)); // Set the total amount
 		  console.log('total deduction:',totalDeduction);
 		  console.log('total increment:',totalincrement);
@@ -215,13 +237,18 @@ console.log('frfrrrrffrfrffrffrffr',filterEmployeeData);
 		} catch (error) {
 		  console.error('Error in useEffect:', error);
 		}
-	  }, [tablerow, basicSalary, salarymasterData, allowedleave, absentDays, perDaySalary]);
+	  }, [tablerow, basicSalary, salarymasterData, allowedleave, absentDays, perDaySalary,IRPrice,DAPrice,selectedOption]);
 	  
     
 
+	  const handleTableClick =()=>{
+		setEditSalary(false)
+		setSalaryList(true)
+	   }
 	
-	const [selectedOption, setSelectedOption] = useState([]);
+
 	console.log('selected name',selectedOption);
+	console.log(Employeename,":Employeename");
 	const [options, setOptions] = useState(EmployeeData.map((data) => ({ value: data.name, label: data.name })));
    
 	 const handleInputChange = (newValue) => {
@@ -235,8 +262,8 @@ console.log('frfrrrrffrfrffrffrffr',filterEmployeeData);
 	 };
  
 		 
- // console.log('opyions',selectedOption.value);
- console.log("employeeid",EmployeeId);
+//  // console.log('opyions',selectedOption.value);
+//  console.log("employeeid",EmployeeId);
  
 	const handleSelectChange = (selected) => {
 	 setSelectedOption(selected);
@@ -248,6 +275,13 @@ console.log('frfrrrrffrfrffrffrffr',filterEmployeeData);
 	 if (select) {
 		 
 		 const filteredEmployees = EmployeeData.filter(data => data.name === select);
+		 if(filteredEmployees[0].EmployeeTypeId._id !== "6566be7b0085f19cfbfd00c1"){
+			setTablerow([])
+			setDAValue("")
+			setIRValue("")
+			setDAPercentage("")
+			setIRPercentage("")
+		 }
 		 setAllowedLeave(filteredEmployees[0]?filteredEmployees[0].allowedleave :"")
 	
 		 setEmployeeTypeId(filteredEmployees[0]?filteredEmployees[0].EmployeeTypeId._id:"");
@@ -364,9 +398,8 @@ console.log('frfrrrrffrfrffrffrffr',filterEmployeeData);
 	 setIRPercentage('')
    }
 useEffect(() => {
-
-		
-
+	console.log("hhhhhhhhhhhhaaaaaaaaaaaaaiaaahahahahahah");
+	console.log(employeeTypeIds,employeeTypeId,"employeeTypeIds");
 			if(employeeTypeId === "6566be7b0085f19cfbfd00c1" && basicSalary ){
 				const EPF = parseFloat(basicSalary) + parseFloat(DAPrice) + parseFloat(IRPrice)
 				setEPFWage(EPF)
@@ -381,19 +414,19 @@ useEffect(() => {
 
 			if (employeeTypeId === "6566be7b0085f19cfbfd00c1" && (joiningDate >= comparisonDate)) {
 			  setEPSWage(0);
-			} else if (employeeTypeId === "6566be7b0085f19cfbfd00c1" && (salaryTotal >= 15000)) {
+			} else if (employeeTypeId === "6566be7b0085f19cfbfd00c1" && (totalAmount >= 15000)) {
 			  setEPSWage(15000);
-			} else if(employeeTypeId === "6566be7b0085f19cfbfd00c1" && (salaryTotal < 15000)) {
+			} else if(employeeTypeId === "6566be7b0085f19cfbfd00c1" && (totalAmount < 15000)) {
 			  setEPSWage(totalAmount);
 			}else{
 				setEPSWage('')
 			};
 		
 
-			if(employeeTypeId === "6566be7b0085f19cfbfd00c1" &&(salaryTotal >= 15000)){
+			if(employeeTypeId === "6566be7b0085f19cfbfd00c1" &&(totalAmount >= 15000)){
 				setEDLIWage(15000)
-			}else if(employeeTypeId === "6566be7b0085f19cfbfd00c1" &&(salaryTotal < 15000)){
-				setEDLIWage(salaryTotal)
+			}else if(employeeTypeId === "6566be7b0085f19cfbfd00c1" &&(totalAmount < 15000)){
+				setEDLIWage(totalAmount)
 			}else{
 				setEDLIWage('')
 			}
@@ -408,6 +441,7 @@ useEffect(() => {
 		  
   useEffect(() => {
 
+	console.log("hhhhhhhhhhhhhhhhaikkko");
 	 // DA row
 	 
 	 if (DAPercentage !== 0 && !DAValue) {
@@ -489,22 +523,7 @@ try{
 },[employeeid,options ])
 
 
-const firstrow =[
-	{
-		id:1,
-		salaryComponent:"6581128dc32bc7fefb3b2e30",
-		percentage:DAPercentage?DAPercentage:"",
-		value:DAValue?DAValue:"",
-		price:DAPrice
-	},
-	{
-		id:2,
-		salaryComponent:"658112c9c32bc7fefb3b2e3b",
-		percentage:IRPercentage?IRPercentage:"",
-		value:IRValue?IRValue:"",
-		price:IRPrice
-	}
-  ]
+
   const[updatedRow,setUpdatedRow]=useState('');
 
   useEffect(()=>{
@@ -521,9 +540,9 @@ const firstrow =[
 	}
 	console.log(updatedFirstRow,":::::::::::::::fffff");
 
-  },[tablerow]) 
+  },[tablerow,DAPrice,IRPrice]) 
 
-console.log(tablerow,"::tableroqw");
+console.log(updatedRow,"::tableroqw");
   
 const handlesubmit =async(event)=>{
   event.preventDefault()
@@ -536,16 +555,23 @@ try{
     departmentid : department?department:departments,
     unitid : unit?unit:unitid,
     basicSalary:basicSalary,
-    tablerow: tablerow.map(row => {
-      return {
-        ...row,
-        salaryComponent: row.salaryComponent._id ? row.salaryComponent._id : row.salaryComponent // or provide a default value if _id doesn't exist
-      };
-    }),
+    // tablerow:tablerow[0]&&tablerow[1]? tablerow.map(row => {
+    //   return {
+    //     ...row,
+    //     salaryComponent: row.salaryComponent._id ? row.salaryComponent._id : row.salaryComponent // or provide a default value if _id doesn't exist
+    //   };
+    // }):[],
+	tablerow:updatedRow||[],
     allowedleave:allowedleave,
     absentDays : absentDays,
 	totaldeduction:totaldeduction,
 	totalincrement:totalincrement,
+	EPFWage,
+	EPSWage,
+	EDLIWage,
+	EPFContri,
+	EPSContri,
+	EPSEPFDiff,
     totalAmount: salaryTotal?.TotalSalary?salaryTotal.TotalSalary :salaryTotal,
   }; console.log("formdataedit",formdatas);
 
@@ -570,14 +596,16 @@ try{
    
     
 }
-
+console.log(salarymasterData,"::salarymasterDataaaa");
 
 
   return (
     <div>
+	
      {Editsalary&&
+	 
         <div>
-         
+				<button className='btn btn-success mt-2 ' onClick={handleTableClick}>Table</button>
           <div className="row">
             <div className="col-sm-12">
               <div className="card">
@@ -627,7 +655,7 @@ try{
 									<div className="form-group local-forms">
 										<label>Employee Name <span className="login-danger">*</span></label>
 										<Select
-										value={selectedOption ==[] ?item.employeeid.name:selectedOption}
+										defaultInputValue={Employeename}
 										onChange={handleSelectChange}
 										options={options}
 										onInputChange={handleInputChange}
@@ -662,7 +690,7 @@ try{
 												<div className="card-body">
 													<div className="invoice-add-table">
 													
-													{tabledisplay &&
+													{tabledisplay && employeeTypeId === "6566be7b0085f19cfbfd00c1"&&
 													<div className="table-responsive">
 														<table className="table table-striped table-nowrap  mb-0 no-footer add-table-items">
 														<thead>
@@ -675,7 +703,7 @@ try{
 														
 															</tr>
 														</thead>
-														<tbody>
+														{salarymasterData[0]&&<tbody>
 													
 															<tr key={1454}>
 																<td>
@@ -737,8 +765,8 @@ try{
 														
 
 														
-														</tbody>
-														<tbody>
+														</tbody>}
+														{salarymasterData[1]&&<tbody>
 															
 															<tr key={235435}>
 																<td>
@@ -756,8 +784,7 @@ try{
 																		<option value={salarymasterData[1]._id} key={salarymasterData[0]._id}>
 																			{salarymasterData[1].name}
 																		</option>
-																	
-																	
+															
 																</select>
 																</td>
 																
@@ -800,7 +827,7 @@ try{
 													
 
 														
-														</tbody>
+														</tbody>}
 														<tbody>
 															
 													{tablerow.map((row,index)=>(

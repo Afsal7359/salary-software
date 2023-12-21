@@ -108,10 +108,6 @@ const closeEditModal = () => {
     setSelectedItem(item)
      };
 
-   const handleTableClick =()=>{
-    setShowEditModal(false)
-    setSalaryList(true)
-   }
    
    const closeDeleteModal = () => {
 	 // Set showEditModal to false when the modal is closed
@@ -419,7 +415,7 @@ console.log(grandNetPay,":Grandnetpay");
     }
 	  
       {showEditModal && selectedItem && (
-        <div> <button className='btn btn-success mt-2 ' onClick={handleTableClick}>Table</button>
+        <div> 
   <SalaryBillEdit item={selectedItem} setData={setData} Data={Data}  closeEdit={closeEditModal}/></div>
 )}
 {showDeleteModal && selectedItem &&(<SalaryBill

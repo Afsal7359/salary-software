@@ -9,7 +9,7 @@ function EditEmployeeMaster({ closeEdit, item, setData, Data, show, setshow }) {
   console.log(item,"item");
   const [itemdata,setitemdata]=useState(item)
   const [employeeTypeData, setEmployeeTypeData] = useState([]);
-  const [employeeTypeId, setEmployeeTypeId] = useState("");
+  const [employeeTypeId, setEmployeeTypeId] = useState(item.EmployeeTypeId._id);
   const [isemployeeTypeDataFetch, setisEmployeeTypeDataFetch] = useState(false);
   const [postData, setPostData] = useState([]);
   const [postId, setPostId] = useState("");
@@ -51,20 +51,82 @@ function EditEmployeeMaster({ closeEdit, item, setData, Data, show, setshow }) {
   //  const [secondInputValue, setSecondInputValue] = useState("");
    const [formdata, setFormdata] = useState("");
    const [itemid, setitemid] = useState(item._id);
-   const [tablerow, setTablerow] = useState(item?.tablerow);
+   const [tablerow, setTablerow] = useState(item?item.tablerow.slice(2):"");
+  
    const [password, setPassword] = useState(item?.password);
 
    const [totalAmount, setTotalAmount] = useState(0);
-   const [DAPercentage,setDAPercentage]=useState();
-   const [DAValue,setDAValue]=useState('');
-   const [DAPrice,setDAPrice]=useState(tablerow[0]?tablerow[0].price:"");
-   const [IRPercentage,setIRPercentage]=useState('');
-   const [IRValue,setIRValue]=useState('');
-   const [IRPrice,setIRPrice]=useState('');
-   const [EPFWage,setEPFWage]=useState('');
-   const [EPSWage,setEPSWage]=useState('');
-   const [EDLIWage,setEDLIWage]=useState(''); 
 
+   const [salarycomponent,setSalarycomponent]=useState(false)
+
+   
+	const [EPFWage,setEPFWage]=useState("");
+	const [EPSWage,setEPSWage]=useState("");
+	const [EPSContri,setEPSContri]=useState("");
+	const[EPFContri,setEPFContri]=useState("");
+	const[EPSEPFDiff,setEPSEPFDiff]=useState("");
+	const [EDLIWage, setEDLIWage]=useState("");
+
+  	  
+  const [DAPercentage,setDAPercentage]=useState(item.tablerow[0]?item.tablerow[0].percentage:"");
+  const [DAValue,setDAValue]=useState(item.tablerow[0]?item.tablerow[0].value:"");
+  const [DAPrice,setDAPrice]=useState(item.tablerow[0]?item.tablerow[0].price:"");
+  const [IRPercentage,setIRPercentage]=useState(item.tablerow[1]?item.tablerow[1].percentage:"");
+  const [IRValue,setIRValue]=useState(item.tablerow[1]?item.tablerow[1].value:"");
+  const [IRPrice,setIRPrice]=useState(item.tablerow[1]?item.tablerow[1].price:"");
+
+
+
+
+  const handleDAPercentage = (event)=>{
+   const value= event.target.value;
+   setDAPercentage(value)
+   setDAValue('')
+   }
+   const handleDAValue = (event)=>{
+   const value= event.target.value;
+   setDAValue(value)
+   setDAPercentage('')
+   }
+   const handleIRPercentage = (event)=>{
+   const value= event.target.value;
+   setIRPercentage(value)
+   setIRValue('')
+   }
+   const handleIRValue = (event)=>{
+   const value= event.target.value;
+   setIRValue(value)
+   setIRPercentage('')
+   }
+
+  useEffect(() => {
+
+   // DA row
+   
+   if (DAPercentage !== 0 && !DAValue) {
+     const price = (basicSalary * DAPercentage) / 100;
+     setDAPrice(price);
+   }
+   
+   else if (DAValue !== 0 && !DAPercentage) {
+     const prices = DAValue;
+     console.log("Priceeeeeeeeeee",prices);
+     setDAPrice(prices);
+   }
+
+   // IR row
+   
+   if (IRPercentage !== 0 && !IRValue  ) {
+     const price = (basicSalary * IRPercentage) / 100;
+     setIRPrice(price);
+   }
+   
+   else if (IRValue !== 0 && !IRPercentage) {
+     const prices = IRValue;
+     console.log("Priceeeeeeeeeee",prices);
+     setIRPrice(prices);
+   }
+   }, [DAPercentage, DAValue, basicSalary,IRPercentage,IRValue]);
 
 
   const handlemployeetypeclick = async () => {
@@ -82,10 +144,23 @@ function EditEmployeeMaster({ closeEdit, item, setData, Data, show, setshow }) {
       toast.error(error.message);
     }
   };
+
+ 
   const handleemployeetypechange = (event) => {
     setEmployeeTypeId(event.target.value);
+    console.log(employeeTypeId,"iddddddddd");
+   
   };
 
+
+  useEffect(()=>{
+    if (employeeTypeId == "6566be7b0085f19cfbfd00c1"){
+			setSalarycomponent(true)
+		}else{
+			setSalarycomponent(false)
+		}
+
+  },[employeeTypeId])
 
 
   const handlePostClick = async () => {
@@ -219,7 +294,7 @@ try {
       }
     }
     return acc;
-  }, parseFloat(basicSalary));
+  }, parseFloat(basicSalary)+ parseFloat(DAPrice) + parseFloat(IRPrice) );
 
   if (!isNaN(totalAmount)) {
     // Check if the calculated totalAmount is a valid number
@@ -233,7 +308,7 @@ try {
 } catch (error) {
   console.error('Error in useEffect:', error);
 }
-  }, [tablerow, basicSalary, salarymasterData]);
+  }, [tablerow, basicSalary, salarymasterData,DAPrice,IRPrice]);
 
 
 
@@ -391,6 +466,7 @@ try {
   };
 console.log(DAPrice,"DAPRICEEE");
 console.log(IRPrice,"IRPRICE");
+console.log(employeeTypeId,":employeetypeid");
 
 
 
@@ -455,8 +531,9 @@ console.log(IRPrice,"IRPRICE");
                             onKeyDown={handlemployeetypeclick}
                             onMouseEnter={handlemployeetypeclick}
                             onChange={handleemployeetypechange}
+                            onclick={handleemployeetypechange}
                           >
-                            <option value={item.EmployeeTypeId._id}>
+                            <option value={employeeTypeId}>
                               {item.EmployeeTypeId.name}
                             </option>
                             {employeeTypeData.map((option) => (
@@ -914,6 +991,7 @@ console.log(IRPrice,"IRPRICE");
                       </div>
 
                       <div className="row">
+                        {salarycomponent&&
                         <div className="col-md-12">
                           <div className="card invoices-add-card">
                             <div className="card-body">
@@ -931,6 +1009,123 @@ console.log(IRPrice,"IRPRICE");
                                         <th></th>
                                       </tr>
                                     </thead>
+                                    {salarymasterData[0]&&  <tbody>
+													
+															<tr key={1454}>
+																<td>
+																<input type="text" className="form-control" value={ 1} readOnly 
+																onChange={(e) => setRowId1(e.target.value)}/>
+																</td>
+																<td>
+																<select className="form-control"
+																// onKeyDown={handlesalarymasterclick}
+																// onMouseEnter={handlesalarymasterclick}
+																onChange={(event) => handlesalarymasterchange(event, index)}
+																>
+																
+																	
+																		<option value={salarymasterData[0]._id} key={salarymasterData[0]._id}>
+																			{salarymasterData[0].name}
+																		</option>
+																	
+																	
+																</select>
+																</td>
+																
+																<td>
+																<input
+																		
+																		type="number"
+																		className={`form-control `}
+																		placeholder="%"
+																		// onChange={handleChange}
+																		value={DAPercentage}
+																		// value={row.percentage ? row.percentage : ''}
+                                                                        onChange={(e)=>handleDAPercentage(e)}
+																		/>
+																	
+															</td>
+																<td>
+																<input
+																	type="text"
+																	className="form-control"
+																	value={DAValue ? DAValue : ''}
+																	onChange={(e) => handleDAValue( e)}
+																	
+																/>
+																</td>
+																<td>
+																<input type="text" className="form-control" 
+																 value={DAPrice?DAPrice:''}
+																 readOnly/>
+																</td>
+																<td className="add-remove text-end">
+																
+																
+																
+																</td>
+															</tr>
+														
+
+														
+												      		</tbody>}
+                                  {salarymasterData[0]&&	<tbody>
+                                  <tr key={235435}>
+                                    <td>
+                                    <input type="text" className="form-control" value={ 2 } readOnly 
+                                    onChange={(e) => setRowId2(e.target.value)}/>
+                                    </td>
+                                    <td>
+                                    <select className="form-control"
+                                    // onKeyDown={handlesalarymasterclick}
+                                    // onMouseEnter={handlesalarymasterclick}
+                                    onChange={(event) => handlesalarymasterchange(event, index)}
+                                    >
+                                    
+                                      
+                                        <option value={salarymasterData[1]._id} key={salarymasterData[0]._id}>
+                                          {salarymasterData[1].name}
+                                        </option>
+                                      
+                                      
+                                    </select>
+                                    </td>
+                                    
+                                    <td>
+                                    <input
+                                        
+                                        type="number"
+                                        className={`form-control`}
+                                        placeholder="%"
+                                        // onChange={handleChange}
+                                        value={IRPercentage}
+                                        // value={row.percentage ? row.percentage : ''}
+                                                                            onChange={(e) => handleIRPercentage(e)}
+                                        />
+                                      
+                                       
+                                  </td>
+                                    <td>
+                                    <input
+                                      type="text"
+                                      className="form-control"
+                                      value={IRValue}
+                                      onChange={(e) => handleIRValue(e)}
+                                      
+                                    />
+                                    </td>
+                                    <td>
+                                    <input type="text" className="form-control" 
+                                    value={IRPrice?IRPrice:''}
+                                    readOnly/>
+                                    </td>
+                                    <td className="add-remove text-end">
+                                    
+                                    
+                                    
+                                    </td>
+                                  </tr>
+                                </tbody>}
                                     <tbody>
                                       {tablerow.map((row, index) => (
                                         <tr key={row.id}>
@@ -1071,7 +1266,7 @@ console.log(IRPrice,"IRPRICE");
                               </div>
                             </div>
                           </div>
-                        </div>
+                        </div>}
                       </div>
                       <div className="col-12">
                         <div className="doctor-submit text-end">

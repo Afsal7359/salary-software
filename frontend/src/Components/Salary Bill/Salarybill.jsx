@@ -307,7 +307,7 @@ console.log('totalrssow',totalrowprice);
 		  console.log("total contribution",totalcontribution);
 	  
 		  // Calculate the total after deducting deductions and adding increments
-		  totalAmount = totalAmount - totalDeduction + totalIncrement;
+		  totalAmount = totalAmount - totalDeduction + totalIncrement + parseFloat(DAPrice) + parseFloat(IRPrice);
 	  
 		  const calculatedPerDaySalary = basicSalary / 30;
 		  setPerDaySalary(calculatedPerDaySalary);
@@ -333,7 +333,7 @@ console.log('totalrssow',totalrowprice);
 		} catch (error) {
 		  console.error('Error in useEffect:', error);
 		}
-	  }, [tablerow, basicSalary, salarymasterData, allowedleave, absentDays, perDaySalary]);
+	  }, [tablerow, basicSalary, salarymasterData, allowedleave, absentDays, perDaySalary,IRPrice,DAPrice]);
 	  
 	  
 
@@ -548,9 +548,10 @@ const firstrow =[
 	}
 	console.log(updatedFirstRow,":::::::::::::::fffff");
 
-  },[tablerow]) 
+  },[tablerow,DAPrice,IRPrice]) 
 
-console.log(tablerow,"::tableroqw");
+console.log(updatedRow,"::tableroqw");
+
 
 const handleformsubmit = async(event)=>{
 	// event.preventDefault();
@@ -582,12 +583,7 @@ const handleformsubmit = async(event)=>{
 			EPFContri,
 			EPSContri,
 			EPSEPFDiff,
-			tablerow: tablerow[0]&&tablerow[1] ?updatedRow.map(row => {
-				return {
-					...row,
-					salaryComponent: row.salaryComponent._id ? row.salaryComponent._id : row.salaryComponent // or provide a default value if _id doesn't exist
-				};
-			}):[],
+			tablerow:updatedRow||[],
 			allowedleave:allowedleave,
 			absentDays : absentDays,
 			totalAmount: salaryTotal?.TotalSalary?salaryTotal.TotalSalary :salaryTotal
