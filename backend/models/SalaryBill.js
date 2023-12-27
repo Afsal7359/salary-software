@@ -41,6 +41,10 @@ const SalarybillSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Employee'
     },
+    employeeTypeId:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:'Employeetype'
+    },
 
     unitid:{
         type: mongoose.Schema.Types.ObjectId,

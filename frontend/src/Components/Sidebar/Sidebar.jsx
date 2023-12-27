@@ -50,7 +50,7 @@ const Sidebar = () => {
 							<a href="#"><span className="menu-side"><img src={Doctors} alt=""/></span> <span> Report</span> <span className="menu-arrow"></span></a>
 							<ul style={{ display:'none'}}>
                             <li><Link to="/report-pf">PF Report</Link></li>
-                            
+                            <li><Link to="/report-esi">ESI Report</Link></li>
 							</ul>
 						</li>
 

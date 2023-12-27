@@ -12,6 +12,7 @@ module.exports={
                         $gte:  (fromMonth),
                         $lte:  (toMonth),
                         },
+                        employeeTypeId:"6566be7b0085f19cfbfd00c1"
                     })
                     .populate({
                             path: "employeeid",

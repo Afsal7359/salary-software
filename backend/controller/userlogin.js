@@ -413,7 +413,7 @@ module.exports={
         console.log(error);
         res.status(500).json({
           success: false,
-          message: "Error occurred",
+          message: " Data not found this month",
           error: error.message,
         });
       }

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import * as XLSX from 'xlsx';
 
 import { toast } from 'react-toastify';
@@ -33,11 +33,44 @@ if (response.success){
 console.log(Data,":;;;;dddddddata");
  }
 
+ const [GrossWagetotal,setGrossWageTotal]=useState('');
+ const [EPFWagetotal,setEPFWageTotal]=useState('');
+ const [EPSWagetotal,setEPSWagetotal]=useState('');
+ const [EDLIWagetotal,setEDLIWagetotal]=useState('');
+ const [EPFContritotal,setEPFContritotal]=useState('');
+ const [EPSContritotal,setEPSContritotal]=useState('');
+ const [EPFEPSDIFFtotal,setEPSEPFDifftotal]=useState('');
+
+ useEffect(() => {
+  if (Data.length === 0) {
+    console.log("haaai");
+  } else {
+    const sumgrosswage = Data.reduce((total, item) => total + item.totalAmount, 0);
+    setGrossWageTotal(sumgrosswage);
+    const sumepfwage = Data.reduce((total,item) => total + item.EPFWage,0)
+    setEPFWageTotal(sumepfwage)
+    const sumepswage = Data.reduce((total, item) => total + item.EPSWage, 0);
+    setEPSWagetotal(sumepswage);
+    const sumepfcontri = Data.reduce((total,item) => total + item.EPFContri,0)
+    setEPFContritotal(sumepfcontri)
+    const sumepscontri = Data.reduce((total, item) => total + item.EPSContri, 0);
+    setEPSContritotal(sumepscontri);
+    const sumedliwage = Data.reduce((total,item) => total + item.EDLIWage,0)
+    setEDLIWagetotal(sumedliwage)
+    const sumepfepsdiff = Data.reduce((total,item) => total + item.EPSEPFDiff,0)
+    setEPSEPFDifftotal(sumepfepsdiff)
+  
+  }
+}, [Data]);
+
+
+
+
  const downloadExcel = () => {
     const worksheet = XLSX.utils.table_to_sheet(document.querySelector('.comman-table'));
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, worksheet, 'Sheet1');
-    XLSX.writeFile(wb, 'table_data.xlsx');
+    XLSX.writeFile(wb, `EPFO_${fromMonth} to ${toMonth}.xlsx`);
   };
   return (
     <>
@@ -132,18 +165,104 @@ console.log(Data,":;;;;dddddddata");
                           <td>{index + 1}</td>
                           <td>{item.employeeid.universalAcNo}</td>
                           <td>{item.employeeid.name}</td>
-                          <td>{item.totalAmount}</td>
-                          <td>{item.EPFWage}</td>
-                          <td>{item.EPSWage}</td>
-                          <td>{item.EDLIWage}</td>
-                          <td>{item.EPFContri}</td>
-                          <td>{item.EPSContri}</td>
-                          <td>{item.EPSEPFDiff}</td>
+                          <td>{Math.round(item.totalAmount)}</td>
+                          <td>{Math.round(item.EPFWage)}</td>
+                          <td>{Math.round(item.EPSWage)}</td>
+                          <td>{Math.round(item.EDLIWage)}</td>
+                          <td>{Math.round(item.EPFContri)}</td>
+                          <td>{Math.round(item.EPSContri)}</td>
+                          <td>{Math.round(item.EPSEPFDiff)}</td>
                           <td>{0}</td>
                           <td>{0}</td>
                          
                         </tr>
                       ))}
+                      <tr></tr>
+                     
+                      <tr>
+                        <td></td>
+                        <td></td>
+                        <td><strong>Total</strong></td>
+                        <td><strong>{Math.round(GrossWagetotal)}</strong></td>
+                        <td><strong>{Math.round(EPFWagetotal)}</strong></td>
+                        <td><strong>{Math.round(EPSWagetotal)}</strong></td>
+                        <td><strong>{Math.round(EDLIWagetotal)}</strong></td>
+                        <td><strong>{Math.round(EPFContritotal)}</strong></td>
+                        <td><strong>{Math.round(EPSContritotal)}</strong></td>
+                        <td><strong>{Math.round(EPFEPSDIFFtotal)}</strong></td>
+                      </tr>
+
+                      <tr></tr>
+                      <tr></tr>
+                      <tr></tr>
+
+                      <tr>
+                        <td>A/Cno.01</td>
+                        <td>EPF EMPLOYEES CONTRIBUTION</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td><strong>{Math.round(EPFContritotal)}</strong></td>
+                      </tr>
+                      <tr>
+                        <td></td>
+                        <td>EPF EMPLOYERS CONTRIBUTION</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td><strong>{Math.round(EPFEPSDIFFtotal)}</strong></td>
+                        <td><strong>{Math.round(EPFEPSDIFFtotal+EPFContritotal)}</strong></td>
+                      </tr>
+                      <tr></tr>
+                      <tr></tr>
+                      <tr>
+                        <td>A/Cno.02</td>
+                        <td>ADMINISTRATIVE  CHARGE @.50%</td>
+                      </tr>
+                      <tr>
+                        <td></td>
+                        <td>OF EPF WAGES {Math.round(EPFWagetotal)}</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>{Math.round((EPFWagetotal * 0.5)/100)}</td>
+                      </tr>
+                      <tr></tr><tr></tr>
+                      <tr>
+                        <td>A/Cno.10</td>
+                        <td>PENSION FUND 8.33% OF DLI WAGES</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>{Math.round(EPSContritotal)}</td>
+                      </tr>
+                      <tr></tr><tr></tr>
+                      <tr>
+                        <td>A/Cno.21</td>
+                        <td>DLI WAGES 0.50% OF {EDLIWagetotal}</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>{Math.round((EDLIWagetotal * 0.5)/100)}</td>
+                      </tr>
+                      <tr></tr><tr></tr>
+                      <tr>
+                        <td>A/Cno.22</td>
+                        <td>ADDITIONAL ADMINISTRATION CHARGE</td>
+                      </tr>
+                      <tr>
+                        <td></td>
+                        <td>OF {EPFWagetotal}*0.01%</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>{Math.round((EPFWagetotal * 0.01)/100)}</td>
+                      </tr>
+                     
                     </tbody>
                   </table>
                 

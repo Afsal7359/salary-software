@@ -21,6 +21,7 @@ function Salarybill() {
 	const [absentvalue,setAbsentValue]=useState('')
 	const [allowedleave,setAllowedLeave]=useState(0)
 	const [tablerow, setTablerow] = useState([]);
+	const [tablerows, setTablerows] = useState([]);
 	const [basicSalary,setBasicSalary]=useState('')
 	const [filterEmployeeData,setFilterEmployeeData]=useState([]);
 	const [TotalSalary, setTotalSalary] = useState('');
@@ -78,7 +79,7 @@ function Salarybill() {
 	
 
 	const handleEmployeeclick = async () => {
-	 console.log('ddddddddddEmployee');
+	
 	 try {
 	   if (!isEmployeeDataFetched) {
 		 const response = await getallemployeemaster ();
@@ -97,32 +98,24 @@ function Salarybill() {
 	handleEmployeeclick()
   },[])
 
-   console.log('ggggggggggggggggggggggg',EmployeeData);
+  
 
    const [selectedOption, setSelectedOption] = useState(null);
    const [options, setOptions] = useState(EmployeeData.map((data) => ({ value: data.name, label: data.name })));
   
 	const  handleInputChange = (newValue) => {
-	  // Implement your search/filter logic here
-	  // For example, filter options based on user input
-	  console.log("newwwvaluees",newValue);
+	
 	  const filteredOptions = EmployeeData.filter((data) =>
 		data.name.toLowerCase().includes(newValue.toLowerCase())
 	  ).map((data) => ({ value: data.name, label: data.name }));
 	  setOptions(filteredOptions);
 	};
 
-	    
-// console.log('opyions',selectedOption.value);
-console.log("employeeid",EmployeeId);
+
 
    const handleSelectChange = (selected) => {
-	// setSelectedOption(selected);
-	// console.log(selected,"haaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaai");
-	// console.log(selectedOption,'gggggggggggggggiiiiiiiiiiiiiiiiiiiiiii');
-	// console.log('opyions',selectedOption.value);
+
 	const select = selected.value
-	console.log(select,"fffffffffffffffffffffdddddddddddddddddddd");
 
 	
     if (select) {
@@ -230,7 +223,6 @@ const headerdata = useMemo(() => {
   const [salarymasterId, setSalarymasterId] = useState("");
 
   const data = tablerow.slice(2)
-  console.log(data,"::data::");
   
  
   const handlesalarymasterclick = async () => {
@@ -253,8 +245,7 @@ const headerdata = useMemo(() => {
   },[])
 
 
-  
-console.log("salary fetch",salarymasterData);
+
 
 const handlesalarymasterchange = (event, index) => {
 	const updatedTableRows = [...tablerow];
@@ -262,12 +253,10 @@ const handlesalarymasterchange = (event, index) => {
 	  ...updatedTableRows[index],
 	  salaryComponent: event.target.value,
 	};
-	console.log("iiiiiiiiiiiiiiiiiiiiii",updatedTableRows);
 	setTablerow(updatedTableRows);
   };
   
   const [salarycomponent, setSalaryComponent] = useState([]);
-console.log('totalrssow',totalrowprice);
 
    
 	const [absentDays, setAbsentDays] = useState(0);
@@ -304,7 +293,6 @@ console.log('totalrssow',totalrowprice);
 			  }
 			}
 		  });
-		  console.log("total contribution",totalcontribution);
 	  
 		  // Calculate the total after deducting deductions and adding increments
 		  totalAmount = totalAmount - totalDeduction + totalIncrement + parseFloat(DAPrice) + parseFloat(IRPrice);
@@ -323,13 +311,9 @@ console.log('totalrssow',totalrowprice);
 		  const balanceleave = allowedleave - absentDays;
 		  setLeaveDifference(balanceleave < 0 ? 0 : balanceleave);
 		  setTotalDeduction(totalDeduction.toFixed(2));
-		  console.log(basicSalary,":basicsalary");
 		//   const TotalIncrements=(basicSalary)+parseFloat(totalIncrement);
 		  setTotalIncrement(parseFloat(basicSalary) + parseFloat(totalIncrement));
-		  setTotalAmount(totalAmount.toFixed(2)); // Set the total amount
-		  console.log('total deduction:',totalDeduction);
-		  console.log('total increment:',totalincrement);
-		  console.log('total :',totalAmount);
+		  setTotalAmount(totalAmount.toFixed(2)); 
 		} catch (error) {
 		  console.error('Error in useEffect:', error);
 		}
@@ -386,134 +370,40 @@ console.log('totalrssow',totalrowprice);
 	 setIRValue(value)
 	 setIRPercentage('')
    }
-useEffect(() => {
 
-			if(employeeTypeId === "6566be7b0085f19cfbfd00c1"){
-				setTableDisplay(true)
-			}else{
-				setTableDisplay(false)
-			}
+   useEffect(() => {
 
-			if(employeeTypeId === "6566be7b0085f19cfbfd00c1" && basicSalary ){
-				const EPF = parseFloat(basicSalary) + parseFloat(DAPrice) + parseFloat(IRPrice)
-				setEPFWage(EPF)
-			}else{
-				setEPFWage('')
-			};
+	// DA row
 	
+	if (DAPercentage !== 0 && !DAValue) {
+	  const price = (basicSalary * DAPercentage) / 100;
+	  setDAPrice(price);
+	}
+  
+	else if (DAValue !== 0 && !DAPercentage) {
+	  const prices = DAValue;
+	  setDAPrice(prices);
+	}
 
+	// IR row
+	
+	if (IRPercentage !== 0 && !IRValue) {
+	  const price = (basicSalary * IRPercentage) / 100;
+	  setIRPrice(price);
+	}
+  
+	else if (IRValue !== 0 && !IRPercentage) {
+	  const prices = IRValue;
+	  setIRPrice(prices);
+	}
 
-		const joiningDate = new Date(dateOfJoining);
-        const comparisonDate = new Date('2014-01-01');
-
-			if (employeeTypeId === "6566be7b0085f19cfbfd00c1" && (joiningDate >= comparisonDate)) {
-			  setEPSWage(0);
-			} else if (employeeTypeId === "6566be7b0085f19cfbfd00c1" && (totalAmount >= 15000)) {
-			  setEPSWage(15000);
-			} else if(employeeTypeId === "6566be7b0085f19cfbfd00c1" && (totalAmount < 15000)) {
-			  setEPSWage(totalAmount);
-			}else{
-				setEPSWage('')
-			};
-		
-
-			if(employeeTypeId === "6566be7b0085f19cfbfd00c1" &&(totalAmount >= 15000)){
-				setEDLIWage(15000)
-			}else if(employeeTypeId === "6566be7b0085f19cfbfd00c1" &&(totalAmount < 15000)){
-				setEDLIWage(totalAmount)
-			}else{
-				setEDLIWage('')
-			}
-
-			console.log(EPFWage,":EPF WAGE");
-			console.log(EPSWage,":Eps WAGE");
-			console.log(dateOfJoining);
-			console.log(EDLIWage,":EDLI WAGE");
-			console.log(EDLIWage,"EdliWage");
-
-		  }, [totalAmount, dateOfJoining,EPSWage,EPFWage,EDLIWage,filterEmployeeData,employeeTypeId]);
-		  
-  useEffect(() => {
-
-	 // DA row
-	 
-	 if (DAPercentage !== 0 && !DAValue) {
-	   const price = (basicSalary * DAPercentage) / 100;
-	   setDAPrice(price);
-	 }
    
-	 else if (DAValue !== 0 && !DAPercentage) {
-	   const prices = DAValue;
-	   console.log("Priceeeeeeeeeee",prices);
-	   setDAPrice(prices);
-	 }
+  }, [DAPercentage, DAValue, basicSalary,IRPercentage,IRValue]);
 
-	 // IR row
-	 
-	 if (IRPercentage !== 0 && !IRValue) {
-	   const price = (basicSalary * IRPercentage) / 100;
-	   setIRPrice(price);
-	 }
-   
-	 else if (IRValue !== 0 && !IRPercentage) {
-	   const prices = IRValue;
-	   console.log("Priceeeeeeeeeee",prices);
-	   setIRPrice(prices);
-	 }
-   }, [DAPercentage, DAValue, basicSalary,IRPercentage,IRValue]);
+
   
 
-useEffect(()=>{
-try{
-	if(EPSWage === 15000){
-		setEPSContri(1250)
-	}else if(EPSWage === 0){
-		setEPSContri(0)
-	}else{
-		 const EPS = (EPFWage * 8.33)/100
-		 console.log(EPS,"eps");
-		 setEPSContri(EPS)
-	}
 
-	const targetId = '6572ef07fb305bd8c621bcee';
-	let foundData = null;
-	
-	for (let i = 0; i < tablerow.length; i++) {
-	  if (tablerow[i].salaryComponent._id === targetId) {
-		foundData = tablerow[i];
-		break;
-	  }
-	}
-
-	const EPFs = (EPFWage * 12) / 100;
-
-	if (!foundData) {
-	 setEPFContri(EPFs)
-	 console.log('ffffffffffffffffffuuuuuuuuuuu');
-	} else {
-		console.log('ddddddddddddddddddddddddd');
-	  const EPFS =( EPFs + foundData.price)
-	  setEPFContri(EPFS)
-	}
-    
-	const EPFSS = (EPFWage * 12) / 100;
-
-	if(EPFSS && EPFContri){
-		const EPFEPSDIFF = EPFs -EPSContri
-		setEPSEPFDiff(EPFEPSDIFF)
-	}
-	
-
-	
-
-}catch(error){
-	console.log(error);
-}
-
-	console.log(EPSContri,";;;;;;;EPSContri;;;;;;;");
-	console.log(EPFContri,"....................EPFContri.............................");
-	console.log(EPSEPFDiff,":EPSEPFDiff:");
-},[employeeid,options ])
 
 
 const firstrow =[
@@ -536,8 +426,6 @@ const firstrow =[
 
   useEffect(()=>{
 	let updatedFirstRow = [...firstrow];
-	console.log(updatedFirstRow,"updatedroww");
-	console.log(tablerow);
 
 	if (tablerow && tablerow.length > 0 && tablerow[0].price === '') {
 	  updatedFirstRow = [...updatedFirstRow];
@@ -546,11 +434,101 @@ const firstrow =[
 	  updatedFirstRow=[...updatedFirstRow, ...tablerow]
 	  setUpdatedRow(updatedFirstRow)
 	}
-	console.log(updatedFirstRow,":::::::::::::::fffff");
 
   },[tablerow,DAPrice,IRPrice]) 
 
 console.log(updatedRow,"::tableroqw");
+
+
+useEffect(() => {
+
+	if(employeeTypeId === "6566be7b0085f19cfbfd00c1"){
+		setTableDisplay(true)
+	}else{
+		setTableDisplay(false)
+	}
+
+	if(employeeTypeId === "6566be7b0085f19cfbfd00c1" && basicSalary ){
+		const EPF = parseFloat(basicSalary) + parseFloat(DAPrice) + parseFloat(IRPrice)
+		setEPFWage(EPF)
+	}else{
+		setEPFWage('')
+	};
+
+
+
+const joiningDate = new Date(dateOfJoining);
+const comparisonDate = new Date('2014-01-01');
+
+	if (employeeTypeId === "6566be7b0085f19cfbfd00c1" && (joiningDate >= comparisonDate)) {
+	  setEPSWage(0);
+	} else if (employeeTypeId === "6566be7b0085f19cfbfd00c1" && (totalAmount >= 15000)) {
+	  setEPSWage(15000);
+	} else if(employeeTypeId === "6566be7b0085f19cfbfd00c1" && (totalAmount < 15000)) {
+	  setEPSWage(totalAmount);
+	}else{
+		setEPSWage('')
+	};
+
+
+	if(employeeTypeId === "6566be7b0085f19cfbfd00c1" &&(totalAmount >= 15000)){
+		setEDLIWage(15000)
+	}else if(employeeTypeId === "6566be7b0085f19cfbfd00c1" &&(totalAmount < 15000)){
+		setEDLIWage(totalAmount)
+	}else{
+		setEDLIWage('')
+	}
+
+	
+if(EPSWage === 15000){
+setEPSContri(1250)
+}else if(EPSWage === 0){
+setEPSContri(0)
+}else{
+ const EPS = (EPFWage * 8.33)/100
+ setEPSContri(EPS)
+}
+
+const targetId = '658112ecc32bc7fefb3b2e3f';
+let foundData = null;
+
+for (let i = 0; i < tablerow.length; i++) {
+if (tablerow[i].salaryComponent._id ?tablerow[i].salaryComponent._id :tablerow[i].salaryComponent === targetId) {
+foundData = tablerow[i];
+break;
+}
+}
+const EPFcontribution = (EPFWage * 12) / 100;
+console.log(EPFcontribution,"::EPFSSS");
+if (!foundData) {
+setEPFContri(EPFcontribution)
+console.log('ffffffffffffffffffuuuuuuuuuuu');
+} else {
+console.log('ddddddddddddddddddddddddd');
+const EPFS =( EPFcontribution + foundData.price)
+setEPFContri(EPFS)
+}
+
+const EPFSS = (EPFWage * 12) / 100;
+
+if( EPFContri){
+const EPFEPSDIFF = EPFSS -EPSContri
+setEPSEPFDiff(EPFEPSDIFF)
+}
+
+
+	console.log(EPSContri,";;;;;;;EPSContri;;;;;;;");
+	console.log(EPFContri,"....................EPFContri.............................");
+	console.log(EPSEPFDiff,":EPSEPFDiff::::::");
+	console.log(EPFWage,":EPF WAGE");
+	console.log(EPSWage,":Eps WAGE");
+	console.log(dateOfJoining);
+	console.log(EDLIWage,":EDLI WAGE");
+	console.log(EDLIWage,"EdliWage");
+
+  }, [totalAmount, dateOfJoining,EPSWage,EPFWage,EDLIWage,filterEmployeeData,employeeTypeId,,employeeid,options,tablerow,DAPrice,IRPrice,updatedRow]);
+  
+
 
 
 const handleformsubmit = async(event)=>{
@@ -577,6 +555,7 @@ const handleformsubmit = async(event)=>{
 			totaldeduction:totaldeduction,
 			totalcontribution:totalcontribution?totalcontribution:"",
 			totalincrement:totalincrement,
+			employeeTypeId:employeeTypeId,
 			EPFWage,
 			EPSWage,
 			EDLIWage,

@@ -397,47 +397,115 @@ console.log('frfrrrrffrfrffrffrffr',filterEmployeeData);
 	 setIRValue(value)
 	 setIRPercentage('')
    }
-useEffect(() => {
-	console.log("hhhhhhhhhhhhaaaaaaaaaaaaaiaaahahahahahah");
-	console.log(employeeTypeIds,employeeTypeId,"employeeTypeIds");
-			if(employeeTypeId === "6566be7b0085f19cfbfd00c1" && basicSalary ){
-				const EPF = parseFloat(basicSalary) + parseFloat(DAPrice) + parseFloat(IRPrice)
-				setEPFWage(EPF)
-			}else{
-				setEPFWage('')
-			};
+
+   const[updatedRow,setUpdatedRow]=useState('');
+
+   useEffect(()=>{
+	 let updatedFirstRow = [...firstrow];
+	 console.log(updatedFirstRow,"updatedroww");
+	 console.log(tablerow);
+ 
+	 if (tablerow && tablerow.length > 0 && tablerow[0].price === '') {
+	   updatedFirstRow = [...updatedFirstRow];
+	   setUpdatedRow(updatedFirstRow)
+	 }else if( tablerow && tablerow.length > 0 && tablerow[0].price > 0){
+	   updatedFirstRow=[...updatedFirstRow, ...tablerow]
+	   setUpdatedRow(updatedFirstRow)
+	 }
+	 console.log(updatedFirstRow,":::::::::::::::fffff");
+ 
+   },[tablerow,DAPrice,IRPrice]) 
+
+   useEffect(() => {
+
+	if(employeeTypeId === "6566be7b0085f19cfbfd00c1"){
+		setTableDisplay(true)
+	}else{
+		setTableDisplay(false)
+	}
+
+	if(employeeTypeId === "6566be7b0085f19cfbfd00c1" && basicSalary ){
+		const EPF = parseFloat(basicSalary) + parseFloat(DAPrice) + parseFloat(IRPrice)
+		setEPFWage(EPF)
+	}else{
+		setEPFWage('')
+	};
+
+
+
+const joiningDate = new Date(dateOfJoining);
+const comparisonDate = new Date('2014-01-01');
+
+	if (employeeTypeId === "6566be7b0085f19cfbfd00c1" && (joiningDate >= comparisonDate)) {
+	  setEPSWage(0);
+	} else if (employeeTypeId === "6566be7b0085f19cfbfd00c1" && (totalAmount >= 15000)) {
+	  setEPSWage(15000);
+	} else if(employeeTypeId === "6566be7b0085f19cfbfd00c1" && (totalAmount < 15000)) {
+	  setEPSWage(totalAmount);
+	}else{
+		setEPSWage('')
+	};
+
+
+	if(employeeTypeId === "6566be7b0085f19cfbfd00c1" &&(totalAmount >= 15000)){
+		setEDLIWage(15000)
+	}else if(employeeTypeId === "6566be7b0085f19cfbfd00c1" &&(totalAmount < 15000)){
+		setEDLIWage(totalAmount)
+	}else{
+		setEDLIWage('')
+	}
+
 	
+if(EPSWage === 15000){
+setEPSContri(1250)
+}else if(EPSWage === 0){
+setEPSContri(0)
+}else{
+ const EPS = (EPFWage * 8.33)/100
+ setEPSContri(EPS)
+}
+
+const targetId = '658112ecc32bc7fefb3b2e3f';
+let foundData = null;
+
+for (let i = 0; i < tablerow.length; i++) {
+if (tablerow[i].salaryComponent._id ?tablerow[i].salaryComponent._id :tablerow[i].salaryComponent === targetId) {
+foundData = tablerow[i];
+break;
+}
+}
+const EPFcontribution = (EPFWage * 12) / 100;
+console.log(EPFcontribution,"::EPFSSS");
+console.log(foundData);
+if (!foundData) {
+setEPFContri(EPFcontribution)
+console.log('ffffffffffffffffffuuuuuuuuuuu');
+} else {
+console.log('ddddddddddddddddddddddddd');
+const EPFS =( EPFcontribution + foundData.price)
+setEPFContri(EPFS)
+}
+
+const EPFSS = (EPFWage * 12) / 100;
+
+if( EPFContri){
+const EPFEPSDIFF = EPFSS -EPSContri
+setEPSEPFDiff(EPFEPSDIFF)
+}
 
 
-		const joiningDate = new Date(dateOfJoining);
-        const comparisonDate = new Date('2014-01-01');
+	console.log(EPSContri,";;;;;;;EPSContri;;;;;;;");
+	console.log(EPFContri,"....................EPFContri.............................");
+	console.log(EPSEPFDiff,":EPSEPFDiff::::::");
+	console.log(EPFWage,":EPF WAGE");
+	console.log(EPSWage,":Eps WAGE");
+	console.log(dateOfJoining);
+	console.log(EDLIWage,":EDLI WAGE");
+	console.log(EDLIWage,"EdliWage");
+	console.log(tablerow,"Tableroww");
 
-			if (employeeTypeId === "6566be7b0085f19cfbfd00c1" && (joiningDate >= comparisonDate)) {
-			  setEPSWage(0);
-			} else if (employeeTypeId === "6566be7b0085f19cfbfd00c1" && (totalAmount >= 15000)) {
-			  setEPSWage(15000);
-			} else if(employeeTypeId === "6566be7b0085f19cfbfd00c1" && (totalAmount < 15000)) {
-			  setEPSWage(totalAmount);
-			}else{
-				setEPSWage('')
-			};
-		
-
-			if(employeeTypeId === "6566be7b0085f19cfbfd00c1" &&(totalAmount >= 15000)){
-				setEDLIWage(15000)
-			}else if(employeeTypeId === "6566be7b0085f19cfbfd00c1" &&(totalAmount < 15000)){
-				setEDLIWage(totalAmount)
-			}else{
-				setEDLIWage('')
-			}
-
-			console.log(EPFWage,":EPF WAGE");
-			console.log(EPSWage,":Eps WAGE");
-			console.log(dateOfJoining);
-			console.log(EDLIWage,":EDLI WAGE");
-			console.log(EDLIWage,"EdliWage");
-
-		  }, [salaryTotal, dateOfJoining,EPSWage,EPFWage,EDLIWage,filterEmployeeData,employeeTypeId]);
+  }, [totalAmount, dateOfJoining,EPSWage,EPFWage,EDLIWage,filterEmployeeData,employeeTypeId,,employeeid,options,tablerow,DAPrice,IRPrice,updatedRow]);
+  
 		  
   useEffect(() => {
 
@@ -470,77 +538,61 @@ useEffect(() => {
    }, [DAPercentage, DAValue, basicSalary,IRPercentage,IRValue]);
   
 
-useEffect(()=>{
-try{
-	if(EPSWage === 15000){
-		setEPSContri(1250)
-	}else if(EPSWage === 0){
-		setEPSContri(0)
-	}else{
-		 const EPS = (EPFWage * 8.33)/100
-		 console.log(EPS,"eps");
-		 setEPSContri(EPS)
-	}
+// useEffect(()=>{
+// try{
+// 	if(EPSWage === 15000){
+// 		setEPSContri(1250)
+// 	}else if(EPSWage === 0){
+// 		setEPSContri(0)
+// 	}else{
+// 		 const EPS = (EPFWage * 8.33)/100
+// 		 console.log(EPS,"eps");
+// 		 setEPSContri(EPS)
+// 	}
 
-	const targetId = '6572ef07fb305bd8c621bcee';
-	let foundData = null;
+// 	const targetId = '6572ef07fb305bd8c621bcee';
+// 	let foundData = null;
 	
-	for (let i = 0; i < tablerow.length; i++) {
-	  if (tablerow[i].salaryComponent._id === targetId) {
-		foundData = tablerow[i];
-		break;
-	  }
-	}
+// 	for (let i = 0; i < tablerow.length; i++) {
+// 	  if (tablerow[i].salaryComponent._id === targetId) {
+// 		foundData = tablerow[i];
+// 		break;
+// 	  }
+// 	}
 
-	const EPFs = (EPFWage * 12) / 100;
+// 	const EPFs = (EPFWage * 12) / 100;
 
-	if (!foundData) {
-	 setEPFContri(EPFs)
-	 console.log('ffffffffffffffffffuuuuuuuuuuu');
-	} else {
-		console.log('ddddddddddddddddddddddddd');
-	  const EPFS =( EPFs + foundData.price)
-	  setEPFContri(EPFS)
-	}
+// 	if (!foundData) {
+// 	 setEPFContri(EPFs)
+// 	 console.log('ffffffffffffffffffuuuuuuuuuuu');
+// 	} else {
+// 		console.log('ddddddddddddddddddddddddd');
+// 	  const EPFS =( EPFs + foundData.price)
+// 	  setEPFContri(EPFS)
+// 	}
     
-	const EPFSS = (EPFWage * 12) / 100;
+// 	const EPFSS = (EPFWage * 12) / 100;
 
-	if(EPFSS && EPFContri){
-		const EPFEPSDIFF = EPFs -EPSContri
-		setEPSEPFDiff(EPFEPSDIFF)
-	}
+// 	if(EPFSS && EPFContri){
+// 		const EPFEPSDIFF = EPFs -EPSContri
+// 		setEPSEPFDiff(EPFEPSDIFF)
+// 	}
 	
 
 	
 
-}catch(error){
-	console.log(error);
-}
+// }catch(error){
+// 	console.log(error);
+// }
 
-	console.log(EPSContri,";;;;;;;EPSContri;;;;;;;");
-	console.log(EPFContri,"....................EPFContri.............................");
-	console.log(EPSEPFDiff,":EPSEPFDiff:");
-},[employeeid,options ])
+// 	console.log(EPSContri,";;;;;;;EPSContri;;;;;;;");
+// 	console.log(EPFContri,"....................EPFContri.............................");
+// 	console.log(EPSEPFDiff,":EPSEPFDiff:");
+// },[employeeid,options ])
 
 
 
-  const[updatedRow,setUpdatedRow]=useState('');
 
-  useEffect(()=>{
-	let updatedFirstRow = [...firstrow];
-	console.log(updatedFirstRow,"updatedroww");
-	console.log(tablerow);
-
-	if (tablerow && tablerow.length > 0 && tablerow[0].price === '') {
-	  updatedFirstRow = [...updatedFirstRow];
-	  setUpdatedRow(updatedFirstRow)
-	}else if( tablerow && tablerow.length > 0 && tablerow[0].price > 0){
-	  updatedFirstRow=[...updatedFirstRow, ...tablerow]
-	  setUpdatedRow(updatedFirstRow)
-	}
-	console.log(updatedFirstRow,":::::::::::::::fffff");
-
-  },[tablerow,DAPrice,IRPrice]) 
 
 console.log(updatedRow,"::tableroqw");
   
