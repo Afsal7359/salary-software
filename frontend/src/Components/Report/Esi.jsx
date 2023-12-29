@@ -1,35 +1,103 @@
 import React,{useState,useEffect} from 'react'
 import * as XLSX from 'xlsx';
 import { toast } from 'react-toastify';
+import { GetESIReport } from '../../Apicalls/Report';
 
 function Esi() {
+  const [fromMonth, setFromMonth] = useState('');
+  const [toMonth, setToMonth] = useState('');
+  const [Data, setData] = useState([]);
+  const [lastworkday, setLastWorkDay] = useState('');
+  const [tablerow, setTablerow] = useState([]);
+  const [selectedValue, setSelectedValue] = useState('');
 
-    const [fromMonth,setFromMonth]=useState('');
-    const [toMonth,setToMonth]=useState('');
-    const [Data,setData]=useState('');
-console.log(fromMonth,toMonth);
+
+  const handlesubmit = async (event) => {
+    event.preventDefault();
+    try {
+      const formdata = {
+        fromMonth: fromMonth,
+        toMonth: toMonth,
+      };
+      const response = await GetESIReport(formdata);
+      if (response.success) {
+        setData(response.data);
+        toast.success(response.message);
+      } else {
+        toast.error(response.message);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error(error.message);
+    }
+  };
+  const options = [
+    { value: '1', label: 'Option 1' },
+    { value: '2', label: 'Option 2' },
+    { value: '3', label: 'Option 3' },
+    { value: '4', label: 'Option 4' },
+    // Add more options here as needed...
+  ];
 
 
-const handlesubmit =async(event)=>{
-  event.preventDefault();
-try {
-  const formdata = {
-    fromMonth : fromMonth,
-    toMonth : toMonth,
-  }
-// const response = await GetPFReport(formdata)
-// if (response.success){
-//   setData(response.data);
-//   toast.success(response.message)
-//   }else{
-//     toast.error(response.message)
-//   }
-} catch (error) {
-  console.log(error);
-  toast.error(error.message);
-}
+  const handleSelectChange = (index, event) => {
+    const value = event.target.value;
+  
+    setTablerow(prevRows => {
+      const updatedRows = prevRows.map((row, i) => {
+        if (i === index) {
+          return { ...row, selectedValue: value };
+        }
+        return row;
+      });
+      return updatedRows;
+    });
+  
+    setSelectedValue(prevSelected => {
+      const updatedSelected = [...prevSelected];
+      updatedSelected[index] = value;
+      return updatedSelected;
+    });
+  };
+  
+  
 
- }
+
+
+  const handleDateChange = (index, value) => {
+    setTablerow(prevRows => {
+      const updatedRows = [...prevRows];
+      updatedRows[index] = {
+        ...updatedRows[index],
+        lastworkday: value
+      };
+      return updatedRows;
+    });
+  };
+
+  console.log(tablerow,":tablerow");
+
+  useEffect(()=>{
+    if (Data&&tablerow) {
+      const combinedArray = Data.map((row, index) => ({
+        ...row,
+        ...tablerow[index]
+      }));
+      setData(combinedArray)
+      console.log(combinedArray,":Combined Arrayys");
+    } else {
+      console.error('Arrays are of different lengths. Cannot combine.');
+    }
+  
+  },[tablerow])
+
+const downloadExcel = () => {
+    const worksheet = XLSX.utils.table_to_sheet(document.querySelector('.comman-tabless'));
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, worksheet, 'Sheet1');
+    XLSX.writeFile(wb, `EPFO_${fromMonth} to ${toMonth}.xlsx`);
+  };
+
   return (
     <>
          <div className="card card-table show-entire">
@@ -91,54 +159,111 @@ try {
                       <button className=" btn btn-primary submit-form m-3" onClick={handlesubmit}>
                           Submit
                       </button>
-                      <button className='btn btn-primary submit-form m-2' >Download Excel</button>
-                  
+                      <button className='btn btn-primary submit-form m-2' onClick={downloadExcel}>Download Excel</button>
                       </form>
                     </div>
                   </div>
                 </div>
-               
+                {Data.length === 0 ? 
+                (<p className='m-3'>No Data Available</p>):(
                     <div className="table-responsive">
-                  <table className="table border-0 custom-table comman-table  mb-0 table-responsive">
+                  <table className="table border-0 custom-table comman-table mb-0 table-responsive">
                     <thead>
                       <tr>
                         <th>SL NO</th>
                         <th>IP NUMBER</th>
                         <th>IP NAME</th>
                         <th>EMPLOYEE TYPE</th>
-                        <th>EPF WAGES</th>
-                        <th>EPS WAGES</th>
-                        <th>EDLI WAGES</th>
-                        
+                        <th>No of Days for which wages paid/payable during the month</th>
+                        <th>Total Monthly Wages</th>
+                        <th> Reason Code for Zero workings days</th>
+                        <th>Last Working Day</th>
+                        <th>Employee Contribution</th>
+                        <th>Employer Contribution</th>
+                        <th>TOTAL ESI</th>
                       </tr>
                     </thead>
-                    <tbody>
-                    
-                    
+                       <tbody>
+                    {Data.map((item, index) => (
+                        <tr key={index}>
+                          <td>{index + 1}</td>
+                          <td>{item.employeeid && item.employeeid.Ipnumber}</td>
+                          <td>{item.employeeid && item.employeeid.name}</td>
+                          <td>
+                            {item.employeeid && item.employeeid.EmployeeTypeId
+                              ? item.employeeid.EmployeeTypeId.name
+                              : ''}
+                          </td>
+                          <td></td>
+                          <td></td>
+                          <td> <select
+                            className='form-control'
+                            value={selectedValue[index] || ''}
+                            onChange={(event) => handleSelectChange(index, event)}
+                          >
+                            <option value="">Select reason code</option>
+                            {options.map((option) => (
+                              <option key={option.value} value={option.value}>
+                                {option.label}
+                              </option>
+                            ))}
+                          </select>
+                          </td>
+                            <td>
+                              <input
+                               className='form-control'
+                               type="date"
+                               onChange={(e) => handleDateChange(index, e.target.value)}
+                            />
+                            </td>
+                        </tr>
+                      ))}
+
                     </tbody>
                   </table>
-                
+                  <table className="table border-0 custom-table comman-tabless  mb-0 table-responsive">
+                    <thead>
+                      <tr>
+                        <th>SL NO</th>
+                        <th>IP NUMBER</th>
+                        <th>IP NAME</th>
+                        <th>EMPLOYEE TYPE</th>
+                        <th>No of Days for which wages paid/payable during the month</th>
+                        <th>Total Monthly Wages</th>
+                        <th> Reason Code for Zero workings days</th>
+                        <th>Last Working Day</th>
+                        <th>Employee Contribution</th>
+                        <th>Employer Contribution</th>
+                        <th>TOTAL ESI</th>
+                      </tr>
+                    </thead>
+                 
+                       <tbody>
+                    {Data.map((item, index) => (
+                        <tr key={index}>
+                          <td>{index + 1}</td>
+                          <td>{item.employeeid && item.employeeid.Ipnumber}</td>
+                          <td>{item.employeeid && item.employeeid.name}</td>
+                          <td>
+                            {item.employeeid && item.employeeid.EmployeeTypeId
+                              ? item.employeeid.EmployeeTypeId.name
+                              : ''}
+                          </td>
+                          <td></td>
+                          <td></td>
+                          <td>{item.selectedValue?item.selectedValue:""}</td>
+                          <td>{item.lastworkday?item.lastworkday:""}</td>
+                            
+                        </tr>
+                      ))}
+
+                    </tbody>
+                  </table>
                 </div>
-                
+                      )}  
                 
               </div>
-              {/* <nav aria-label="Page navigation example">
-           
-           {memoizedData.length > itemsPerPage && (
-             <ul className="pagination">
-               {Array(Math.ceil(memoizedData.length / itemsPerPage))
-                 .fill()
-                 .map((_, index) => (
-                         <li className="page-item" key={index}>
-                           <a className="page-link"  onClick={() => setCurrentPage(index + 1)}>{index + 1}</a>
-                           </li>
-                     
-                  
-                 ))}
-             </ul>
-           )}
-        
-           </nav> */}
+              
             </div>
     </>
   )

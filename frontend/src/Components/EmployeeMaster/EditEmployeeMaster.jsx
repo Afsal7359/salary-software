@@ -38,6 +38,7 @@ function EditEmployeeMaster({ closeEdit, item, setData, Data, show, setshow }) {
    const [guardianname, setGuardianName] = useState(item?.guardianName);
    const [basicSalary, setBasicSalary] = useState(item?.basicSalary);
    const [universalAcNo, setUniversalAcNo] = useState(item?.universalAcNo);
+   const [Ipnumber, setIPNumber] = useState(item?.Ipnumber);
    const [city, setCity] = useState(item?.city);
    const [country, setCountry] = useState(item?.country);
    const [tabledata, setTabledata] = useState(item?.tableRow);
@@ -420,6 +421,7 @@ try {
 	  allowedleave,
     previousAllowedleave:allowedleave,
       universalAcNo,
+      Ipnumber,
       city,
       country,
       password,
@@ -941,6 +943,26 @@ console.log(employeeTypeId,":employeetypeid");
                             type="text"
                             placeholder=""
                             value={universalAcNo}
+                          />
+                        </div>
+                      </div>
+                      <div className="col-12 col-md-6 col-xl-6">
+                        <div className="form-group local-forms">
+                          <label>
+                            Ip Number
+                            <span className="login-danger">*</span>
+                          </label>
+                          <input
+                            onChange={(e) => {
+                              const Ipnumbers = e.target.value 
+                              if (Ipnumbers.length <= 10) {
+                                setIPNumber(Ipnumbers);
+                              }
+                            }}
+                            className={`form-control`}
+                            type="text"
+                            placeholder=""
+                            value={Ipnumber}
                           />
                         </div>
                       </div>

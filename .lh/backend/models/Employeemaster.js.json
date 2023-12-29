@@ -1,0 +1,26 @@
+{
+    "sourceFile": "backend/models/Employeemaster.js",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 2,
+            "patches": [
+                {
+                    "date": 1703655055071,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1703655999121,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -96,9 +96,9 @@\n     ageOfRetirement:{\r\n         type:String,\r\n         trim:true\r\n     },\r\n-    dateOfRetirement:{\r\n+    dateOfRetierment:{\r\n         type:String,\r\n         trim:true\r\n     },\r\n     guardianName :{\r\n"
+                },
+                {
+                    "date": 1703656015298,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -92,9 +92,9 @@\n         type: String,\r\n         \r\n         trim:true\r\n     },\r\n-    ageOfRetirement:{\r\n+    ageOfRetierment:{\r\n         type:String,\r\n         trim:true\r\n     },\r\n     dateOfRetierment:{\r\n"
+                }
+            ],
+            "date": 1703655055071,
+            "name": "Commit-0",
+            "content": "const mongoose = require('mongoose');\r\n\r\nconst EmployeeSchema= new mongoose.Schema({\r\n    employeeid:{\r\n        type: String,\r\n      \r\n        trim:true\r\n    },\r\n    name:{\r\n        type: String,\r\n       \r\n        trim:true\r\n    },\r\n    EmployeeTypeId:{\r\n        type: mongoose.Schema.Types.ObjectId,\r\n        ref: 'Employeetype',\r\n       \r\n    },\r\n    PostId:{\r\n        type: mongoose.Schema.Types.ObjectId,\r\n        ref: 'Post', \r\n       \r\n    },\r\n    employeeno:{\r\n        type: String,\r\n       \r\n        trim:true\r\n    },\r\n    address1:{\r\n        type: String,\r\n        \r\n        trim:true\r\n    },\r\n    address2:{\r\n        type: String,\r\n        trim:true\r\n    },\r\n    address3:{\r\n        type: String,\r\n        trim:true\r\n    },\r\n    pincode:{\r\n        type:Number,\r\n        trim:true\r\n    },\r\n    email:{\r\n        type: String,\r\n     \r\n        trim:true\r\n    },\r\n    phone:{\r\n        type: Number,\r\n       \r\n        trim:true\r\n    },\r\n    bank:{\r\n        type: String,\r\n     \r\n        trim:true\r\n    },\r\n    branch:{\r\n        type: String,\r\n      \r\n        trim:true\r\n    },\r\n    accountNo:{\r\n        type: String,\r\n       \r\n        trim:true\r\n    },\r\n    ifsc:{\r\n        type: String,\r\n      \r\n        trim:true\r\n    },\r\n    panNo:{\r\n        type: String,\r\n       \r\n        trim:true\r\n    },\r\n    panName:{\r\n        type: String,\r\n      \r\n        trim:true\r\n    },\r\n    dateOfBirth:{\r\n        type: String,\r\n       \r\n        trim:true\r\n    },\r\n    dateOfJoining:{\r\n        type: String,\r\n        \r\n        trim:true\r\n    },\r\n    ageOfRetirement:{\r\n        type:String,\r\n        trim:true\r\n    },\r\n    dateOfRetirement:{\r\n        type:String,\r\n        trim:true\r\n    },\r\n    guardianName :{\r\n        type: String,\r\n      \r\n        trim:true\r\n    },\r\n    basicSalary:{\r\n        type: String,\r\n        \r\n        trim:true\r\n    },\r\n    allowedleave:{\r\n        type: Number,\r\n        require:true,\r\n        trim:true\r\n    },\r\n    previousAllowedleave:{\r\n        type: Number,\r\n        require:true,\r\n        trim:true\r\n    },\r\n   \r\n    gender:{\r\n        type: String,\r\n      \r\n        trim:true\r\n    },\r\n    universalAcNo:{\r\n        type: String,\r\n      \r\n        trim:true\r\n    },\r\n    Ipnumber:{\r\n        type: String,\r\n      \r\n        trim:true\r\n    },\r\n    city:{\r\n        type: String,\r\n       \r\n        trim:true\r\n    },\r\n    country:{\r\n        type: String,\r\n      \r\n        trim:true\r\n    },\r\n    password:{\r\n        type:String,\r\n        trim:true\r\n    },\r\n    image:{\r\n        type:String,\r\n        trim:true\r\n    },\r\n\r\n   \r\n    tablerow: {\r\n        type: [{\r\n            id: {\r\n                type: mongoose.Schema.Types.Mixed,\r\n                default:null\r\n            },\r\n            salaryComponent: {\r\n                type: mongoose.Schema.Types.ObjectId,\r\n                ref: 'Salarymaster',\r\n            },\r\n            percentage: {\r\n                type: Number,\r\n            },\r\n            value: {\r\n                type: String,\r\n            },\r\n            price: {\r\n                type: Number,\r\n            }\r\n        }],  \r\n        default: [] \r\n    },\r\n    \r\n    \r\n    TotalSalary:{\r\n        type:Number\r\n    },\r\n  \r\n    isdeleted:{\r\n        type:Boolean,\r\n        require:true,\r\n        default:false\r\n    }\r\n    \r\n\r\n})\r\nconst Employee = mongoose.model('Employee',EmployeeSchema);\r\nmodule.exports=Employee;\r\n\r\n"
+        }
+    ]
+}

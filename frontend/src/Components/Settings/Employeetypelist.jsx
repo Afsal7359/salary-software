@@ -131,12 +131,17 @@ const closeEditModal = () => {
                       <th></th>
                     </tr>
                   </thead>
+                 
                   <tbody>
                     {Data.map((item, index) => (
                       <tr  key={`${item._id}-${index}`}>
                         <td>{index + 1}</td>
                         <td>{item.employeeid}</td>
                         <td>{item.name}</td>
+                        {index < 1 ? (
+
+              <td></td> 
+              ) : (
                         <td className="text-end">
                           <div className="dropdown dropdown-action">
                             <a
@@ -189,6 +194,7 @@ const closeEditModal = () => {
                             </div>
                           </div>
                         </td>
+                        )}
                       </tr>
                     ))}
                   </tbody>

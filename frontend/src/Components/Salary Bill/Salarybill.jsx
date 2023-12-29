@@ -114,7 +114,12 @@ function Salarybill() {
 
 
    const handleSelectChange = (selected) => {
-
+		setDAPercentage('')
+		setDAPrice('')
+		setIRPercentage('')
+		setIRPrice('')
+		setDAValue('')
+		setIRValue('')
 	const select = selected.value
 
 	
@@ -300,16 +305,12 @@ const handlesalarymasterchange = (event, index) => {
 		  const calculatedPerDaySalary = basicSalary / 30;
 		  setPerDaySalary(calculatedPerDaySalary);
 	  
-		  if (absentDays > allowedleave) {
-			const leaveDifferences = absentDays - allowedleave;
-			const calculatedTotal = totalAmount - leaveDifferences * perDaySalary;
-			setSalaryTotal(calculatedTotal.toFixed(2));
-		  } else {
+		
 			setSalaryTotal(totalAmount.toFixed(2));
-		  }
+		  
 	  
-		  const balanceleave = allowedleave - absentDays;
-		  setLeaveDifference(balanceleave < 0 ? 0 : balanceleave);
+		//   const balanceleave = allowedleave - absentDays;
+		//   setLeaveDifference(balanceleave < 0 ? 0 : balanceleave);
 		  setTotalDeduction(totalDeduction.toFixed(2));
 		//   const TotalIncrements=(basicSalary)+parseFloat(totalIncrement);
 		  setTotalIncrement(parseFloat(basicSalary) + parseFloat(totalIncrement));
@@ -563,7 +564,6 @@ const handleformsubmit = async(event)=>{
 			EPSContri,
 			EPSEPFDiff,
 			tablerow:updatedRow||[],
-			allowedleave:allowedleave,
 			absentDays : absentDays,
 			totalAmount: salaryTotal?.TotalSalary?salaryTotal.TotalSalary :salaryTotal
 			}
@@ -663,34 +663,7 @@ return (
 													)}
 										</div>
 									</div>
-									{/* <div class="col-sm-4">
-									   <div className="form-group local-forms">
-											<label>Month <span className="login-danger">*</span></label>
-											  
-												  <select
-                                                   className="form-control select"
-                                                   {...register('month', { required: 'Please select a month' })}
-												   value={month}
-												   onChange={(e) => setmonth(e.target.value)}
-                                                      >
-                                                         <option value="">Select Type</option>
-														 <option value="january">January</option>
-                                                      	 <option value="february">Feburary</option>
-														<option value="march">March</option>
-														<option value="april">April</option>
-														<option value="may">May</option>
-														<option value="june">June</option>
-														<option value="july">July</option>
-														<option value="august">August</option>
-														<option value="september">September</option>
-														<option value="october">October</option>
-														<option value="november">November</option>
-														<option value="december">December</option>
-                                                     </select>
-                                                       {errors.month && <p className="text-danger">{errors.month.message}</p>}
-											
-										</div>
-									</div> */}
+				
 								
 
 								<div class="col-sm-4">
@@ -746,9 +719,11 @@ return (
 											<div className="card invoices-add-card">
 												<div className="card-body">
 													<div className="invoice-add-table">
-													{tabledisplay &&
+											
 													<div className="table-responsive">
 														<table className="table table-striped table-nowrap  mb-0 no-footer add-table-items">
+														{tabledisplay &&
+														<div className="table table-striped table-nowrap  mb-0 no-footer add-table-items">
 														<thead>
 															<tr>
 															<th>No</th>
@@ -961,44 +936,46 @@ return (
 															},
 															])}	
 														</tbody>
+														</div>}
 														<tfoot>
+															
 															{/* <tr>
-																 <td colSpan="4" className='text-end'>Allowed Leaves</td>
-																 <td><input
-																className="form-control"
-																type="number"
-																value={allowedleave ? allowedleave : ''}
-																style={{ backgroundColor: "#cbd0d6" }}
-																readOnly
-																/>
-																</td>
-															</tr> */}
-															<tr>
-																<td colSpan="4" className='text-end mt-4'>Absent</td>
+															<div class="col-sm-4">
+																<td colSpan="4" className='text-end mt-4'></td>
 																<input
 																className="form-control"
 																type="number"
 																min={0}
 																onChange={(e) => setAbsentDays(e.target.value)}
-																value={absentDays}
-    />
-															</tr>
-															<div style={{display:"none"}}>balance Leave</div>
+																value={absentDays}/>
+																</div>
+															</tr> */}
 															<tr>
-															<td colSpan="4" className="text-end"><strong>Total Amount:</strong></td>
-															<td><input type="number" className="form-control"   value={salaryTotal?.TotalSalary?salaryTotal.TotalSalary :salaryTotal} readOnly/></td>
+															<div class="col-sm-4">
+															<td colSpan="4" className="text-end"><strong>Absent:</strong></td>
+															<td><input type="number" className="form-control"   value={absentDays} min={0}
+																onChange={(e) => setAbsentDays(e.target.value)}/></td>
 															{/* <td><input className="form-control" type="number" value={itemdata?.TotalSalary?itemdata.TotalSalary :TotalSalary}  readOnly/>
 															
 															</td> */}
-															
+															</div>
 															</tr>
 															<tr>
-																<td><input type="text" style={{display:"none"}} value={leaveDifference}/></td>
+															<div class="col-sm-4">
+															<td colSpan="4" className="text-end"><strong>Total Amount:</strong></td>
+															<td><input type="number" className="form-control" 	style={{backgroundColor:"#cbd0d6"}}   value={salaryTotal?.TotalSalary?salaryTotal.TotalSalary :salaryTotal} readOnly/></td>
+															{/* <td><input className="form-control" type="number" value={itemdata?.TotalSalary?itemdata.TotalSalary :TotalSalary}  readOnly/>
+															
+															</td> */}
+															</div>
 															</tr>
+															{/* <tr>
+																<td><input type="text" style={{display:"none"}} value={leaveDifference}/></td>
+															</tr> */}
 														</tfoot>
 														</table>
 														
-													</div>}
+													</div>
 													<div className="col-12">
 											<div className="doctor-submit text-end m-3">
 												<button type="submit" className="btn btn-primary submit-form me-2">Submit</button>

@@ -93,11 +93,11 @@ const EmployeeSchema= new mongoose.Schema({
         
         trim:true
     },
-    ageOfRetirement:{
+    ageOfRetierment:{
         type:String,
         trim:true
     },
-    dateOfRetirement:{
+    dateOfRetierment:{
         type:String,
         trim:true
     },
@@ -128,6 +128,11 @@ const EmployeeSchema= new mongoose.Schema({
         trim:true
     },
     universalAcNo:{
+        type: String,
+      
+        trim:true
+    },
+    Ipnumber:{
         type: String,
       
         trim:true

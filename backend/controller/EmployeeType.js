@@ -124,7 +124,7 @@ module.exports = {
   GetallEmployeetype: async (req, res) => {
     try {
       // Retrieve a single Employeetype record based on the specified employeetypeid
-      const Employeetypess = await Employeetype.find({ isdeleted: { $ne: true } }).sort({_id:-1});
+      const Employeetypess = await Employeetype.find({ isdeleted: { $ne: true } })
 
       if (!Employeetype) {
         return res.status(404).json({

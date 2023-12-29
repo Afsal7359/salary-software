@@ -35,6 +35,7 @@ const AddEmployeemaster = () => {
 	const [basicsalary, setBasicSalary]=useState('');
 	const [allowedLeave, setAllowedLeave]=useState('');
 	const [universalAcNo, setUniversalAcNo]=useState('');
+	const [Ipnumber, setIPNumber]=useState('');
 	const [city, setCity]=useState('');
 	const [country, setCountry]=useState('');
 	const [password,setPassword]=useState('');
@@ -463,6 +464,7 @@ const [tablestate,settablestate]=useState(false)
 		setDAValue('');
 		setIRPrice('')
 		setDAPrice('')
+		setIPNumber('');
 	  }
 	  console.log(resetstate);
 
@@ -494,6 +496,8 @@ const [tablestate,settablestate]=useState(false)
 		 data.PostId=postId
 		 data.previousAllowedleave=allowedLeave
 		 data.tablerow=employeeTypeId==="6566be7b0085f19cfbfd00c1"? updatedRow:[]
+		 data.ageOfRetierment=ageOfRetierment
+		 data.dateOfRetierment=dateOfRetierment
 		
 // 		data.tablerow = (tableRows && Array.isArray(tableRows) && tableRows.length === 1 &&
 //   tableRows[0].value === '0' &&
@@ -1045,7 +1049,30 @@ const [tablestate,settablestate]=useState(false)
 													)}
 												</div>
 										</div>
-
+										<div className="col-12 col-md-6 col-xl-6">
+												<div className="form-group local-forms">
+													<label>IP Number<span className="login-danger">*</span></label>
+													<input
+													{...register('Ipnumber', { required: true, minLength: 6 })}
+													type="text"
+													className={`form-control ${errors.Ipnumber ? 'is-invalid' : ''}`}
+													placeholder=""
+													value={Ipnumber} 
+													onChange={(e) => {
+														const Ipnumbers = e.target.value 
+														if (Ipnumbers.length <= 10) {
+															setIPNumber(Ipnumbers);
+														}
+													}}
+													/>
+													{errors.Ipnumber && errors.Ipnumber.type === 'required' && (
+													<span className="text-danger">Account Number is required</span>
+													)}
+													{errors.Ipnumber && errors.Ipnumber.type === 'minLength' && (
+													<span className="text-danger">Account Number should be at  10 characters</span>
+													)}
+												</div>
+										</div>
 										
 										<div className="col-12 col-md-6 col-xl-6">
 												<div className="form-group local-forms">

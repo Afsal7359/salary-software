@@ -109,13 +109,14 @@ function EmployeeView({item}){
                                                                 <td>{item?.universalAcNo}</td>
                                                             </tr>
                                                             <tr>
+                                                                <th>IP Number</th>
+                                                                <td>{item?.Ipnumber}</td>
+                                                            </tr>
+                                                            <tr>
                                                                 <th> City </th>
                                                                 <td>{item?.city}</td>
                                                             </tr>
-                                                            <tr>
-                                                                <th>  Country </th>
-                                                                <td>{item?.country}</td>
-                                                            </tr>
+                                                      
                                                             <tr>
                                                                 <th>  Country </th>
                                                                 <td>{item?.country}</td>
@@ -145,7 +146,7 @@ function EmployeeView({item}){
 ) : (
     <tbody>
         <tr>
-            <td colSpan="1">No data available</td>
+            <td style={{color:"red"}} colSpan="1">salary component not available</td>
         </tr>
     </tbody>
 )}
