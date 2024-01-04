@@ -29,6 +29,8 @@ function Salarybill() {
 	const [totalrowprice,setTotalRowPrice]=useState([]);
 	const [employeeid,setEmployeeid]=useState('');
 	const [formdata,setformData]=useState([]);
+	const [eligiblePay,setEligiblePay]=useState('');
+	const [lossOfPay,setLossOfPay]=useState('');
 	
 	const [EPFWage,setEPFWage]=useState('');
 	const [EPSWage,setEPSWage]=useState('');
@@ -528,10 +530,21 @@ setEPSEPFDiff(EPFEPSDIFF)
 	console.log(EDLIWage,"EdliWage");
 
   }, [totalAmount, dateOfJoining,EPSWage,EPFWage,EDLIWage,filterEmployeeData,employeeTypeId,,employeeid,options,tablerow,DAPrice,IRPrice,updatedRow]);
-  
+  console.log(absentDays,":AbsentDays");
 
+  useEffect(()=>{
+	if(absentDays && basicSalary){
+		const EligiblePay = (30 - absentDays)*basicSalary/30
+		const LossOfPAY = (absentDays)*basicSalary/30
+		setEligiblePay(Math.round(EligiblePay))
+		setLossOfPay(Math.round(LossOfPAY))
+		console.log(EligiblePay,":Eligible Pay");
+	}
 
+  },[absentDays])
 
+console.log(eligiblePay,"Eligible Pay");
+console.log(lossOfPay,"LossOfpay");
 const handleformsubmit = async(event)=>{
 	// event.preventDefault();
 	console.log(tablerow,":tablerow:");
@@ -557,6 +570,8 @@ const handleformsubmit = async(event)=>{
 			totalcontribution:totalcontribution?totalcontribution:"",
 			totalincrement:totalincrement,
 			employeeTypeId:employeeTypeId,
+			lossOfPay,
+			eligiblePay,
 			EPFWage,
 			EPSWage,
 			EDLIWage,
@@ -584,6 +599,8 @@ const handleformsubmit = async(event)=>{
 			setIRPrice('');
 			setDAValue('');
 			setIRValue('');
+			setLossOfPay('');
+			setEligiblePay('');
 			setTotalContributions([])
 			const response = await AddSalaryBill(formdata);
 

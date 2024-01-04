@@ -52,13 +52,8 @@ function Esi() {
       });
       return updatedRows;
     });
-  
-    setSelectedValue(prevSelected => {
-      const updatedSelected = [...prevSelected];
-      updatedSelected[index] = value;
-      return updatedSelected;
-    });
   };
+  
   
   
 
@@ -197,10 +192,11 @@ const downloadExcel = () => {
                           <td></td>
                           <td></td>
                           <td> <select
-                            className='form-control'
-                            value={selectedValue[index] || ''}
-                            onChange={(event) => handleSelectChange(index, event)}
-                          >
+                           className='form-control'
+                               type="text"
+                               value={item.selectedValue} // Bind input value to selectedValue
+                               onChange={event => handleSelectChange(index, event)}
+                             >
                             <option value="">Select reason code</option>
                             {options.map((option) => (
                               <option key={option.value} value={option.value}>

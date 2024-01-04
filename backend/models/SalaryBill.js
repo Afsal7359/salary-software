@@ -31,6 +31,12 @@ const SalarybillSchema = new mongoose.Schema({
         type:Array,
         
     },
+    eligiblePay:{
+        type:String,
+    },
+    lossOfPay:{
+        type:String,
+    }, 
     
     departmentid:{
         type: mongoose.Schema.Types.ObjectId,

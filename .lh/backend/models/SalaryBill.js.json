@@ -1,0 +1,22 @@
+{
+    "sourceFile": "backend/models/SalaryBill.js",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 1,
+            "patches": [
+                {
+                    "date": 1704101655549,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1704169327440,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -35,9 +35,9 @@\n         type:String,\r\n     },\r\n     lossOfPay:{\r\n         type:String,\r\n-    },\r\n+    }, \r\n     \r\n     departmentid:{\r\n         type: mongoose.Schema.Types.ObjectId,\r\n         ref: 'Department',\r\n"
+                }
+            ],
+            "date": 1704101655548,
+            "name": "Commit-0",
+            "content": "const mongoose = require('mongoose');\r\n\r\n\r\nconst SalarybillSchema = new mongoose.Schema({\r\n    SalaryBillNo:{\r\n        type: String,\r\n        trim:true\r\n    },\r\n    absentDays:{\r\n        type:Number,\r\n    },\r\n\r\n    allowedleave:{\r\n        type:Number,\r\n    },\r\n    date:{\r\n        type:String,\r\n    },\r\n\r\n    basicSalary:{\r\n        type:String,\r\n        require:true\r\n    },\r\n    totaldeduction:{\r\n        type:String,\r\n    },\r\n    totalincrement:{\r\n        type:String,\r\n    },\r\n    totalcontribution:{\r\n        type:Array,\r\n        \r\n    },\r\n    eligiblePay:{\r\n        type:String,\r\n    },\r\n    lossOfPay:{\r\n        type:String,\r\n    },\r\n    \r\n    departmentid:{\r\n        type: mongoose.Schema.Types.ObjectId,\r\n        ref: 'Department',\r\n    },\r\n\r\n    employeeid:{\r\n        type: mongoose.Schema.Types.ObjectId,\r\n        ref: 'Employee'\r\n    },\r\n    employeeTypeId:{\r\n        type:mongoose.Schema.Types.ObjectId,\r\n        ref:'Employeetype'\r\n    },\r\n\r\n    unitid:{\r\n        type: mongoose.Schema.Types.ObjectId,\r\n        ref:'Unit'\r\n    },\r\n\r\n    tablerow: {\r\n        type: [{\r\n            id: {\r\n                type:Number,\r\n            },\r\n            salaryComponent: {\r\n                type: mongoose.Schema.Types.ObjectId,\r\n                ref: 'Salarymaster',\r\n                default: null,\r\n            },\r\n            percentage: {\r\n                type: Number,\r\n            },\r\n            value: {\r\n                type: String,\r\n            },\r\n            price: {\r\n                type: Number,\r\n            }\r\n        }],\r\n        default: []\r\n    },\r\n    totalAmount :{\r\n        type:Number,\r\n        require:true\r\n    },\r\n    EPFWage:{\r\n        type: Number,\r\n    },\r\n    EPFContri:{\r\n        type:Number,\r\n    },\r\n    EPSWage:{\r\n        type:Number,\r\n    },\r\n    EPSContri:{\r\n        type:Number\r\n    },\r\n    EPSEPFDiff:{\r\n        type:Number\r\n    },\r\n    EDLIWage:{\r\n        type:Number\r\n    },\r\n    isdeleted:{\r\n        type:Boolean,\r\n        require:true,\r\n        default:false\r\n    }\r\n\r\n},{timestamps:true});\r\nconst SalaryBill = mongoose.model('SalaryBill',SalarybillSchema);\r\nmodule.exports= SalaryBill;"
+        }
+    ]
+}
