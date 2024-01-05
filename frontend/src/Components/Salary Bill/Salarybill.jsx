@@ -276,7 +276,7 @@ const handlesalarymasterchange = (event, index) => {
 	const [totalcontribution,setTotalContributions]=useState(0)
 	useEffect(() => {
 		try {
-		  let 	totalAmount = basicSalary;
+		  let totalAmount = basicSalary;
 		  let totalDeduction = 0;
 		  let totalIncrement = 0;
 		  let totalcontribution =0;

@@ -13,7 +13,7 @@ const AddEmployeemaster = () => {
 	const [name, setName] = useState('');
 	const [email, setEmail]=useState('');
 	const [rowid ,setRowId]=useState('')
-	const [rowid1,setRowId1]=useState('')
+	const [rowid1,setRowId1]=useState("")
 	const [rowid2 ,setRowId2]=useState('')
 	const [phone,setPhone]=useState('');
 	const [employeeno, setEmployeeno]=useState('');
@@ -111,6 +111,7 @@ const AddEmployeemaster = () => {
 		 setDAPercentage(value)
 		 setDAValue('')
 	   }
+	   
 	   const handleDAValue = (event)=>{
 		 const value= event.target.value;
 		 setDAValue(value)
@@ -226,14 +227,14 @@ const AddEmployeemaster = () => {
 
 	const firstrow =[
 		{
-			id:1,
+			id:101,
 			salaryComponent:"6581128dc32bc7fefb3b2e30",
 			percentage:DAPercentage?DAPercentage:"",
 			value:DAValue?DAValue:"",
 			price:DAPrice
 		},
 		{
-			id:2,
+			id:102,
 			salaryComponent:"658112c9c32bc7fefb3b2e3b",
 			percentage:IRPercentage?IRPercentage:"",
 			value:IRValue?IRValue:"",
@@ -241,17 +242,23 @@ const AddEmployeemaster = () => {
 		}
 	  ]
 	  
-	const handlesalarymasterchange = (event, index) => {
+	  const [updatedTableRowsss, setUpdatedTableRowsss] = useState([]);
+
+	  const handlesalarymasterchange = (event, index) => {
 		const updatedTableRows = [...tableRows];
+		console.log(updatedTableRows,"tablerow updated");
+		// setDAPrice(updatedTableRows[0].price)
+		// setIRPrice(updatedTableRows[1].price)
 		updatedTableRows[index] = {
 		  ...updatedTableRows[index],
-		  salaryComponent: event.target.value, // Update salaryComponent based on the event value
-		  id : Number(index + 2 + 1)
+		  salaryComponent: event.target.value,
 		};
-	
-	  console.log(updatedTableRows,"ii");
 		settableRows(updatedTableRows);
-	  }
+	  };
+
+
+
+	  
 
 	//   const handleRowIdChange = (index) => {
 	// 	console.log('hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhi');
@@ -465,28 +472,24 @@ const [tablestate,settablestate]=useState(false)
 		setIRPrice('')
 		setDAPrice('')
 		setIPNumber('');
+		settableRows([])
 	  }
 	  console.log(resetstate);
 
 	  const[updatedRow,setUpdatedRow]=useState('');
-
-	  useEffect(()=>{
-		let updatedFirstRow = [...firstrow];
-		console.log(updatedFirstRow,"updatedroww");
-		console.log(tableRows);
-
-		if (tableRows && tableRows.length > 0 && tableRows[0].price === '') {
-		  updatedFirstRow = [...updatedFirstRow];
-		  setUpdatedRow(updatedFirstRow)
-		}else if( tableRows && tableRows.length > 0 && tableRows[0].price > 0){
-		  updatedFirstRow=[...updatedFirstRow, ...tableRows]
-		  setUpdatedRow(updatedFirstRow)
-		}
-		console.log(updatedFirstRow,":::::::::::::::fffff");
-
-	  },[tableRows]) 
+console.log(firstrow,":First  row");
+console.log(tableRows,":::Table::Row::");
+useEffect(() => {
+	if (tableRows && tableRows.length > 0 && !tableRows[0].price) {
+	  setUpdatedRow([...firstrow.map(row => ({ ...row }))]); // Set updatedRow with the cloned contents of firstrow
+	} else if (tableRows && tableRows.length > 0 && tableRows[0].price > 0) {
+	  setUpdatedRow([...firstrow.map(row => ({ ...row })), ...tableRows.map(row => ({ ...row }))]); // Merge firstrow and tableRows into updatedRow with cloned objects
+	}
+  }, [tableRows]);
+  
+  
 	
-
+console.log(updatedRow,":tabllllerow");
 	  const onSubmit = async (data) => {
 	
 
@@ -1286,16 +1289,17 @@ const [tablestate,settablestate]=useState(false)
 																<input
 																type="text"
 																className="form-control"
-																value={row.id || index + 2 + 1} // If row.id exists, use it; otherwise, use index + 2 + 1
+																value={index + 2 + 1} // If row.id exists, use it; otherwise, use index + 2 + 1
 																readOnly
-																// onChange={(e) => setRowId(index, e.target.value)}
+																onChange={(e) => setRowId(index+ 2 + 1)}
 																/>
 																</td>
 																<td>
 																<select className="form-control"
 																onKeyDown={handlesalarymasterclick}
-																onMouseEnter={handlesalarymasterclick}
+																onClick={handlesalarymasterclick}
 																onChange={(event) => handlesalarymasterchange(event, index)}
+															
 																>
 																	<option>Select</option>
 																	{salarymasterData.map((option)=>(
@@ -1355,7 +1359,7 @@ const [tablestate,settablestate]=useState(false)
 
 															{tableRows.length === 0 && (
 															settableRows(prevRows => [...prevRows, {
-																id: rowid,
+																id: rowid+1,
 																salaryComponent: '',
 																percentage: '',
 																value: '',
