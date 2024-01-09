@@ -1,7 +1,8 @@
-import React,{useState,useEffect} from 'react'
+import React,{useState,useEffect, useMemo} from 'react'
 import * as XLSX from 'xlsx';
 import { toast } from 'react-toastify';
 import { GetESIReport } from '../../Apicalls/Report';
+import PageHeader from '../PageHeader';
 
 function Esi() {
   const [fromMonth, setFromMonth] = useState('');
@@ -56,7 +57,12 @@ function Esi() {
   
   
   
-
+  const headerdata = useMemo(() => {
+		return {
+		  data:"REPORT",
+		  page:"ESI REPORT"
+		};
+	  }, []);
 
 
   const handleDateChange = (index, value) => {
@@ -95,6 +101,7 @@ const downloadExcel = () => {
 
   return (
     <>
+    <PageHeader headerdata={headerdata}/>
          <div className="card card-table show-entire">
               <div className="card-body">
                 <div className="page-table-header mb-2">

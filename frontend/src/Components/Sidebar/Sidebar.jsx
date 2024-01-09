@@ -51,6 +51,7 @@ const Sidebar = () => {
 							<ul style={{ display:'none'}}>
                             <li><Link to="/report-pf">PF Report</Link></li>
                             <li><Link to="/report-esi">ESI Report</Link></li>
+                            <li><Link to="/report-salary">Salary Monthly Report</Link></li>
 							</ul>
 						</li>
 

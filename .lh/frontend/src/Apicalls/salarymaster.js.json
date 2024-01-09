@@ -1,0 +1,18 @@
+{
+    "sourceFile": "frontend/src/Apicalls/salarymaster.js",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 0,
+            "patches": [
+                {
+                    "date": 1704782203359,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                }
+            ],
+            "date": 1704782203359,
+            "name": "Commit-0",
+            "content": "import instance from './axiosinstance'\r\n\r\n\r\nexport const Addsalarymaster = async (payload) => {\r\n    try {\r\n        const response = await instance.post('salary/addsalarymaster', payload);\r\n        return response.data\r\n    } catch (err) {\r\n        return err.response.data;\r\n    }\r\n}\r\n\r\nexport const getallSalary = async () => {\r\n    try {\r\n        const response = await instance.get('salary/getallsalary');\r\n        return response.data\r\n    } catch (err) {\r\n        return err.response.data;\r\n    }\r\n}\r\n\r\nexport const editsalarymaster= async (payload) => {\r\n    try {\r\n      // Make a PUT request to edit the employeetype\r\n      const response = await instance.post(`salary/editsalarymaster/${payload._id}`, payload);\r\n      return response.data;\r\n    } catch (err) {\r\n      return err.response.data;\r\n    }\r\n  };\r\n\r\n  export const deletesalarymaster = async (payload) => {\r\n    try {\r\n      // Make a PUT request to edit the employeetype\r\n      const response = await instance.delete(`salary/deletesalarymaster/${payload}`);\r\n      return response.data;\r\n    } catch (err) {\r\n      return err.response.data;\r\n    }\r\n  };\r\n\r\n  export const getallSalarycount = async () => {\r\n    try {\r\n        const response = await instance.get('salary/getallsalarycount');\r\n        return response.data\r\n    } catch (err) {\r\n        return err.response.data;\r\n    }\r\n}\r\n\r\nexport const GetSalaryComponent = async()=>{\r\n  try {\r\n    const response = await instance.get('salary/getSalaryComponent');\r\n    return response.data\r\n  } catch (error) {\r\n    return error.response.data;\r\n  }\r\n}"
+        }
+    ]
+}

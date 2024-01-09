@@ -138,7 +138,7 @@ const closeEditModal = () => {
                         <td>{index + 1}</td>
                         <td>{item.employeeid}</td>
                         <td>{item.name}</td>
-                        {index < 1 ? (
+                        {/* {index < 1 ? (
 
               <td></td> 
               ) : (
@@ -194,7 +194,7 @@ const closeEditModal = () => {
                             </div>
                           </div>
                         </td>
-                        )}
+                        )} */}
                       </tr>
                     ))}
                   </tbody>

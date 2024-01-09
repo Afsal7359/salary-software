@@ -154,5 +154,39 @@ module.exports={
             error: error.message,
           });
         }
-      }
+      },
+      GetSalaryComponent:async(req,res)=>{
+        try{
+            const response = await Salarymaster.find({ isdeleted: { $ne: true } })
+
+            const incrementComponents = ([]);
+            const decrementComponents = ([]);
+            
+            response.forEach(item => {
+              if (item.type) {
+                if (item.type === 'Increment') {
+                  incrementComponents.push(item);
+                } else if (item.type === 'Decrement') {
+                  decrementComponents.push(item);
+                }
+              }
+            });
+            
+            res.status(200).json({
+              success: true,
+              message: "Salarymaster data get Successfully",
+              data:{
+                incrementComponents: incrementComponents,
+                decrementComponents: decrementComponents
+              }
+              
+            });
+        }catch(err){
+            res.status(500).json({
+                success: false,
+                message: "Failed to Get Salarymaster.",
+                error: err.message,
+            });
+        }
+    },
 }

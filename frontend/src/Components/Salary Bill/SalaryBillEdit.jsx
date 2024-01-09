@@ -163,14 +163,14 @@ console.log('frfrrrrffrfrffrffrffr',filterEmployeeData);
   const firstrow =[
 	{
 		id:1,
-		salaryComponent:"6581128dc32bc7fefb3b2e30",
+		salaryComponent:"659bb609d4d7dd6ffd8dfbf3",
 		percentage:DAPercentage?DAPercentage:"",
 		value:DAValue?DAValue:"",
 		price:DAPrice
 	},
 	{
 		id:2,
-		salaryComponent:"658112c9c32bc7fefb3b2e3b",
+		salaryComponent:"659bb617d4d7dd6ffd8dfbf7",
 		percentage:IRPercentage?IRPercentage:"",
 		value:IRValue?IRValue:"",
 		price:IRPrice
