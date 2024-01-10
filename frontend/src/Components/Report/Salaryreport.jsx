@@ -309,6 +309,8 @@ const downloadExcel = (event) => {
                             <td style={{border:"2px solid"}}>{data.TotalGrossSalary}</td>
                           </tr>
                         ))}
+
+                        <tr></tr>
                          {contractstaff.map((data, index) => (
                           <tr key={index}>
                             <td style={{border:"2px solid"}}>{permenantstaff.length+1}</td>
@@ -349,6 +351,7 @@ const downloadExcel = (event) => {
                             <td style={{border:"2px solid"}}>{data.TotalGrossSalary}</td>
                            </tr> 
                           ))}
+                          <tr></tr>
 
                           {dailywagestaff.map((data, index) => (
                           <tr key={index}>
