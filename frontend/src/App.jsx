@@ -20,6 +20,7 @@ const Typepage = lazy(() => import('./Pages/Typepage'));
 const Operationalpage = lazy(() => import('./Pages/Operationalpage'));
 const Accounttypepage = lazy(() => import('./Pages/Accounttypepage'));
 import { BrowserRouter as Router, Routes, Route} from 'react-router-dom'
+const Bankreport = lazy(()=> import('./Components/Report/Bankreport'));
 const Salaryreport = lazy(()=> import('./Components/Report/Salaryreport'));
 const Esi= lazy(()=> import('./Components/Report/Esi'));
 const Salarybill = lazy(()=> import('./Components/Salary Bill/Salarybill')) ;
@@ -57,9 +58,10 @@ const App = () => {
        <Route path="/salary-bill" element={<Salarybill/>}/>
        <Route path="/salary" element={<Salaryview/>}/>
        <Route path="/salary-voucher" element={<SalaryvoucherPrint/>}/>
-       <Route path="/report-pf" element={<Pf/>}/>
-       <Route path="/report-esi" element={<Esi/>}/>
-       <Route path="/report-salary" element={<Salaryreport/>}/>
+       <Route path="/pf-report" element={<Pf/>}/>
+       <Route path="/esi-report" element={<Esi/>}/>
+       <Route path="/salary-report" element={<Salaryreport/>}/>
+       <Route path='/bank-report' element={<Bankreport/>}/>
        </Routes>
        </Suspense>
        </div>

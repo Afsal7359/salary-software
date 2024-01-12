@@ -177,7 +177,7 @@ const downloadExcel = (event) => {
                   <div className="row align-items-center">
                   <div className="col">
                       <div className="doctor-table-blk">
-                        <h3>PF REPORT</h3>
+                        <h3> REPORT</h3>
                         <div className="doctor-search-blk">
                           {/* <div className="top-nav-search table-search-blk">
                             <form>

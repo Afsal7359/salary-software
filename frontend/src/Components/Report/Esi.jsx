@@ -133,7 +133,16 @@ const downloadExcel = () => {
                     <div className="col-auto  ms-auto">
                       
                     <form >
-                      
+                    <a type='button' className=" me-2" >
+                        {/* <img src={pdficon} alt="" /> */}
+                        <input
+                        className='form-control'
+                          type="date"
+                          value={fromMonth}
+                          onChange={(e) => setFromMonth(e.target.value)}
+                          required
+                        />
+                      </a>
                           
                       <a type='button' className=" me-2" >
                         {/* <img src={pdficon} alt="" /> */}

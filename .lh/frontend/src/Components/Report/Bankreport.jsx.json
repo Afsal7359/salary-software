@@ -1,0 +1,38 @@
+{
+    "sourceFile": "frontend/src/Components/Report/Bankreport.jsx",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 5,
+            "patches": [
+                {
+                    "date": 1704954451458,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1704954461536,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,1 +1,7 @@\n-r\n\\ No newline at end of file\n+import React from 'react'\r\n+\r\n+export const Bankreport = () => {\r\n+  return (\r\n+    <div>Bankreport</div>\r\n+  )\r\n+}\r\n"
+                },
+                {
+                    "date": 1704954470737,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,9 @@\n+import React from 'react'\r\n+\r\n+const Bankreport = () => {\r\n+  return (\r\n+    <div>Bankreport</>\r\n+  )\r\n+}\r\n+\r\n+export default Bankreport\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1704954729809,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,11 @@\n+import React from 'react'\r\n+\r\n+const Bankreport = () => {\r\n+\r\n+    const hea\r\n+  return (\r\n+    <>Bankreport</>\r\n+  )\r\n+}\r\n+\r\n+export default Bankreport\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1704954736422,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,9 +1,9 @@\n import React from 'react'\r\n \r\n const Bankreport = () => {\r\n \r\n-    const headerdata = use\r\n+    const headerdata = usem\r\n   return (\r\n     <>Bankreport</>\r\n   )\r\n }\r\n"
+                },
+                {
+                    "date": 1704954742374,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,11 @@\n+import React, { useMemo } from 'react'\r\n+\r\n+const Bankreport = () => {\r\n+\r\n+    const headerdata = useMemo(())\r\n+  return (\r\n+    <>Bankreport</>\r\n+  )\r\n+}\r\n+\r\n+export default Bankreport\n\\ No newline at end of file\n"
+                }
+            ],
+            "date": 1704954451458,
+            "name": "Commit-0",
+            "content": "r"
+        }
+    ]
+}
