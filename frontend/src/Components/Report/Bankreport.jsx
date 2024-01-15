@@ -4,6 +4,7 @@ import { getallbankAccount } from '../../Apicalls/BankAccount'
 import { toast } from 'react-toastify'
 import { GetESIReport } from '../../Apicalls/Report'
 import * as XLSX from 'xlsx';
+import { getallUnite } from '../../Apicalls/Unit'
 
 const Bankreport = () => {
 
@@ -18,6 +19,7 @@ const Bankreport = () => {
     const [Bank,setBank]=useState([]);
     const [ selectBankAcNo,setSelectedBankAcNo]=useState('')
     const [Data,setData]=useState([]);
+    const [Unit,setUnit]=useState([]);
 
     const handlesubmit =async(event)=>{
         event.preventDefault();
@@ -49,6 +51,8 @@ const Bankreport = () => {
           try {
             const result = await getallbankAccount();
             setBank(result.data);
+            const Unitresult = await getallUnite();
+            setUnit(Unitresult.data)
           } catch (error) {
             console.error('Error fetching data:', error);
           }
@@ -59,6 +63,7 @@ const Bankreport = () => {
 console.log(Bank,"Bank");
 console.log(selectBankAcNo,"bankAccountnumber");
 console.log(Data,"dataaaa");
+console.log(Unit,"UnitData");
 
 const handleBankChange =(event)=>{
     setSelectedBankAcNo(event.target.value)
@@ -66,7 +71,7 @@ const handleBankChange =(event)=>{
        
 const downloadExcel = () => {
     // Get the table element
-    const table = document.querySelector('.comman-table');
+    const table = document.querySelector('.download-Excel');
 
     // Convert the table to worksheet
     const worksheet = XLSX.utils.table_to_sheet(table);
@@ -197,7 +202,7 @@ const downloadExcel = () => {
                 </div>
                 {Data.length === 0 ? 
                 (<p className='m-3'>No Data Available</p>):(
-                    <div className="table-responsive">
+                    <div className="table-responsive download-Excel">
                   <table className="table border-0 custom-table comman-table mb-0 table-responsive">
                     <thead>
                       <tr>
@@ -264,9 +269,97 @@ const downloadExcel = () => {
                           <td>{selectBankAcNo}</td>
                         </tr>
                       ))}
-
+                      <tr></tr>
+                      <tr></tr>
+                      <tr></tr>
+                      <tr></tr>
+                      
                     </tbody>
-                  </table>
+                    </table>
+              
+                  {Unit.map((data, index) => (
+                           <table  className="table border-0 custom-table comman-table mb-0 table-responsive">
+                          <thead key={index}>
+                            <tr key={index}>
+                              <th>
+                                <h4>{data.name}</h4>
+                              </th>
+                            </tr>
+                            <tr>
+                      <th>SL NO</th>
+                        <th>Dr Acct</th>
+                        <th>Amount</th>
+                        <th>Beneficiary IFSC</th>
+                        <th>Tran Particular</th>
+                        <th>Benef Cust AcctID</th>
+                        <th>Benef Cust Name</th>
+                        <th>Benf Cust Addr1</th>
+                        <th>Benef Cust Addr2</th>
+                        <th>Benf Cust Addr3</th>
+                        <th>Ordering Bank Code</th>
+                        <th>Ordering Branch Code</th>
+                        <th>Ordering Inst ID</th>
+                        <th>Ordering Inst Name</th>
+                        <th>OrdInst Addr1</th>
+                        <th>OrdInst Addr2</th>
+                        <th>OrdInst Addr3</th>
+                        <th>Payment Detail1 (email)</th>
+                        <th>Payment Detail2</th>
+                        <th>Payment Detail3</th>
+                        <th>Payment Detail4</th>
+                        <th>Sender Receiver Info1</th>
+                        <th>Sender Receiver Info2</th>
+                        <th>Sender Receiver Info3</th>
+                        <th>Sender Receiver Info4</th>
+                        <th>Sender Receiver Info5</th>
+                        <th>Sender Receiver Info6</th>
+                        <th>Charge Acct</th>
+                      </tr>
+                          </thead>
+                          <tbody>
+                            {Data.filter(employee => employee.unitid._id === data._id).map((item, index) => (
+                               <tr key={index}>
+                               <td>{index + 1}</td>
+                               <td>{selectBankAcNo}</td>
+                               <td>{item.totalAmount}</td>
+                               <td>{item.employeeid.ifsc}</td>
+                               <td>Salary</td>
+                               <td>{item.employeeid.accountNo}</td>
+                               <td>{item.employeeid.name}</td>
+                               <td>{item.employeeid.bank}</td>
+                               <td>{item.employeeid.branch}</td>
+                               <td></td>
+                               <td>O49</td>
+                               <td>16686</td>
+                               <td></td>
+                               <td></td>
+                               <td></td>
+                               <td></td>
+                               <td></td>
+                               <td>emlmarketing@marketfed.com</td>
+                               <td></td>
+                               <td></td>
+                               <td></td>
+                               <td>/FAST/</td>
+                               <td></td>
+                               <td></td>
+                               <td></td>
+                               <td></td>
+                               <td></td>
+                               <td>{selectBankAcNo}</td>
+                             </tr>
+                               
+                            ))}
+                            
+                             
+                               <tr></tr>
+                               <tr></tr>
+                               <tr></tr>
+                          </tbody>
+                          </table>
+                      ))}
+
+
                
                 </div>
                       )}  

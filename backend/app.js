@@ -24,6 +24,8 @@ const SalaryBill = require('./routes/SalaryBill');
 const CompanyRouter = require('./routes/Company');
 const UserLogin = require('./routes/user');
 const Report = require('./routes/Report');
+const SuperAdminlogin = require('./routes/SuperAdmin');
+const Admin = require('./routes/Admin');
 
 
 dotenv.config()
@@ -68,6 +70,8 @@ app.use('/api/salarybill',SalaryBill)
 app.use('/api/company',CompanyRouter);
 app.use('/api/userlogin',UserLogin);
 app.use('/api/report',Report)
+app.use('/api/SuperAdmin',SuperAdminlogin);
+app.use('/api/admin',Admin)
 
 
 

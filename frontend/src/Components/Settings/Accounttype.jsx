@@ -76,14 +76,14 @@ const [count,setcount]=useState(0)
                     <div className="form-group local-forms">
                       <label>Account Type Id<span className="login-danger">*</span></label>
                       <input
-  {...register('accounttypeid')}
-  className={`form-control ${errors.accounttypeid ? 'is-invalid' : ''}`}
-  type="text"
-  value={`MA${count.toString().padStart(3, '0')}`}
-  placeholder=""
-  style={{ backgroundColor: "#cbd0d6" }}
-  readOnly // Make the input field non-editable
-/>
+                        {...register('accounttypeid')}
+                        className={`form-control ${errors.accounttypeid ? 'is-invalid' : ''}`}
+                        type="text"
+                        value={`MA${count.toString().padStart(3, '0')}`}
+                        placeholder=""
+                        style={{ backgroundColor: "#cbd0d6" }}
+                        readOnly // Make the input field non-editable
+                      />
                     </div>
                   </div>
                   <div className="col-12 col-md-6 col-xl-4">

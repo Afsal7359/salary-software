@@ -8,8 +8,25 @@ import Bankicon from '../../assets/img/icons/menu-icon-04.svg'
 import Company from '../../assets/img/icons/company.png'
 // import Report from '../../assets/img/icons/invoices-icon5.png'
 
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { logout } from '../../Store/AuthSlice'
+import { useDispatch, useSelector } from 'react-redux'
+import { selectAuth } from '../../Store/AuthSlice'
 const Sidebar = () => {
+    const navigate = useNavigate()
+    const dispatch = useDispatch()
+
+    const { token, isLoggedIn } = useSelector(selectAuth);
+
+    const handlelogout =()=>{
+        try {
+           dispatch(logout())
+            // localStorage.removeItem('token')
+           
+        } catch (error) {
+            console.log(error);
+        }
+    }
   return (
     <>
     <div className="sidebar" id="sidebar">
@@ -108,6 +125,18 @@ const Sidebar = () => {
 							
 							</ul>
 						</li>
+
+                     {}   <li className="submenu">
+							<a href="#"><span className="menu-side"><img src={settings} alt=""/></span> <span> Admin </span> <span className="menu-arrow"></span></a>
+							<ul style={{ display:'none'}}>
+                            <li><Link to="/add-admin"> Add Admin</Link></li>
+                        
+							</ul>
+						</li>
+                        <li className="submenu">
+							<a href="#"><span className="menu-side"><img src={settings} alt=""/></span> <span><button onClick={handlelogout}>Logout</button>  </span></a>
+							
+						</li>
                         
                         {/* <li>
                             <a href="settings.html"><span className="menu-side"><img src="assets/img/icons/menu-icon-16.svg" alt=""/></span> <span>Settings</span></a>
@@ -180,7 +209,7 @@ const Sidebar = () => {
                         </li> */}
                     </ul>
 					<div className="logout-btn">
-						<a href="login.html"><span className="menu-side"><img src={logouticon} alt=""/></span> <span>Logout</span></a>
+						<a><span className="menu-side btn-submit"  onClick={logout}><img src={logouticon} alt=""/></span> <span>Logout</span></a>
 					</div>
                 </div>
             </div>

@@ -65,6 +65,8 @@ module.exports={
                             { path: "PostId" }
                         ],
                         })
+                .populate('departmentid')
+                .populate('unitid')
                 // .populate('departmentid')
                 // .populate('unitid')
                 // .populate({ path: 'tablerow.salaryComponent' })
