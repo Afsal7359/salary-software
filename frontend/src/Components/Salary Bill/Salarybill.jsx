@@ -315,14 +315,16 @@ const handlesalarymasterchange = (event, index) => {
 		//   setLeaveDifference(balanceleave < 0 ? 0 : balanceleave);
 		  setTotalDeduction(totalDeduction.toFixed(2));
 		//   const TotalIncrements=(basicSalary)+parseFloat(totalIncrement);
-		  setTotalIncrement(parseFloat(basicSalary) + parseFloat(totalIncrement));
+		console.log(basicSalary,"ssssssssssssssssssssssssssssssssbas");
+		console.log(totalIncrement,"ffffffffffffffffffffffffffffffincred");
+		  setTotalIncrement(parseFloat(basicSalary) + parseFloat(totalIncrement) + parseFloat(IRPrice) + parseFloat(DAPrice));
 		  setTotalAmount(totalAmount.toFixed(2)); 
 		} catch (error) {
 		  console.error('Error in useEffect:', error);
 		}
 	  }, [tablerow, basicSalary, salarymasterData, allowedleave, absentDays, perDaySalary,IRPrice,DAPrice]);
 	  
-	  
+
 
 
   const handleSecondInputChange = (index, value) => {
