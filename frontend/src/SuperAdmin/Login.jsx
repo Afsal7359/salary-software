@@ -1,11 +1,13 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { toast } from 'react-toastify';
 import { SuperAdminlogin } from '../Apicalls/SuperAdmin';
 import { useDispatch } from 'react-redux';
 import { login } from '../Store/AuthSlice';
 import { useNavigate } from 'react-router-dom';
+import { adminlogout } from '../Store/Adminauth';
 
 const Login = () => {
+
     const dispatch = useDispatch();
     const [showPassword, setShowPassword] = useState(false);
     const [username,setUserName]=useState('');
@@ -43,6 +45,7 @@ console.log(password,"password");
             
         }
     }
+    
   return (
     <>
     <div className="col-lg-10 ">
@@ -78,7 +81,10 @@ console.log(password,"password");
               </button>
             </div>
           </form>
-          
+          <div class="next-sign">
+            <p class="account-subtitle">If you are an admin, <a href="/">login</a></p>
+          </div>
+
         </div>
       </div>
     </div>

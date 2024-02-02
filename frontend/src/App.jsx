@@ -27,7 +27,6 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
-import PrivateRoute from "./Components/PrivateRoute/PrivateRoute";
 import { useSelector } from "react-redux";
 import {selectAuth} from "./Store/AuthSlice";
 import AdminLogin from "./Components/Admin/AdminLogin";
@@ -49,87 +48,79 @@ const App = () => {
   const { token, isLoggedIn } = useSelector(selectAuth);
   console.log(token, "tockewn");
 
+  const {admintoken} = useSelector((state)=>state.admin)
+
   return (
-    //     <Router>
-
-    // <div className="main-wrapper">
-    //    <Header/>
-    //    <Sidebar/>
-    //    <div className="page-wrapper">
-    //    <div className="content">
-    //    <Suspense fallback={<div>Loading...</div>}>
-
-    //    </Suspense>
-    //    </div>
-    //   <Notificationbox/>
-    //   </div>
-    // </div>
-    // <div className="sidebar-overlay" data-reff=""></div>
-
-    // </Router>
+  
     <>
       <Router>
         <div className="main-wrapper">
 
-         {token? <><Header /><Sidebar /></>:""}
+        {token || admintoken ? (
+            <>
+              <Header />
+              <Sidebar />
+            </>
+          ) : null}
+
           
           <div className="page-wrapper">
             <div className="content">
               <Suspense fallback={<div>Loading...</div>}>
                 <Routes>
-                  <Route path="/" element={<Dashboardpage />} />
-                  <Route path="/admin-login" element={<AdminLogin/>}/>
-                  <Route path="/company-master" element={<AddCompany />} />
+                  <Route path="/" element={admintoken?<Dashboardpage />:<Navigate to={"/admin-login"}/>} />
+                  <Route path="/admin-login" element={<AdminLogin/>} />
+                  <Route path="/company-master" element={admintoken?<AddCompany />:<Navigate to={"/admin-login"}/>} />
                   <Route
                     path="/employee-master"
-                    element={<AddEmployeemaster />}
+                    element={admintoken?<AddEmployeemaster />:<Navigate to={"/admin-login"}/>}
                   />
                   <Route path="/add-post-master" element={<AddPostmaster />} />
                   <Route
                     path="/add-employeetype"
-                    element={<Employeetypepage />}
+                    element={admintoken?<Employeetypepage />:<Navigate to={"/admin-login"}/>}
                   />
-                  <Route path="/add-Department" element={<Departmentpage />} />
-                  <Route path="/add-unit" element={<Unitpage />} />
+                  <Route path="/add-Department" element={admintoken?<Departmentpage />:<Navigate to={"/admin-login"}/>} />
+                  <Route path="/add-unit" element={admintoken?<Unitpage />:<Navigate to={"/admin-login"}/>} />
                   <Route
                     path="/add-Designation"
-                    element={<Designationpage />}
+                    element={admintoken?<Designationpage />:<Navigate to={"/admin-login"}/>}
                   />
-                  <Route path="/add-Bank-master" element={<Bankmasterpage />} />
+                  <Route path="/add-Bank-master" element={admintoken?<Bankmasterpage />:<Navigate to={"/admin-login"}/>} />
                   <Route
                     path="/add-Bankaccount-master"
-                    element={<Bankaccountpage />}
+                    element={admintoken?<Bankaccountpage />:<Navigate to={"/admin-login"}/>}
                   />
                   <Route
                     path="/add-salary-master"
-                    element={<Salarycreationpage />}
+                    element={admintoken?<Salarycreationpage />:<Navigate to={"/admin-login"}/>}
                   />
-                  <Route path="/add-purpose" element={<Purposepage />} />
-                  <Route path="/add-Type" element={<Typepage />} />
+                  <Route path="/add-purpose" element={admintoken?<Purposepage />:<Navigate to={"/admin-login"}/>} />
+                  <Route path="/add-Type" element={admintoken?<Typepage />:<Navigate to={"/admin-login"}/>} />
                   <Route
                     path="/add-operationalType"
-                    element={<Operationalpage />}
+                    element={admintoken?<Operationalpage />:<Navigate to={"/admin-login"}/>}
                   />
                   <Route
                     path="/add-accounttype"
-                    element={<Accounttypepage />}
+                    element={admintoken?<Accounttypepage />:<Navigate to={"/admin-login"}/>}
                   />
-                  <Route path="/salary-bill" element={<Salarybill />} />
-                  <Route path="/salary" element={<Salaryview />} />
+                  <Route path="/salary-bill" element={admintoken?<Salarybill />:<Navigate to={"/admin-login"}/>} />
+                  <Route path="/salary" element={admintoken?<Salaryview />:<Navigate to={"/admin-login"}/>} />
                   <Route
                     path="/salary-voucher"
-                    element={<SalaryvoucherPrint />}
+                    element={admintoken?<SalaryvoucherPrint />:<Navigate to={"/admin-login"}/>}
                   />
-                  <Route path="/pf-report" element={<Pf />} />
-                  <Route path="/esi-report" element={<Esi />} />
-                  <Route path="/salary-report" element={<Salaryreport />} />
-                  <Route path="/bank-report" element={<Bankreport />} />
+                  <Route path="/pf-report" element={admintoken?<Pf />:<Navigate to={"/admin-login"}/>} />
+                  <Route path="/esi-report" element={admintoken?<Esi />:<Navigate to={"/admin-login"}/>} />
+                  <Route path="/salary-report" element={admintoken?<Salaryreport />:<Navigate to={"/admin-login"}/>} />
+                  <Route path="/bank-report" element={admintoken?<Bankreport />:<Navigate to={"/admin-login"}/>} />
 
                   <Route
               path="/superadmin-login"
               element={token ? <Navigate to={"/superadmin"} /> : <Login />}
                   />
-            <Route
+          <Route
               path="/superadmin"
               element={
                 token ? (
@@ -139,13 +130,14 @@ const App = () => {
                 )
               }
             />
-                <Route
+              <Route
               path="/add-admin"
               element={
-                token ? (
-                  <AddAdmin />
-                ) : (
+                token == null ? (
                   <Navigate to={"/superadmin-login"} />
+                 
+                ) : (
+                  <AddAdmin />
                 )
               }
             />

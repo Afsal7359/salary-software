@@ -2,7 +2,9 @@ import React from 'react'
 
 function SuperDashboard() {
   return (
-    <div>SuperDashboard</div>
+    <>
+      Super Admin Dashboard
+    </>
   )
 }
 

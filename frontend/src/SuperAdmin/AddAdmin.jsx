@@ -1,8 +1,11 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useForm } from 'react-hook-form';
 import { AddAdmins } from '../Apicalls/Admin';
 import { toast } from 'react-toastify';
+import AdminList from './AdminList';
 function AddAdmin() {
+
+  const [data,setData]=useState([])
 
     const { register, handleSubmit, watch,	reset, formState: { errors } } = useForm();
     const onSubmit =async(data) =>{
@@ -15,6 +18,7 @@ function AddAdmin() {
         }
         const response = await AddAdmins(formData);
         if (response.success){
+          setData(response.data)
             toast.success(response.message)
             console.log(response.data,"response.dataa");
             reset()
@@ -98,6 +102,7 @@ function AddAdmin() {
     </div>
   </div>
 </div>
+<AdminList formdata={data} setformdata={setData} />
     </>
   )
 }

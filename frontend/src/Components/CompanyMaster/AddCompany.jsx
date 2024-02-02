@@ -107,7 +107,7 @@ console.log('Company Data :',companyData);
                                            <div className="form-heading">
                                                <h4>Add Company Details</h4>
                                            </div>
-                                       </div>
+                                        </div>
                                        <div className="col-12 col-md-6 col-xl-4">  
                                            <div className="form-group local-forms">
                                                <label >Company Name <span className="login-danger">*</span></label>

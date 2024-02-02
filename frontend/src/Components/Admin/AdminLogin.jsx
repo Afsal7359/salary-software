@@ -1,11 +1,18 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { toast } from 'react-toastify';
+import { LoginAdmin } from '../../Apicalls/Admin';
+import { adminlogin } from '../../Store/Adminauth';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 const AdminLogin = () => {
+    const dispatch = useDispatch()
     const [showPassword, setShowPassword] = useState(false);
     const [username,setUserName]=useState('');
     const [password,setPassword]=useState('');
     const [tocken,setTocken]=useState('');
+
+    const navigate = useNavigate()
 
 
 console.log(username,"username");
@@ -14,6 +21,39 @@ console.log(password,"password");
       setShowPassword(!showPassword);
     };
 
+    useEffect(() => {
+      const handleTouchStart = (event) => {
+        event.preventDefault();
+      };
+      window.addEventListener('touchstart', handleTouchStart, { passive: true });
+      return () => {
+        window.removeEventListener('touchstart', handleTouchStart);
+      };
+    }, []);
+
+    const handlesubmit =async(event)=>{
+      event.preventDefault();
+      const formdata ={
+          username:username,
+          password:password
+      }
+      try {
+          const response = await LoginAdmin(formdata);
+          if(response.success){
+              dispatch(adminlogin(response.data))
+              navigate('/')
+              // setTocken(response.data)
+              toast.success(response.message);
+              // console.log(tocken,"tocken");
+              location.reload()
+             
+          }else{
+              toast.error(response.message);
+          }
+      } catch (error) {
+          console.log(error);
+      }
+  }
   
     
   return (
@@ -31,7 +71,7 @@ console.log(password,"password");
           </div>
          
           {/* Form */}
-          <form >
+          <form onSubmit={handlesubmit}>
             <div className="form-group">
               <label>
                 Username <span className="login-danger">*</span>
@@ -50,6 +90,7 @@ console.log(password,"password");
                 Login
               </button>
             </div>
+            
           </form>
           
         </div>
