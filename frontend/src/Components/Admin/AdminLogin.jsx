@@ -65,7 +65,7 @@ console.log(password,"password");
         <div className="login-right-wrap">
           <div className="account-logo">
             <a>
-              <img src="assets/img/login-logo.png" alt="" />
+              <img src="assets/img/loogo.jpg" alt="" />
             </a>
             <h2 className='mt-5'> Admin </h2>
           </div>
