@@ -57,6 +57,8 @@ const AddEmployeemaster = () => {
 
 	const [salarycomponent,setSalarycomponent]=useState(false)
 
+	const [postselectdata,setPostselectdata]=useState([])
+
 	// Usage in useEffect
 	useEffect(() => {
 	  const fetchUniqueSixCharacterID = async () => {
@@ -199,10 +201,22 @@ const AddEmployeemaster = () => {
 			toast.error(error.message);
 		}
 	};
-	const handlePostChange=(event)=>{
-		setPostId(event.target.value);
-	}
+	
+	const handlePostChange = (event) => {
+		const postId = event.target.value;
+		setPostId(postId);
 
+		const foundPost = postData.find(post => post._id === postId);
+	  
+		if (foundPost) {
+		  console.log('Found post:', foundPost);
+		  setPostselectdata(foundPost);
+		} else {
+		  console.log('Post not found');
+		  setPostselectdata(null); 
+		}
+	  };
+	  
 
 	const handlesalarymasterclick = async () => {
 		try {
@@ -255,21 +269,6 @@ const AddEmployeemaster = () => {
 		};
 		settableRows(updatedTableRows);
 	  };
-
-
-
-	  
-
-	//   const handleRowIdChange = (index) => {
-	// 	console.log('hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhi');
-	// 	const updatedTableRowss = [...tableRows];
-	// 	updatedTableRowss[index].id = Number(index + 2 + 1); 
-	// 	console.log("updatedRoeee",updatedTableRowss);
-	// 	console.log(tableRows,":taableerow");
-		
-	//   };
-
-
 
 	const {
 		
@@ -331,59 +330,8 @@ const AddEmployeemaster = () => {
 		} catch (error) {
 		  console.error('Error in useEffect:', error);
 		}
-
-	
-		
 	  }, [tableRows, basicsalary, salarymasterData,DAPrice,IRPrice]);
 	  
-	 
-		
-
-		// useEffect(() => {
-
-		// 	if(employeeTypeId === "6566be7b0085f19cfbfd00c1" && basicsalary ){
-		// 		const EPF = parseFloat(basicsalary) + parseFloat(DAPrice) + parseFloat(IRPrice)
-		// 		setEPFWage(EPF)
-		// 	}else{
-		// 		setEPFWage('')
-		// 	};
-		
-
-
-		// const joiningDate = new Date(dateOfJoining);
-        // const comparisonDate = new Date('2014-01-01');
-
-		// 	if (employeeTypeId === "6566be7b0085f19cfbfd00c1" && (joiningDate >= comparisonDate)) {
-		// 	  setEPSWage(0);
-		// 	} else if (employeeTypeId === "6566be7b0085f19cfbfd00c1" && (totalAmount >= 15000)) {
-		// 	  setEPSWage(15000);
-		// 	} else if(employeeTypeId === "6566be7b0085f19cfbfd00c1" && (totalAmount < 15000)) {
-		// 	  setEPSWage(totalAmount);
-		// 	}else{
-		// 		setEPSWage('')
-		// 	};
-		
-
-		// 	if(employeeTypeId === "6566be7b0085f19cfbfd00c1" &&(totalAmount >= 15000)){
-		// 		setEDLIWage(15000)
-		// 	}else if(employeeTypeId === "6566be7b0085f19cfbfd00c1" &&(totalAmount < 15000)){
-		// 		setEDLIWage(totalAmount)
-		// 	}else{
-		// 		setEDLIWage('')
-		// 	}
-
-		// 	console.log(EPFWage,":EPF WAGE");
-		// 	console.log(EPSWage,":Eps WAGE");
-		// 	console.log(dateOfJoining);
-		// 	console.log(EDLIWage,":EDLI WAGE");
-
-		//   }, [totalAmount, dateOfJoining,EPSWage,EPFWage,EDLIWage]);
-		  
-	
-	 
-	  
-
-
 	  const handleChange = (index,percentage) => {
 		const updatedTableRows = [...tableRows];
         updatedTableRows[index].percentage = Number(percentage);
@@ -531,10 +479,12 @@ console.log(updatedRow,":tabllllerow");
 		  toast.error(err.message);
 		}
 	  };
-	  console.log(rowid,"::rowiddd:");
 
+	
 
-  
+  console.log(postData,"postdataaaaaaaaaaa");
+  console.log(postId,"postid");
+  console.log(postselectdata,"postselectdata");
 
   return (
    <>
@@ -617,6 +567,28 @@ console.log(updatedRow,":tabllllerow");
 												  </select>
 											</div>
 										</div>
+										<div className='col-12 col-md-6 col-xl-6'>
+											<div className="form-group local-forms">
+												<label>Department<span className="login-danger">*</span></label>
+												<input
+												className='form-control'
+												type='text'
+												value={postselectdata?.department?.name || ''}
+												/>
+											</div>
+											</div>
+
+											<div className='col-12 col-md-6 col-xl-6'>
+											<div className="form-group local-forms">
+												<label>Unit<span className="login-danger">*</span></label>
+												<input
+												className='form-control'
+												type='text'
+												value={postselectdata?.unit?.name || ''}
+												/>
+											</div>
+											</div>
+
 										<div className="col-12 col-md-6 col-xl-6">
 											<div className="form-group local-forms">
 													<label>Employee No <span className="login-danger">*</span></label>
