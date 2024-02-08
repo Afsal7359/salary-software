@@ -1,5 +1,6 @@
 {
   "name": "frontend",
+  "homepage": "http://127.0.0.1:5500/frontend/dist/index.html",
   "private": true,
   "version": "0.0.0",
   "type": "module",
