@@ -128,8 +128,6 @@ console.log(formdatas,"fffffffffffffffffffff");
       if (response.success) {
         setcount((prevCount) => prevCount + 1);
         setformdata(response.data);
-        setUnitId('');
-        setDepartmentId('');
         setDesignation('')
         toast.success(response.message);
       } else {

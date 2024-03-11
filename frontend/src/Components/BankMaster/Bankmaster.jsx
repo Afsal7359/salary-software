@@ -164,7 +164,7 @@ function Bankmaster() {
                       value={Phone}
                       onChange={(e) => {
                         const onlyNumbers = e.target.value.replace(/[^0-9]/g, ''); // Remove non-numeric characters
-                        if (onlyNumbers.length <= 10) {
+                        if (onlyNumbers.length <= 12) {
                           setPhone(onlyNumbers);
                         }
                       }}

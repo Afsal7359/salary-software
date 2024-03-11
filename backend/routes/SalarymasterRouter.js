@@ -8,6 +8,7 @@ router.delete('/deletesalarymaster/:id',salarymaster.DeleteSalarymaster)
 router.get('/getallsalary',salarymaster.GetSalarymaster)
 router.post('/editsalarymaster/:id',salarymaster.EditSalaryMaster);
 router.get('/getallsalarycount',salarymaster.GetsalarymasterCount)
+router.get('/getSalaryComponent',salarymaster.GetSalaryComponent);
 
 
 module.exports = router;

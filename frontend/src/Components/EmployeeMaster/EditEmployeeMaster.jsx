@@ -53,7 +53,8 @@ function EditEmployeeMaster({ closeEdit, item, setData, Data, show, setshow }) {
    const [formdata, setFormdata] = useState("");
    const [itemid, setitemid] = useState(item._id);
    const [tablerow, setTablerow] = useState(item?item.tablerow.slice(2):"");
-  
+  const [oldtablerow,setOldTablerow]=useState(item?item.tablerow:"");
+console.log(oldtablerow,"llllll");
    const [password, setPassword] = useState(item?.password);
 
    const [totalAmount, setTotalAmount] = useState(0);
@@ -75,7 +76,7 @@ function EditEmployeeMaster({ closeEdit, item, setData, Data, show, setshow }) {
   const [IRPercentage,setIRPercentage]=useState(item.tablerow[1]?item.tablerow[1].percentage:"");
   const [IRValue,setIRValue]=useState(item.tablerow[1]?item.tablerow[1].value:"");
   const [IRPrice,setIRPrice]=useState(item.tablerow[1]?item.tablerow[1].price:"");
-
+  const[updatedRow,setUpdatedRow]=useState('');
 
 
 
@@ -103,7 +104,6 @@ function EditEmployeeMaster({ closeEdit, item, setData, Data, show, setshow }) {
   useEffect(() => {
 
    // DA row
-   
    if (DAPercentage !== 0 && !DAValue) {
      const price = (basicSalary * DAPercentage) / 100;
      setDAPrice(price);
@@ -199,7 +199,7 @@ function EditEmployeeMaster({ closeEdit, item, setData, Data, show, setshow }) {
     } catch (error) {
       toast.error(error.message);
     }
-  };
+  };setSalarymasterData
 
   useEffect(()=>{
 	handlesalarymasterclick()
@@ -208,9 +208,6 @@ function EditEmployeeMaster({ closeEdit, item, setData, Data, show, setshow }) {
 
   const handlesalarymasterchange = (event, index) => {
     const updatedTableRows = [...tablerow];
-    console.log(updatedTableRows,"tablerow updated");
-    setDAPrice(updatedTableRows[0].price)
-    setIRPrice(updatedTableRows[1].price)
     updatedTableRows[index] = {
       ...updatedTableRows[index],
       salaryComponent: event.target.value,
@@ -218,7 +215,7 @@ function EditEmployeeMaster({ closeEdit, item, setData, Data, show, setshow }) {
     setTablerow(updatedTableRows); // Update the state with the modified rows
   };
  
-
+    
 
   const handleAddRow = () => {
     const newRow = {
@@ -303,6 +300,7 @@ try {
       ...itemdata,
       TotalSalary: totalAmount,
     });
+    console.log(totalAmount,":ToptalAmount");
   } else {
     console.error('Invalid totalAmount:', totalAmount);
   }
@@ -313,45 +311,45 @@ try {
 
 
 
-  useEffect(() => {
+  // useEffect(() => {
 
-    if(employeeTypeId === "6566be7b0085f19cfbfd00c1" && basicSalary ){
-      const EPF = parseFloat(basicSalary) + parseFloat(DAPrice) + parseFloat(IRPrice)
-      setEPFWage(EPF)
-    }else{
-      setEPFWage('')
-    };
+  //   if(employeeTypeId === "6566be7b0085f19cfbfd00c1" && basicSalary ){
+  //     const EPF = parseFloat(basicSalary) + parseFloat(DAPrice) + parseFloat(IRPrice)
+  //     setEPFWage(EPF)
+  //   }else{
+  //     setEPFWage('')
+  //   };
   
 
 
-  const joiningDate = new Date(dateOfJoining);
-      const comparisonDate = new Date('2014-01-01');
+  // const joiningDate = new Date(dateOfJoining);
+  //     const comparisonDate = new Date('2014-01-01');
 
-    if (employeeTypeId === "6566be7b0085f19cfbfd00c1" && (joiningDate >= comparisonDate)) {
-      setEPSWage(0);
-    } else if (employeeTypeId === "6566be7b0085f19cfbfd00c1" && (totalAmount >= 15000)) {
-      setEPSWage(15000);
-    } else if(employeeTypeId === "6566be7b0085f19cfbfd00c1" && (totalAmount < 15000)) {
-      setEPSWage(totalAmount);
-    }else{
-      setEPSWage('')
-    };
+  //   if (employeeTypeId === "6566be7b0085f19cfbfd00c1" && (joiningDate >= comparisonDate)) {
+  //     setEPSWage(0);
+  //   } else if (employeeTypeId === "6566be7b0085f19cfbfd00c1" && (totalAmount >= 15000)) {
+  //     setEPSWage(15000);
+  //   } else if(employeeTypeId === "6566be7b0085f19cfbfd00c1" && (totalAmount < 15000)) {
+  //     setEPSWage(totalAmount);
+  //   }else{
+  //     setEPSWage('')
+  //   };
   
 
-    if(employeeTypeId === "6566be7b0085f19cfbfd00c1" &&(totalAmount >= 15000)){
-      setEDLIWage(15000)
-    }else if(employeeTypeId === "6566be7b0085f19cfbfd00c1" &&(totalAmount < 15000)){
-      setEDLIWage(totalAmount)
-    }else{
-      setEDLIWage('')
-    }
+  //   if(employeeTypeId === "6566be7b0085f19cfbfd00c1" &&(totalAmount >= 15000)){
+  //     setEDLIWage(15000)
+  //   }else if(employeeTypeId === "6566be7b0085f19cfbfd00c1" &&(totalAmount < 15000)){
+  //     setEDLIWage(totalAmount)
+  //   }else{
+  //     setEDLIWage('')
+  //   }
 
-    console.log(EPFWage,":EPF WAGE");
-    console.log(EPSWage,":Eps WAGE");
-    console.log(dateOfJoining);
-    console.log(EDLIWage,":EDLI WAGE");
+  //   console.log(EPFWage,":EPF WAGE");
+  //   console.log(EPSWage,":Eps WAGE");
+  //   console.log(dateOfJoining);
+  //   console.log(EDLIWage,":EDLI WAGE");
 
-    }, [totalAmount, dateOfJoining,EPSWage,EPFWage,EDLIWage]);
+  //   }, [totalAmount, dateOfJoining,EPSWage,EPFWage,EDLIWage]);
     
 
  
@@ -363,8 +361,8 @@ try {
     const newPrice = value.trim() !== "" ? value : "";
     updatedTableRows[index].price = newPrice;
     setTablerow(updatedTableRows);
-    setIRPrice(updatedTableRows[1].price)
-    setDAPrice(updatedTableRows[0].price)
+    // setIRPrice(updatedTableRows[1].price)
+    // setDAPrice(updatedTableRows[0].price)
   };
 
   const   handleChange = (index, percentage) => {
@@ -381,8 +379,8 @@ try {
     updatedTableRows[index].price = newPrice || "";
 
     setTablerow(updatedTableRows);
-    setIRPrice(updatedTableRows[1].price)
-    setDAPrice(updatedTableRows[0].price)
+    // setIRPrice(updatedTableRows[1].price)
+    // setDAPrice(updatedTableRows[0].price)
   };
 
  
@@ -391,45 +389,84 @@ try {
     setEmployelist(true);
   };
 
+  const [firstrow,setFirstRow] =useState([
+		{
+			id:101,
+			salaryComponent:"659bb609d4d7dd6ffd8dfbf3",
+			percentage:DAPercentage?DAPercentage:"",
+			value:DAValue?DAValue:"",
+			price:DAPrice
+		},
+		{
+			id:102,
+			salaryComponent:"659bb617d4d7dd6ffd8dfbf7",
+			percentage:IRPercentage?IRPercentage:"",
+			value:IRValue?IRValue:"",
+			price:IRPrice
+		}
+	  ])
+    useEffect(()=>{
+      firstrow[0].value = DAValue
+      firstrow[0].percentage = DAPercentage
+      firstrow[1].value = IRValue
+      firstrow[1].percentage = IRPercentage
+      firstrow[0].price = DAPrice
+      firstrow[1].price = IRPrice
+    },[DAValue,DAPercentage,IRPercentage,IRValue,DAPrice,IRPrice])
+    
+    
 
-  const handleclick = async (event) => {
-    event.preventDefault(); // Prevent default form submission
+	   console.log(tablerow,"tableeeeeeeeeeerow:");
+     console.log(firstrow,"firstrow...........");
+    useEffect(() => {
+      if (tablerow && tablerow.length > 0 && !tablerow[0].price) {
+        setUpdatedRow([...firstrow.map(row => ({ ...row }))]); 
+      } else if (tablerow && tablerow.length > 0 && tablerow[0].price > 0) {
+        setUpdatedRow([...firstrow.map(row => ({ ...row })), ...tablerow.map(row => ({ ...row }))]);
+      }
+      }, [tablerow,firstrow,DAPrice,IRPrice]);
+      const formData = {
+        name,
+        email,
+        phone,
+        gender,
+        employeeno,
+        address1,
+        address2,
+        address3,
+        pincode,
+        bank,
+        accountNo,
+        ifsc,
+        branch,
+        panNo,
+        panName,
+        dateOfJoining,
+        dateOfBirth,
+        ageOfRetirement:ageOfRetierment,
+        dateOfRetirement: dateOfRetierment,
+        guardianname,
+        basicSalary,
+      allowedleave,
+      previousAllowedleave:allowedleave,
+        universalAcNo,
+        Ipnumber,
+        city,
+        country,
+        password,
+        tablerow:updatedRow?updatedRow:[],
+        TotalSalary:itemdata.TotalSalary
+      };
+      console.log(updatedRow,":UpdatedRowww");
 
-    // Prepare formData with all necessary fields
-    const formData = {
-      name,
-      email,
-      phone,
-      gender,
-      employeeno,
-      address1,
-      address2,
-      address3,
-      pincode,
-      bank,
-      accountNo,
-      ifsc,
-      branch,
-      panNo,
-      panName,
-      dateOfJoining,
-      dateOfBirth,
-      ageOfRetirement:ageOfRetierment,
-      dateOfRetirement: dateOfRetierment,
-      guardianname,
-      basicSalary,
-	  allowedleave,
-    previousAllowedleave:allowedleave,
-      universalAcNo,
-      Ipnumber,
-      city,
-      country,
-      password,
-      tablerow,
-      TotalSalary:itemdata.TotalSalary
-    };
-   
-    // Update Data array if itemid matches
+console.log(tabledata,":tabledaataa");
+console.log(tablerow,":Taableroow");
+console.log(formData,":Formdataaaa");
+
+
+    const handleclick = async (event) => {
+    event.preventDefault();
+
     const updatedData = Data.map((dataItem) => {
       if (dataItem._id === item._id) {
         return { ...dataItem, name: formData.name }; // Update the relevant field here
@@ -439,19 +476,21 @@ try {
     setData(updatedData);
 
     formData._id = itemid;
+  
     try {
-      // const tablerowValue = formData.tablerow?.price;
-      // if (!tablerowValue) {
-      //   toast.error("Add atl ")
-      //   return;
-      // }
-      // console.log(formData,"dataaaaaaaaaaashahid");
-      formData.tablerow = (tablerow && Array.isArray(tablerow) && tablerow.length === 1 &&
-      tablerow[0].value === '' &&
-      tablerow[0].percentage === '' &&
-      tablerow[0].price === '')
-      ? []
-      : (tablerow || []);
+      // // const tablerowValue = formData.tablerow?.price;
+      // // if (!tablerowValue) {
+      // //   toast.error("Add atl ")
+      // //   return;
+      // // }
+      // // console.log(formData,"dataaaaaaaaaaashahid");
+      // formData.updatedRow = (updatedRow && Array.isArray(updatedRow) && updatedRow.length === 1 &&
+      // updatedRow[0].value === '' &&
+      // updatedRow[0].percentage === '' &&
+      // updatedRow[0].price === '')
+      // ? []
+      // : (updatedRow || []);
+      
       const response = await editemployeemaster(formData);
       if (response.success) {
         toast.success(response.message);
@@ -1046,8 +1085,8 @@ console.log(employeeTypeId,":employeetypeid");
 																>
 																
 																	
-																		<option value={salarymasterData[0]._id} key={salarymasterData[0]._id}>
-																			{salarymasterData[0].name}
+																		<option value={oldtablerow[0]._id} key={oldtablerow[0]._id}>
+																			{oldtablerow[0].salaryComponent.name}
 																		</option>
 																	
 																	
@@ -1091,7 +1130,7 @@ console.log(employeeTypeId,":employeetypeid");
 
 														
 												      		</tbody>}
-                                  {salarymasterData[0]&&	<tbody>
+                                  {salarymasterData[1]&&	<tbody>
                                   <tr key={235435}>
                                     <td>
                                     <input type="text" className="form-control" value={ 2 } readOnly 
@@ -1105,8 +1144,8 @@ console.log(employeeTypeId,":employeetypeid");
                                     >
                                     
                                       
-                                        <option value={salarymasterData[1]._id} key={salarymasterData[0]._id}>
-                                          {salarymasterData[1].name}
+                                        <option value={oldtablerow[1]._id} key={oldtablerow[1]._id}>
+                                          {oldtablerow[1].salaryComponent.name}
                                         </option>
                                       
                                       
@@ -1155,7 +1194,7 @@ console.log(employeeTypeId,":employeetypeid");
                                             <input
                                               type="text"
                                               className="form-control"
-                                              value={index + 1}
+                                              value={index +2+ 1}
                                               readOnly
                                             />
                                           </td>

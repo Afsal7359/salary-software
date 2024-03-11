@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import * as XLSX from 'xlsx';
 
 import { toast } from 'react-toastify';
 import { GetPFReport } from '../../Apicalls/Report';
+import PageHeader from '../PageHeader';
 function Pf() {
 
     const [fromMonth,setFromMonth]=useState('');
@@ -32,6 +33,13 @@ if (response.success){
 
 console.log(Data,":;;;;dddddddata");
  }
+
+ const headerdata = useMemo(()=>{
+  return{
+    data:"REPORT",
+    page:"PF REPORT"
+  };
+ },[]);
 
  const [GrossWagetotal,setGrossWageTotal]=useState('');
  const [EPFWagetotal,setEPFWageTotal]=useState('');
@@ -74,6 +82,7 @@ console.log(Data,":;;;;dddddddata");
   };
   return (
     <>
+    <PageHeader headerdata={headerdata}/>
    <div className="card card-table show-entire">
               <div className="card-body">
                 <div className="page-table-header mb-2">

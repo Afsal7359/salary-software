@@ -47,3 +47,12 @@ export const editsalarymaster= async (payload) => {
         return err.response.data;
     }
 }
+
+export const GetSalaryComponent = async()=>{
+  try {
+    const response = await instance.get('salary/getSalaryComponent');
+    return response.data
+  } catch (error) {
+    return error.response.data;
+  }
+}

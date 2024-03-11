@@ -276,7 +276,7 @@ const handlesalarymasterchange = (event, index) => {
 	const [totalcontribution,setTotalContributions]=useState(0)
 	useEffect(() => {
 		try {
-		  let 	totalAmount = basicSalary;
+		  let totalAmount = basicSalary;
 		  let totalDeduction = 0;
 		  let totalIncrement = 0;
 		  let totalcontribution =0;
@@ -315,14 +315,16 @@ const handlesalarymasterchange = (event, index) => {
 		//   setLeaveDifference(balanceleave < 0 ? 0 : balanceleave);
 		  setTotalDeduction(totalDeduction.toFixed(2));
 		//   const TotalIncrements=(basicSalary)+parseFloat(totalIncrement);
-		  setTotalIncrement(parseFloat(basicSalary) + parseFloat(totalIncrement));
+		console.log(basicSalary,"ssssssssssssssssssssssssssssssssbas");
+		console.log(totalIncrement,"ffffffffffffffffffffffffffffffincred");
+		  setTotalIncrement(parseFloat(basicSalary) + parseFloat(totalIncrement) + parseFloat(IRPrice) + parseFloat(DAPrice));
 		  setTotalAmount(totalAmount.toFixed(2)); 
 		} catch (error) {
 		  console.error('Error in useEffect:', error);
 		}
 	  }, [tablerow, basicSalary, salarymasterData, allowedleave, absentDays, perDaySalary,IRPrice,DAPrice]);
 	  
-	  
+
 
 
   const handleSecondInputChange = (index, value) => {
@@ -412,14 +414,14 @@ const handlesalarymasterchange = (event, index) => {
 const firstrow =[
 	{
 		id:1,
-		salaryComponent:"6581128dc32bc7fefb3b2e30",
+		salaryComponent:"659bb609d4d7dd6ffd8dfbf3",
 		percentage:DAPercentage?DAPercentage:"",
 		value:DAValue?DAValue:"",
 		price:DAPrice
 	},
 	{
 		id:2,
-		salaryComponent:"658112c9c32bc7fefb3b2e3b",
+		salaryComponent:"659bb617d4d7dd6ffd8dfbf7",
 		percentage:IRPercentage?IRPercentage:"",
 		value:IRValue?IRValue:"",
 		price:IRPrice
@@ -492,7 +494,7 @@ setEPSContri(0)
  setEPSContri(EPS)
 }
 
-const targetId = '658112ecc32bc7fefb3b2e3f';
+const targetId = '659bb695d4d7dd6ffd8dfbfb';
 let foundData = null;
 
 for (let i = 0; i < tablerow.length; i++) {

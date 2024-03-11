@@ -17,3 +17,12 @@ export const GetESIReport = async(payload)=>{
         return error.response.data
     }
 }
+
+export const GetMonthlyReport = async(payload)=>{
+    try{
+        const response = await instance.post('report/monthlyreport',payload);
+        return response.data
+    }catch(error){
+        return error.response.data
+    }
+}

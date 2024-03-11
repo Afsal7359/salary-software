@@ -8,31 +8,52 @@ import Bankicon from '../../assets/img/icons/menu-icon-04.svg'
 import Company from '../../assets/img/icons/company.png'
 // import Report from '../../assets/img/icons/invoices-icon5.png'
 
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux'
+import { logout, selectAuth } from '../../Store/AuthSlice'
+import { adminlogout } from '../../Store/Adminauth'
 const Sidebar = () => {
+    const navigate = useNavigate()
+    const dispatch = useDispatch()
+
+    const { admintoken } = useSelector((state)=>state.admin);
+    console.log(admintoken,"tttttto");
+    const {superAdmin} = useSelector(selectAuth)
+
+    const handlelogout =()=>{
+        try {
+           dispatch(logout())
+            // localStorage.removeItem('token')
+           
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    const handleAdminLogout =()=>{
+        try {
+            dispatch(adminlogout())
+        } catch (error) {
+            console.log(error);
+        }
+    }
   return (
     <>
     <div className="sidebar" id="sidebar">
     <div className="sidebar-inner slimscroll">
                 <div id="sidebar-menu" className="sidebar-menu">
-                <ul>
+                    {admintoken? (<ul>
                         <li className="menu-title">Main</li>
 						<li className="submenu">
 							<a href="#"><span className="menu-side"><img src={Dashboard} alt=""/></span> <span> Dashboard </span> <span className="menu-arrow"></span></a>
 							<ul style={{ display:'none'}}>
-								{/* <li><a className="active" href="index.html">Admin Dashboard</a></li>
-								<li><a href="doctor-dashboard.html">Doctor Dashboard</a></li>
-								<li><a href="patient-dashboard.html">Patient Dashboard</a></li> */}
+								
 							</ul>
 						</li>
 						<li className="submenu">
 							<a href="#"><span className="menu-side"><img src={Doctors} alt=""/></span> <span> Employee Master</span> <span className="menu-arrow"></span></a>
 							<ul style={{ display:'none'}}>
                             <li><Link to="/employee-master">Employee Master</Link></li>
-                            
-                            {/* <li><Link to="/add-doctor">Add Doctor</Link></li>
-                            <li><Link to="/edit-doctor">Edit Doctor</Link></li>
-                            <li><Link to="/doctor-profile">Doctor Profile</Link></li> */}
+                       
 							</ul>
 						</li>
                         <li className="submenu">
@@ -40,17 +61,16 @@ const Sidebar = () => {
 							<ul style={{ display:'none'}}>
                             <li><Link to="/salary-bill">Salary Bill</Link></li>
                             
-                            {/* <li><Link to="/add-doctor">Add Doctor</Link></li>
-                            <li><Link to="/edit-doctor">Edit Doctor</Link></li>
-                            <li><Link to="/doctor-profile">Doctor Profile</Link></li> */}
 							</ul>
 						</li>
 
                         <li className="submenu">
 							<a href="#"><span className="menu-side"><img src={Doctors} alt=""/></span> <span> Report</span> <span className="menu-arrow"></span></a>
 							<ul style={{ display:'none'}}>
-                            <li><Link to="/report-pf">PF Report</Link></li>
-                            <li><Link to="/report-esi">ESI Report</Link></li>
+                            <li><Link to="/pf-report">PF Report</Link></li>
+                            <li><Link to="/esi-report">ESI Report</Link></li>
+                            <li><Link to="/salary-report">Salary Monthly Report</Link></li>
+                            <li><Link to="/bank-report">Bank Report</Link></li>
 							</ul>
 						</li>
 
@@ -59,10 +79,7 @@ const Sidebar = () => {
 							<a href="#"><span className="menu-side"><img src={Bankicon} alt=""/></span> <span> Bank Master</span> <span className="menu-arrow"></span></a>
 							<ul style={{ display:'none'}}>
                             <li><Link to="/add-Bankaccount-master">Add BankAccount</Link></li>
-                            {/* <li><Link to="/add-Bank-master"> Add Bank</Link></li> */}
-                            {/* <li><Link to="/add-doctor">Add Doctor</Link></li>
-                            <li><Link to="/edit-doctor">Edit Doctor</Link></li>
-                            <li><Link to="/doctor-profile">Doctor Profile</Link></li> */}
+                           
 							</ul>
 						</li>
                         <li className="submenu">
@@ -71,18 +88,12 @@ const Sidebar = () => {
                             <li><Link to="/add-post-master">Add Post Master</Link></li>
                             <li><Link to="/add-Designation"> Add Designation</Link></li>
                             
-                            {/* <li><Link to="/add-doctor">Add Doctor</Link></li>
-                            <li><Link to="/edit-doctor">Edit Doctor</Link></li>
-                            <li><Link to="/doctor-profile">Doctor Profile</Link></li> */}
 							</ul>
 						</li>
                         <li className="submenu">
 							<a href="#"><span className="menu-side"><img src={Posts} alt=""/></span> <span> Salary Master</span> <span className="menu-arrow"></span></a>
 							<ul style={{ display:'none'}}>
                             <li><Link to="/add-salary-master">Add salary Master</Link></li>
-                            {/* <li><Link to="/add-doctor">Add Doctor</Link></li>
-                            <li><Link to="/edit-doctor">Edit Doctor</Link></li>
-                            <li><Link to="/doctor-profile">Doctor Profile</Link></li> */}
 							</ul>
 						</li>
                         <li className="submenu">
@@ -106,40 +117,22 @@ const Sidebar = () => {
 							
 							</ul>
 						</li>
+
+                      
+                        <li className="submenu mb-5">
+							<a href="#"><span className="menu-side"><img src={logouticon} ></img></span> <span>   <li><Link onClick={handleAdminLogout}> Logout</Link></li></span></a>
+							
+						</li>
+                      
+                       
+                    </ul>):(<ul> 
                         
-                        {/* <li>
-                            <a href="settings.html"><span className="menu-side"><img src="assets/img/icons/menu-icon-16.svg" alt=""/></span> <span>Settings</span></a>
-                        </li> */}
-                        {/* <li className="menu-title">UI Elements</li>
                         <li className="submenu">
-                            <a href="#"><i className="fa fa-laptop"></i> <span> Components</span> <span className="menu-arrow"></span></a>
-                            <ul style={{ display:'none'}}>
-                                <li><a href="uikit.html">UI Kit</a></li>
-                                <li><a href="typography.html">Typography</a></li>
-                                <li><a href="tabs.html">Tabs</a></li>
-                            </ul>
-                        </li> */}
-                        {/* <li className="submenu">
-                            <a href="#"><i className="fa fa-edit"></i> <span> Forms</span> <span className="menu-arrow"></span></a>
-                            <ul style={{ display:'none'}}>
-                                <li><a href="form-basic-inputs.html">Basic Inputs</a></li>
-                                <li><a href="form-input-groups.html">Input Groups</a></li>
-                                <li><a href="form-horizontal.html">Horizontal Form</a></li>
-                                <li><a href="form-vertical.html">Vertical Form</a></li>
-                            </ul>
-                        </li> */}
-                        {/* <li className="submenu">
-                            <a href="#"><i className="fa fa-table"></i> <span> Tables</span> <span className="menu-arrow"></span></a>
-                            <ul style={{ display:'none'}}>
-                                <li><a href="tables-basic.html">Basic Tables</a></li>
-                                <li><a href="tables-datatables.html">Data Table</a></li>
-                            </ul>
-                        </li> */}
-                        {/* <li>
-                            <a href="calendar.html"><i className="fa fa-calendar"></i> <span>Calendar</span></a>
-                        </li> */}
-                        {/* <li className="menu-title">Extras</li>
+							<a href="#"><span className="menu-side"></span> <span>   <li><Link to="/superadmin"> Dashboard</Link></li></span></a>
+							
+						</li>
                         <li className="submenu">
+<<<<<<< HEAD
                             <a href="#"><i className="fa fa-columns"></i> <span>Pages</span> <span className="menu-arrow"></span></a>
                             <ul style={{ display:'none'}}>
                                 <li><a href="login.html"> Login </a></li>
@@ -180,6 +173,19 @@ const Sidebar = () => {
 					<div className="logout-btn">
 						<a href="#"><span className="menu-side"><img src={logouticon} alt=""/></span> <span>Logout</span></a>
 					</div>
+=======
+							<a href="#"><span className="menu-side"></span> <span>   <li><Link to="/add-admin"> Add Admin</Link></li></span></a>
+							
+						</li>
+                        <li className="submenu">
+							<a href="#"><span className="menu-side"></span> <span>   <li><Link onClick={handlelogout}> Logout</Link></li></span></a>
+							
+						</li>
+                     </ul>)}
+					{/* <div className="logout-btn">
+						<a><span className="menu-side btn-submit"  ><img src={logouticon} alt=""/></span> <span>Logout</span></a>
+					</div> */}
+>>>>>>> bd2866a2952eecbcf916f94a302fd30a4edd5e37
                 </div>
             </div>
         </div>

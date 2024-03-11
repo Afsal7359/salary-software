@@ -237,24 +237,20 @@ const AddEmployeemaster = () => {
 	  ]
 	  const [selectedOptions, setSelectedOptions] = useState([]);
 	  const handlesalarymasterchange = (event, index) => {
-		const selectedOptionId = event.target.value;
 		const updatedTableRows = [...tableRows];
 		updatedTableRows[index] = {
 		  ...updatedTableRows[index],
-		  salaryComponent: selectedOptionId,
+		  salaryComponent: event.target.value, // Update salaryComponent based on the event value
 		  id: Number(index + 2 + 1)
 		};
 	  
-		// Update the selected option only if it's a new selection
-		if (selectedOptions[index] !== selectedOptionId) {
-		  setSelectedOptions((prevSelectedOptions) => {
-			const updatedOptions = [...prevSelectedOptions];
-			updatedOptions[index] = selectedOptionId;
-			return updatedOptions;
-		  });
-		}
-	  
+		console.log(updatedTableRows, "ii");
 		settableRows(updatedTableRows);
+		setSelectedOptions((prevSelectedOptions) => {
+		  const updatedOptions = [...prevSelectedOptions];
+		  updatedOptions[index] = event.target.value;
+		  return updatedOptions;
+		});
 	  };
 	  
 	//   const handleRowIdChange = (index) => {
@@ -1306,23 +1302,23 @@ const [tablestate,settablestate]=useState(false)
 																</td>
 																<td>
 																<select
-															className="form-control"
-															onChange={(event) => handlesalarymasterchange(event, index)}
-															value={selectedOptions[index] || ''}
-														>
-															<option>Select</option>
-															{filteredSalarydata.length !== 0
-															? filteredSalarydata.map((option) => (
-																<option value={option._id} key={option._id}>
-																	{option.name}
-																</option>
-																))
-															: salarymasterData.map((option) => (
-																<option value={option._id} key={option._id}>
-																	{option.name}
-																</option>
-																))}
-														</select>
+														className="form-control"
+														onChange={(event) => handlesalarymasterchange(event, index)}
+														value={selectedOptions[index] || ''}
+													>
+														<option>Select</option>
+														{filteredSalarydata.length !== 0
+														? filteredSalarydata.map((option) => (
+															<option value={option._id} key={option._id}>
+																{option.name}
+															</option>
+															))
+														: salarymasterData.map((option) => (
+															<option value={option._id} key={option._id}>
+																{option.name}
+															</option>
+															))}
+													</select>
 																</td>
 																
 																<td>
