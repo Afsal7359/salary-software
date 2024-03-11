@@ -178,7 +178,7 @@ const Sidebar = () => {
                         </li> */}
                     </ul>
 					<div className="logout-btn">
-						<a href="login.html"><span className="menu-side"><img src={logouticon} alt=""/></span> <span>Logout</span></a>
+						<a href="#"><span className="menu-side"><img src={logouticon} alt=""/></span> <span>Logout</span></a>
 					</div>
                 </div>
             </div>

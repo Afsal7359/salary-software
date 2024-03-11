@@ -55,7 +55,8 @@ const AddEmployeemaster = () => {
 	const [salarymasterId, setSalarymasterId]=useState('');
 	const [data , setData]=useState([])
 
-	const [salarycomponent,setSalarycomponent]=useState(false)
+
+
 
 	// Usage in useEffect
 	useEffect(() => {
@@ -175,12 +176,6 @@ const AddEmployeemaster = () => {
 	}
 	const handleemployeetypechange = (event)=>{
 		setEmployeeTypeId(event.target.value);
-		console.log("typeid",employeeTypeId);
-		if (employeeTypeId == "6566be7b0085f19cfbfd00c1"){
-			setSalarycomponent(true)
-		}else{
-			setSalarycomponent(false)
-		}
 	};
 
 
@@ -221,7 +216,7 @@ const AddEmployeemaster = () => {
 	
 	  useEffect(()=>{
 		handlesalarymasterclick()
-	  },[tableRows])
+	  },[])	
 	
 
 	const firstrow =[
@@ -240,19 +235,28 @@ const AddEmployeemaster = () => {
 			price:IRPrice
 		}
 	  ]
-	  
-	const handlesalarymasterchange = (event, index) => {
+	  const [selectedOptions, setSelectedOptions] = useState([]);
+	  const handlesalarymasterchange = (event, index) => {
+		const selectedOptionId = event.target.value;
 		const updatedTableRows = [...tableRows];
 		updatedTableRows[index] = {
 		  ...updatedTableRows[index],
-		  salaryComponent: event.target.value, // Update salaryComponent based on the event value
-		  id : Number(index + 2 + 1)
+		  salaryComponent: selectedOptionId,
+		  id: Number(index + 2 + 1)
 		};
-	
-	  console.log(updatedTableRows,"ii");
+	  
+		// Update the selected option only if it's a new selection
+		if (selectedOptions[index] !== selectedOptionId) {
+		  setSelectedOptions((prevSelectedOptions) => {
+			const updatedOptions = [...prevSelectedOptions];
+			updatedOptions[index] = selectedOptionId;
+			return updatedOptions;
+		  });
+		}
+	  
 		settableRows(updatedTableRows);
-	  }
-
+	  };
+	  
 	//   const handleRowIdChange = (index) => {
 	// 	console.log('hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhi');
 	// 	const updatedTableRowss = [...tableRows];
@@ -332,49 +336,56 @@ const AddEmployeemaster = () => {
 	 
 		
 
-		// useEffect(() => {
+	  const [incrementbtn,setIncrementbtn]=useState(false)
+	  const [decrementbtn,setDecrementbtn]=useState(false);
+	  const [nilbtn,setNilbtn]=useState(false);
+	  const [filteredSalarydata,setFilteredSalaryData]=useState([]);
 
-		// 	if(employeeTypeId === "6566be7b0085f19cfbfd00c1" && basicsalary ){
-		// 		const EPF = parseFloat(basicsalary) + parseFloat(DAPrice) + parseFloat(IRPrice)
-		// 		setEPFWage(EPF)
-		// 	}else{
-		// 		setEPFWage('')
-		// 	};
-		
-
-
-		// const joiningDate = new Date(dateOfJoining);
-        // const comparisonDate = new Date('2014-01-01');
-
-		// 	if (employeeTypeId === "6566be7b0085f19cfbfd00c1" && (joiningDate >= comparisonDate)) {
-		// 	  setEPSWage(0);
-		// 	} else if (employeeTypeId === "6566be7b0085f19cfbfd00c1" && (totalAmount >= 15000)) {
-		// 	  setEPSWage(15000);
-		// 	} else if(employeeTypeId === "6566be7b0085f19cfbfd00c1" && (totalAmount < 15000)) {
-		// 	  setEPSWage(totalAmount);
-		// 	}else{
-		// 		setEPSWage('')
-		// 	};
-		
-
-		// 	if(employeeTypeId === "6566be7b0085f19cfbfd00c1" &&(totalAmount >= 15000)){
-		// 		setEDLIWage(15000)
-		// 	}else if(employeeTypeId === "6566be7b0085f19cfbfd00c1" &&(totalAmount < 15000)){
-		// 		setEDLIWage(totalAmount)
-		// 	}else{
-		// 		setEDLIWage('')
-		// 	}
-
-		// 	console.log(EPFWage,":EPF WAGE");
-		// 	console.log(EPSWage,":Eps WAGE");
-		// 	console.log(dateOfJoining);
-		// 	console.log(EDLIWage,":EDLI WAGE");
-
-		//   }, [totalAmount, dateOfJoining,EPSWage,EPFWage,EDLIWage]);
-		  
-	
-	 
-	  
+	  const handleincrementbtnclick = ()=>{
+		  try {
+			const data = salarymasterData.filter(e =>e.type === "Increment")
+			if(data.length === 0){
+				toast.info("No Data Found in Increment ")
+			}
+			console.log(data,"incrementdata");
+			setFilteredSalaryData(data)
+			  setIncrementbtn(true)
+			  setDecrementbtn(false)
+			  setNilbtn(false)
+		  } catch (error) {
+			  console.log(error);
+		  }
+	  }
+	  const handledecrementbtnclick = ()=>{
+		try {
+			const data = salarymasterData.filter(e =>e.type === "Decrement")
+			if(data.length === 0){
+				toast.info("No Data Found in Decrement ")
+			}
+			setFilteredSalaryData(data)
+			console.log(data,"salarymatserdata");
+			setIncrementbtn(false)
+			setDecrementbtn(true)
+			setNilbtn(false)
+		} catch (error) {
+			console.log(error);
+		}
+	}
+	const handlenilbtnclick = ()=>{
+		try {
+			const data = salarymasterData.filter(e =>e.type === "nil")
+			if(data.length === 0){
+				toast.info("No Data Found in Nil ")
+			}
+			setFilteredSalaryData(data)
+			console.log(data,"salarymatserdata");
+			setIncrementbtn(false)
+			setDecrementbtn(false)
+			setNilbtn(true)
+		} catch (error) {
+			console.log(error);
+		}
+	}
 
 
 	  const handleChange = (index,percentage) => {
@@ -1135,12 +1146,14 @@ const [tablestate,settablestate]=useState(false)
 										</div>
 										
 										<div className="row">
-											{salarycomponent&&
 											<div className="col-md-12">
 											<div className="card invoices-add-card">
 												<div className="card-body">
 													<div className="invoice-add-table">
 													<h4>Salary component</h4>
+													<a className={incrementbtn?`btn btn-success  m-4`:"btn  btn-outline-success  m-4"} onClick={handleincrementbtnclick}>Increment</a>
+													<a className={decrementbtn?`btn btn-danger  m-4`:"btn  btn-outline-danger  m-4"} onClick={handledecrementbtnclick}>Decrement</a>
+													<a className={nilbtn?`btn btn-primary  m-4`:"btn  btn-outline-primary  m-4"} onClick={handlenilbtnclick}>Nil</a>
 													<div className="table-responsive">
 														<table className="table table-striped table-nowrap  mb-0 no-footer add-table-items">
 														<thead>
@@ -1153,7 +1166,7 @@ const [tablestate,settablestate]=useState(false)
 															<th></th>
 															</tr>
 														</thead>
-														<tbody> 
+														{/* <tbody> 
 													
 															<tr key={1454}>
 																<td>
@@ -1278,7 +1291,7 @@ const [tablestate,settablestate]=useState(false)
 													
 
 														
-														</tbody>
+														</tbody> */}
 														<tbody>
 															{tableRows.map((row, index) => (
 															<tr key={row.id+1}>
@@ -1286,25 +1299,30 @@ const [tablestate,settablestate]=useState(false)
 																<input
 																type="text"
 																className="form-control"
-																value={row.id || index + 2 + 1} // If row.id exists, use it; otherwise, use index + 2 + 1
+																value={ index + 1} // If row.id exists, use it; otherwise, use index + 2 + 1
 																readOnly
 																// onChange={(e) => setRowId(index, e.target.value)}
 																/>
 																</td>
 																<td>
-																<select className="form-control"
-																onKeyDown={handlesalarymasterclick}
-																onMouseEnter={handlesalarymasterclick}
-																onChange={(event) => handlesalarymasterchange(event, index)}
-																>
-																	<option>Select</option>
-																	{salarymasterData.map((option)=>(
-																		<option value={option._id} key={option._id}>
-																			{option.name}
-																		</option>
-																	
-																	))}
-																</select>
+																<select
+															className="form-control"
+															onChange={(event) => handlesalarymasterchange(event, index)}
+															value={selectedOptions[index] || ''}
+														>
+															<option>Select</option>
+															{filteredSalarydata.length !== 0
+															? filteredSalarydata.map((option) => (
+																<option value={option._id} key={option._id}>
+																	{option.name}
+																</option>
+																))
+															: salarymasterData.map((option) => (
+																<option value={option._id} key={option._id}>
+																	{option.name}
+																</option>
+																))}
+														</select>
 																</td>
 																
 																<td>
@@ -1379,7 +1397,7 @@ const [tablestate,settablestate]=useState(false)
 													</div>
 												</div>
 											</div>
-											</div> }
+											</div> 
 										</div>
 
 										<div className="col-12">
