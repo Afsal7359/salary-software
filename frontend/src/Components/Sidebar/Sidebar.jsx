@@ -132,7 +132,6 @@ const Sidebar = () => {
 							
 						</li>
                         <li className="submenu">
-<<<<<<< HEAD
                             <a href="#"><i className="fa fa-columns"></i> <span>Pages</span> <span className="menu-arrow"></span></a>
                             <ul style={{ display:'none'}}>
                                 <li><a href="login.html"> Login </a></li>
@@ -146,37 +145,15 @@ const Sidebar = () => {
                                 <li><a href="error-500.html">500 Error </a></li>
                                 <li><a href="blank-page.html"> Blank Page </a></li>
                             </ul>
-                        </li> */}
-                        {/* <li className="submenu">
-                            <a href="javascript:void(0);"><i className="fa fa-share-alt"></i> <span>Multi Level</span> <span className="menu-arrow"></span></a>
-                            <ul style={{ display:'none'}}>
-                                <li className="submenu">
-                                    <a href="javascript:void(0);"><span>Level 1</span> <span className="menu-arrow"></span></a>
-                                    <ul style="display: none;">
-                                        <li><a href="javascript:void(0);"><span>Level 2</span></a></li>
-                                        <li className="submenu">
-                                            <a href="javascript:void(0);"> <span> Level 2</span> <span className="menu-arrow"></span></a>
-                                            <ul style={{ display:'none'}}>
-                                                <li><a href="javascript:void(0);">Level 3</a></li>
-                                                <li><a href="javascript:void(0);">Level 3</a></li>
-                                            </ul>
-                                        </li>
-                                        <li><a href="javascript:void(0);"><span>Level 2</span></a></li>
-                                    </ul>
-                                </li>
-                                <li>
-                                    <a href="javascript:void(0);"><span>Level 1</span></a>
-                                </li>
-                            </ul>
-                        </li> */}
-                    </ul>
+                        </li> 
+                
+                    
 					<div className="logout-btn">
 						<a href="#"><span className="menu-side"><img src={logouticon} alt=""/></span> <span>Logout</span></a>
 					</div>
-=======
 							<a href="#"><span className="menu-side"></span> <span>   <li><Link to="/add-admin"> Add Admin</Link></li></span></a>
 							
-						</li>
+						
                         <li className="submenu">
 							<a href="#"><span className="menu-side"></span> <span>   <li><Link onClick={handlelogout}> Logout</Link></li></span></a>
 							
@@ -185,7 +162,6 @@ const Sidebar = () => {
 					{/* <div className="logout-btn">
 						<a><span className="menu-side btn-submit"  ><img src={logouticon} alt=""/></span> <span>Logout</span></a>
 					</div> */}
->>>>>>> bd2866a2952eecbcf916f94a302fd30a4edd5e37
                 </div>
             </div>
         </div>
