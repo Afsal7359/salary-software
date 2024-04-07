@@ -1,5 +1,6 @@
 const SalaryBill = require("../models/SalaryBill");
 
+
 module.exports={
 
     GetPFReport : async(req,res)=>{
@@ -12,7 +13,6 @@ module.exports={
                         $gte:  (fromMonth),
                         $lte:  (toMonth),
                         },
-                        employeeTypeId:"6566be7b0085f19cfbfd00c1"
                     })
                     .populate({
                             path: "employeeid",
@@ -62,7 +62,8 @@ module.exports={
                         path: "employeeid",
                         populate: [
                             { path: "EmployeeTypeId" },
-                            { path: "PostId" }
+                            { path: "PostId" },
+                            { path: "bank"}
                         ],
                         })
                 .populate('departmentid')

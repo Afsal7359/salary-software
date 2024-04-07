@@ -12,7 +12,7 @@ module.exports = {
       if (existingEmployee && existingEmployee.isdeleted) {
         // Update the isdeleted flag to false and get the updated document
         const updatedEmployee = await Employee.findOneAndUpdate(
-          { employeeno: data.employeeno },
+          { name: data.name },
           { isdeleted: false },
           { new: true } // To get the updated document
         );
@@ -74,6 +74,7 @@ module.exports = {
         data:updatedEmployee,
       });
     } catch (err) {
+      console.log(err);
       res.status(500).json({
         success: false,
         message: "Failed to edit Employee.",
@@ -118,8 +119,10 @@ module.exports = {
       const Employees = await Employee.find({ isdeleted: { $ne: true } })
         .sort({ _id: -1 })
         .populate("EmployeeTypeId")
+        .populate("bank")
         .populate({
           path: "PostId",
+          
           populate: [
             { path: "unit" },
             { path: "department" },

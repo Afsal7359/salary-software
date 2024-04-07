@@ -3,7 +3,7 @@ import logo from '../../assets/img/logo.jpg'
 import './Salaryview.css'
 import { useReactToPrint } from 'react-to-print';
 import { GetAllCompany } from '../../Apicalls/Company';
-function Salaryview(item, setData, Data,) {
+function Salaryview(item, setData, Data, Salarylist ,setSalaryList,setshowPrint) {
 console.log(item.item ,'DDDDDDDDDDDDDDDDDDDDDDDDDDDDDD');
   const componentRef = useRef();
   const handlePrint = useReactToPrint({
@@ -40,7 +40,7 @@ console.log(item.item ,'DDDDDDDDDDDDDDDDDDDDDDDDDDDDDD');
         newIncrement.push(item);
       } else if(item.salaryComponent.type === 'Decrement') {
         newDecrement.push(item);
-      }else if(item.salaryComponent.type === 'nill'){
+      }else if(item.salaryComponent.type === 'nil'){
         newContributions.push(item);
       }
     });
@@ -54,11 +54,10 @@ console.log(item.item ,'DDDDDDDDDDDDDDDDDDDDDDDDDDDDDD');
   
   const [company,setCompany]=useState([]);
 
-  
 console.log('CompanyData',company);
   return (
     <>
-      <button onClick={handlePrint}>Print</button>
+      <button  className='btn btn-primary' onClick={handlePrint}>Print</button>
       <div id="content-to-print" className="main" ref={componentRef}>
       <table>
     <tbody>

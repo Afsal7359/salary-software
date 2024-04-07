@@ -58,7 +58,7 @@ function EmployeeView({item}){
                                                             </tr>
                                                             <tr>
                                                                 <th> Bank </th>
-                                                                <td>{item?.bank}</td>
+                                                                <td>{item?.bank.name}</td>
                                                             </tr>
                                                             <tr>
                                                                 <th> Account Number </th>

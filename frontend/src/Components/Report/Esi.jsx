@@ -40,23 +40,6 @@ function Esi() {
     // Add more options here as needed...
   ];
 
-
-  const handleSelectChange = (index, event) => {
-    const value = event.target.value;
-  
-    setTablerow(prevRows => {
-      const updatedRows = prevRows.map((row, i) => {
-        if (i === index) {
-          return { ...row, selectedValue: value };
-        }
-        return row;
-      });
-      return updatedRows;
-    });
-  };
-  
-  
-  
   const headerdata = useMemo(() => {
 		return {
 		  data:"REPORT",
@@ -64,6 +47,29 @@ function Esi() {
 		};
 	  }, []);
 
+
+  // const handleSelectChanges = (index, value) => {
+  // console.log(value);
+  //   setTablerow(prevRows => {
+  //     const updatedRows = prevRows.map((row, i) => {
+  //       if (i === index) {
+  //         return { ...row, selectedValue: value };
+  //       }
+  //       return row;
+  //     });
+  //     return updatedRows;
+  //   });
+  // };
+  const handleSelectChange = (index, value) => {
+    setTablerow(prevRows => {
+      const updatedRows = [...prevRows];
+      updatedRows[index] = {
+        ...updatedRows[index],
+        selectedValue: value
+      };
+      return updatedRows;
+    });
+  };
 
   const handleDateChange = (index, value) => {
     setTablerow(prevRows => {
@@ -90,7 +96,7 @@ function Esi() {
       console.error('Arrays are of different lengths. Cannot combine.');
     }
   
-  },[tablerow])
+  },[tablerow,selectedValue])
 
 const downloadExcel = () => {
     const worksheet = XLSX.utils.table_to_sheet(document.querySelector('.comman-tabless'));
@@ -133,16 +139,7 @@ const downloadExcel = () => {
                     <div className="col-auto  ms-auto">
                       
                     <form >
-                    <a type='button' className=" me-2" >
-                        {/* <img src={pdficon} alt="" /> */}
-                        <input
-                        className='form-control'
-                          type="date"
-                          value={fromMonth}
-                          onChange={(e) => setFromMonth(e.target.value)}
-                          required
-                        />
-                      </a>
+                   
                           
                       <a type='button' className=" me-2" >
                         {/* <img src={pdficon} alt="" /> */}
@@ -210,8 +207,8 @@ const downloadExcel = () => {
                           <td> <select
                            className='form-control'
                                type="text"
-                               value={item.selectedValue} // Bind input value to selectedValue
-                               onChange={event => handleSelectChange(index, event)}
+                               value={item.selectedValues} // Bind input value to selectedValue
+                               onChange={(e) => handleSelectChange(index, e.target.value)}
                              >
                             <option value="">Select reason code</option>
                             {options.map((option) => (
@@ -233,7 +230,7 @@ const downloadExcel = () => {
 
                     </tbody>
                   </table>
-                  <table className="table border-0 custom-table comman-tabless  mb-0 table-responsive">
+                  <table className="table border-0 custom-table comman-tabless  mb-0 table-responsive d-none">
                     <thead>
                       <tr>
                         <th>SL NO</th>

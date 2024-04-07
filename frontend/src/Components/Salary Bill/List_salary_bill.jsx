@@ -107,7 +107,9 @@ const closeEditModal = () => {
     setshowPrint(true)
     setSelectedItem(item)
      };
-
+const handleremoveprint = ()=>{
+  setshowPrint(false);
+}
    
    const closeDeleteModal = () => {
 	 // Set showEditModal to false when the modal is closed
@@ -165,6 +167,17 @@ console.log(grandNetPay,":Grandnetpay");
 
   return (
     <>
+    {showPrint && selectedItem &&(
+    <>  <button className=' btn btn-primary submit-form m-2' onClick={handleremoveprint}>cancel Print</button>
+    <Salaryview
+ setData={setData}
+ Data={Data}
+ item={selectedItem}
+ Salarylist={Salarylist}
+ setSalaryList={setSalaryList}
+ setshowPrint={setshowPrint}
+
+/> </>)}
     {Salarylist&& 
       <div className="row">
         <div className="col-sm-12">
@@ -313,8 +326,6 @@ console.log(grandNetPay,":Grandnetpay");
                          <li className="page-item" key={index}>
                            <a className="page-link"  onClick={() => setCurrentPage(index + 1)}>{index + 1}</a>
                            </li>
-                     
-                  
                  ))}
              </ul>
            )}
@@ -424,12 +435,7 @@ console.log(grandNetPay,":Grandnetpay");
  item={selectedItem}
  closeDeleteModal={closeDeleteModal}
 />)}
-{showPrint && selectedItem &&(<Salaryview
- setData={setData}
- Data={Data}
- item={selectedItem}
- 
-/>)}
+
     </>
   );
 }

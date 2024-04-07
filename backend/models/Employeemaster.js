@@ -54,9 +54,8 @@ const EmployeeSchema= new mongoose.Schema({
         trim:true
     },
     bank:{
-        type: String,
-     
-        trim:true
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Bankmaster',
     },
     branch:{
         type: String,
@@ -111,6 +110,7 @@ const EmployeeSchema= new mongoose.Schema({
         
         trim:true
     },
+  
     allowedleave:{
         type: Number,
         require:true,

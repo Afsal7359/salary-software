@@ -5,6 +5,7 @@ import { getallpost } from "../../Apicalls/Post";
 import { getallSalary } from "../../Apicalls/salarymaster";
 import { editemployeemaster } from "../../Apicalls/EmployeeMater";
 import Employeemasterlist from "./Employeemasterlist";
+import { getallbank } from "../../Apicalls/Bank";
 function EditEmployeeMaster({ closeEdit, item, setData, Data, show, setshow }) {
   console.log(item,"item");
   const [itemdata,setitemdata]=useState(item)
@@ -12,6 +13,8 @@ function EditEmployeeMaster({ closeEdit, item, setData, Data, show, setshow }) {
   const [employeeTypeId, setEmployeeTypeId] = useState(item.EmployeeTypeId._id);
   const [isemployeeTypeDataFetch, setisEmployeeTypeDataFetch] = useState(false);
   const [postData, setPostData] = useState([]);
+  const [isBankDataFetched, setIsBankDataFetched]=useState(false);
+  const [BankData, setBankData]=useState([]);
   const [postId, setPostId] = useState("");
   const [ispostDataFetched, setIspostDataFetched] = useState(false);
   const [issalarymasterDataFetched, setIsSalarymasterDataFetched] =useState(false);
@@ -27,7 +30,8 @@ function EditEmployeeMaster({ closeEdit, item, setData, Data, show, setshow }) {
    const [pincode,setPincode]=useState(item?.pincode);
    const [dateOfRetierment,setDateOfRetierment]=useState(item?.dateOfRetierment);
 	const [ageOfRetierment,setAgeOfRetierment]=useState(item?.ageOfRetierment);
-   const [bank, setBank] = useState(item?.bank);
+   const [bank, setBank] = useState(item?.bank.name);
+   const [bankid, setBankid] = useState(item?.bank._id);
    const [accountNo, setAccountno] = useState(item?.accountNo);
    const [branch, setBranch] = useState(item?.branch);
    const [ifsc, setIfsc] = useState(item?.ifsc);
@@ -52,14 +56,15 @@ function EditEmployeeMaster({ closeEdit, item, setData, Data, show, setshow }) {
   //  const [secondInputValue, setSecondInputValue] = useState("");
    const [formdata, setFormdata] = useState("");
    const [itemid, setitemid] = useState(item._id);
-   const [tablerow, setTablerow] = useState(item?item.tablerow.slice(2):"");
+   const [tablerow, setTablerow] = useState(item?item.tablerow:"");
   const [oldtablerow,setOldTablerow]=useState(item?item.tablerow:"");
 console.log(oldtablerow,"llllll");
    const [password, setPassword] = useState(item?.password);
 
    const [totalAmount, setTotalAmount] = useState(0);
+   const [totalAmountd, setTotalAmountd] = useState(0);
+   const [totalAmountN, setTotalAmountN] = useState(0);
 
-   const [salarycomponent,setSalarycomponent]=useState(false)
 
    
 	const [EPFWage,setEPFWage]=useState("");
@@ -68,67 +73,26 @@ console.log(oldtablerow,"llllll");
 	const[EPFContri,setEPFContri]=useState("");
 	const[EPSEPFDiff,setEPSEPFDiff]=useState("");
 	const [EDLIWage, setEDLIWage]=useState("");
+	const [incrementtable,SetIncrementTable]=useState([])
+	const [decrementtable,SetDecrementTable]=useState([]);
+	const [niltable,SetNilTable]=useState([]);
+  const [IRPrice,setIRPrice]=useState(0);
+  const [DAPrice,setDAPrice]=useState(0);
 
+  useEffect(()=>{
+    const incrementData = tablerow.filter(e =>e.salaryComponent.type === "Increment")
+		const decrementData = tablerow.filter(e =>e.salaryComponent.type === "Decrement")
+		const nilData = tablerow.filter(e =>e.salaryComponent.type === "nil")
+		console.log(incrementData,"Increment Data....");
+		console.log(decrementData,"Decrement Data....");
+		console.log(nilData,"Nil Data....");
+		SetIncrementTable(incrementData)
+		SetDecrementTable(decrementData)
+		SetNilTable(nilData)
+  },[tablerow])
   	  
-  const [DAPercentage,setDAPercentage]=useState(item.tablerow[0]?item.tablerow[0].percentage:"");
-  const [DAValue,setDAValue]=useState(item.tablerow[0]?item.tablerow[0].value:"");
-  const [DAPrice,setDAPrice]=useState(item.tablerow[0]?item.tablerow[0].price:"");
-  const [IRPercentage,setIRPercentage]=useState(item.tablerow[1]?item.tablerow[1].percentage:"");
-  const [IRValue,setIRValue]=useState(item.tablerow[1]?item.tablerow[1].value:"");
-  const [IRPrice,setIRPrice]=useState(item.tablerow[1]?item.tablerow[1].price:"");
+
   const[updatedRow,setUpdatedRow]=useState('');
-
-
-
-  const handleDAPercentage = (event)=>{
-   const value= event.target.value;
-   setDAPercentage(value)
-   setDAValue('')
-   }
-   const handleDAValue = (event)=>{
-   const value= event.target.value;
-   setDAValue(value)
-   setDAPercentage('')
-   }
-   const handleIRPercentage = (event)=>{
-   const value= event.target.value;
-   setIRPercentage(value)
-   setIRValue('')
-   }
-   const handleIRValue = (event)=>{
-   const value= event.target.value;
-   setIRValue(value)
-   setIRPercentage('')
-   }
-
-  useEffect(() => {
-
-   // DA row
-   if (DAPercentage !== 0 && !DAValue) {
-     const price = (basicSalary * DAPercentage) / 100;
-     setDAPrice(price);
-   }
-   
-   else if (DAValue !== 0 && !DAPercentage) {
-     const prices = DAValue;
-     console.log("Priceeeeeeeeeee",prices);
-     setDAPrice(prices);
-   }
-
-   // IR row
-   
-   if (IRPercentage !== 0 && !IRValue  ) {
-     const price = (basicSalary * IRPercentage) / 100;
-     setIRPrice(price);
-   }
-   
-   else if (IRValue !== 0 && !IRPercentage) {
-     const prices = IRValue;
-     console.log("Priceeeeeeeeeee",prices);
-     setIRPrice(prices);
-   }
-   }, [DAPercentage, DAValue, basicSalary,IRPercentage,IRValue]);
-
 
   const handlemployeetypeclick = async () => {
     try {
@@ -140,6 +104,7 @@ console.log(oldtablerow,"llllll");
           setEmployeeTypeData([]);
         }
       }
+
       setisEmployeeTypeDataFetch(true);
     } catch (error) {
       toast.error(error.message);
@@ -153,15 +118,6 @@ console.log(oldtablerow,"llllll");
    
   };
 
-
-  useEffect(()=>{
-    if (employeeTypeId == "6566be7b0085f19cfbfd00c1"){
-			setSalarycomponent(true)
-		}else{
-			setSalarycomponent(false)
-		}
-
-  },[employeeTypeId])
 
 
   const handlePostClick = async () => {
@@ -183,7 +139,24 @@ console.log(oldtablerow,"llllll");
     setPostId(event.target.value);
   };
 
+	const handleBankClick= async()=>{
+		try{
+			if(!isBankDataFetched){
+				const response=await getallbank();
+				if(response.success){
+					setBankData(response.data);
+				}else{
+					setBankData([]);
+				}
+			}setIsBankDataFetched(true)
+		}catch(error){
+			toast.error(error.message);
+		}
+	};
+	const handleBankChange=(event)=>{
+		setBankid(event.target.value);
 
+	}
 
   const handlesalarymasterclick = async () => {
     try {
@@ -204,36 +177,149 @@ console.log(oldtablerow,"llllll");
   useEffect(()=>{
 	handlesalarymasterclick()
   },[])
+  const [selectedOptions, setSelectedOptions] = useState([]);
+  const [selectedOptionsd, setSelectedOptionsd] = useState([]);
+  const [selectedOptionsN, setSelectedOptionsN] = useState([]);
 
 
   const handlesalarymasterchange = (event, index) => {
-    const updatedTableRows = [...tablerow];
+    const updatedTableRows = [...incrementtable];
     updatedTableRows[index] = {
       ...updatedTableRows[index],
       salaryComponent: event.target.value,
+      id: Number(index + 2 + 1)
     };
-    setTablerow(updatedTableRows); // Update the state with the modified rows
-  };
- 
+    
+    console.log(updatedTableRows, "ii");
+    SetIncrementTable(updatedTableRows);
+    setSelectedOptions((prevSelectedOptions) => {
+      const updatedOptions = [...prevSelectedOptions];
+      updatedOptions[index] = event.target.value;
+      return updatedOptions;
+    });
+    };
+    const handlesalarymasterchangede = (event, index , row) => {
+    console.log(event, index,"eveeeeeeeent chnage");
+    console.log(row,"eveeeeeeeent chnage rrrrrrrrrrrrrro");
+    const updatedTableRows = [...decrementtable];
+    updatedTableRows[index] = {
+      ...updatedTableRows[index],
+      salaryComponent: event.target.value, // Update salaryComponent based on the event value
+      id: Number(index + 2 + 1)
+    };
+    
+    console.log(updatedTableRows, "ii");
+    SetDecrementTable(updatedTableRows);
+    setSelectedOptionsd((prevSelectedOptions) => {
+      const updatedOptions = [...prevSelectedOptions];
+      updatedOptions[index] = event.target.value;
+      return updatedOptions;
+    });
+    };
+    const handlesalarymasterchangeNil = (event, index) => {
+    const updatedTableRows = [...niltable];
+    updatedTableRows[index] = {
+      ...updatedTableRows[index],
+      salaryComponent: event.target.value,
+      id: Number(index + 2 + 1)
+    };
+    
+    console.log(updatedTableRows, "ii");
+    SetNilTable(updatedTableRows);
+    setSelectedOptionsN((prevSelectedOptions) => {
+      const updatedOptions = [...prevSelectedOptions];
+      updatedOptions[index] = event.target.value;
+      return updatedOptions;
+    });
+    };
+    const handleDaPrice =()=>{
+      try {
+        const DaPrice = incrementtable.find(item => item.salaryComponent._id === "659bb609d4d7dd6ffd8dfbf3");
+        console.log(DaPrice,"DDDDDDDdaPPPPPPPPPPrrrrice");
+        if(DaPrice === "undefined"){
+          setDAPrice(0)
+        }else{
+          setDAPrice(DaPrice.price?DaPrice.price:0)
+        }
+        
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    const handleIRPrice =()=>{
+      try {
+        const IRPrices = incrementtable.find(item => item.salaryComponent._id === "659bb617d4d7dd6ffd8dfbf7");
+        console.log(IRPrices,"IRPriceIRPriceIRPrice");
+        if(IRPrices === "undefined"){
+          setIr(0)
+        }else{
+          setIRPrice(IRPrices.price?IRPrices.price:0)
+        }
+        
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    useEffect(()=>{
+      handleDaPrice();
+      handleIRPrice();
+    },[tablerow,incrementtable,decrementtable])
+
     
 
   const handleAddRow = () => {
-    const newRow = {
-        id: tablerow.length + 1,
-        salaryComponent: "",
-        percentage: "",
-        value: "",
-        price: "",
-  };
-    setTablerow([...tablerow, newRow]);
-   
-  };
-
-
-  const handleRemoveRow = (id) => {
-    setTablerow((prevRows) => prevRows.filter((row) => row.id !== id));
-  };
-
+    SetIncrementTable((prevRows) => [
+      ...prevRows,
+      {
+      id: prevRows.length + 1, // Incrementing ID
+      salaryComponent: '',
+      percentage: '',
+      value: '',
+      price: '',
+      },
+    ]);
+    };
+    
+  
+    const handleRemoveRow = (id) => {
+    SetIncrementTable((prevRows) => prevRows.filter((row) => row.id !== id));
+    };
+    const handleAddRowd = () => {
+    SetDecrementTable((prevRows) => [
+      ...prevRows,
+      {
+      id: prevRows.length + 1, // Incrementing ID
+      salaryComponent: '',
+      percentage: '',
+      value: '',
+      price: '',
+      },
+    ]);
+    };
+    
+  
+    const handleRemoveRowd = (id) => {
+    SetDecrementTable((prevRows) => prevRows.filter((row) => row.id !== id));
+    };
+    const handleAddRowNil = () => {
+    SetNilTable((prevRows) => [
+      ...prevRows,
+      {
+      id: prevRows.length + 1, 
+      salaryComponent: '',
+      percentage: '',
+      value: '',
+      price: '',
+      },
+    ]);
+    };
+    
+  
+    const handleRemoveRowNil = (id) => {
+    SetNilTable((prevRows) => prevRows.filter((row) => row.id !== id));
+    };
+  
+  
    
 
 
@@ -250,6 +336,47 @@ console.log(oldtablerow,"llllll");
     
       setTablerow(updatedTablerow);
     };
+    const [filteredSalarydatain,setFilteredSalaryDatain]=useState([]);
+	  const [filteredSalarydatade,setFilteredSalaryDatade]=useState([]);
+	  const [filteredSalarydataNil,setFilteredSalaryDataNil]=useState([]);
+
+    const handleincrementbtnclick = ()=>{
+      try {
+        const data = salarymasterData.filter(e =>e.type === "Increment")
+        if(data.length === 0){
+          toast.info("No Data Found in Increment ")
+        }
+        console.log(data,"incrementdata");
+        setFilteredSalaryDatain(data)
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    const handledecrementbtnclick = ()=>{	
+      try {
+        const data = salarymasterData.filter(e =>e.type === "Decrement")
+        if(data.length === 0){
+          toast.info("No Data Found in Decrement ")
+        }
+        setFilteredSalaryDatade(data)
+        console.log(data,"salarymatserdata");
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    const handlenilbtnclick = ()=>{
+      try {
+        const data = salarymasterData.filter(e =>e.type === "nil")
+        if(data.length === 0){
+          toast.info("No Data Found in Nil ")
+        }
+        setFilteredSalaryDataNil(data)
+        console.log(data,"salarymatserdata");
+      
+      } catch (error) {
+        console.log(error);
+      }
+    }
 
     const calculateRetirementDate = () => {
       if (dateOfBirth && ageOfRetierment) {
@@ -273,100 +400,138 @@ console.log(oldtablerow,"llllll");
       }, [dateOfBirth, ageOfRetierment]);
 
 
+// useEffect(() => {
+// try {
+//   const totalAmount = tablerow.reduce((acc, row) => {
+//     const salaryType = salarymasterData.find(
+//       (item) =>
+//         item._id === row.salaryComponent?._id || item._id === row.salaryComponent
+//     );
+
+//     if (salaryType && (salaryType.type === 'Increment' || salaryType.type === 'Decrement')) {
+//       const price = parseFloat(row.price);
+
+//       if (!isNaN(price)) {
+//         // Check if the parsed price is a valid number
+//         return acc + (salaryType.type === 'Increment' ? price : -price);
+//       } else {
+//         console.error('Invalid price for row:', row);
+//       }
+//     }
+//     return acc;
+//   }, parseFloat(basicSalary) );
+
+//   if (!isNaN(totalAmount)) {
+//     // Check if the calculated totalAmount is a valid number
+//     setitemdata({
+//       ...itemdata,
+//       TotalSalary: totalAmount,
+//     });
+//     console.log(totalAmount,":ToptalAmount");
+//   } else {
+//     console.error('Invalid totalAmount:', totalAmount);
+//   }
+// } catch (error) {
+//   console.error('Error in useEffect:', error);
+// }
+//   }, [tablerow, basicSalary, salarymasterData,]);
+
 useEffect(() => {
-try {
-  const totalAmount = tablerow.reduce((acc, row) => {
-    const salaryType = salarymasterData.find(
-      (item) =>
-        item._id === row.salaryComponent?._id || item._id === row.salaryComponent
-    );
-
-    if (salaryType && (salaryType.type === 'Increment' || salaryType.type === 'Decrement')) {
+  try {
+    const totalAmountincrement = incrementtable.reduce((acc, row) => {
+      const salaryType = salarymasterData.find((item) => item._id === row.salaryComponent);
       const price = parseFloat(row.price);
-
-      if (!isNaN(price)) {
-        // Check if the parsed price is a valid number
-        return acc + (salaryType.type === 'Increment' ? price : -price);
-      } else {
-        console.error('Invalid price for row:', row);
-      }
-    }
-    return acc;
-  }, parseFloat(basicSalary)+ parseFloat(DAPrice) + parseFloat(IRPrice) );
-
-  if (!isNaN(totalAmount)) {
-    // Check if the calculated totalAmount is a valid number
-    setitemdata({
-      ...itemdata,
-      TotalSalary: totalAmount,
-    });
-    console.log(totalAmount,":ToptalAmount");
-  } else {
-    console.error('Invalid totalAmount:', totalAmount);
-  }
-} catch (error) {
-  console.error('Error in useEffect:', error);
-}
-  }, [tablerow, basicSalary, salarymasterData,DAPrice,IRPrice]);
-
-
-
-  // useEffect(() => {
-
-  //   if(employeeTypeId === "6566be7b0085f19cfbfd00c1" && basicSalary ){
-  //     const EPF = parseFloat(basicSalary) + parseFloat(DAPrice) + parseFloat(IRPrice)
-  //     setEPFWage(EPF)
-  //   }else{
-  //     setEPFWage('')
-  //   };
-  
-
-
-  // const joiningDate = new Date(dateOfJoining);
-  //     const comparisonDate = new Date('2014-01-01');
-
-  //   if (employeeTypeId === "6566be7b0085f19cfbfd00c1" && (joiningDate >= comparisonDate)) {
-  //     setEPSWage(0);
-  //   } else if (employeeTypeId === "6566be7b0085f19cfbfd00c1" && (totalAmount >= 15000)) {
-  //     setEPSWage(15000);
-  //   } else if(employeeTypeId === "6566be7b0085f19cfbfd00c1" && (totalAmount < 15000)) {
-  //     setEPSWage(totalAmount);
-  //   }else{
-  //     setEPSWage('')
-  //   };
-  
-
-  //   if(employeeTypeId === "6566be7b0085f19cfbfd00c1" &&(totalAmount >= 15000)){
-  //     setEDLIWage(15000)
-  //   }else if(employeeTypeId === "6566be7b0085f19cfbfd00c1" &&(totalAmount < 15000)){
-  //     setEDLIWage(totalAmount)
-  //   }else{
-  //     setEDLIWage('')
-  //   }
-
-  //   console.log(EPFWage,":EPF WAGE");
-  //   console.log(EPSWage,":Eps WAGE");
-  //   console.log(dateOfJoining);
-  //   console.log(EDLIWage,":EDLI WAGE");
-
-  //   }, [totalAmount, dateOfJoining,EPSWage,EPFWage,EDLIWage]);
+      console.log(acc + price, "neeeewprice");
+      return acc + price; // Add the price to the accumulator and return it
+    }, 0); // Provide an initial value of 0 for the accumulator
     
+    console.log(totalAmountincrement,"totttttttttttalneeeewprice"); // This will print the total amount
+  
+    if (!isNaN(totalAmountincrement)) {
+      // Check if the calculated totalAmount is a valid number
+      setTotalAmount(totalAmountincrement)
+      } else {
+      console.error('Invalid totalAmount:', totalAmount);
+      }
+  } catch (error) {
+    console.error('Error in useEffect:', error);
+  }
+}, [ basicSalary,incrementtable]);
 
- 
+useEffect(() => {
+  try {
+    const totaldecrementamount = decrementtable.reduce((acc, row) => {
+      const salaryType = salarymasterData.find((item) => item._id === row.salaryComponent);
+      const price = parseFloat(row.price);
+      console.log(acc + price, "neeeewprice");
+      return acc + price; // Add the price to the accumulator and return it
+    }, 0); // Provide an initial value of 0 for the accumulator
+    
+    console.log(totaldecrementamount,"totttttttttttalneeeewprice"); // This will print the total amount
+  
+    if (!isNaN(totaldecrementamount)) {
+      // Check if the calculated totalAmount is a valid number
+      setTotalAmountd(totaldecrementamount)
+      } else {
+      console.error('Invalid totalAmount:', totalAmount);
+      }
+  } catch (error) {
+    console.error('Error in useEffect:', error);
+  }
+}, [ basicSalary,decrementtable]);
+
+useEffect(() => {
+  try {
+    const totalNil = niltable.reduce((acc, row) => {
+      const salaryType = salarymasterData.find((item) => item._id === row.salaryComponent);
+      const price = parseFloat(row.price);
+      console.log(acc + price, "neeeewprice");
+      return acc + price; // Add the price to the accumulator and return it
+    }, 0); // Provide an initial value of 0 for the accumulator
+    
+    console.log(totalNil,"totttttttttttalneeeewprice"); // This will print the total amount
+  
+    if (!isNaN(totalNil)) {
+      // Check if the calculated totalAmount is a valid number
+      setTotalAmountN(totalNil)
+      } else {
+      console.error('Invalid totalAmount:', totalNil);
+      }
+  } catch (error) {
+    console.error('Error in useEffect:', error);
+  }
+}, [ basicSalary,decrementtable]);
+
 
   const handleSecondInputChange = (index, value) => {
-    const updatedTableRows = [...tablerow];
+    const updatedTableRows = [...incrementtable];
     updatedTableRows[index].percentage = "";
     updatedTableRows[index].value = value.trim() !== "" ? Number(value) : "";
     const newPrice = value.trim() !== "" ? value : "";
     updatedTableRows[index].price = newPrice;
-    setTablerow(updatedTableRows);
-    // setIRPrice(updatedTableRows[1].price)
-    // setDAPrice(updatedTableRows[0].price)
+    SetIncrementTable(updatedTableRows);
   };
+  const handleSecondInputChangede = (index,value) => {
+	const updatedTableRows = [...decrementtable];
+	updatedTableRows[index].percentage ='';
+	updatedTableRows[index].value = Number(value);
+	const newPrice = (value)
+	updatedTableRows[index].price = newPrice;
+	SetDecrementTable(updatedTableRows);
+};
+const handleSecondInputChangeNil = (index,value) => {
+	const updatedTableRows = [...niltable];
+	updatedTableRows[index].percentage ='';
+	updatedTableRows[index].value = Number(value);
+	const newPrice = (value)
+	updatedTableRows[index].price = newPrice;
+	SetNilTable(updatedTableRows);
+};
+
+
 
   const   handleChange = (index, percentage) => {
-    const updatedTableRows = [...tablerow];
+    const updatedTableRows = [...incrementtable];
     updatedTableRows[index].percentage = Number(percentage);
 
     // Reset second field's value when first field is updated
@@ -378,53 +543,121 @@ try {
       : "";
     updatedTableRows[index].price = newPrice || "";
 
-    setTablerow(updatedTableRows);
-    // setIRPrice(updatedTableRows[1].price)
-    // setDAPrice(updatedTableRows[0].price)
+    SetIncrementTable(updatedTableRows);
   };
 
+  const handleChangede = (index,percentage,row) => {
+	
+	console.log(row,"indexxxxxxxx",percentage,"pppprrrrr");
+	if(row.salaryComponent._id === "659bbb52d4d7dd6ffd8dfc80"){
+		handleDaPrice();
+		handleIRPrice();	
+		console.log("Haaaaaaaaai");
+		const updatedTableRows = [...decrementtable];
+		updatedTableRows[index].percentage = Number(percentage);
+		const newsalarys = (((parseFloat(basicSalary) + parseFloat(DAPrice) + parseFloat(IRPrice)) * Number(percentage))/100).toFixed(2);
+		console.log(newsalarys,DAPrice,"neeeeeeeeeeewsaaaaaaaaa");
+	
+
+	   console.log(newsalarys,"newpriceeeeeeeeeeeeeeeeeeeeeeeeeeee");
+	updatedTableRows[index].price = newsalarys;
+	SetDecrementTable(updatedTableRows);
+	}
+	else if(row.salaryComponent._id === "659bbb98d4d7dd6ffd8dfc9c"){
+		console.log("Haaaaaaaaai");
+		const updatedTableRows = [...decrementtable];
+		updatedTableRows[index].percentage = Number(percentage);
+		console.log(totalAmount);
+	   // Recalculate the price based on the updated percentage and basic salary
+	   const newPrice =   (((parseFloat(totalAmount)+parseFloat(basicSalary)) * Number(percentage)) / 100).toFixed(2)
+	   console.log(newPrice,"newpriceeeeeeeeeeeeeeeeeeeeeeeeeeee");
+	updatedTableRows[index].price = newPrice;
+	SetDecrementTable(updatedTableRows);
+	}
+	else{
+			const updatedTableRows = [...decrementtable];
+			updatedTableRows[index].percentage = Number(percentage);
+		// Recalculate the price based on the updated percentage and basic salary
+		const newPrice = (Number(basicSalary) * Number(percentage)) / 100;
+		updatedTableRows[index].price = newPrice;
+		SetDecrementTable(updatedTableRows);
+		}
+	
+};
+const handleChangeNil = (index,percentage) => {
+	const updatedTableRows = [...niltable];
+	updatedTableRows[index].percentage = Number(percentage);
+   // Recalculate the price based on the updated percentage and basic salary
+const newPrice = (Number(basicSalary) * Number(percentage)) / 100;
+updatedTableRows[index].price = newPrice;
+SetNilTable(updatedTableRows);
+};
  
   const handleclicktable = () => {
     setEditemployee(false);
     setEmployelist(true);
   };
 
-  const [firstrow,setFirstRow] =useState([
-		{
-			id:101,
-			salaryComponent:"659bb609d4d7dd6ffd8dfbf3",
-			percentage:DAPercentage?DAPercentage:"",
-			value:DAValue?DAValue:"",
-			price:DAPrice
-		},
-		{
-			id:102,
-			salaryComponent:"659bb617d4d7dd6ffd8dfbf7",
-			percentage:IRPercentage?IRPercentage:"",
-			value:IRValue?IRValue:"",
-			price:IRPrice
-		}
-	  ])
-    useEffect(()=>{
-      firstrow[0].value = DAValue
-      firstrow[0].percentage = DAPercentage
-      firstrow[1].value = IRValue
-      firstrow[1].percentage = IRPercentage
-      firstrow[0].price = DAPrice
-      firstrow[1].price = IRPrice
-    },[DAValue,DAPercentage,IRPercentage,IRValue,DAPrice,IRPrice])
+  // const [firstrow,setFirstRow] =useState([
+	// 	{
+	// 		id:101,
+	// 		salaryComponent:"659bb609d4d7dd6ffd8dfbf3",
+	// 		percentage:DAPercentage?DAPercentage:"",
+	// 		value:DAValue?DAValue:"",
+	// 		price:DAPrice
+	// 	},
+	// 	{
+	// 		id:102,
+	// 		salaryComponent:"659bb617d4d7dd6ffd8dfbf7",
+	// 		percentage:IRPercentage?IRPercentage:"",
+	// 		value:IRValue?IRValue:"",
+	// 		price:IRPrice
+	// 	}
+	//   ])
+    // useEffect(()=>{
+    //   firstrow[0].value = DAValue
+    //   firstrow[0].percentage = DAPercentage
+    //   firstrow[1].value = IRValue
+    //   firstrow[1].percentage = IRPercentage
+    //   firstrow[0].price = DAPrice
+    //   firstrow[1].price = IRPrice
+    // },[DAValue,DAPercentage,IRPercentage,IRValue,DAPrice,IRPrice])
     
     
 
-	   console.log(tablerow,"tableeeeeeeeeeerow:");
-     console.log(firstrow,"firstrow...........");
-    useEffect(() => {
-      if (tablerow && tablerow.length > 0 && !tablerow[0].price) {
-        setUpdatedRow([...firstrow.map(row => ({ ...row }))]); 
-      } else if (tablerow && tablerow.length > 0 && tablerow[0].price > 0) {
-        setUpdatedRow([...firstrow.map(row => ({ ...row })), ...tablerow.map(row => ({ ...row }))]);
+	   console.log(tablerow,"tableeeeeeeeeeerow:"); 
+    // useEffect(() => {
+    //   if (tablerow && tablerow.length > 0 && !tablerow[0].price) {
+    //     setUpdatedRow([...firstrow.map(row => ({ ...row }))]); 
+    //   } else if (tablerow && tablerow.length > 0 && tablerow[0].price > 0) {
+    //     setUpdatedRow([...firstrow.map(row => ({ ...row })), ...tablerow.map(row => ({ ...row }))]);
+    //   }
+    //   }, [tablerow,DAPrice,IRPrice]);
+    useEffect(()=>{
+      handleUpdatedRow();
+    },[incrementtable,decrementtable,niltable])
+
+    const handleUpdatedRow =()=>{
+      try {
+        let UpdatedRowss = [...incrementtable,...decrementtable,...niltable]
+        let filteredRows = UpdatedRowss.filter(row => row.price !== ''|| 0);
+        setUpdatedRow(filteredRows)
+        console.log(updatedRow,":::::::::::::::fffff UpdatedRRRRRRRRooooew");
+        // if (incrementtable.length < 0 && decrementtable.length <0 && niltable.length < 0) {
+        // 	let updatedrow = [...incrementtable,...decrementtable,...niltable ];
+        // 	setUpdatedRow(updatedrow)	
+        // }else{
+        // 	setUpdatedRow([])
+        //   }
+          if(updatedRow){
+          updatedRow.forEach((row, index) => {
+            row.id = index + 1;
+          });
+          }
+      } catch (error) {
+        console.log(error);
       }
-      }, [tablerow,firstrow,DAPrice,IRPrice]);
+    }
       const formData = {
         name,
         email,
@@ -435,7 +668,7 @@ try {
         address2,
         address3,
         pincode,
-        bank,
+        bank:bankid,
         accountNo,
         ifsc,
         branch,
@@ -505,8 +738,7 @@ console.log(formData,":Formdataaaa");
       toast.error(err.message);
     }
   };
-console.log(DAPrice,"DAPRICEEE");
-console.log(IRPrice,"IRPRICE");
+
 console.log(employeeTypeId,":employeetypeid");
 
 
@@ -770,16 +1002,24 @@ console.log(employeeTypeId,":employeetypeid");
                       <div className="col-12 col-md-6 col-xl-6">
                         <div className="form-group local-forms">
                           <label>
-                            Bank <span className="login-danger">*</span>
+                            Bank<span className="login-danger">*</span>
                           </label>
 
-                          <input
-                            onChange={(e) => setBank(e.target.value)}
-                            className={`form-control`}
-                            type="text"
-                            placeholder=""
-                            value={bank}
-                          />
+                          <select
+                            className="form-control select  "
+                            onKeyDown={handleBankClick}
+                            onMouseEnter={handleBankClick}
+                            onChange={handleBankChange}
+                          >
+                            <option value={bank}>
+                              {item.bank.name}
+                            </option>
+                            {BankData.map((option) => (
+                              <option value={option._id} key={option._id}>
+                                {option.name}
+                              </option>
+                            ))}
+                          </select>
                         </div>
                       </div>
 
@@ -1052,7 +1292,6 @@ console.log(employeeTypeId,":employeetypeid");
                       </div>
 
                       <div className="row">
-                        {salarycomponent&&
                         <div className="col-md-12">
                           <div className="card invoices-add-card">
                             <div className="card-body">
@@ -1070,27 +1309,33 @@ console.log(employeeTypeId,":employeetypeid");
                                         <th></th>
                                       </tr>
                                     </thead>
-                                    {salarymasterData[0]&&  <tbody>
-													
-															<tr key={1454}>
+                                   
+                                    {incrementtable.length !== 0 ? <tbody>
+															{incrementtable.map((row, index) => (
+															<tr key={row.id+1}>
 																<td>
-																<input type="text" className="form-control" value={ 1} readOnly 
-																onChange={(e) => setRowId1(e.target.value)}/>
+																<input
+																type="text"
+																className="form-control"
+																value={ index + 1} // If row.id exists, use it; otherwise, use index + 2 + 1
+																readOnly
+																// onChange={(e) => setRowId(index, e.target.value)}
+																/>
 																</td>
 																<td>
-																<select className="form-control"
-																// onKeyDown={handlesalarymasterclick}
-																// onMouseEnter={handlesalarymasterclick}
+																<select
+																className="form-control"
 																onChange={(event) => handlesalarymasterchange(event, index)}
-																>
-																
-																	
-																		<option value={oldtablerow[0]._id} key={oldtablerow[0]._id}>
-																			{oldtablerow[0].salaryComponent.name}
-																		</option>
-																	
-																	
-																</select>
+																value={selectedOptions[index] || ''}
+																onClick={handleincrementbtnclick}
+															>
+														<option value={row._id} key={row._id}>
+																{row.salaryComponent.name}
+														</option>
+														{filteredSalarydatain.map((option,index)=>(
+															<option value={option._id} key={option._id}>{option.name}</option>
+														))}
+													</select>
 																</td>
 																
 																<td>
@@ -1100,9 +1345,9 @@ console.log(employeeTypeId,":employeetypeid");
 																		className={`form-control `}
 																		placeholder="%"
 																		// onChange={handleChange}
-																		value={DAPercentage}
-																		// value={row.percentage ? row.percentage : ''}
-                                                                        onChange={(e)=>handleDAPercentage(e)}
+																		// value={percentage}
+																		value={row.percentage ? row.percentage : ''}
+                                                                        onChange={(e) => handleChange(index, e.target.value)}
 																		/>
 																	
 															</td>
@@ -1110,201 +1355,236 @@ console.log(employeeTypeId,":employeetypeid");
 																<input
 																	type="text"
 																	className="form-control"
-																	value={DAValue ? DAValue : ''}
-																	onChange={(e) => handleDAValue( e)}
+																	value={row.value ? row.value : ''}
+																	onChange={(e) => handleSecondInputChange(index, e.target.value)}
 																	
 																/>
 																</td>
 																<td>
 																<input type="text" className="form-control" 
-																 value={DAPrice?DAPrice:''}
+																 value={row.price?row .price:''}
+															
 																 readOnly/>
 																</td>
 																<td className="add-remove text-end">
 																
-																
+																	<a href="javascript:void(0);" className="me-2" onClick={handleAddRow}>
+																	<i className="fas fa-plus-circle"></i>
+																	</a>
+															
+															
+																	<a href="javascript:void(0);" className="remove-btn" onClick={() => handleRemoveRow(row.id)}>
+																	<i className="fa fa-trash-alt"></i>
+																	</a>
 																
 																</td>
 															</tr>
-														
+															))}
 
-														
-												      		</tbody>}
-                                  {salarymasterData[1]&&	<tbody>
-                                  <tr key={235435}>
-                                    <td>
-                                    <input type="text" className="form-control" value={ 2 } readOnly 
-                                    onChange={(e) => setRowId2(e.target.value)}/>
-                                    </td>
-                                    <td>
-                                    <select className="form-control"
-                                    // onKeyDown={handlesalarymasterclick}
-                                    // onMouseEnter={handlesalarymasterclick}
-                                    onChange={(event) => handlesalarymasterchange(event, index)}
-                                    >
-                                    
-                                      
-                                        <option value={oldtablerow[1]._id} key={oldtablerow[1]._id}>
-                                          {oldtablerow[1].salaryComponent.name}
-                                        </option>
-                                      
-                                      
-                                    </select>
-                                    </td>
-                                    
-                                    <td>
-                                    <input
-                                        
-                                        type="number"
-                                        className={`form-control`}
-                                        placeholder="%"
-                                        // onChange={handleChange}
-                                        value={IRPercentage}
-                                        // value={row.percentage ? row.percentage : ''}
-                                                                            onChange={(e) => handleIRPercentage(e)}
-                                        />
-                                      
-                                       
-                                  </td>
-                                    <td>
-                                    <input
-                                      type="text"
-                                      className="form-control"
-                                      value={IRValue}
-                                      onChange={(e) => handleIRValue(e)}
-                                      
-                                    />
-                                    </td>
-                                    <td>
-                                    <input type="text" className="form-control" 
-                                    value={IRPrice?IRPrice:''}
-                                    readOnly/>
-                                    </td>
-                                    <td className="add-remove text-end">
-                                    
-                                    
-                                    
-                                    </td>
-                                  </tr>
-                                </tbody>}
-                                    <tbody>
-                                      {tablerow.map((row, index) => (
-                                        <tr key={row.id}>
-                                          <td>
-                                            <input
-                                              type="text"
-                                              className="form-control"
-                                              value={index +2+ 1}
-                                              readOnly
-                                            />
-                                          </td>
-                                          <td>
-                                            <select
-                                              className="form-control"
-                                            //   onMouseEnter={
-                                            //     handlesalarymasterclick
-                                            //   }
-                                              onChange={(event) =>
-                                                handlesalarymasterchange(
-                                                  event,
-                                                  index
-                                                )
-                                              }
-                                            >
-                                              <option
-                                                value={row._id}
-                                                key={row._id}
-                                              >
-                                                {row.salaryComponent.name}
-                                              </option>
-                                              {salarymasterData.map(
-                                                (option) => (
-                                                  <option
-                                                    value={option._id}
-                                                    key={option._id}
-                                                  >
-                                                    {option.name}
-                                                  </option>
-                                                )
-                                              )}
-                                            </select>
-                                          </td>
+															{incrementtable.length === 0 && (
+															SetIncrementTable(prevRows => [...prevRows, {
+																id: rowid,
+																salaryComponent: '',
+																percentage: '',
+																value: '',
+																price: '',
+															}])
+														)}
+														{/* <tr>
+															<td colSpan="5" className="text-end pt-3"><strong>Total Increment:</strong></td>
+															<td><input className="form-control" type="number" value={totalAmount} readOnly/>
+															</td>
+															
+															</tr> */}
+															<tr>
 
-                                          <td>
-                                            <input
-                                              type="number"
-                                              className={`form-control`}
-                                              placeholder="%"
-                                              // onChange={handleChange}
-                                              // value={percentage}
-                                              value={
-                                                row.percentage
-                                                  ? row.percentage
-                                                  : ""
-                                              }
-                                              onChange={(e) =>
-                                                handleChange(
-                                                  index,
-                                                  e.target.value
-                                                )
-                                              }
-                                            />
-                                          </td>
-                                          <td>
-                                            <input
-                                              type="text"
-                                              className="form-control"
-                                              value={row.value ? row.value : ""}
-                                              onChange={(e) =>
-                                                handleSecondInputChange(
-                                                  index,
-                                                  e.target.value
-                                                )
-                                              }
-                                            />
-                                          </td>
-                                          <td>
-                                            <input
-                                              type="text"
-                                              className="form-control"
-                                              value={row.price ? row.price : ""}
-                                              readOnly
-                                            />
-                                          </td>
-                                          <td className="add-remove text-end">
-                                            <a
-                                              href="javascript:void(0);"
-                                              className="me-2"
-                                              onClick={handleAddRow}
-                                            >
-                                              <i className="fas fa-plus-circle"></i>
-                                            </a>
+															</tr>
+															<tr>
+															<td colSpan="5" className="text-end pt-3"><strong>Gross Salary:</strong></td>
+															<td><input className="form-control" type="number" value={(parseFloat(totalAmount) + parseFloat(basicSalary)).toFixed(2)} readOnly/>
+															</td>
+															
+															</tr>
+														</tbody>:""}
 
-                                            <a
-                                              href="javascript:void(0);"
-                                              className="remove-btn"
-                                              onClick={() =>
-                                                handleRemoveRow(row.id)
-                                              }
-                                            >
-                                              <i className="fa fa-trash-alt"></i>
-                                            </a>
-                                          </td>
-                                        </tr>
-                                      ))}
+											         {decrementtable.length !==0 ? <tbody>
+													
+															{decrementtable.map((row, index) => (
+															<tr key={row.id+1}>
+																<td>
+																<input
+																type="text"
+																className="form-control"
+																value={ index + 1} // If row.id exists, use it; otherwise, use index + 2 + 1
+																readOnly
+																// onChange={(e) => setRowId(index, e.target.value)}
+																/>
+																</td>
+																<td>
+																<select
+																className="form-control"
+																onChange={(event) => handlesalarymasterchangede(event, index ,row)}
+																value={selectedOptionsd[index] || ''}
+																onClick={handledecrementbtnclick}
+															>
+														<option value={row._id} key={row._id}>
+																{row.salaryComponent.name}
+														</option>
+														{filteredSalarydatade.map((option,index)=>(
+															<option value={option._id} key={option._id}>{option.name}</option>
+														))}
+													</select>
+																</td>
+																
+																<td>
+																<input
+																		
+																		type="number"
+																		className={`form-control `}
+																		placeholder="%"
+																		// onChange={handleChange}
+																		// value={percentage}
+																		value={row.percentage ? row.percentage : ''}
+                                                                        onChange={(e) => handleChangede(index, e.target.value ,row)}
+																		/>
+																	
+															</td>
+																<td>
+																<input
+																	type="text"
+																	className="form-control"
+																	value={row.value ? row.value : ''}
+																	onChange={(e) => handleSecondInputChangede(index, e.target.value)}
+																	
+																/>
+																</td>
+																<td>
+																<input type="text" className="form-control" 
+																 value={row.price?row .price:''}
+															
+																 readOnly/>
+																</td>
+																<td className="add-remove text-end">
+																
+																	<a href="javascript:void(0);" className="me-2" onClick={handleAddRowd}>
+																	<i className="fas fa-plus-circle"></i>
+																	</a>
+															
+															
+																	<a href="javascript:void(0);" className="remove-btn" onClick={() => handleRemoveRowd(row.id)}>
+																	<i className="fa fa-trash-alt"></i>
+																	</a>
+																
+																</td>
+															</tr>
+															))}
+															
+															{decrementtable.length === 0 && (
+															SetDecrementTable(prevRows => [...prevRows, {
+																id: rowid,
+																salaryComponent: '',
+																percentage: '',
+																value: '',
+																price: '',
+															}])
+														)}
+														<tr>
+															<td colSpan="5" className="text-end pt-3"><strong>Total Decrement:</strong></td>
+															<td><input className="form-control" type="number" value={totalAmountd} readOnly/>
+															</td>
+															
+															</tr>
+														</tbody>:""}
 
-                                      {tablerow.length === 0 &&
-                                        setTablerow((prevRows) => [
-                                          ...prevRows,
-                                          {
-                                            id: tablerow.length+1,
-                                            salaryComponent: "",
-                                            percentage: "",
-                                            value: "",
-                                            price: "",
-                                          },
-                                        ])}
-                                    </tbody>
+														{niltable.length !== 0 ?<tbody>
+													
+															{niltable.map((row, index) => (
+															<tr key={row.id+1}>
+																<td>
+																<input
+																type="text"
+																className="form-control"
+																value={ index + 1} // If row.id exists, use it; otherwise, use index + 2 + 1
+																readOnly
+																// onChange={(e) => setRowId(index, e.target.value)}
+																/>
+																</td>
+																<td>
+																<select
+																className="form-control"
+																onChange={(event) => handlesalarymasterchangeNil(event, index)}
+																value={selectedOptionsN[index] || ''}
+																onClick={handlenilbtnclick}
+															>
+														<option value={row._id} key={row._id}>
+																{row.salaryComponent.name}
+														</option>
+														{filteredSalarydataNil.map((option,index)=>(
+															<option value={option._id} key={option._id}>{option.name}</option>
+														))}
+													</select>
+																</td>
+																
+																<td>
+																<input
+																		
+																		type="number"
+																		className={`form-control `}
+																		placeholder="%"
+																		// onChange={handleChange}
+																		// value={percentage}
+																		value={row.percentage ? row.percentage : ''}
+                                                                        onChange={(e) => handleChangeNil(index, e.target.value)}
+																		/>
+																	
+																		
+															</td>
+																<td>
+																<input
+																	type="text"
+																	className="form-control"
+																	value={row.value ? row.value : ''}
+																	onChange={(e) => handleSecondInputChangeNil(index, e.target.value)}
+																	
+																/>
+																</td>
+																<td>
+																<input type="text" className="form-control" 
+																 value={row.price?row .price:''}
+															
+																 readOnly/>
+																</td>
+																<td className="add-remove text-end">
+																
+																	<a href="javascript:void(0);" className="me-2" onClick={handleAddRowNil}>
+																	<i className="fas fa-plus-circle"></i>
+																	</a>
+															
+															
+																	<a href="javascript:void(0);" className="remove-btn" onClick={() => handleRemoveRowNil(row.id)}>
+																	<i className="fa fa-trash-alt"></i>
+																	</a>
+																
+																</td>
+															</tr>
+															))}
+															
+															{niltable.length === 0 && (
+															SetNilTable(prevRows => [...prevRows, {
+																id: rowid,
+																salaryComponent: '',
+																percentage: '',
+																value: '',
+																price: '',
+															}])
+														)}
+														<tr>
+															<td colSpan="5" className="text-end pt-3"><strong>Total Nil:</strong></td>
+															<td><input className="form-control" type="number" value={totalAmountN} readOnly/>
+															</td>
+															
+															</tr>
+														</tbody>:""}
                                     <tfoot>
                                       <tr>
                                         <td colSpan="5" className="text-end">
@@ -1327,7 +1607,7 @@ console.log(employeeTypeId,":employeetypeid");
                               </div>
                             </div>
                           </div>
-                        </div>}
+                        </div>
                       </div>
                       <div className="col-12">
                         <div className="doctor-submit text-end">

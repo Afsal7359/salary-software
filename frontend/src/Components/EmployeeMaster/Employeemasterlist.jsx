@@ -33,9 +33,15 @@ const Employeemasterlist = React.memo(({ formdata, setformdata }) =>{
     useEffect(() => {
       async function fetchData() {
         try {
-          const result = await getallemployeemaster();
-          setData(result.data);
-          setIsLoading(false);
+          if(Data.length !==0){
+            console.log("Already fetch Data");
+            setIsLoading(false);
+          }else{
+            const result = await getallemployeemaster();
+            setData(result.data);
+            setIsLoading(false);
+          }
+          
         } catch (error) {
           console.error('Error fetching data:', error);
         }
