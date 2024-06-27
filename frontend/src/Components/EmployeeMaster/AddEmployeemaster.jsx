@@ -758,20 +758,12 @@ const [tablestate,settablestate]=useState(false)
 		 data.IRPrice = IRPrice ? IRPrice:""
 		 data.DAPrice = DAPrice ? DAPrice:""
 		 data.bank = bank 
-		
-// 		data.tablerow = (tableRows && Array.isArray(tableRows) && tableRows.length === 1 &&
-//   tableRows[0].value === '0' &&
-//   tableRows[0].percentage === 0 &&
-//   tableRows[0].price === 0)
-//   ? []
-//   : (tableRows || []);
-		
 		 data.TotalSalary=parseFloat(basicsalary)+(totalAmount-totalAmountd)
 		 console.log(data,":dataaaa");
 		try {
 			console.log('Afsal :' , data);
 		  const response = await Addemployee(data);
-		  console.log(response,"ii");
+		  console.log(response,"ii");	
 		  if (response.success) {
 			setcount((prevCount) => prevCount + 1);
 			setData(response.data);

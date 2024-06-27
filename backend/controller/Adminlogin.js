@@ -54,7 +54,7 @@ module.exports={
         try {
             let userInfo = req.body;
             console.log(userInfo,"req.body");
-            const user = await AdminLogin.findOne({ username: req.body.username })
+            const user = await AdminLogin.findOne({ username: userInfo.username })
             if (user) {
                 let validaPassword
                 if(req.body.password===user.password){

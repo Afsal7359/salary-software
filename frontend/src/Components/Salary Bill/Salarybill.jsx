@@ -1348,7 +1348,7 @@ return (
 															
 															</tr>
 															<tr>
-															<div class="col-sm-4">
+															<div class="col-sm-6">
 															<td colSpan="5" className="text-end"><strong>Current Month Total Pay:</strong></td>
 															<td><input className="form-control" type="number" value={(parseFloat(basicSalary)+(totalAmount-totalAmountd)).toFixed(2)} readOnly/></td>
 															{/* <td><input className="form-control" type="number" value={itemdata?.TotalSalary?itemdata.TotalSalary :TotalSalary}  readOnly/>
