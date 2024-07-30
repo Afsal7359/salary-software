@@ -268,8 +268,7 @@ const AddEmployeemaster = () => {
 		});
 	  };
 	  const handlesalarymasterchangede = (event, index , row) => {
-		console.log(event, index,"eveeeeeeeent chnage");
-		console.log(row,"eveeeeeeeent chnage rrrrrrrrrrrrrro");
+
 		const updatedTableRows = [...tableRowsd];
 		updatedTableRows[index] = {
 		  ...updatedTableRows[index],
@@ -277,7 +276,6 @@ const AddEmployeemaster = () => {
 		  id: Number(index + 2 + 1)
 		};
 	  
-		console.log(updatedTableRows, "ii");
 		settableRowsd(updatedTableRows);
 		setSelectedOptionsd((prevSelectedOptions) => {
 		  const updatedOptions = [...prevSelectedOptions];
@@ -293,7 +291,6 @@ const AddEmployeemaster = () => {
 		  id: Number(index + 2 + 1)
 		};
 	  
-		console.log(updatedTableRows, "ii");
 		settableRowsN(updatedTableRows);
 		setSelectedOptionsN((prevSelectedOptions) => {
 		  const updatedOptions = [...prevSelectedOptions];
@@ -385,11 +382,9 @@ const AddEmployeemaster = () => {
 			const totalAmountincrement = tableRows.reduce((acc, row) => {
 				const salaryType = salarymasterData.find((item) => item._id === row.salaryComponent);
 				const price = parseFloat(row.price);
-				console.log(acc + price, "neeeewprice");
 				return acc + price; // Add the price to the accumulator and return it
 			}, 0); // Provide an initial value of 0 for the accumulator
-			
-			console.log(totalAmountincrement,"totttttttttttalneeeewprice"); // This will print the total amount
+			// This will print the total amount
 		
 			if (!isNaN(totalAmountincrement)) {
 				// Check if the calculated totalAmount is a valid number
@@ -407,11 +402,9 @@ const AddEmployeemaster = () => {
 			const totaldecrementamount = tableRowsd.reduce((acc, row) => {
 				const salaryType = salarymasterData.find((item) => item._id === row.salaryComponent);
 				const price = parseFloat(row.price);
-				console.log(acc + price, "neeeewprice");
 				return acc + price; // Add the price to the accumulator and return it
 			}, 0); // Provide an initial value of 0 for the accumulator
-			
-			console.log(totaldecrementamount,"totttttttttttalneeeewprice"); // This will print the total amount
+			 // This will print the total amount
 		
 			if (!isNaN(totaldecrementamount)) {
 				// Check if the calculated totalAmount is a valid number
@@ -432,8 +425,7 @@ const AddEmployeemaster = () => {
 				console.log(acc + price, "neeeewprice");
 				return acc + price; // Add the price to the accumulator and return it
 			}, 0); // Provide an initial value of 0 for the accumulator
-			
-			console.log(totalNil,"totttttttttttalneeeewprice"); // This will print the total amount
+			// This will print the total amount
 		
 			if (!isNaN(totalNil)) {
 				// Check if the calculated totalAmount is a valid number
@@ -477,9 +469,7 @@ const AddEmployeemaster = () => {
 	
 		
 	//   }, [tableRowsd, basicsalary, salarymasterData]);
-	console.log(totalAmountN , "....",tableRowsN);
-		console.log(totalAmount , "....",totalAmountd);
-console.log(tableRows,tableRowsd,tableRowsN);
+
 	  const [incrementbtn,setIncrementbtn]=useState(false)
 	  const [decrementbtn,setDecrementbtn]=useState(false);
 	  const [nilbtn,setNilbtn]=useState(false);
@@ -493,7 +483,6 @@ console.log(tableRows,tableRowsd,tableRowsN);
 			if(data.length === 0){
 				toast.info("No Data Found in Increment ")
 			}
-			console.log(data,"incrementdata");
 			setFilteredSalaryDatain(data)
 		  } catch (error) {
 			  console.log(error);
@@ -506,7 +495,6 @@ console.log(tableRows,tableRowsd,tableRowsN);
 				toast.info("No Data Found in Decrement ")
 			}
 			setFilteredSalaryDatade(data)
-			console.log(data,"salarymatserdata");
 		} catch (error) {
 			console.log(error);
 		}
@@ -518,7 +506,6 @@ console.log(tableRows,tableRowsd,tableRowsN);
 				toast.info("No Data Found in Nil ")
 			}
 			setFilteredSalaryDataNil(data)
-			console.log(data,"salarymatserdata");
 			setIncrementbtn(false)
 			setDecrementbtn(false)
 			setNilbtn(true)
@@ -544,7 +531,6 @@ console.log(tableRows,tableRowsd,tableRowsN);
 	const handleDaPrice =()=>{
 		try {
 			const DaPrice = tableRows.find(item => item.salaryComponent === "659bb609d4d7dd6ffd8dfbf3");
-			console.log(DaPrice,"DDDDDDDdaPPPPPPPPPPrrrrice");
 			if(DaPrice === "undefined"){
 				setDAPrice(0)
 			}else{
@@ -558,7 +544,6 @@ console.log(tableRows,tableRowsd,tableRowsN);
 	const handleIRPrice =()=>{
 		try {
 			const IRPrices = tableRows.find(item => item.salaryComponent === "659bb617d4d7dd6ffd8dfbf7");
-			console.log(IRPrices,"IRPriceIRPriceIRPrice");
 			if(IRPrices === "undefined"){
 				setIRPrice(0)
 			}else{
@@ -571,7 +556,6 @@ console.log(tableRows,tableRowsd,tableRowsN);
 	}
 	const handleChangede = (index,percentage,row) => {
 	
-		console.log(row,"indexxxxxxxx",percentage,"pppprrrrr");
 		if(row.salaryComponent === "659bbb52d4d7dd6ffd8dfc80"){
 			handleDaPrice();
 			handleIRPrice();	
@@ -579,7 +563,6 @@ console.log(tableRows,tableRowsd,tableRowsN);
 			updatedTableRows[index].percentage = Number(percentage);
 			const newsalarys = (parseFloat(basicsalary) + parseFloat(DAPrice?DAPrice:0) + parseFloat(IRPrice?IRPrice:0))
 
-			console.log(tableRows);
 		   // Recalculate the price based on the updated percentage and basic salary
 		   const newPrice =   (newsalarys * Number(percentage)) / 100;
 		updatedTableRows[index].price = newPrice;
@@ -590,7 +573,7 @@ console.log(tableRows,tableRowsd,tableRowsN);
 			updatedTableRows[index].percentage = Number(percentage);
 		   // Recalculate the price based on the updated percentage and basic salary
 		   const newPrice =   ((parseFloat(totalAmount) + parseFloat(basicsalary)) * Number(percentage)) / 100;
-		   console.log(newPrice,"newpriceeeeeeeeeeeeeeeeeeeeeeeeeeee");
+		
 		updatedTableRows[index].price = newPrice;
 		settableRowsd(updatedTableRows);
 		}
@@ -609,6 +592,7 @@ console.log(tableRows,tableRowsd,tableRowsN);
         updatedTableRows[index].percentage = Number(percentage);
        // Recalculate the price based on the updated percentage and basic salary
     const newPrice = (Number(basicsalary) * Number(percentage)) / 100;
+	
     updatedTableRows[index].price = newPrice;
     settableRowsN(updatedTableRows);
 	};
@@ -712,42 +696,36 @@ const [tablestate,settablestate]=useState(false)
 		setDAPrice('')
 		setIPNumber('');
 	  }
-	  console.log(resetstate);
-	  console.log(tableRowsN ,"ttttttttttttabbbbbbbbbbbbblennnnnnnnnnnnnillllllll");
 
-	  const[updatedRow,setUpdatedRow]=useState('');
+	  const[updatedRow,setUpdatedRow]=useState([]);
 
-	  console.log(tableRows , tableRowsd ,tableRowsN ,"tablerooooooooooooows");
 	  useEffect(()=>{
 		let updatedrow = [...tableRows, ...tableRowsd, ...tableRowsN];
 		let filteredRows = updatedrow.filter(row => row.price !== ''|| 0);
 
 		setUpdatedRow(filteredRows);
 				
-		  if(updatedRow){
-			updatedRow.forEach((row, index) => {
-				row.id = index + 1;
-			});
-		  }
+		//   if(updatedRow){
+		// 	updatedRow.forEach((row, index) => {
+		// 		row.id = index + 1;
+		// 	});
+		//   }
 		 
 		
-		  console.log(updatedRow,":::::::::::::::fffff");
+		  console.log(updatedRow,"Updaterow");
 	  },[tableRows,tableRowsN,tableRowsd ]) 
 	
 
 	  const onSubmit = async (data) => {
-		let updatedrow = [...tableRows, ...tableRowsd, ...tableRowsN];
-		let filteredRows = updatedrow.filter(row => row.price !== ''|| 0);
-
-		setUpdatedRow(filteredRows);
+		
 				
-		  if(updatedRow){
+		  if(updatedRow.length !==0){
 			updatedRow.forEach((row, index) => {
 				row.id = index + 1;
 			});
 		  }
-
-		console.log(tableRows);
+console.log(updatedRow,"Update row");
+		
 		data.employeeid=`ME${count.toString().padStart(3, '0')}`
 	     data.EmployeeTypeId=employeeTypeId
 		 data.PostId=postId
@@ -759,9 +737,8 @@ const [tablestate,settablestate]=useState(false)
 		 data.DAPrice = DAPrice ? DAPrice:""
 		 data.bank = bank 
 		 data.TotalSalary=parseFloat(basicsalary)+(totalAmount-totalAmountd)
-		 console.log(data,":dataaaa");
+		
 		try {
-			console.log('Afsal :' , data);
 		  const response = await Addemployee(data);
 		  console.log(response,"ii");	
 		  if (response.success) {
@@ -780,7 +757,7 @@ const [tablestate,settablestate]=useState(false)
 		  toast.error(err.message);
 		}
 	  };
-	  console.log(rowid,"::rowiddd:");
+	  
 
 
   
